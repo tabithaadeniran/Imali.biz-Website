@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Dashboard — The Land Bank | Imali.biz</title>
@@ -242,6 +243,34 @@
     .trust-hero { flex-direction: column; gap: 1.5rem; }
     .trust-breakdown { grid-template-columns: 1fr; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #f0ebe0 !important; color: #1a1814 !important; }
+  [data-theme="light"] .topnav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .topnav-logo, [data-theme="light"] .topnav-section { color: #1a1814 !important; }
+  [data-theme="light"] .topnav-link { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .topnav-link:hover { color: #1a1814 !important; }
+  [data-theme="light"] .topnav-divider { background: rgba(0,0,0,0.12) !important; }
+  [data-theme="light"] .sidebar { background: #fff !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .sidebar-item { color: rgba(26,24,20,0.55) !important; }
+  [data-theme="light"] .sidebar-item:hover, [data-theme="light"] .sidebar-item.active { background: rgba(0,0,0,0.05) !important; color: #1a1814 !important; }
+  [data-theme="light"] .sidebar-section { color: rgba(26,24,20,0.35) !important; }
+  [data-theme="light"] .main-area { background: #f0ebe0 !important; }
+  [data-theme="light"] .tab-panel { background: #f0ebe0 !important; }
+  [data-theme="light"] .section-title { color: #1a1814 !important; }
+  [data-theme="light"] .stat-card { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .stat-val { color: #1a1814 !important; }
+  [data-theme="light"] .stat-label { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .listing-row { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .listing-row-name { color: #1a1814 !important; }
+  [data-theme="light"] .listing-row td { border-color: rgba(0,0,0,0.07) !important; color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] table th { background: rgba(0,0,0,0.05) !important; color: rgba(26,24,20,0.55) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .activity-item { border-color: rgba(0,0,0,0.07) !important; }
+  [data-theme="light"] .partner-stat { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .user-avatar { background: var(--terracotta) !important; }
+  .theme-toggle { background: rgba(245,240,232,0.07); border: 1px solid rgba(245,240,232,0.12); border-radius: 2rem; padding: 0.3rem 0.65rem; cursor: none; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: rgba(245,240,232,0.5); transition: all 0.2s; }
+  .theme-toggle:hover { color: #f5f0e8; background: rgba(245,240,232,0.12); }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; }
 </style>
 </head>
 <body>
@@ -259,6 +288,7 @@
   <div class="topnav-right">
     <a href="listings.html" class="topnav-link">Browse Listings</a>
     <a href="list-land.html" class="topnav-link">+ List Land</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
     <div class="notif-btn">🔔<div class="notif-dot"></div></div>
     <div class="user-pill">
       <div class="user-avatar">JM</div>
@@ -895,6 +925,21 @@
       btn.textContent = '✓ Copied!';
       setTimeout(() => { btn.textContent = orig; }, 2000);
     });
+  });
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
   });
 </script>
 </body>

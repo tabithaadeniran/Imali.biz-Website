@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Imali.biz — Rwanda's Real Estate Intelligence Platform</title>
@@ -891,6 +892,47 @@
     .cta-section { padding: 5rem 2rem; }
     .hero-stats { gap: 1.5rem; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
+  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
+  [data-theme="light"] .nav-links a:not(.nav-cta) { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .nav-links a:not(.nav-cta):hover { color: #1a1814 !important; }
+  [data-theme="light"] .hero-headline, [data-theme="light"] .hero-sub { color: #1a1814 !important; }
+  [data-theme="light"] .hero-sub { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .hero-eyebrow { color: var(--terracotta) !important; }
+  [data-theme="light"] .hero-stats { border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .stat-label { color: rgba(26,24,20,0.45) !important; }
+  [data-theme="light"] .stat-num { color: var(--terracotta) !important; }
+  [data-theme="light"] .section-eyebrow { color: var(--terracotta) !important; }
+  [data-theme="light"] .section-title { color: #1a1814 !important; }
+  [data-theme="light"] .stakeholders-section { background: #ebe4d8 !important; }
+  [data-theme="light"] .stakeholder-card { background: #fff !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .sk-name { color: #1a1814 !important; }
+  [data-theme="light"] .sk-desc { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .platforms-section { background: #faf7f2 !important; }
+  [data-theme="light"] .platform-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .platform-name, [data-theme="light"] .platform-desc { color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .tools-section { background: #ebe4d8 !important; }
+  [data-theme="light"] .tool-card { background: #fff !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .tool-name { color: #1a1814 !important; }
+  [data-theme="light"] .tool-desc { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .how-section { background: #faf7f2 !important; }
+  [data-theme="light"] .how-step { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .how-step-title, [data-theme="light"] .how-step-desc { color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .features-section { background: #ebe4d8 !important; }
+  [data-theme="light"] .feature-card { background: #fff !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .feature-card-title, [data-theme="light"] .feature-card-desc { color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .ecosystem-section { background: #faf7f2 !important; }
+  [data-theme="light"] .eco-node { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .cta-section { background: #ebe4d8 !important; }
+  [data-theme="light"] .cta-title, [data-theme="light"] .cta-sub { color: #1a1814 !important; }
+  [data-theme="light"] .cta-sub { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .btn-outline { border-color: rgba(0,0,0,0.2) !important; color: #1a1814 !important; }
+  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; list-style: none; }
+  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; }
 </style>
 </head>
 <body>
@@ -908,6 +950,7 @@
     <li><a href="#stakeholders">Who We Serve</a></li>
     <li><a href="#ecosystem">Ecosystem</a></li>
     <li><a href="#how">How It Works</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button></li>
     <li><a href="#" class="nav-cta">Join the Waitlist</a></li>
   </ul>
 </nav>
@@ -1452,6 +1495,21 @@
       if (start >= target) clearInterval(timer);
     }, 30);
   }
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  });
 </script>
 </body>
 </html>

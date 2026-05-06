@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Land Bank — Imali.biz</title>
@@ -559,6 +560,34 @@
     .partner-banner { flex-direction: column; gap: 1.5rem; text-align: center; }
     .ecosystem-banner { padding: 4rem 2rem; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
+  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
+  [data-theme="light"] .nav-links a:not(.nav-cta) { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .nav-links a:not(.nav-cta):hover, [data-theme="light"] .nav-links a.active { color: #1a1814 !important; }
+  [data-theme="light"] .nav-back { color: rgba(26,24,20,0.35) !important; }
+  [data-theme="light"] .hero-headline, [data-theme="light"] .hero-sub, [data-theme="light"] .section-title { color: #1a1814 !important; }
+  [data-theme="light"] .hero-sub { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .audience-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .audience-card-title, [data-theme="light"] .audience-card-sub { color: rgba(26,24,20,0.7) !important; }
+  [data-theme="light"] .how-step { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .how-step-title { color: #1a1814 !important; }
+  [data-theme="light"] .how-step-desc { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .feature-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .feature-card-title { color: #1a1814 !important; }
+  [data-theme="light"] .feature-card-desc { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .stats-bar { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .stat-val { color: var(--terracotta) !important; }
+  [data-theme="light"] .stat-label { color: rgba(26,24,20,0.55) !important; }
+  [data-theme="light"] .ecosystem-banner { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .eco-label { color: rgba(26,24,20,0.4) !important; }
+  [data-theme="light"] .eco-pill { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .btn-outline { border-color: rgba(0,0,0,0.2) !important; color: #1a1814 !important; }
+  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; list-style: none; }
+  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; background: rgba(0,0,0,0.09); }
 </style>
 </head>
 <body>
@@ -578,6 +607,7 @@
     <li><a href="valuation.html">Valuation</a></li>
     <li><a href="dashboard.html">Dashboard</a></li>
     <li><a href="../index.html" class="nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button></li>
     <li><a href="signup.html" class="nav-cta">List Your Land</a></li>
   </ul>
 </nav>
@@ -998,6 +1028,21 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12 });
   reveals.forEach(el => observer.observe(el));
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  });
 </script>
 </body>
 </html>

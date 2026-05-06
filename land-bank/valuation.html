@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Land Valuation Tool — The Land Bank | Imali.biz</title>
@@ -201,6 +202,29 @@
     footer { padding: 1.5rem; flex-direction: column; gap: 1rem; }
     .rec-price-box { flex-direction: column; gap: 1rem; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
+  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
+  [data-theme="light"] .nav-links a:not(.nav-cta) { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .nav-links a.active { color: #1a1814 !important; }
+  [data-theme="light"] .hero-strip { background: linear-gradient(135deg, #ebe4d8 0%, #f0ebe0 100%) !important; }
+  [data-theme="light"] .hero-strip-title, [data-theme="light"] .hero-strip-sub { color: #1a1814 !important; }
+  [data-theme="light"] .hero-strip-sub { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .val-layout { background: #faf7f2 !important; }
+  [data-theme="light"] .val-form-panel { background: #fff !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .form-label { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .form-input, [data-theme="light"] .form-select { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1814 !important; }
+  [data-theme="light"] .val-results-panel { background: #f0ebe0 !important; }
+  [data-theme="light"] .results-title { color: #1a1814 !important; }
+  [data-theme="light"] .result-card { background: #fff !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .factor-item { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .factor-name { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .factor-val { color: #1a1814 !important; }
+  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; list-style: none; }
+  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; }
 </style>
 </head>
 <body>
@@ -219,6 +243,7 @@
     <li><a href="list-land.html">List Your Land</a></li>
     <li><a href="valuation.html" class="active">Valuation</a></li>
     <li><a href="dashboard.html">Dashboard</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button></li>
     <li><a href="signup.html" class="nav-cta">+ List Land</a></li>
   </ul>
 </nav>
@@ -617,6 +642,21 @@
         document.getElementById('resultsContent').scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 1800);
+  });
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
   });
 </script>
 </body>

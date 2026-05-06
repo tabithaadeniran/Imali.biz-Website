@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Create Your Account — The Land Bank | Imali.biz</title>
@@ -144,6 +145,27 @@
     .right-panel { padding: 2.5rem 1.5rem 4rem; }
     nav { padding: 1rem 1.5rem; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
+  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
+  [data-theme="light"] .nav-link { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .nav-link:hover { color: #1a1814 !important; }
+  [data-theme="light"] .nav-login { color: rgba(26,24,20,0.5) !important; border-color: rgba(0,0,0,0.15) !important; }
+  [data-theme="light"] .right-panel { background: #faf7f2 !important; }
+  [data-theme="light"] .form-title { color: #1a1814 !important; }
+  [data-theme="light"] .form-sub { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .role-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .role-name, [data-theme="light"] .role-desc { color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .role-card.selected { border-color: var(--terracotta) !important; background: rgba(200,82,26,0.05) !important; }
+  [data-theme="light"] .field-group label { color: rgba(26,24,20,0.7) !important; }
+  [data-theme="light"] .field-group input, [data-theme="light"] .field-group select { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1814 !important; }
+  [data-theme="light"] .kyc-notice { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.1) !important; }
+  [data-theme="light"] .kyc-notice-text { color: rgba(26,24,20,0.7) !important; }
+  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; }
+  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; }
 </style>
 </head>
 <body>
@@ -159,6 +181,7 @@
     <a href="./listings.html" class="nav-link">Browse Listings</a>
     <a href="./valuation.html" class="nav-link">Valuation Tool</a>
     <a href="../index.html" class="nav-link">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
     <a href="#" class="nav-login">Already a member? Log in</a>
   </div>
 </nav>
@@ -446,6 +469,21 @@
     document.getElementById('successPanel').classList.add('visible');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  });
 </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Portfolio — The Wealth Hub | Imali.biz</title>
@@ -109,6 +110,43 @@
     .partner-stats { grid-template-columns: 1fr 1fr; }
     .earn-cards { grid-template-columns: 1fr 1fr; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #f0ebe0 !important; color: #1a1814 !important; }
+  [data-theme="light"] .topbar { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .topbar-logo, [data-theme="light"] .topbar-user { color: #1a1814 !important; }
+  [data-theme="light"] .topbar-sub { color: var(--gold) !important; }
+  [data-theme="light"] .topbar-btn { background: rgba(0,0,0,0.07) !important; color: rgba(26,24,20,0.7) !important; border-color: rgba(0,0,0,0.12) !important; }
+  [data-theme="light"] .sidebar { background: #faf7f2 !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .sidebar-item { color: rgba(26,24,20,0.55) !important; }
+  [data-theme="light"] .sidebar-item:hover, [data-theme="light"] .sidebar-item.active { background: rgba(0,0,0,0.05) !important; color: #1a1814 !important; }
+  [data-theme="light"] .sidebar-section { color: rgba(26,24,20,0.35) !important; }
+  [data-theme="light"] .main { background: #f0ebe0 !important; }
+  [data-theme="light"] .tab-title { color: #1a1814 !important; }
+  [data-theme="light"] .stat-card { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .stat-card-label { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .stat-card-val { color: #1a1814 !important; }
+  [data-theme="light"] .portfolio-card { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .pc-name, [data-theme="light"] .pc-loc { color: #1a1814 !important; }
+  [data-theme="light"] .pc-loc { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .metric-label { color: rgba(26,24,20,0.45) !important; }
+  [data-theme="light"] .metric-val { color: #1a1814 !important; }
+  [data-theme="light"] .activity-table { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .activity-table th { background: rgba(0,0,0,0.04) !important; color: rgba(26,24,20,0.5) !important; border-color: rgba(0,0,0,0.07) !important; }
+  [data-theme="light"] .activity-table td { border-color: rgba(0,0,0,0.06) !important; color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .investments-table th { background: rgba(0,0,0,0.04) !important; color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .investments-table td { border-color: rgba(0,0,0,0.06) !important; color: rgba(26,24,20,0.75) !important; }
+  [data-theme="light"] .partner-stat { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .partner-stat-label { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .partner-stat-val { color: #1a1814 !important; }
+  [data-theme="light"] .ref-box { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; }
+  [data-theme="light"] .earn-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .earn-card-title, [data-theme="light"] .earn-card-desc { color: rgba(26,24,20,0.7) !important; }
+  [data-theme="light"] .settings-group label { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .settings-input { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1814 !important; }
+  .theme-toggle { background: rgba(245,240,232,0.07); border: 1px solid rgba(245,240,232,0.12); border-radius: 2rem; padding: 0.3rem 0.65rem; cursor: none; display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: rgba(245,240,232,0.5); transition: all 0.2s; }
+  .theme-toggle:hover { color: #f5f0e8; background: rgba(245,240,232,0.12); }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; }
 </style>
 </head>
 <body>
@@ -123,6 +161,7 @@
   </a>
   <div class="topbar-right">
     <a href="opportunities.html" class="topbar-btn">+ New Investment</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
     <div class="topbar-user">
       <div class="user-avatar">AM</div>
       <span>Amara M.</span>
@@ -462,6 +501,22 @@
   // Deep-link via hash
   const hash = window.location.hash.replace('#', '');
   if (['overview','investments','dividends','watchlist','partner','settings'].includes(hash)) switchTab(hash);
+
+  // Theme toggle
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  });
 </script>
 </body>
 </html>

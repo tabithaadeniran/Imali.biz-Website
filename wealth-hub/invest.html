@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>How to Invest — The Wealth Hub | Imali.biz</title>
@@ -93,6 +94,35 @@
     .step-detail { grid-template-columns: 1fr; }
     .invest-step { grid-template-columns: 48px 1fr; gap: 1.5rem; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
+  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] nav a:not(.nav-cta) { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
+  [data-theme="light"] .hero { background: #faf7f2 !important; }
+  [data-theme="light"] .hero-title, [data-theme="light"] .hero-sub { color: #1a1814 !important; }
+  [data-theme="light"] .hero-sub { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .section-title { color: #1a1814 !important; }
+  [data-theme="light"] .invest-step { background: #f0ebe0 !important; }
+  [data-theme="light"] .step-num { color: rgba(26,24,20,0.12) !important; }
+  [data-theme="light"] .step-title { color: #1a1814 !important; }
+  [data-theme="light"] .step-desc { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .detail-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .detail-card-title, [data-theme="light"] .detail-card-body { color: rgba(26,24,20,0.7) !important; }
+  [data-theme="light"] .protect-section { background: #ebe4d8 !important; }
+  [data-theme="light"] .protect-card { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .protect-title, [data-theme="light"] .protect-desc { color: rgba(26,24,20,0.7) !important; }
+  [data-theme="light"] .faq-section { background: #f0ebe0 !important; }
+  [data-theme="light"] .faq-q { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; color: #1a1814 !important; }
+  [data-theme="light"] .faq-a { color: rgba(26,24,20,0.7) !important; border-color: rgba(0,0,0,0.08) !important; background: rgba(0,0,0,0.02) !important; }
+  [data-theme="light"] .btn-outline { border-color: rgba(0,0,0,0.2) !important; color: #1a1814 !important; }
+  [data-theme="light"] .ecosystem-banner { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .eco-label { color: rgba(26,24,20,0.4) !important; }
+  [data-theme="light"] .eco-pill { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; color: rgba(26,24,20,0.6) !important; }
+  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; }
+  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; background: rgba(0,0,0,0.09); }
 </style>
 </head>
 <body>
@@ -109,6 +139,7 @@
     <a href="calculator.html" class="nav-link">Calculator</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="../index.html" class="nav-link" style="color:rgba(245,240,232,0.3);">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
     <a href="opportunities.html" class="nav-cta">Browse Deals</a>
   </div>
 </nav>
@@ -250,10 +281,10 @@
     <div class="section-title">Common <em>questions</em></div>
   </div>
   <div id="faqList">
-    <div class="faq-item"><div class="faq-q">What is the minimum investment?</div><div class="faq-a">Fractional investments start from RWF 500,000. Full Asset deals start from RWF 50,000,000 and above depending on the project. You can use our Returns Calculator to model any amount.</div></div>
+    <div class="faq-item"><div class="faq-q">What is the minimum investment?</div><div class="faq-a">Fractional investments start from RWF 75,000. Full Asset deals start from RWF 50,000,000 and above depending on the project. You can use our Returns Calculator to model any amount.</div></div>
     <div class="faq-item"><div class="faq-q">Is my investment legally protected in Rwanda?</div><div class="faq-a">Yes. All projects pass full legal due diligence via our Compliance Hub. Title is registered through NLA and the Land Administration Information System (LAIS). Tokenisation agreements are legally binding under Rwandan law, with marital consent where required.</div></div>
     <div class="faq-item"><div class="faq-q">What happens if a project is delayed or fails?</div><div class="faq-a">Funds are held in escrow and only released at verified milestones — so your money does not reach the developer until work is confirmed. If a project is cancelled, escrowed funds are returned proportionally. Imali maintains a legal dispute resolution process for all projects.</div></div>
-    <div class="faq-item"><div class="faq-q">Can I sell my tokens before the project completes?</div><div class="faq-a">Yes. For fractional investments, a secondary market for token trades will be available. You can sell your ownership stake to another investor at the prevailing market price. Full Asset investors may negotiate a private sale through our platform.</div></div>
+    <div class="faq-item"><div class="faq-q">Can I sell my tokens if I don't want to invest anymore?</div><div class="faq-a">Yes. For fractional investments, a secondary market for token trades will be available. You can sell your ownership stake to another investor at the prevailing market price. Full Asset investors may negotiate a private sale through our platform.</div></div>
     <div class="faq-item"><div class="faq-q">How are dividends paid?</div><div class="faq-a">For income-producing assets (rental), yields are distributed quarterly from the date the asset becomes income-generating — typically from Year 2 for development projects. For capital appreciation deals, returns are distributed at milestone completions and final project sale.</div></div>
     <div class="faq-item"><div class="faq-q">Do I need to be a Rwandan citizen to invest?</div><div class="faq-a">Rwandan citizens and residents can invest immediately. Diaspora investors and non-residents are supported — contact our team for the documentation requirements specific to your residency status.</div></div>
     <div class="faq-item"><div class="faq-q">What is Imali's cut?</div><div class="faq-a">2.5% of the total return on completion. No upfront fees, no annual management fees, no hidden charges. We earn only when you earn.</div></div>
@@ -295,6 +326,22 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
   }, { threshold: 0.1 });
   reveals.forEach(el => io.observe(el));
+
+  // Theme toggle
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  });
 </script>
 </body>
 </html>

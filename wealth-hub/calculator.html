@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Returns Calculator — The Wealth Hub | Imali.biz</title>
@@ -108,6 +109,31 @@
     nav { padding: 1rem 1.5rem; }
     .big-metrics { grid-template-columns: 1fr 1fr; }
   }
+  /* LIGHT MODE */
+  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
+  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] nav a:not(.nav-cta) { color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
+  [data-theme="light"] .calc-panel { background: #f0ebe0 !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .calc-title, [data-theme="light"] .calc-eyebrow { color: #1a1814 !important; }
+  [data-theme="light"] .slider-label, [data-theme="light"] .slider-label-val { color: rgba(26,24,20,0.7) !important; }
+  [data-theme="light"] .slider-input { background: rgba(0,0,0,0.06) !important; }
+  [data-theme="light"] .calc-input, [data-theme="light"] .calc-select { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1814 !important; }
+  [data-theme="light"] .toggle-btn:not(.active) { background: rgba(0,0,0,0.05) !important; color: rgba(26,24,20,0.6) !important; border-color: rgba(0,0,0,0.1) !important; }
+  [data-theme="light"] .result-panel { background: #faf7f2 !important; }
+  [data-theme="light"] .big-metric-val { color: #1a1814 !important; }
+  [data-theme="light"] .big-metric-label { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .result-section-title { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .year-table { background: rgba(0,0,0,0.03) !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .year-table th { background: rgba(0,0,0,0.05) !important; color: rgba(26,24,20,0.6) !important; }
+  [data-theme="light"] .year-table td { border-color: rgba(0,0,0,0.06) !important; color: #1a1814 !important; }
+  [data-theme="light"] .scenario-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
+  [data-theme="light"] .scenario-name { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .scenario-val { color: #1a1814 !important; }
+  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; }
+  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
+  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
+  [data-theme="light"] .theme-toggle:hover { color: #1a1814; background: rgba(0,0,0,0.09); }
 </style>
 </head>
 <body>
@@ -124,6 +150,7 @@
     <a href="calculator.html" class="nav-link" style="color:var(--gold);">Calculator</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
     <a href="../index.html" class="nav-link" style="color:rgba(245,240,232,0.3);">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
     <a href="invest.html" class="nav-cta">Start Investing</a>
   </div>
 </nav>
@@ -402,6 +429,22 @@
 
   // Auto-calculate on load
   calculate();
+
+  // Theme toggle
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    icon.textContent = next === 'light' ? '🌙' : '☀️';
+    label.textContent = next === 'light' ? 'Dark' : 'Light';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+  });
 </script>
 </body>
 </html>

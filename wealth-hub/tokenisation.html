@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokenisation — Own a Piece of Rwanda's Future | The Wealth Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── BASE THEME VARIABLES ─────────────────────────────────── */
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --terracotta: #c8521a;
+    --gold: #d4a832;
+    --forest: #1a3a2a;
+    --sapphire: #1a3a5c;
+    --warm-white: #faf7f2;
+
+    /* semantic tokens — dark mode defaults */
+    --bg: #0a0a0f;
+    --bg2: #0f0f16;
+    --surface: rgba(245,240,232,0.04);
+    --surface-hover: rgba(245,240,232,0.07);
+    --border: rgba(245,240,232,0.08);
+    --border-strong: rgba(245,240,232,0.14);
+    --text: #f5f0e8;
+    --text-dim: rgba(245,240,232,0.55);
+    --text-muted: rgba(245,240,232,0.3);
+    --nav-bg: rgba(10,10,15,0.97);
+    --card-bg: rgba(245,240,232,0.04);
+    --input-bg: rgba(245,240,232,0.06);
+    --light-section-bg: #f5f0e8;
+    --light-section-text: #0a0a0f;
+    --light-section-muted: #6b6560;
+    --scrollbar-thumb: rgba(212,168,50,0.3);
+  }
+  [data-theme="light"] {
+    --bg: #faf7f2;
+    --bg2: #f0ebe0;
+    --surface: rgba(0,0,0,0.04);
+    --surface-hover: rgba(0,0,0,0.07);
+    --border: rgba(0,0,0,0.09);
+    --border-strong: rgba(0,0,0,0.16);
+    --text: #1a1814;
+    --text-dim: rgba(26,24,20,0.6);
+    --text-muted: rgba(26,24,20,0.38);
+    --nav-bg: rgba(250,247,242,0.97);
+    --card-bg: rgba(0,0,0,0.04);
+    --input-bg: rgba(0,0,0,0.05);
+    --light-section-bg: #ebe4d8;
+    --light-section-text: #0a0a0f;
+    --light-section-muted: #5a5248;
+    --scrollbar-thumb: rgba(212,168,50,0.5);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; transition: background 0.3s, color 0.3s; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--gold); transform: translate(-10px,-10px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* ── NAV ─────────────────────────────────────────────────── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--gold); }
+  .nav-back { color: var(--text-muted); font-size: 0.78rem; }
+  .nav-cta { background: var(--gold); color: var(--ink); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s, transform 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: #c49a28; transform: translateY(-1px); }
+
+  /* theme toggle */
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); border-color: var(--border-strong); }
+  .theme-toggle .toggle-icon { font-size: 0.9rem; line-height: 1; }
+
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .hero { min-height: 88vh; padding: 8rem 4rem 5rem; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; max-width: 900px; }
+  .hero::before { content: ''; position: absolute; top: -200px; right: -400px; width: 800px; height: 800px; background: radial-gradient(circle, rgba(212,168,50,0.07) 0%, transparent 65%); pointer-events: none; }
+  .eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .hero-headline { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 4.5vw, 5rem); font-weight: 800; line-height: 1.06; letter-spacing: -0.035em; margin-bottom: 1.5rem; }
+  .hero-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-sub { font-size: 1.1rem; color: var(--text-dim); line-height: 1.75; max-width: 580px; margin-bottom: 2.5rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gold); color: var(--ink); text-decoration: none; border-radius: 3rem; padding: 0.85rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; transition: background 0.2s, transform 0.2s; border: none; }
+  .btn-primary:hover { background: #c49a28; transform: translateY(-2px); }
+  .btn-outline { display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid var(--border-strong); color: var(--text); text-decoration: none; border-radius: 3rem; padding: 0.85rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; transition: border-color 0.2s, background 0.2s; background: none; }
+  .btn-outline:hover { border-color: var(--gold); background: rgba(212,168,50,0.06); }
+
+  /* ── SECTION BASE ─────────────────────────────────────────── */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-eyebrow { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; color: var(--text); }
+  .section-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.12s; }
+  .reveal-delay-2 { transition-delay: 0.24s; }
+  .reveal-delay-3 { transition-delay: 0.36s; }
+
+  /* ── WHAT IS TOKENISATION ─────────────────────────────────── */
+  .explainer { background: var(--light-section-bg); color: var(--light-section-text); }
+  .explainer .section-eyebrow { color: var(--terracotta); }
+  .explainer .section-eyebrow::before { background: var(--terracotta); }
+  .explainer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; margin-top: 4rem; }
+  .explainer-text { display: flex; flex-direction: column; gap: 1.75rem; }
+  .explainer-text p { font-size: 1.05rem; line-height: 1.8; color: var(--light-section-muted); }
+  .explainer-text p strong { color: var(--light-section-text); font-weight: 600; }
+  .explainer-text .highlight { background: rgba(212,168,50,0.12); border-left: 3px solid var(--gold); border-radius: 0 0.5rem 0.5rem 0; padding: 1.25rem 1.5rem; font-size: 1.1rem; font-weight: 500; color: var(--light-section-text); line-height: 1.6; }
+  .explainer-visual { position: relative; }
+  .explainer-image { width: 100%; border-radius: 1rem; overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
+  .explainer-image img { width: 100%; height: auto; display: block; }
+  /* SVG diagram fallback shown if no image */
+  .diagram-svg { width: 100%; border-radius: 1rem; background: var(--ink); padding: 2rem; }
+  [data-theme="light"] .diagram-svg { background: #1a1814; }
+  .explainer-caption { margin-top: 1rem; font-size: 0.78rem; letter-spacing: 0.04em; color: var(--light-section-muted); text-align: center; }
+
+  /* ── HOW IT WORKS ─────────────────────────────────────────── */
+  .how-tok { background: var(--bg); }
+  .tok-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 4.5rem; position: relative; }
+  .tok-steps::before { content: ''; position: absolute; top: 2.5rem; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .tok-step { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 1.5rem; position: relative; }
+  .tok-num { width: 50px; height: 50px; border-radius: 50%; background: var(--gold); color: var(--ink); font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; flex-shrink: 0; position: relative; z-index: 1; }
+  .tok-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .tok-label { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+  .tok-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
+
+  /* ── PLAIN ENGLISH EXPLAINER ─────────────────────────────── */
+  .plain-eng { background: var(--bg2); }
+  [data-theme="light"] .plain-eng { background: var(--bg2); }
+  .plain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3.5rem; }
+  .plain-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 2rem; transition: background 0.2s; }
+  .plain-card:hover { background: var(--surface-hover); }
+  .plain-card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .plain-card-q { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; }
+  .plain-card-a { font-size: 0.9rem; line-height: 1.75; color: var(--text-dim); }
+  .plain-card-a strong { color: var(--text); }
+
+  /* ── TOKEN ECONOMICS ─────────────────────────────────────── */
+  .token-econ { background: var(--light-section-bg); color: var(--light-section-text); }
+  .token-econ .section-eyebrow { color: var(--gold); }
+  .token-econ .section-eyebrow::before { background: var(--gold); }
+  .token-econ .section-title { color: var(--light-section-text); }
+  .econ-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 4rem; }
+  .econ-donut-wrap { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+  .econ-donut { position: relative; width: 240px; height: 240px; }
+  .econ-donut svg { transform: rotate(-90deg); }
+  .econ-donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .donut-big { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--light-section-text); }
+  .donut-sub { font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--light-section-muted); }
+  .econ-legend { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; max-width: 300px; }
+  .legend-item { display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; color: var(--light-section-muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .legend-val { margin-left: auto; font-family: 'Syne', sans-serif; font-weight: 700; color: var(--light-section-text); }
+  .econ-points { display: flex; flex-direction: column; gap: 1.5rem; }
+  .econ-point { display: flex; gap: 1.25rem; align-items: flex-start; }
+  .econ-point-num { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; color: var(--gold); background: rgba(212,168,50,0.1); border: 1px solid rgba(212,168,50,0.2); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.15rem; }
+  .econ-point-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--light-section-text); margin-bottom: 0.4rem; }
+  .econ-point-desc { font-size: 0.88rem; line-height: 1.65; color: var(--light-section-muted); }
+
+  /* ── WALLET SECTION ──────────────────────────────────────── */
+  .wallet-section { background: var(--bg); }
+  .wallet-ui { background: var(--surface); border: 1px solid var(--border); border-radius: 1.5rem; overflow: hidden; margin-top: 3rem; max-width: 1000px; margin-left: auto; margin-right: auto; }
+  .wallet-header { background: linear-gradient(135deg, rgba(212,168,50,0.12) 0%, rgba(212,168,50,0.03) 100%); border-bottom: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: gap; gap: 1.5rem; }
+  .wallet-id { display: flex; flex-direction: column; gap: 0.35rem; }
+  .wallet-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .wallet-address { font-family: 'DM Sans', monospace; font-size: 0.85rem; color: var(--text); letter-spacing: 0.04em; background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.4rem 0.9rem; display: flex; align-items: center; gap: 0.6rem; }
+  .wallet-copy { background: none; border: none; color: var(--text-muted); cursor: none; font-size: 0.9rem; padding: 0; transition: color 0.2s; }
+  .wallet-copy:hover { color: var(--gold); }
+  .wallet-balance-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; }
+  .wallet-balance-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .wallet-balance { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--gold); letter-spacing: -0.03em; }
+  .wallet-balance-sub { font-size: 0.75rem; color: var(--text-muted); }
+  .wallet-nav-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+  .wtab { padding: 1rem 1.75rem; font-size: 0.82rem; font-family: 'Syne', sans-serif; font-weight: 600; color: var(--text-dim); background: none; border: none; border-bottom: 2px solid transparent; cursor: none; transition: color 0.2s, border-color 0.2s; margin-bottom: -1px; }
+  .wtab:hover { color: var(--text); }
+  .wtab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .wallet-body { padding: 2rem 2.5rem; }
+
+  /* Holdings tab */
+  .holdings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .holding-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; transition: background 0.2s; position: relative; overflow: hidden; }
+  .holding-card:hover { background: var(--surface-hover); }
+  .holding-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); opacity: 0.6; }
+  .holding-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+  .holding-name { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .holding-loc { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .holding-badge { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; border-radius: 2rem; padding: 0.2rem 0.6rem; }
+  .badge-active { background: rgba(76,175,125,0.12); color: #4caf7d; border: 1px solid rgba(76,175,125,0.2); }
+  .badge-milestone { background: rgba(212,168,50,0.12); color: var(--gold); border: 1px solid rgba(212,168,50,0.2); }
+  .holding-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .hm-item { background: var(--surface); border-radius: 0.4rem; padding: 0.5rem 0.6rem; }
+  .hm-val { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--text); }
+  .hm-label { font-size: 0.6rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.1rem; }
+  .holding-progress { }
+  .prog-label { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.4rem; }
+  .prog-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 3px; background: var(--gold); }
+
+  /* Transactions tab */
+  .tx-list { display: flex; flex-direction: column; gap: 0; }
+  .tx-row { display: grid; grid-template-columns: 2.5rem 1fr auto; gap: 1rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .tx-row:last-child { border-bottom: none; }
+  .tx-icon { width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .tx-icon.in { background: rgba(76,175,125,0.12); }
+  .tx-icon.out { background: rgba(200,82,26,0.12); }
+  .tx-icon.swap { background: rgba(212,168,50,0.12); }
+  .tx-detail { display: flex; flex-direction: column; gap: 0.25rem; }
+  .tx-title { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+  .tx-sub { font-size: 0.72rem; color: var(--text-muted); }
+  .tx-amount { text-align: right; }
+  .tx-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; }
+  .tx-val.positive { color: #4caf7d; }
+  .tx-val.negative { color: var(--terracotta); }
+  .tx-date { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.15rem; }
+
+  /* Transfer tab */
+  .transfer-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .tf-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .tf-group.full { grid-column: 1 / -1; }
+  .tf-label { font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .tf-input { background: var(--input-bg); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.75rem 1rem; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; width: 100%; outline: none; transition: border-color 0.2s; }
+  .tf-input:focus { border-color: var(--gold); }
+  .tf-select { background: var(--input-bg); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.75rem 1rem; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; width: 100%; outline: none; cursor: none; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; transition: border-color 0.2s; }
+  .tf-select:focus { border-color: var(--gold); }
+  [data-theme="light"] .tf-select option { background: #faf7f2; color: #1a1814; }
+  .tf-hint { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.25rem; }
+  .transfer-summary { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.15); border-radius: 0.75rem; padding: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .ts-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .ts-label { font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+  .ts-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .btn-transfer { background: var(--gold); color: var(--ink); border: none; border-radius: 2rem; padding: 0.9rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: none; transition: background 0.2s, transform 0.2s; width: 100%; margin-top: 1rem; }
+  .btn-transfer:hover { background: #c49a28; transform: translateY(-1px); }
+
+  /* ── SETUP WIZARD ─────────────────────────────────────────── */
+  .setup-section { background: var(--bg2); }
+  [data-theme="light"] .setup-section { background: var(--bg2); }
+  .setup-box { max-width: 700px; margin: 3rem auto 0; background: var(--surface); border: 1px solid var(--border); border-radius: 1.5rem; overflow: hidden; }
+  .setup-progress { display: flex; gap: 0; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .setup-step { flex: 1; padding: 1.25rem 1rem; text-align: center; font-size: 0.75rem; font-family: 'Syne', sans-serif; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; }
+  .setup-step.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(212,168,50,0.04); }
+  .setup-step.done { color: #4caf7d; }
+  .setup-step.done::before { content: '✓ '; }
+  .setup-content { padding: 2.5rem; }
+  .setup-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; }
+  .setup-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 2rem; }
+  .wallet-option { display: flex; align-items: flex-start; gap: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; cursor: none; transition: background 0.2s, border-color 0.2s; margin-bottom: 1rem; }
+  .wallet-option:hover, .wallet-option.selected { background: rgba(212,168,50,0.06); border-color: rgba(212,168,50,0.3); }
+  .wallet-option-icon { font-size: 2rem; flex-shrink: 0; }
+  .wallet-option-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; }
+  .wallet-option-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; }
+  .wallet-option-tag { display: inline-block; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; background: rgba(76,175,125,0.1); color: #4caf7d; border: 1px solid rgba(76,175,125,0.2); border-radius: 2rem; padding: 0.15rem 0.5rem; margin-top: 0.5rem; }
+  .setup-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
+  .btn-setup-back { background: none; border: 1px solid var(--border); border-radius: 2rem; padding: 0.7rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-dim); cursor: none; transition: all 0.2s; }
+  .btn-setup-back:hover { border-color: var(--border-strong); color: var(--text); }
+  .btn-setup-next { background: var(--gold); color: var(--ink); border: none; border-radius: 2rem; padding: 0.7rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s, transform 0.2s; }
+  .btn-setup-next:hover { background: #c49a28; transform: translateY(-1px); }
+  .setup-note { font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; margin-top: 1rem; }
+
+  /* KYC check */
+  .kyc-check { background: rgba(76,175,125,0.07); border: 1px solid rgba(76,175,125,0.2); border-radius: 0.75rem; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .kyc-icon { font-size: 1.5rem; }
+  .kyc-text { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+  .kyc-text strong { color: #4caf7d; }
+
+  /* security badges */
+  .security-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.5rem; }
+  .sec-badge { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem 1.25rem; text-align: center; }
+  .sec-badge-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .sec-badge-label { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; }
+
+  /* ── ECOSYSTEM BANNER ─────────────────────────────────────── */
+  .ecosystem-banner { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1.75rem 4rem; display: flex; flex-direction: column; gap: 1.25rem; align-items: center; }
+  .eco-label { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+  .eco-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+  .eco-pill { font-size: 0.75rem; color: var(--text-dim); background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.4rem 1rem; text-decoration: none; transition: all 0.2s; cursor: none; }
+  .eco-pill:hover { background: var(--surface-hover); color: var(--text); }
+  .eco-pill.active { color: var(--gold); border-color: rgba(212,168,50,0.3); background: rgba(212,168,50,0.06); }
+
+  /* ── FOOTER ──────────────────────────────────────────────── */
+  footer { background: var(--ink); color: var(--cream); padding: 5rem 4rem 2.5rem; }
+  [data-theme="light"] footer { background: #1a1814; }
+  .footer-inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; margin-bottom: 3.5rem; }
+  .footer-brand-name { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: #f5f0e8; }
+  .footer-brand-name span { color: var(--gold); }
+  .footer-sub { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-top: 0.25rem; margin-bottom: 1rem; }
+  .footer-tagline { font-size: 0.83rem; line-height: 1.7; color: rgba(245,240,232,0.35); max-width: 280px; }
+  .footer-col-title { font-family: 'Syne', sans-serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 1.25rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+  .footer-links a { color: rgba(245,240,232,0.45); text-decoration: none; font-size: 0.83rem; transition: color 0.2s; cursor: none; }
+  .footer-links a:hover { color: #f5f0e8; }
+  .footer-bottom { border-top: 1px solid rgba(245,240,232,0.06); padding-top: 2rem; display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(245,240,232,0.2); }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-right { gap: 1rem; }
+    section { padding: 5rem 2rem; }
+    .hero { padding: 7rem 2rem 4rem; }
+    .explainer-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .tok-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .tok-steps::before { display: none; }
+    .plain-grid { grid-template-columns: 1fr; }
+    .econ-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+    .holdings-grid { grid-template-columns: 1fr; }
+    .transfer-form { grid-template-columns: 1fr; }
+    .security-row { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    .ecosystem-banner { padding: 1.5rem 2rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Wealth Hub</div>
+  </a>
+  <div class="nav-right">
+    <ul style="display:flex; list-style:none; align-items:center; gap:1.5rem;">
+      <li><a href="opportunities.html" class="nav-link">Opportunities</a></li>
+      <li><a href="calculator.html" class="nav-link">Returns Calculator</a></li>
+      <li><a href="tokenisation.html" class="nav-link active">Tokenisation</a></li>
+      <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+      <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    </ul>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
+      <span class="toggle-icon" id="themeIcon">☀️</span>
+      <span id="themeLabel">Light</span>
+    </button>
+    <a href="invest.html" class="nav-cta">Start Investing</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Tokenisation — Ownership Reimagined</div>
+  <h1 class="hero-headline">Your land.<br><em>Turned into</em><br>digital equity.</h1>
+  <p class="hero-sub">Tokenisation converts real-world property into digital ownership certificates on the blockchain. Instead of needing millions of francs to own land, you can own a verified, legally-backed <em>fraction</em> — and earn returns as the project grows.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.getElementById('wallet').scrollIntoView({behavior:'smooth'})">
+      Open My Wallet
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <a href="opportunities.html" class="btn-outline">Browse Tokenised Projects</a>
+  </div>
+</div>
+
+<!-- WHAT IS TOKENISATION -->
+<section class="explainer" id="explainer">
+  <div class="section-eyebrow">Plain English First</div>
+  <h2 class="section-title">What is<br><em>tokenisation?</em></h2>
+  <div class="explainer-grid">
+    <div class="explainer-text">
+      <div class="highlight">
+        "Imagine a plot of land worth RWF 375 million. Instead of one person buying it all, 5,000 people each own a digital certificate worth RWF 75,000. When the land appreciates or generates rental income — everyone earns proportionally."
+      </div>
+      <p>A <strong>token</strong> is simply a digital certificate of ownership stored on the blockchain — an unforgeable, publicly verifiable record that says <em>"this person owns X% of this asset."</em> Think of it like a share in a company, except instead of a company, it's a physical piece of land or property in Rwanda.</p>
+      <p>The blockchain is the record-keeper. Just like the NLA (National Land Authority) keeps a register of who owns land, the blockchain keeps a digital register that cannot be changed, faked, or lost. Every token issued by Imali is tied to a real, verified, NLA-registered parcel.</p>
+      <p>When a project earns money — from rent, from sale, or from milestone completions — the smart contract <strong>automatically distributes</strong> your share to your wallet. No banks, no delays, no middlemen deciding when you get paid.</p>
+    </div>
+    <div class="explainer-visual reveal reveal-delay-1">
+      <!-- User's attached image goes here. Replace src with the actual image path. -->
+      <div class="explainer-image">
+        <img src="./tokenisation-diagram.png" alt="How tokenisation works — converting land into digital tokens" onerror="this.parentElement.style.display='none'; document.getElementById('diagramFallback').style.display='block';" />
+      </div>
+      <!-- SVG Diagram shown if no image file is present -->
+      <div id="diagramFallback" style="display:none;">
+        <svg class="diagram-svg" viewBox="0 0 460 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tokenisation diagram">
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#d4a832;stop-opacity:0.9"/>
+              <stop offset="100%" style="stop-color:#c49a28;stop-opacity:0.7"/>
+            </linearGradient>
+          </defs>
+          <!-- Land parcel -->
+          <rect x="20" y="80" width="110" height="80" rx="10" fill="#1a3a2a" stroke="#d4a832" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="75" y="108" text-anchor="middle" fill="#4caf7d" font-size="20">🏡</text>
+          <text x="75" y="130" text-anchor="middle" fill="#f5f0e8" font-size="10" font-family="'DM Sans',sans-serif">Land Parcel</text>
+          <text x="75" y="145" text-anchor="middle" fill="#d4a832" font-size="9" font-family="'DM Sans',sans-serif">NLA Verified</text>
+          <!-- Arrow right -->
+          <path d="M135 120 L185 120" stroke="#d4a832" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- Smart Contract box -->
+          <rect x="188" y="80" width="84" height="80" rx="10" fill="rgba(212,168,50,0.1)" stroke="#d4a832" stroke-width="1.5"/>
+          <text x="230" y="108" text-anchor="middle" fill="#d4a832" font-size="16">⛓️</text>
+          <text x="230" y="126" text-anchor="middle" fill="#f5f0e8" font-size="9" font-family="'DM Sans',sans-serif">Smart</text>
+          <text x="230" y="139" text-anchor="middle" fill="#f5f0e8" font-size="9" font-family="'DM Sans',sans-serif">Contract</text>
+          <text x="230" y="153" text-anchor="middle" fill="#d4a832" font-size="8" font-family="'DM Sans',sans-serif">Blockchain</text>
+          <!-- Arrow right -->
+          <path d="M275 120 L325 120" stroke="#d4a832" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <!-- Tokens -->
+          <rect x="328" y="60" width="112" height="120" rx="10" fill="rgba(245,240,232,0.04)" stroke="rgba(245,240,232,0.15)" stroke-width="1"/>
+          <circle cx="365" cy="95" r="14" fill="url(#goldGrad)"/>
+          <text x="365" y="100" text-anchor="middle" fill="#0a0a0f" font-size="10" font-weight="bold" font-family="'DM Sans',sans-serif">₿</text>
+          <circle cx="403" cy="95" r="14" fill="url(#goldGrad)" opacity="0.7"/>
+          <text x="403" y="100" text-anchor="middle" fill="#0a0a0f" font-size="10" font-weight="bold" font-family="'DM Sans',sans-serif">₿</text>
+          <circle cx="384" cy="125" r="14" fill="url(#goldGrad)" opacity="0.5"/>
+          <text x="384" y="130" text-anchor="middle" fill="#0a0a0f" font-size="10" font-weight="bold" font-family="'DM Sans',sans-serif">₿</text>
+          <text x="384" y="162" text-anchor="middle" fill="#f5f0e8" font-size="9" font-family="'DM Sans',sans-serif">Tokens</text>
+          <text x="384" y="174" text-anchor="middle" fill="#d4a832" font-size="8" font-family="'DM Sans',sans-serif">1,000 issued</text>
+          <!-- Wallet arrows -->
+          <path d="M384 182 L384 210 L180 245" stroke="#d4a832" stroke-width="1" stroke-dasharray="3,2" fill="none"/>
+          <path d="M384 182 L384 210 L384 245" stroke="#d4a832" stroke-width="1" stroke-dasharray="3,2" fill="none"/>
+          <!-- Investor wallets -->
+          <rect x="40" y="250" width="80" height="50" rx="8" fill="rgba(212,168,50,0.08)" stroke="rgba(212,168,50,0.25)" stroke-width="1"/>
+          <text x="80" y="272" text-anchor="middle" fill="#f5f0e8" font-size="9" font-family="'DM Sans',sans-serif">👤 Amara</text>
+          <text x="80" y="287" text-anchor="middle" fill="#d4a832" font-size="9" font-family="'DM Sans',sans-serif">50 tokens · 5%</text>
+          <rect x="190" y="250" width="80" height="50" rx="8" fill="rgba(212,168,50,0.08)" stroke="rgba(212,168,50,0.25)" stroke-width="1"/>
+          <text x="230" y="272" text-anchor="middle" fill="#f5f0e8" font-size="9" font-family="'DM Sans',sans-serif">👤 Jean</text>
+          <text x="230" y="287" text-anchor="middle" fill="#d4a832" font-size="9" font-family="'DM Sans',sans-serif">10 tokens · 1%</text>
+          <rect x="340" y="250" width="80" height="50" rx="8" fill="rgba(212,168,50,0.08)" stroke="rgba(212,168,50,0.25)" stroke-width="1"/>
+          <text x="380" y="272" text-anchor="middle" fill="#f5f0e8" font-size="9" font-family="'DM Sans',sans-serif">👤 Marie</text>
+          <text x="380" y="287" text-anchor="middle" fill="#d4a832" font-size="9" font-family="'DM Sans',sans-serif">200 tokens · 20%</text>
+          <!-- Arrow marker -->
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="#d4a832"/>
+            </marker>
+          </defs>
+          <!-- Title -->
+          <text x="230" y="30" text-anchor="middle" fill="#d4a832" font-size="11" letter-spacing="2" font-family="'DM Sans',sans-serif" text-transform="uppercase">HOW TOKENISATION WORKS</text>
+          <text x="230" y="48" text-anchor="middle" fill="rgba(245,240,232,0.4)" font-size="9" font-family="'DM Sans',sans-serif">Land → Smart Contract → Tokens → Wallets</text>
+        </svg>
+      </div>
+      <p class="explainer-caption">Illustration: One parcel of land, split into 1,000 digital ownership tokens across multiple investors.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS STEP BY STEP -->
+<section class="how-tok">
+  <div style="text-align:center; max-width:640px; margin:0 auto;">
+    <div class="section-eyebrow" style="justify-content:center;">Step by Step</div>
+    <h2 class="section-title">From <em>land</em> to <em>token</em></h2>
+    <p style="color:var(--text-dim); margin-top:1rem; line-height:1.7; font-size:0.95rem;">Here's exactly how a piece of Rwanda's land becomes digital equity — and how you earn from it.</p>
+  </div>
+  <div class="tok-steps" style="margin-top:5rem;">
+    <div class="tok-step reveal">
+      <div class="tok-num">01</div>
+      <span class="tok-icon">🏡</span>
+      <div class="tok-label">Land is Listed & Verified</div>
+      <p class="tok-desc">A landowner submits their parcel on The Land Bank. Imali verifies title deeds, confirms UPI with the NLA, and runs the Readiness Assessment.</p>
+    </div>
+    <div class="tok-step reveal reveal-delay-1">
+      <div class="tok-num">02</div>
+      <span class="tok-icon">📋</span>
+      <div class="tok-label">Legal Wrap Applied</div>
+      <p class="tok-desc">Our Compliance Hub creates a legal entity (SPV) around the land. This is what investors are actually buying shares of — with full title protection.</p>
+    </div>
+    <div class="tok-step reveal reveal-delay-2">
+      <div class="tok-num">03</div>
+      <span class="tok-icon">⛓️</span>
+      <div class="tok-label">Smart Contract Deployed</div>
+      <p class="tok-desc">A smart contract on Hedera Hashgraph is created. It defines how many tokens exist, who can own them, and exactly when and how earnings are distributed.</p>
+    </div>
+    <div class="tok-step reveal reveal-delay-3">
+      <div class="tok-num">04</div>
+      <span class="tok-icon">💰</span>
+      <div class="tok-label">Tokens Issued to Investors</div>
+      <p class="tok-desc">Investors commit funds via escrow. Tokens are issued proportionally to their wallets. Each token = a verified, legal share of the asset.</p>
+    </div>
+    <div class="tok-step reveal">
+      <div class="tok-num">05</div>
+      <span class="tok-icon">📈</span>
+      <div class="tok-label">You Earn as It Grows</div>
+      <p class="tok-desc">At every project milestone — groundbreaking, completion, rental commencement, or sale — the smart contract releases returns directly to your wallet.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PLAIN ENGLISH Q&A -->
+<section class="plain-eng">
+  <div style="text-align:center; max-width:640px; margin:0 auto;">
+    <div class="section-eyebrow" style="justify-content:center;">Common Questions</div>
+    <h2 class="section-title">Things people<br>wonder about</h2>
+  </div>
+  <div class="plain-grid">
+    <div class="plain-card reveal">
+      <div class="plain-card-icon">🔐</div>
+      <div class="plain-card-q">Is my ownership legally real?</div>
+      <p class="plain-card-a">Yes. Every token is backed by a legal SPV (Special Purpose Vehicle) that holds the title deed. Your token is a <strong>legal equity share</strong>, not just a digital receipt. The Compliance Hub handles all legal documentation.</p>
+    </div>
+    <div class="plain-card reveal reveal-delay-1">
+      <div class="plain-card-icon">💸</div>
+      <div class="plain-card-q">Can I sell my tokens before the project ends?</div>
+      <p class="plain-card-a">The secondary market is coming. Currently, tokens are held for the duration of the project hold period. Early exit requests are reviewed case-by-case. This protects all co-investors from sudden liquidity events.</p>
+    </div>
+    <div class="plain-card reveal reveal-delay-2">
+      <div class="plain-card-icon">🌍</div>
+      <div class="plain-card-q">What blockchain does Imali use?</div>
+      <p class="plain-card-a">We use <strong>Hedera Hashgraph</strong> — faster and more energy-efficient than Ethereum or Bitcoin, with transaction fees under $0.001. Designed for enterprise and government-grade applications.</p>
+    </div>
+    <div class="plain-card reveal">
+      <div class="plain-card-icon">🏦</div>
+      <div class="plain-card-q">Where does my investment money go?</div>
+      <p class="plain-card-a">Your funds go into an escrow account held by a licensed partner bank in Rwanda — <strong>Imali never holds your money.</strong> Funds are only released to the project when verified milestones are reached.</p>
+    </div>
+    <div class="plain-card reveal reveal-delay-1">
+      <div class="plain-card-icon">📊</div>
+      <div class="plain-card-q">How do I know a project will succeed?</div>
+      <p class="plain-card-a">Every project must score <strong>75+ on the Imali Readiness Assessment</strong>, with mandatory 100% on Legal and Tokenisation categories. We only list projects that pass — so you never see risky, unvetted deals.</p>
+    </div>
+    <div class="plain-card reveal reveal-delay-2">
+      <div class="plain-card-icon">📱</div>
+      <div class="plain-card-q">Do I need to understand crypto?</div>
+      <p class="plain-card-a"><strong>No.</strong> Imali manages the technical blockchain layer for you. Your wallet is created automatically when you verify your account. You interact with it through this dashboard — no wallets, seed phrases, or exchanges required.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOKEN ECONOMICS -->
+<section class="token-econ">
+  <div class="section-eyebrow">Token Economics</div>
+  <h2 class="section-title">How your <em>tokens earn</em></h2>
+  <div class="econ-layout">
+    <div class="econ-donut-wrap reveal">
+      <div class="econ-donut">
+        <svg width="240" height="240" viewBox="0 0 240 240">
+          <!-- SVG donut chart representing token distribution of returns -->
+          <circle cx="120" cy="120" r="90" fill="none" stroke="rgba(245,240,232,0.06)" stroke-width="30"/>
+          <!-- Capital appreciation: 45% -->
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#d4a832" stroke-width="30"
+            stroke-dasharray="254.5 565.5" stroke-dashoffset="0" transform="rotate(-90 120 120)"/>
+          <!-- Rental yield: 30% -->
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#4caf7d" stroke-width="30"
+            stroke-dasharray="169.6 650.4" stroke-dashoffset="-254.5" transform="rotate(-90 120 120)"/>
+          <!-- Sale proceeds: 20% -->
+          <circle cx="120" cy="120" r="90" fill="none" stroke="#6aacf0" stroke-width="30"
+            stroke-dasharray="113.1 706.9" stroke-dashoffset="-424.1" transform="rotate(-90 120 120)"/>
+          <!-- Platform fee: 5% -->
+          <circle cx="120" cy="120" r="90" fill="none" stroke="rgba(245,240,232,0.2)" stroke-width="30"
+            stroke-dasharray="28.3 791.7" stroke-dashoffset="-537.2" transform="rotate(-90 120 120)"/>
+        </svg>
+        <div class="econ-donut-center">
+          <div class="donut-big" style="color:var(--light-section-text)">100%</div>
+          <div class="donut-sub" style="color:var(--light-section-muted)">Token Returns</div>
+        </div>
+      </div>
+      <div class="econ-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#d4a832"></div> Capital Appreciation <span class="legend-val">45%</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#4caf7d"></div> Rental Income <span class="legend-val">30%</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:#6aacf0"></div> Sale Proceeds <span class="legend-val">20%</span></div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(245,240,232,0.3)"></div> Platform Fee <span class="legend-val">5%</span></div>
+      </div>
+    </div>
+    <div class="econ-points">
+      <div class="econ-point reveal reveal-delay-1">
+        <div class="econ-point-num">01</div>
+        <div>
+          <div class="econ-point-title">Milestone-based releases</div>
+          <p class="econ-point-desc">Returns are not paid at the end of a project — they are released at each verified milestone (foundation, structure, fit-out, handover). You earn as the project progresses.</p>
+        </div>
+      </div>
+      <div class="econ-point reveal reveal-delay-2">
+        <div class="econ-point-num">02</div>
+        <div>
+          <div class="econ-point-title">Token price appreciation</div>
+          <p class="econ-point-desc">As a project moves through milestones and land value increases, the underlying value of your token increases. Early investors benefit from the greatest appreciation.</p>
+        </div>
+      </div>
+      <div class="econ-point reveal">
+        <div class="econ-point-num">03</div>
+        <div>
+          <div class="econ-point-title">Smart contract auto-distribution</div>
+          <p class="econ-point-desc">When a milestone is verified, the smart contract automatically calculates each token holder's share and transfers returns directly to their wallets — without delays or human approval.</p>
+        </div>
+      </div>
+      <div class="econ-point reveal reveal-delay-1">
+        <div class="econ-point-num">04</div>
+        <div>
+          <div class="econ-point-title">Landowner equity option</div>
+          <p class="econ-point-desc">Landowners can choose to receive tokens instead of cash — becoming co-investors in their own land's development. Their tokens gain value as the project succeeds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WALLET -->
+<section class="wallet-section" id="wallet">
+  <div class="section-eyebrow">My Token Wallet</div>
+  <h2 class="section-title">Manage your <em>digital equity</em></h2>
+  <p style="color:var(--text-dim); margin-top:1rem; margin-bottom:0; font-size:0.95rem; max-width:560px; line-height:1.7;">All your tokenised property holdings in one place — view balances, track performance, and transfer tokens to other verified investors.</p>
+
+  <div class="wallet-ui" id="walletUI">
+    <!-- Wallet Header -->
+    <div class="wallet-header">
+      <div class="wallet-id">
+        <div class="wallet-label">Wallet Address</div>
+        <div class="wallet-address">
+          <span id="walletAddr">0x4a7F…3d2E</span>
+          <button class="wallet-copy" onclick="copyAddr()" title="Copy full address">⎘</button>
+        </div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:0.5rem;">✅ KYC Verified · Hedera Hashgraph · Account ID: 0.0.4729183</div>
+      </div>
+      <div class="wallet-balance-wrap">
+        <div class="wallet-balance-label">Total Portfolio Value</div>
+        <div class="wallet-balance">RWF 4.82M</div>
+        <div class="wallet-balance-sub">↑ +18.4% since initial investment</div>
+      </div>
+    </div>
+
+    <!-- Wallet Tabs -->
+    <div class="wallet-nav-tabs">
+      <button class="wtab active" onclick="switchWTab('holdings', this)">Token Holdings</button>
+      <button class="wtab" onclick="switchWTab('transactions', this)">Transaction History</button>
+      <button class="wtab" onclick="switchWTab('transfer', this)">Transfer Tokens</button>
+    </div>
+
+    <!-- HOLDINGS TAB -->
+    <div class="wallet-body" id="wt-holdings">
+      <div class="holdings-grid">
+        <!-- Holding 1 -->
+        <div class="holding-card reveal">
+          <div class="holding-top">
+            <div>
+              <div class="holding-name">Kimisagara Heights</div>
+              <div class="holding-loc">📍 Kigali, Nyarugenge</div>
+            </div>
+            <span class="holding-badge badge-active">Active</span>
+          </div>
+          <div class="holding-metrics">
+            <div class="hm-item"><div class="hm-val">50</div><div class="hm-label">Tokens</div></div>
+            <div class="hm-item"><div class="hm-val">5%</div><div class="hm-label">Stake</div></div>
+            <div class="hm-item"><div class="hm-val">RWF 2.4M</div><div class="hm-label">Current Value</div></div>
+          </div>
+          <div class="holding-progress">
+            <div class="prog-label"><span>Project progress</span><span>62% complete</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:62%"></div></div>
+          </div>
+          <div style="margin-top:0.75rem; font-size:0.75rem; color:var(--text-muted);">Next milestone: Structure handover · Est. Feb 2026</div>
+        </div>
+        <!-- Holding 2 -->
+        <div class="holding-card reveal reveal-delay-1">
+          <div class="holding-top">
+            <div>
+              <div class="holding-name">Huye Student Campus</div>
+              <div class="holding-loc">📍 Huye, Southern Province</div>
+            </div>
+            <span class="holding-badge badge-milestone">Milestone Due</span>
+          </div>
+          <div class="holding-metrics">
+            <div class="hm-item"><div class="hm-val">10</div><div class="hm-label">Tokens</div></div>
+            <div class="hm-item"><div class="hm-val">1%</div><div class="hm-label">Stake</div></div>
+            <div class="hm-item"><div class="hm-val">RWF 1.1M</div><div class="hm-label">Current Value</div></div>
+          </div>
+          <div class="holding-progress">
+            <div class="prog-label"><span>Project progress</span><span>41% complete</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:41%; background:#4caf7d;"></div></div>
+          </div>
+          <div style="margin-top:0.75rem; font-size:0.75rem; color:#4caf7d;">🔔 Milestone payout of RWF 124,800 pending verification</div>
+        </div>
+        <!-- Holding 3 -->
+        <div class="holding-card reveal">
+          <div class="holding-top">
+            <div>
+              <div class="holding-name">Rubavu Lakefront Villas</div>
+              <div class="holding-loc">📍 Rubavu, Western Province</div>
+            </div>
+            <span class="holding-badge badge-active">Active</span>
+          </div>
+          <div class="holding-metrics">
+            <div class="hm-item"><div class="hm-val">8</div><div class="hm-label">Tokens</div></div>
+            <div class="hm-item"><div class="hm-val">0.8%</div><div class="hm-label">Stake</div></div>
+            <div class="hm-item"><div class="hm-val">RWF 1.32M</div><div class="hm-label">Current Value</div></div>
+          </div>
+          <div class="holding-progress">
+            <div class="prog-label"><span>Project progress</span><span>28% complete</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:28%; background:#6aacf0;"></div></div>
+          </div>
+          <div style="margin-top:0.75rem; font-size:0.75rem; color:var(--text-muted);">Full asset project · Est. completion Dec 2026</div>
+        </div>
+        <!-- Add investment prompt -->
+        <div class="holding-card reveal reveal-delay-1" style="border-style:dashed; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:200px; background:transparent;">
+          <div style="font-size:2rem; margin-bottom:1rem; opacity:0.4;">＋</div>
+          <div style="font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:700; color:var(--text-dim); margin-bottom:0.5rem;">Add a new investment</div>
+          <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:1.25rem; line-height:1.6;">Browse vetted projects and invest from RWF 500K</p>
+          <a href="opportunities.html" class="btn-primary" style="font-size:0.8rem; padding:0.6rem 1.25rem;">Browse Opportunities</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSACTIONS TAB -->
+    <div class="wallet-body" id="wt-transactions" style="display:none;">
+      <div class="tx-list">
+        <div class="tx-row">
+          <div class="tx-icon in">💰</div>
+          <div class="tx-detail">
+            <div class="tx-title">Milestone Payout — Kimisagara Heights</div>
+            <div class="tx-sub">Foundation completion verified · Smart contract auto-release</div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-val positive">+RWF 187,500</div>
+            <div class="tx-date">15 Apr 2025</div>
+          </div>
+        </div>
+        <div class="tx-row">
+          <div class="tx-icon out">🏗️</div>
+          <div class="tx-detail">
+            <div class="tx-title">Investment — Rubavu Lakefront Villas</div>
+            <div class="tx-sub">8 tokens acquired · Funds moved to escrow</div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-val negative">−RWF 1,200,000</div>
+            <div class="tx-date">3 Mar 2025</div>
+          </div>
+        </div>
+        <div class="tx-row">
+          <div class="tx-icon in">🎓</div>
+          <div class="tx-detail">
+            <div class="tx-title">Quarterly Rental Dividend — Huye Student Campus</div>
+            <div class="tx-sub">Q1 2025 rental income distributed pro-rata</div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-val positive">+RWF 42,000</div>
+            <div class="tx-date">1 Apr 2025</div>
+          </div>
+        </div>
+        <div class="tx-row">
+          <div class="tx-icon swap">🔁</div>
+          <div class="tx-detail">
+            <div class="tx-title">5 Tokens Transferred — Kimisagara Heights</div>
+            <div class="tx-sub">Transferred to 0x9b3C…1aF2 (verified investor)</div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-val" style="color:var(--text-dim);">5 IML-KIM</div>
+            <div class="tx-date">20 Feb 2025</div>
+          </div>
+        </div>
+        <div class="tx-row">
+          <div class="tx-icon out">🏡</div>
+          <div class="tx-detail">
+            <div class="tx-title">Investment — Huye Student Campus</div>
+            <div class="tx-sub">10 tokens acquired · Funds moved to escrow</div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-val negative">−RWF 900,000</div>
+            <div class="tx-date">14 Jan 2025</div>
+          </div>
+        </div>
+        <div class="tx-row">
+          <div class="tx-icon out">🏗️</div>
+          <div class="tx-detail">
+            <div class="tx-title">Investment — Kimisagara Heights</div>
+            <div class="tx-sub">50 tokens acquired · Funds moved to escrow</div>
+          </div>
+          <div class="tx-amount">
+            <div class="tx-val negative">−RWF 2,000,000</div>
+            <div class="tx-date">5 Oct 2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSFER TAB -->
+    <div class="wallet-body" id="wt-transfer" style="display:none;">
+      <div class="kyc-check">
+        <div class="kyc-icon">✅</div>
+        <div class="kyc-text"><strong>KYC Verified</strong> — You can transfer tokens to other verified Imali investors. All transfers are recorded permanently on the blockchain and require the recipient to be KYC-verified.</div>
+      </div>
+      <div class="transfer-form">
+        <div class="tf-group">
+          <label class="tf-label">Token to Transfer</label>
+          <select class="tf-select" id="transferToken">
+            <option value="">Select a holding...</option>
+            <option value="kim">IML-KIM — Kimisagara Heights (50 tokens)</option>
+            <option value="huy">IML-HUY — Huye Student Campus (10 tokens)</option>
+            <option value="rub">IML-RUB — Rubavu Lakefront Villas (8 tokens)</option>
+          </select>
+        </div>
+        <div class="tf-group">
+          <label class="tf-label">Amount (tokens)</label>
+          <input class="tf-input" type="number" id="transferAmt" min="1" max="50" placeholder="e.g. 5" oninput="updateTransferSummary()"/>
+          <div class="tf-hint">You have up to 50 tokens available for this holding.</div>
+        </div>
+        <div class="tf-group full">
+          <label class="tf-label">Recipient Wallet Address</label>
+          <input class="tf-input" type="text" id="transferTo" placeholder="0x... or Hedera Account ID (0.0.xxxxxxx)" oninput="updateTransferSummary()"/>
+          <div class="tf-hint">The recipient must be a KYC-verified Imali investor. Non-verified wallets will be rejected by the smart contract.</div>
+        </div>
+        <div class="tf-group full">
+          <label class="tf-label">Transfer Note (optional)</label>
+          <input class="tf-input" type="text" id="transferNote" placeholder="e.g. Family investment transfer"/>
+        </div>
+      </div>
+      <div class="transfer-summary" style="margin-top:1.5rem;">
+        <div class="ts-item"><div class="ts-label">Tokens Being Sent</div><div class="ts-val" id="tsSending">—</div></div>
+        <div class="ts-item"><div class="ts-label">Estimated Value</div><div class="ts-val" id="tsValue">—</div></div>
+        <div class="ts-item"><div class="ts-label">Network Fee</div><div class="ts-val" style="color:var(--text-muted);">&lt; $0.001 USD</div></div>
+        <div class="ts-item"><div class="ts-label">Confirmation Time</div><div class="ts-val" style="color:#4caf7d;">~3 seconds</div></div>
+      </div>
+      <button class="btn-transfer" onclick="handleTransfer()">Confirm Transfer on Blockchain →</button>
+      <p class="setup-note">🔒 This transfer is irreversible once confirmed. Ensure the recipient address is correct.</p>
+      <div id="transferSuccess" style="display:none; background:rgba(76,175,125,0.1); border:1px solid rgba(76,175,125,0.3); border-radius:0.75rem; padding:1.5rem; margin-top:1rem; text-align:center;">
+        <div style="font-size:1.5rem; margin-bottom:0.5rem;">✅</div>
+        <div style="font-family:'Syne',sans-serif; font-weight:700; color:#4caf7d; margin-bottom:0.35rem;">Transfer Submitted</div>
+        <p style="font-size:0.85rem; color:var(--text-dim);">Your transfer has been broadcast to the Hedera network. It will be confirmed in ~3 seconds and reflected in Transaction History.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WALLET SETUP WIZARD -->
+<section class="setup-section" id="setupWizard">
+  <div style="text-align:center; max-width:640px; margin:0 auto;">
+    <div class="section-eyebrow" style="justify-content:center;">New to Imali?</div>
+    <h2 class="section-title">Set up your <em>wallet</em></h2>
+    <p style="color:var(--text-dim); margin-top:1rem; font-size:0.95rem; line-height:1.7;">Your Imali wallet is created automatically when you verify your identity. Here's how to get started — no crypto experience needed.</p>
+  </div>
+  <div class="setup-box">
+    <div class="setup-progress">
+      <div class="setup-step done" id="sw1">Create Account</div>
+      <div class="setup-step active" id="sw2">Verify Identity</div>
+      <div class="setup-step" id="sw3">Wallet Activated</div>
+      <div class="setup-step" id="sw4">First Investment</div>
+    </div>
+    <!-- Step content panels -->
+    <div id="swContent1" style="display:none;" class="setup-content">
+      <div class="setup-title">Create your account</div>
+      <p class="setup-desc">Sign up with your name, phone number, and email. Choose whether you're investing as an individual or on behalf of a business.</p>
+      <div class="wallet-option selected" onclick="selectWalletOpt(this)">
+        <div class="wallet-option-icon">👤</div>
+        <div>
+          <div class="wallet-option-name">Individual Investor</div>
+          <p class="wallet-option-desc">For personal investments. KYC via NIDA national ID. Minimum investment: RWF 500,000.</p>
+          <span class="wallet-option-tag">Most common</span>
+        </div>
+      </div>
+      <div class="wallet-option" onclick="selectWalletOpt(this)">
+        <div class="wallet-option-icon">🏢</div>
+        <div>
+          <div class="wallet-option-name">Business / Institutional</div>
+          <p class="wallet-option-desc">For companies, family offices, or investment clubs. Requires RDB business registration. Minimum: RWF 5,000,000.</p>
+        </div>
+      </div>
+      <div class="setup-actions">
+        <span></span>
+        <button class="btn-setup-next" onclick="goSetupStep(2)">Next: Verify Identity →</button>
+      </div>
+    </div>
+    <div id="swContent2" class="setup-content">
+      <div class="setup-title">Verify your identity (KYC)</div>
+      <p class="setup-desc">Rwanda law requires identity verification before investing. We use your NIDA National ID to verify you in minutes — no documents to upload, no waiting.</p>
+      <div class="kyc-check">
+        <div class="kyc-icon">🪪</div>
+        <div class="kyc-text">Enter your 16-digit NIDA number and we'll verify it instantly via the Rwanda National Identification Agency. Your data is never stored — only your verification status is recorded.</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:1rem;">
+        <div class="tf-group">
+          <label class="tf-label">NIDA Number</label>
+          <input class="tf-input" type="text" placeholder="1 XXXX X XXXXXXX X XX" maxlength="19" style="font-family:'DM Sans',monospace; letter-spacing:0.08em;"/>
+        </div>
+        <div class="tf-group">
+          <label class="tf-label">Date of Birth (for verification match)</label>
+          <input class="tf-input" type="date"/>
+        </div>
+      </div>
+      <div class="security-row" style="margin-top:1.5rem;">
+        <div class="sec-badge"><div class="sec-badge-icon">🔒</div><div class="sec-badge-label">256-bit encrypted transit</div></div>
+        <div class="sec-badge"><div class="sec-badge-icon">🗑️</div><div class="sec-badge-label">Never stored after verification</div></div>
+        <div class="sec-badge"><div class="sec-badge-icon">🇷🇼</div><div class="sec-badge-label">NIDA API · Rwanda-native</div></div>
+      </div>
+      <div class="setup-actions">
+        <button class="btn-setup-back" onclick="goSetupStep(1)">← Back</button>
+        <button class="btn-setup-next" onclick="goSetupStep(3)">Verify & Activate Wallet →</button>
+      </div>
+    </div>
+    <div id="swContent3" style="display:none;" class="setup-content">
+      <div style="text-align:center; padding:1rem 0;">
+        <div style="font-size:3rem; margin-bottom:1rem;">🎉</div>
+        <div class="setup-title" style="text-align:center;">Wallet Activated!</div>
+        <p class="setup-desc" style="text-align:center; margin:0 auto;">Your Imali wallet has been created and linked to your verified identity. Here's what you can do now:</p>
+        <div style="display:flex; flex-direction:column; gap:0.75rem; margin:1.5rem 0; text-align:left;">
+          <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.9rem; color:var(--text);">✅ <span>Browse and invest in tokenised projects</span></div>
+          <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.9rem; color:var(--text);">✅ <span>Receive token payouts at each milestone</span></div>
+          <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.9rem; color:var(--text);">✅ <span>Transfer tokens to other verified investors</span></div>
+          <div style="display:flex; align-items:center; gap:0.75rem; font-size:0.9rem; color:var(--text);">✅ <span>Track your portfolio in real time</span></div>
+        </div>
+        <div class="setup-actions" style="justify-content:center;">
+          <a href="opportunities.html" class="btn-setup-next" style="text-decoration:none;">Browse Live Projects →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<div class="ecosystem-banner">
+  <div class="eco-label">Part of the Imali Ecosystem</div>
+  <div class="eco-pills">
+    <a href="../land-bank/index.html" class="eco-pill">🏡 The Land Bank</a>
+    <a href="./index.html" class="eco-pill active">💼 The Wealth Hub</a>
+    <a href="#" class="eco-pill">🏠 Consumer Portal</a>
+    <a href="#" class="eco-pill">🧱 Supply Chain</a>
+    <a href="#" class="eco-pill">🔧 Talent Forge</a>
+    <a href="#" class="eco-pill">⚖️ Compliance Hub</a>
+    <a href="#" class="eco-pill">🏦 Banking Partners</a>
+    <a href="dashboard.html#partner" class="eco-pill">🤝 Partner Dashboard</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">Imali<span>.</span>biz</div>
+      <div class="footer-sub">The Wealth Hub</div>
+      <p class="footer-tagline">Rwanda's real estate intelligence platform. Invest in verified, project-ready land and assets — transparently, fractionally, and securely.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">The Wealth Hub</div>
+      <ul class="footer-links">
+        <li><a href="opportunities.html">Opportunities</a></li>
+        <li><a href="invest.html">How to Invest</a></li>
+        <li><a href="calculator.html">Returns Calculator</a></li>
+        <li><a href="tokenisation.html">Tokenisation</a></li>
+        <li><a href="dashboard.html">My Portfolio</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Ecosystem</div>
+      <ul class="footer-links">
+        <li><a href="../land-bank/index.html">The Land Bank</a></li>
+        <li><a href="#">Consumer Portal</a></li>
+        <li><a href="#">Supply Chain</a></li>
+        <li><a href="#">Talent Forge</a></li>
+        <li><a href="#">Compliance Hub</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Imali.biz</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Our Vision</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Imali.biz — Rwanda's Real Estate Intelligence Platform</span>
+    <span>Kigali, Rwanda · imali.biz</span>
+  </div>
+</footer>
+
+<script>
+// ── THEME ─────────────────────────────────────────────────────
+(function() {
+  var saved = localStorage.getItem('imali-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+})();
+
+function toggleTheme() {
+  var html = document.documentElement;
+  var current = html.getAttribute('data-theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('imali-theme', next);
+  updateToggleUI(next);
+}
+function updateToggleUI(theme) {
+  var icon = document.getElementById('themeIcon');
+  var label = document.getElementById('themeLabel');
+  if (theme === 'light') { icon.textContent = '🌙'; label.textContent = 'Dark'; }
+  else { icon.textContent = '☀️'; label.textContent = 'Light'; }
+}
+document.addEventListener('DOMContentLoaded', function() {
+  updateToggleUI(document.documentElement.getAttribute('data-theme') || 'dark');
+});
+
+// ── CURSOR ───────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = (mx - 5) + 'px';
+  cursor.style.top = (my - 5) + 'px';
+});
+(function animRing() {
+  rx += (mx - rx - 18) * 0.12;
+  ry += (my - ry - 18) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+})();
+
+// ── REVEAL ───────────────────────────────────────────────────
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.1 });
+reveals.forEach(el => io.observe(el));
+
+// ── WALLET TABS ──────────────────────────────────────────────
+function switchWTab(name, btn) {
+  ['holdings','transactions','transfer'].forEach(t => {
+    var el = document.getElementById('wt-' + t);
+    if (el) el.style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.wtab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ── SETUP WIZARD ─────────────────────────────────────────────
+function goSetupStep(step) {
+  [1,2,3].forEach(s => {
+    var cont = document.getElementById('swContent' + s);
+    var tab = document.getElementById('sw' + s);
+    if (cont) cont.style.display = s === step ? 'block' : 'none';
+    if (tab) {
+      tab.className = 'setup-step';
+      if (s < step) tab.className += ' done';
+      else if (s === step) tab.className += ' active';
+    }
+  });
+}
+
+function selectWalletOpt(el) {
+  document.querySelectorAll('.wallet-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── TRANSFER ─────────────────────────────────────────────────
+const tokenValues = { kim: 48000, huy: 110000, rub: 165000 };
+function updateTransferSummary() {
+  var token = document.getElementById('transferToken').value;
+  var amt = parseInt(document.getElementById('transferAmt').value) || 0;
+  var val = tokenValues[token] ? tokenValues[token] * amt : 0;
+  document.getElementById('tsSending').textContent = amt ? amt + ' tokens' : '—';
+  document.getElementById('tsValue').textContent = val ? 'RWF ' + val.toLocaleString() : '—';
+}
+
+function handleTransfer() {
+  var token = document.getElementById('transferToken').value;
+  var amt = document.getElementById('transferAmt').value;
+  var to = document.getElementById('transferTo').value;
+  if (!token || !amt || !to) {
+    alert('Please fill in all required fields before confirming the transfer.');
+    return;
+  }
+  document.getElementById('transferSuccess').style.display = 'block';
+  document.getElementById('transferSuccess').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyAddr() {
+  navigator.clipboard.writeText('0x4a7F8d3C2b1E9aF05d6c4e7b2f1A3d2E')
+    .then(() => { var btn = document.querySelector('.wallet-copy'); btn.textContent = '✓'; setTimeout(() => btn.textContent = '⎘', 1500); })
+    .catch(() => {});
+}
+</script>
+</body>
+</html>
