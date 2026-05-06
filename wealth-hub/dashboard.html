@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio — The Wealth Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832; --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560; --sidebar-w: 240px; --topbar-h: 60px; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--gold); transform: translate(-8px,-8px) !important; }
+
+  /* TOP BAR */
+  .topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h); z-index: 100; background: rgba(10,10,15,0.98); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem 0 calc(var(--sidebar-w) + 1.5rem); }
+  .topbar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: var(--cream); text-decoration: none; display: flex; flex-direction: column; }
+  .topbar-logo span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .topbar-sub { font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .topbar-right { display: flex; align-items: center; gap: 1rem; }
+  .topbar-user { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: rgba(245,240,232,0.6); }
+  .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--terracotta)); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 800; color: white; flex-shrink: 0; }
+  .topbar-btn { background: rgba(212,168,50,0.1); border: 1px solid rgba(212,168,50,0.2); border-radius: 2rem; padding: 0.35rem 0.9rem; font-size: 0.75rem; color: var(--gold); text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; font-weight: 600; }
+  .topbar-btn:hover { background: rgba(212,168,50,0.18); }
+
+  /* SIDEBAR */
+  .sidebar { position: fixed; top: var(--topbar-h); left: 0; bottom: 0; width: var(--sidebar-w); background: rgba(245,240,232,0.02); border-right: 1px solid rgba(245,240,232,0.06); z-index: 90; display: flex; flex-direction: column; padding: 1.5rem 0; overflow-y: auto; }
+  .sidebar-section { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.2); padding: 0 1.25rem; margin: 1rem 0 0.4rem; }
+  .sidebar-item { display: flex; align-items: center; gap: 0.65rem; padding: 0.65rem 1.25rem; font-size: 0.82rem; color: rgba(245,240,232,0.45); cursor: none; transition: background 0.2s, color 0.2s; border-radius: 0; text-decoration: none; }
+  .sidebar-item:hover { background: rgba(245,240,232,0.04); color: var(--cream); }
+  .sidebar-item.active { background: rgba(212,168,50,0.08); color: var(--gold); border-right: 2px solid var(--gold); }
+  .sidebar-icon { font-size: 1rem; flex-shrink: 0; }
+  .sidebar-bottom { margin-top: auto; border-top: 1px solid rgba(245,240,232,0.05); padding-top: 1rem; }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-w); margin-top: var(--topbar-h); padding: 2.5rem; min-height: calc(100vh - var(--topbar-h)); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .panel-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.25rem; }
+  .panel-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .panel-sub { font-size: 0.82rem; color: rgba(245,240,232,0.35); margin-bottom: 2rem; }
+
+  /* STAT CARDS */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 1rem; padding: 1.25rem; }
+  .stat-card.gold-card { background: rgba(212,168,50,0.06); border-color: rgba(212,168,50,0.18); }
+  .stat-eyebrow { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.5rem; }
+  .stat-val { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold); letter-spacing: -0.02em; }
+  .stat-val.white { color: var(--cream); }
+  .stat-val.green { color: #4caf7d; }
+  .stat-sub { font-size: 0.7rem; color: rgba(245,240,232,0.3); margin-top: 0.25rem; }
+
+  /* PORTFOLIO GRID */
+  .portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; margin-bottom: 2rem; }
+  .portfolio-card { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.08); border-radius: 1rem; padding: 1.5rem; }
+  .portfolio-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+  .portfolio-card-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; line-height: 1.25; }
+  .portfolio-card-type { font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; border-radius: 2rem; padding: 0.2rem 0.6rem; }
+  .type-frac { background: rgba(200,82,26,0.12); color: var(--terracotta); border: 1px solid rgba(200,82,26,0.2); }
+  .type-full { background: rgba(212,168,50,0.1); color: var(--gold); border: 1px solid rgba(212,168,50,0.2); }
+  .portfolio-card-loc { font-size: 0.72rem; color: rgba(245,240,232,0.3); margin-bottom: 1rem; }
+  .portfolio-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 0.85rem; }
+  .pm-item { background: rgba(245,240,232,0.03); border-radius: 0.5rem; padding: 0.45rem 0.5rem; text-align: center; }
+  .pm-val { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--gold); }
+  .pm-label { font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.05em; color: rgba(245,240,232,0.3); }
+  .milestone-bar { }
+  .ms-header { display: flex; justify-content: space-between; font-size: 0.7rem; color: rgba(245,240,232,0.35); margin-bottom: 0.3rem; }
+  .ms-track { height: 5px; background: rgba(245,240,232,0.06); border-radius: 3px; overflow: hidden; }
+  .ms-fill { height: 100%; border-radius: 3px; background: var(--gold); }
+  .ms-status { margin-top: 0.6rem; display: flex; justify-content: space-between; align-items: center; }
+  .ms-stage { font-size: 0.68rem; color: rgba(245,240,232,0.4); }
+  .ms-badge { font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; border-radius: 2rem; padding: 0.2rem 0.55rem; }
+  .badge-active { background: rgba(76,175,124,0.12); color: #4caf7d; border: 1px solid rgba(76,175,124,0.2); }
+  .badge-review { background: rgba(212,168,50,0.1); color: var(--gold); border: 1px solid rgba(212,168,50,0.2); }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 0.63rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,240,232,0.3); text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid rgba(245,240,232,0.07); }
+  .data-table td { font-size: 0.82rem; padding: 0.65rem 0.75rem; border-bottom: 1px solid rgba(245,240,232,0.04); color: rgba(245,240,232,0.65); }
+  .data-table td:first-child { color: var(--cream); font-weight: 500; }
+  .data-table .td-gold { color: var(--gold); font-family: 'Syne', sans-serif; font-weight: 700; }
+  .data-table .td-green { color: #4caf7d; font-weight: 600; }
+  .table-card { background: rgba(245,240,232,0.02); border: 1px solid rgba(245,240,232,0.07); border-radius: 1rem; overflow: hidden; }
+
+  /* PARTNER */
+  .partner-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .partner-ref-box { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.15); border-radius: 1rem; padding: 1.25rem; margin-bottom: 1.5rem; }
+  .ref-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.35); margin-bottom: 0.65rem; }
+  .ref-link-wrap { display: flex; gap: 0.75rem; align-items: center; }
+  .ref-link { flex: 1; background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.6rem; padding: 0.65rem 1rem; font-family: 'DM Sans', monospace; font-size: 0.78rem; color: var(--gold); }
+  .ref-copy-btn { background: var(--gold); color: var(--ink); border: none; border-radius: 0.6rem; padding: 0.65rem 1rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: none; white-space: nowrap; transition: background 0.2s; }
+  .ref-copy-btn:hover { background: #c49a28; }
+  .earn-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1.75rem; }
+  .earn-card { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 0.85rem; padding: 1.1rem; }
+  .earn-card-icon { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .earn-card-type { font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .earn-card-rate { font-size: 0.78rem; color: var(--gold); font-weight: 600; margin-bottom: 0.25rem; }
+  .earn-card-desc { font-size: 0.7rem; color: rgba(245,240,232,0.35); line-height: 1.45; }
+  .section-label { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin: 1.5rem 0 0.85rem; }
+
+  @media (max-width: 1024px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 1.5rem; }
+    .topbar { padding-left: 1.5rem; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .partner-stats { grid-template-columns: 1fr 1fr; }
+    .earn-cards { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="./index.html" class="topbar-logo">
+    <span style="font-size:1rem;">Imali<span>.</span>biz</span>
+    <span class="topbar-sub">The Wealth Hub</span>
+  </a>
+  <div class="topbar-right">
+    <a href="opportunities.html" class="topbar-btn">+ New Investment</a>
+    <div class="topbar-user">
+      <div class="user-avatar">AM</div>
+      <span>Amara M.</span>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-section">Portfolio</div>
+  <a href="#" class="sidebar-item active" data-tab="overview" onclick="switchTab('overview');return false;">
+    <span class="sidebar-icon">📊</span> Overview
+  </a>
+  <a href="#" class="sidebar-item" data-tab="investments" onclick="switchTab('investments');return false;">
+    <span class="sidebar-icon">💼</span> My Investments
+  </a>
+  <a href="#" class="sidebar-item" data-tab="dividends" onclick="switchTab('dividends');return false;">
+    <span class="sidebar-icon">💸</span> Dividends
+  </a>
+  <a href="#" class="sidebar-item" data-tab="watchlist" onclick="switchTab('watchlist');return false;">
+    <span class="sidebar-icon">★</span> Watchlist
+  </a>
+  <div class="sidebar-section">Tools</div>
+  <a href="opportunities.html" class="sidebar-item">
+    <span class="sidebar-icon">🔍</span> Opportunities
+  </a>
+  <a href="calculator.html" class="sidebar-item">
+    <span class="sidebar-icon">🧮</span> Calculator
+  </a>
+  <div class="sidebar-section">Earnings</div>
+  <a href="#" class="sidebar-item" data-tab="partner" onclick="switchTab('partner');return false;">
+    <span class="sidebar-icon">🤝</span> Partner Dashboard
+  </a>
+  <div class="sidebar-section">Account</div>
+  <a href="#" class="sidebar-item" data-tab="settings" onclick="switchTab('settings');return false;">
+    <span class="sidebar-icon">⚙️</span> Settings
+  </a>
+  <div class="sidebar-bottom">
+    <a href="../index.html" class="sidebar-item" style="font-size:0.75rem; color:rgba(245,240,232,0.25);">
+      <span class="sidebar-icon">←</span> Imali.biz
+    </a>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- OVERVIEW TAB -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="panel-title">Good morning, <em>Amara.</em></div>
+    <p class="panel-sub">Portfolio last updated today at 09:14 AM · 4 active investments</p>
+
+    <div class="stats-row">
+      <div class="stat-card gold-card">
+        <div class="stat-eyebrow">Portfolio Value</div>
+        <div class="stat-val">RWF 28.4M</div>
+        <div class="stat-sub">↑ +12.3% since entry</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-eyebrow">Total Invested</div>
+        <div class="stat-val white">RWF 24.5M</div>
+        <div class="stat-sub">Across 4 projects</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-eyebrow">Dividends Received</div>
+        <div class="stat-val green">RWF 1.2M</div>
+        <div class="stat-sub">YTD · 2 milestone payouts</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-eyebrow">Blended IRR</div>
+        <div class="stat-val">20.4%</div>
+        <div class="stat-sub">Projected on current portfolio</div>
+      </div>
+    </div>
+
+    <div class="section-label">Active Investments</div>
+    <div class="portfolio-grid">
+      <div class="portfolio-card">
+        <div class="portfolio-card-top">
+          <div class="portfolio-card-name">Kimironko Mixed-Use Block</div>
+          <span class="portfolio-card-type type-frac">Fractional</span>
+        </div>
+        <div class="portfolio-card-loc">📍 Gasabo, Kigali · 1.8% stake · RWF 9M invested</div>
+        <div class="portfolio-metrics">
+          <div class="pm-item"><div class="pm-val">22%</div><div class="pm-label">IRR</div></div>
+          <div class="pm-item"><div class="pm-val">RWF 10.8M</div><div class="pm-label">Current Value</div></div>
+          <div class="pm-item"><div class="pm-val">+RWF 420K</div><div class="pm-label">Dividends</div></div>
+        </div>
+        <div class="milestone-bar">
+          <div class="ms-header"><span>Construction Progress</span><span>68%</span></div>
+          <div class="ms-track"><div class="ms-fill" style="width:68%"></div></div>
+          <div class="ms-status"><span class="ms-stage">Phase 2: Structural work</span><span class="ms-badge badge-active">On track</span></div>
+        </div>
+      </div>
+      <div class="portfolio-card">
+        <div class="portfolio-card-top">
+          <div class="portfolio-card-name">Huye Student Housing Campus</div>
+          <span class="portfolio-card-type type-frac">Fractional</span>
+        </div>
+        <div class="portfolio-card-loc">📍 Huye, Southern Province · 3.2% stake · RWF 8M invested</div>
+        <div class="portfolio-metrics">
+          <div class="pm-item"><div class="pm-val">19%</div><div class="pm-label">IRR</div></div>
+          <div class="pm-item"><div class="pm-val">RWF 9.1M</div><div class="pm-label">Current Value</div></div>
+          <div class="pm-item"><div class="pm-val">+RWF 380K</div><div class="pm-label">Dividends</div></div>
+        </div>
+        <div class="milestone-bar">
+          <div class="ms-header"><span>Construction Progress</span><span>41%</span></div>
+          <div class="ms-track"><div class="ms-fill" style="width:41%; background:#4caf7d;"></div></div>
+          <div class="ms-status"><span class="ms-stage">Phase 1: Foundation complete</span><span class="ms-badge badge-review">Milestone review</span></div>
+        </div>
+      </div>
+      <div class="portfolio-card">
+        <div class="portfolio-card-top">
+          <div class="portfolio-card-name">Musanze Eco-Resort Land</div>
+          <span class="portfolio-card-type type-full">Full Asset</span>
+        </div>
+        <div class="portfolio-card-loc">📍 Musanze, Northern Province · 100% stake · RWF 5M invested</div>
+        <div class="portfolio-metrics">
+          <div class="pm-item"><div class="pm-val">25%</div><div class="pm-label">IRR</div></div>
+          <div class="pm-item"><div class="pm-val">RWF 6.2M</div><div class="pm-label">Current Value</div></div>
+          <div class="pm-item"><div class="pm-val">+RWF 240K</div><div class="pm-label">Dividends</div></div>
+        </div>
+        <div class="milestone-bar">
+          <div class="ms-header"><span>Development Progress</span><span>22%</span></div>
+          <div class="ms-track"><div class="ms-fill" style="width:22%; background:var(--terracotta);"></div></div>
+          <div class="ms-status"><span class="ms-stage">Planning & permitting</span><span class="ms-badge badge-active">On track</span></div>
+        </div>
+      </div>
+      <div class="portfolio-card">
+        <div class="portfolio-card-top">
+          <div class="portfolio-card-name">Kicukiro Affordable Housing</div>
+          <span class="portfolio-card-type type-frac">Fractional</span>
+        </div>
+        <div class="portfolio-card-loc">📍 Kicukiro, Kigali · 0.6% stake · RWF 2.5M invested</div>
+        <div class="portfolio-metrics">
+          <div class="pm-item"><div class="pm-val">16%</div><div class="pm-label">IRR</div></div>
+          <div class="pm-item"><div class="pm-val">RWF 2.9M</div><div class="pm-label">Current Value</div></div>
+          <div class="pm-item"><div class="pm-val">+RWF 160K</div><div class="pm-label">Dividends</div></div>
+        </div>
+        <div class="milestone-bar">
+          <div class="ms-header"><span>Construction Progress</span><span>78%</span></div>
+          <div class="ms-track"><div class="ms-fill" style="width:78%;"></div></div>
+          <div class="ms-status"><span class="ms-stage">Phase 3: Fit-out &amp; finishes</span><span class="ms-badge badge-active">On track</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Recent Activity</div>
+    <div class="table-card">
+      <table class="data-table">
+        <thead><tr><th>Activity</th><th>Project</th><th>Date</th><th>Amount</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td>Dividend paid</td><td style="color:rgba(245,240,232,0.5);">Kimironko Mixed-Use</td><td style="color:rgba(245,240,232,0.35);">2 May 2025</td><td class="td-green">+RWF 420K</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Milestone 2 payout</td></tr>
+          <tr><td>Dividend paid</td><td style="color:rgba(245,240,232,0.5);">Huye Student Housing</td><td style="color:rgba(245,240,232,0.35);">18 Apr 2025</td><td class="td-green">+RWF 380K</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Milestone 1 payout</td></tr>
+          <tr><td>Investment committed</td><td style="color:rgba(245,240,232,0.5);">Kicukiro Affordable</td><td style="color:rgba(245,240,232,0.35);">3 Apr 2025</td><td class="td-gold">RWF 2.5M</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Fractional stake</td></tr>
+          <tr><td>Tokens issued</td><td style="color:rgba(245,240,232,0.5);">Kicukiro Affordable</td><td style="color:rgba(245,240,232,0.35);">3 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">0.6% stake</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Hedera HTS</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INVESTMENTS TAB -->
+  <div class="tab-panel" id="tab-investments">
+    <div class="panel-title">My <em>Investments</em></div>
+    <p class="panel-sub">All active and completed positions · last updated today</p>
+    <div class="table-card">
+      <table class="data-table">
+        <thead><tr><th>Project</th><th>Type</th><th>Invested</th><th>Current Value</th><th>IRR</th><th>Progress</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Kimironko Mixed-Use Block</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 9M</td><td class="td-gold">RWF 10.8M</td><td class="td-green">22%</td><td style="color:rgba(245,240,232,0.5);">68%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Huye Student Housing</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 8M</td><td class="td-gold">RWF 9.1M</td><td class="td-green">19%</td><td style="color:rgba(245,240,232,0.5);">41%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Musanze Eco-Resort</td><td style="color:var(--gold); font-size:0.75rem;">Full Asset</td><td>RWF 5M</td><td class="td-gold">RWF 6.2M</td><td class="td-green">25%</td><td style="color:rgba(245,240,232,0.5);">22%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Kicukiro Affordable Housing</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 2.5M</td><td class="td-gold">RWF 2.9M</td><td class="td-green">16%</td><td style="color:rgba(245,240,232,0.5);">78%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:1.25rem; text-align:right;">
+      <a href="opportunities.html" style="background:var(--gold); color:var(--ink); text-decoration:none; border-radius:0.65rem; padding:0.65rem 1.25rem; font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; cursor:none; display:inline-block;">+ Add Investment →</a>
+    </div>
+  </div>
+
+  <!-- DIVIDENDS TAB -->
+  <div class="tab-panel" id="tab-dividends">
+    <div class="panel-title">Dividend <em>History</em></div>
+    <p class="panel-sub">All payouts received from milestone completions and rental yields</p>
+    <div class="stats-row" style="grid-template-columns:repeat(3,1fr); margin-bottom:1.75rem;">
+      <div class="stat-card gold-card"><div class="stat-eyebrow">Total Received (YTD)</div><div class="stat-val">RWF 1.2M</div><div class="stat-sub">2 milestone payouts</div></div>
+      <div class="stat-card"><div class="stat-eyebrow">Avg Payout Interval</div><div class="stat-val white">47 days</div><div class="stat-sub">Between payouts</div></div>
+      <div class="stat-card"><div class="stat-eyebrow">Next Expected Payout</div><div class="stat-val green">Jun 2025</div><div class="stat-sub">Kicukiro Phase 4 milestone</div></div>
+    </div>
+    <div class="table-card">
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Project</th><th>Milestone</th><th>Amount</th><th>Type</th></tr></thead>
+        <tbody>
+          <tr><td>2 May 2025</td><td style="color:rgba(245,240,232,0.6);">Kimironko Mixed-Use</td><td style="color:rgba(245,240,232,0.4);">Structural completion</td><td class="td-green">RWF 420,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>18 Apr 2025</td><td style="color:rgba(245,240,232,0.6);">Huye Student Housing</td><td style="color:rgba(245,240,232,0.4);">Foundation complete</td><td class="td-green">RWF 380,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>22 Mar 2025</td><td style="color:rgba(245,240,232,0.6);">Kimironko Mixed-Use</td><td style="color:rgba(245,240,232,0.4);">Ground break</td><td class="td-green">RWF 210,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>5 Mar 2025</td><td style="color:rgba(245,240,232,0.6);">Musanze Eco-Resort</td><td style="color:rgba(245,240,232,0.4);">Planning permit issued</td><td class="td-green">RWF 190,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- WATCHLIST TAB -->
+  <div class="tab-panel" id="tab-watchlist">
+    <div class="panel-title">My <em>Watchlist</em></div>
+    <p class="panel-sub">Saved opportunities you're considering · 2 saved</p>
+    <div class="table-card">
+      <table class="data-table">
+        <thead><tr><th>Project</th><th>Type</th><th>IRR</th><th>Funded</th><th>Score</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Rubavu Lakefront Villa Plots</td><td style="color:var(--gold); font-size:0.75rem;">Full Asset</td><td class="td-gold">27%</td><td style="color:rgba(245,240,232,0.5);">90%</td><td class="td-green">96/100</td><td><a href="opportunities.html" style="font-size:0.75rem; color:var(--gold); text-decoration:none;">View →</a></td></tr>
+          <tr><td>Nyagatare Agri-Commercial Hub</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td class="td-gold">18%</td><td style="color:rgba(245,240,232,0.5);">24%</td><td class="td-green">78/100</td><td><a href="opportunities.html" style="font-size:0.75rem; color:var(--gold); text-decoration:none;">View →</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:1.25rem;">
+      <a href="opportunities.html" style="display:inline-flex; align-items:center; gap:0.5rem; background:rgba(212,168,50,0.08); border:1px solid rgba(212,168,50,0.18); color:var(--gold); text-decoration:none; border-radius:0.65rem; padding:0.65rem 1.25rem; font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:600; cursor:none;">Browse More Opportunities →</a>
+    </div>
+  </div>
+
+  <!-- PARTNER TAB -->
+  <div class="tab-panel" id="tab-partner">
+    <div class="panel-title">Partner <em>Dashboard</em></div>
+    <p class="panel-sub">Earn by referring investors, landowners, and other stakeholders to Imali.biz</p>
+
+    <div class="partner-stats">
+      <div class="stat-card gold-card"><div class="stat-eyebrow">Total Referred</div><div class="stat-val">8</div><div class="stat-sub">Stakeholders onboarded</div></div>
+      <div class="stat-card"><div class="stat-eyebrow">Total Earned</div><div class="stat-val green">RWF 312K</div><div class="stat-sub">Lifetime commissions</div></div>
+      <div class="stat-card"><div class="stat-eyebrow">Pending Payout</div><div class="stat-val">RWF 85K</div><div class="stat-sub">Awaiting completion</div></div>
+      <div class="stat-card"><div class="stat-eyebrow">Active This Month</div><div class="stat-val white">2</div><div class="stat-sub">New referrals in progress</div></div>
+    </div>
+
+    <div class="partner-ref-box">
+      <div class="ref-label">Your Referral Link</div>
+      <div class="ref-link-wrap">
+        <div class="ref-link" id="refLink">https://imali.biz/join?ref=amara_m_wh</div>
+        <button class="ref-copy-btn" onclick="copyRef()">Copy Link</button>
+      </div>
+    </div>
+
+    <div class="section-label">Earn rates by stakeholder type</div>
+    <div class="earn-cards">
+      <div class="earn-card">
+        <div class="earn-card-icon">💼</div>
+        <div class="earn-card-type">Investor (Fractional)</div>
+        <div class="earn-card-rate">0.5% of invested amount</div>
+        <div class="earn-card-desc">Paid when your referral completes their first investment on the Wealth Hub.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-card-icon">🏛️</div>
+        <div class="earn-card-type">Investor (Full Asset)</div>
+        <div class="earn-card-rate">1% of deal value</div>
+        <div class="earn-card-desc">Paid at escrow release on a completed full-asset acquisition.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-card-icon">🏡</div>
+        <div class="earn-card-type">Landowner Listed</div>
+        <div class="earn-card-rate">RWF 15,000 flat</div>
+        <div class="earn-card-desc">Paid when your referral lists their land and it passes our readiness check.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-card-icon">🏠</div>
+        <div class="earn-card-type">Buyer / Renter</div>
+        <div class="earn-card-rate">RWF 20,000 flat</div>
+        <div class="earn-card-desc">Paid when your referral signs a lease or purchase agreement through the Consumer Portal.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-card-icon">🔧</div>
+        <div class="earn-card-type">Service Provider</div>
+        <div class="earn-card-rate">RWF 10,000 flat</div>
+        <div class="earn-card-desc">Paid when your referral completes their first job through the Talent Forge.</div>
+      </div>
+      <div class="earn-card">
+        <div class="earn-card-icon">🧱</div>
+        <div class="earn-card-type">Supplier</div>
+        <div class="earn-card-rate">0.3% of first order</div>
+        <div class="earn-card-desc">Paid when your referral's first supply contract is completed via the Supply Chain.</div>
+      </div>
+    </div>
+
+    <div class="section-label">Earnings History</div>
+    <div class="table-card">
+      <table class="data-table">
+        <thead><tr><th>Date</th><th>Referred Stakeholder</th><th>Type</th><th>Commission</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>28 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">Eric N. (Investor)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Fractional</td><td class="td-green">RWF 45,000</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Paid</span></td></tr>
+          <tr><td>12 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">Sandrine U. (Landowner)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Land listing</td><td class="td-green">RWF 15,000</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Paid</span></td></tr>
+          <tr><td>3 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">Patrick K. (Investor)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Full Asset</td><td class="td-gold">RWF 85,000</td><td><span style="background:rgba(212,168,50,0.1); color:var(--gold); border:1px solid rgba(212,168,50,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Pending</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SETTINGS TAB -->
+  <div class="tab-panel" id="tab-settings">
+    <div class="panel-title">Account <em>Settings</em></div>
+    <p class="panel-sub">Manage your investor profile, KYC status, and notification preferences</p>
+    <div style="max-width:540px; display:flex; flex-direction:column; gap:1.25rem;">
+      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:block; margin-bottom:0.5rem;">Full Name</label><input type="text" value="Amara Mutabazi" style="width:100%; background:rgba(245,240,232,0.04); border:1px solid rgba(245,240,232,0.1); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--cream); outline:none; cursor:none;"></div>
+      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:block; margin-bottom:0.5rem;">Email</label><input type="email" value="amara@example.com" style="width:100%; background:rgba(245,240,232,0.04); border:1px solid rgba(245,240,232,0.1); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--cream); outline:none; cursor:none;"></div>
+      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:block; margin-bottom:0.5rem;">Phone</label><input type="tel" value="+250 788 123 456" style="width:100%; background:rgba(245,240,232,0.04); border:1px solid rgba(245,240,232,0.1); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--cream); outline:none; cursor:none;"></div>
+      <div style="background:rgba(76,175,124,0.06); border:1px solid rgba(76,175,124,0.18); border-radius:0.75rem; padding:0.85rem 1rem; display:flex; justify-content:space-between; align-items:center;">
+        <div><div style="font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:#4caf7d;">✓ KYC Verified</div><div style="font-size:0.72rem; color:rgba(245,240,232,0.4); margin-top:0.15rem;">NIDA verified · Investor level clearance</div></div>
+        <span style="font-size:0.65rem; color:rgba(245,240,232,0.3);">Since Mar 2025</span>
+      </div>
+      <button style="background:var(--gold); color:var(--ink); border:none; border-radius:0.65rem; padding:0.8rem 1.5rem; font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; cursor:none; align-self:flex-start; transition:background 0.2s;" onmouseover="this.style.background='#c49a28'" onmouseout="this.style.background='var(--gold)'">Save Changes</button>
+    </div>
+  </div>
+
+</div><!-- end main -->
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY; cursor.style.left=(mx-5)+'px';cursor.style.top=(my-5)+'px'; });
+  (function anim(){ rx+=(mx-rx-18)*0.12;ry+=(my-ry-18)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim); })();
+
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    const item = document.querySelector('[data-tab="' + name + '"]');
+    if (item) item.classList.add('active');
+  }
+
+  function copyRef() {
+    const link = document.getElementById('refLink').textContent;
+    navigator.clipboard.writeText(link).then(() => {
+      const btn = document.querySelector('.ref-copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy Link', 2000);
+    });
+  }
+
+  // Deep-link via hash
+  const hash = window.location.hash.replace('#', '');
+  if (['overview','investments','dividends','watchlist','partner','settings'].includes(hash)) switchTab(hash);
+</script>
+</body>
+</html>

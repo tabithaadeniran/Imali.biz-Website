@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Returns Calculator — The Wealth Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832; --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; min-height: 100vh; }
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--gold); transform: translate(-8px,-8px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(10,10,15,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.05); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--cream); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--cream); }
+  .nav-cta { background: var(--gold); color: var(--ink); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: #c49a28; }
+
+  /* PAGE LAYOUT */
+  .calc-layout { display: grid; grid-template-columns: 420px 1fr; gap: 0; min-height: 100vh; padding-top: 70px; }
+  .calc-panel { padding: 3.5rem 3rem; border-right: 1px solid rgba(245,240,232,0.06); position: sticky; top: 70px; height: calc(100vh - 70px); overflow-y: auto; }
+  .result-panel { padding: 3.5rem 3rem; }
+
+  /* PAGE TITLE */
+  .calc-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .calc-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+  .calc-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 0.5rem; }
+  .calc-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .calc-subtitle { font-size: 0.82rem; color: rgba(245,240,232,0.4); line-height: 1.6; margin-bottom: 2.5rem; }
+
+  /* FORM ELEMENTS */
+  .field-group { margin-bottom: 1.5rem; }
+  .field-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.45); margin-bottom: 0.55rem; font-weight: 500; display: flex; justify-content: space-between; }
+  .field-label span { color: var(--gold); font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; text-transform: none; letter-spacing: 0; }
+  input[type="range"] { width: 100%; accent-color: var(--gold); cursor: none; height: 4px; }
+  input[type="number"], select { width: 100%; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.65rem; padding: 0.7rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; color: var(--cream); outline: none; cursor: none; transition: border-color 0.2s; }
+  input[type="number"]:focus, select:focus { border-color: rgba(212,168,50,0.45); }
+  input::placeholder { color: rgba(245,240,232,0.2); }
+  select option { background: #0d0d12; }
+  .range-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: rgba(245,240,232,0.25); margin-top: 0.3rem; }
+  .field-separator { height: 1px; background: rgba(245,240,232,0.06); margin: 1.5rem 0; }
+
+  /* INVESTMENT TYPE TOGGLE */
+  .type-toggle { display: flex; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.65rem; overflow: hidden; margin-bottom: 1.5rem; }
+  .type-btn { flex: 1; padding: 0.65rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600; text-align: center; cursor: none; border: none; background: transparent; color: rgba(245,240,232,0.4); transition: background 0.2s, color 0.2s; }
+  .type-btn.active { background: rgba(212,168,50,0.12); color: var(--gold); }
+
+  /* RESULTS */
+  .results-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; color: rgba(245,240,232,0.25); }
+  .results-empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .results-empty-text { font-size: 0.88rem; line-height: 1.7; max-width: 320px; }
+  .results-active { display: none; }
+  .results-active.visible { display: block; }
+
+  /* BIG NUMBER CARDS */
+  .result-headline { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+  .result-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .big-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
+  .big-metric { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 1rem; padding: 1.5rem; }
+  .big-metric.highlight { background: rgba(212,168,50,0.06); border-color: rgba(212,168,50,0.18); }
+  .big-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.35); margin-bottom: 0.5rem; }
+  .big-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--gold); letter-spacing: -0.03em; }
+  .big-val.white { color: var(--cream); }
+  .big-val.green { color: #4caf7d; }
+  .big-sub { font-size: 0.72rem; color: rgba(245,240,232,0.3); margin-top: 0.25rem; }
+
+  /* YEAR-BY-YEAR TABLE */
+  .result-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin: 1.75rem 0 0.85rem; }
+  .year-table { width: 100%; border-collapse: collapse; }
+  .year-table th { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,240,232,0.3); text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid rgba(245,240,232,0.07); }
+  .year-table td { font-size: 0.82rem; padding: 0.55rem 0.75rem; border-bottom: 1px solid rgba(245,240,232,0.04); color: rgba(245,240,232,0.65); }
+  .year-table td:first-child { color: rgba(245,240,232,0.35); font-size: 0.72rem; }
+  .year-table td.pos { color: #4caf7d; font-family: 'Syne', sans-serif; font-weight: 700; }
+  .year-table td.gold { color: var(--gold); font-family: 'Syne', sans-serif; font-weight: 700; }
+
+  /* VISUAL BAR */
+  .vis-bar-wrap { margin-bottom: 1.75rem; }
+  .vis-bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+  .vis-bar-label { font-size: 0.72rem; color: rgba(245,240,232,0.4); width: 80px; flex-shrink: 0; }
+  .vis-bar-track { flex: 1; height: 8px; background: rgba(245,240,232,0.05); border-radius: 4px; overflow: hidden; }
+  .vis-bar-fill { height: 100%; border-radius: 4px; background: var(--gold); transition: width 0.6s ease; }
+  .vis-bar-val { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--gold); width: 70px; text-align: right; flex-shrink: 0; }
+
+  /* DISCLAIMER */
+  .disclaimer { background: rgba(245,240,232,0.02); border: 1px solid rgba(245,240,232,0.06); border-radius: 0.75rem; padding: 1rem 1.25rem; font-size: 0.72rem; color: rgba(245,240,232,0.3); line-height: 1.6; margin-top: 2rem; }
+
+  /* CTA */
+  .result-cta { display: flex; gap: 0.75rem; margin-top: 1.75rem; }
+  .btn-browse { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--gold); color: var(--ink); text-decoration: none; border-radius: 0.75rem; padding: 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-browse:hover { background: #c49a28; }
+  .btn-calc-outline { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); border-radius: 0.75rem; padding: 0.85rem 1.25rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: none; transition: background 0.2s; }
+  .btn-calc-outline:hover { background: rgba(245,240,232,0.09); }
+
+  @media (max-width: 1024px) {
+    .calc-layout { grid-template-columns: 1fr; }
+    .calc-panel { position: static; height: auto; padding: 3rem 1.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(245,240,232,0.06); }
+    .result-panel { padding: 2.5rem 1.5rem 4rem; }
+    nav { padding: 1rem 1.5rem; }
+    .big-metrics { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Wealth Hub</div>
+  </a>
+  <div class="nav-right">
+    <a href="opportunities.html" class="nav-link">Opportunities</a>
+    <a href="calculator.html" class="nav-link" style="color:var(--gold);">Calculator</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="../index.html" class="nav-link" style="color:rgba(245,240,232,0.3);">← Imali.biz</a>
+    <a href="invest.html" class="nav-cta">Start Investing</a>
+  </div>
+</nav>
+
+<div class="calc-layout">
+  <!-- INPUT PANEL -->
+  <div class="calc-panel">
+    <div class="calc-eyebrow">Returns Calculator</div>
+    <h1 class="calc-title">Model your <em>returns</em></h1>
+    <p class="calc-subtitle">Input your stake, project details, and assumptions to see projected IRR, equity multiple, and year-by-year growth.</p>
+
+    <div class="type-toggle">
+      <button class="type-btn active" id="typeFrac" onclick="setType('fractional', this)">Fractional</button>
+      <button class="type-btn" id="typeFull" onclick="setType('full', this)">Full Asset</button>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Investment Amount (RWF) <span id="investLabel">RWF 5,000,000</span></div>
+      <input type="range" id="investSlider" min="75000" max="500000000" step="25000" value="75000" oninput="syncInvest(this.value)" />
+      <div class="range-labels"><span>RWF 75K</span><span>RWF 500M</span></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Investment Amount (type directly)</div>
+      <input type="number" id="investInput" placeholder="e.g. 75000" value="75000" oninput="syncInvestInput(this.value)" />
+    </div>
+
+    <div class="field-separator"></div>
+
+    <div class="field-group">
+      <div class="field-label">Total Project Value (RWF) <span id="projLabel">RWF 500,000,000</span></div>
+      <input type="range" id="projSlider" min="50000000" max="5000000000" step="10000000" value="500000000" oninput="syncProj(this.value)" />
+      <div class="range-labels"><span>RWF 50M</span><span>RWF 5B</span></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Hold Period (months) <span id="holdLabel">36 months</span></div>
+      <input type="range" id="holdSlider" min="12" max="84" step="6" value="36" oninput="syncHold(this.value)" />
+      <div class="range-labels"><span>12 mo</span><span>84 mo</span></div>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Target IRR (%) <span id="irrLabel">20%</span></div>
+      <input type="range" id="irrSlider" min="10" max="35" step="1" value="20" oninput="syncIRR(this.value)" />
+      <div class="range-labels"><span>10%</span><span>35%</span></div>
+    </div>
+
+    <div class="field-separator"></div>
+
+    <div class="field-group">
+      <div class="field-label">Project Type</div>
+      <select id="projType" onchange="calculate()">
+        <option value="residential">Residential</option>
+        <option value="commercial">Commercial</option>
+        <option value="mixed">Mixed Use</option>
+        <option value="student">Student Housing</option>
+        <option value="tourism">Tourism / Hospitality</option>
+        <option value="industrial">Industrial / Logistics</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <div class="field-label">Annual Rental Yield (%) <span id="yieldLabel">8%</span></div>
+      <input type="range" id="yieldSlider" min="0" max="20" step="0.5" value="8" oninput="syncYield(this.value)" />
+      <div class="range-labels"><span>0%</span><span>20%</span></div>
+    </div>
+
+    <button style="width:100%; background:var(--gold); color:var(--ink); border:none; border-radius:0.75rem; padding:0.9rem; font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:700; cursor:none; transition:background 0.2s;" onclick="calculate()">
+      Calculate Returns →
+    </button>
+  </div>
+
+  <!-- RESULT PANEL -->
+  <div class="result-panel">
+    <div class="results-empty" id="resultsEmpty">
+      <div class="results-empty-icon">📊</div>
+      <p class="results-empty-text">Adjust the sliders on the left and click <strong style="color:var(--cream);">Calculate Returns</strong> to see your projected IRR, equity multiple, and year-by-year breakdown.</p>
+    </div>
+    <div class="results-active" id="resultsActive">
+      <div class="result-headline">Your projected <em>returns</em></div>
+      <div class="big-metrics">
+        <div class="big-metric highlight">
+          <div class="big-label">Target IRR</div>
+          <div class="big-val" id="resIRR">—</div>
+          <div class="big-sub">Internal Rate of Return (annualised)</div>
+        </div>
+        <div class="big-metric highlight">
+          <div class="big-label">Equity Multiple</div>
+          <div class="big-val" id="resMultiple">—</div>
+          <div class="big-sub">Total return on invested capital</div>
+        </div>
+        <div class="big-metric">
+          <div class="big-label">Gross Return</div>
+          <div class="big-val white" id="resGross">—</div>
+          <div class="big-sub" id="resGrossNote">Over hold period</div>
+        </div>
+        <div class="big-metric">
+          <div class="big-label">Net Profit</div>
+          <div class="big-val green" id="resProfit">—</div>
+          <div class="big-sub">After 2.5% platform fee</div>
+        </div>
+      </div>
+
+      <div class="result-section-title">Ownership & Stake</div>
+      <div class="vis-bar-wrap" id="stakeVis"></div>
+
+      <div class="result-section-title">Year-by-Year Projection</div>
+      <table class="year-table">
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Portfolio Value</th>
+            <th>Your Stake Value</th>
+            <th>Cumulative Yield</th>
+            <th>Gain on Cost</th>
+          </tr>
+        </thead>
+        <tbody id="yearTable"></tbody>
+      </table>
+
+      <div class="result-section-title">Scenario Comparison</div>
+      <div class="vis-bar-wrap" id="scenarioVis"></div>
+
+      <div class="disclaimer">
+        <strong style="color:rgba(245,240,232,0.5);">Important:</strong> These projections are illustrative only, based on your inputs and Imali's market data. Actual returns depend on project execution, market conditions, and exit timing. Past performance does not guarantee future results. Always review full project documents before committing funds.
+      </div>
+
+      <div class="result-cta">
+        <a href="opportunities.html" class="btn-browse">
+          Browse Live Opportunities
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <button class="btn-calc-outline" onclick="resetCalc()">Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY; cursor.style.left=(mx-5)+'px';cursor.style.top=(my-5)+'px'; });
+  (function anim(){ rx+=(mx-rx-18)*0.12;ry+=(my-ry-18)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim); })();
+
+  let investType = 'fractional';
+
+  function fmtRWF(n) {
+    if (n >= 1e9) return 'RWF ' + (n/1e9).toFixed(2) + 'B';
+    if (n >= 1e6) return 'RWF ' + (n/1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return 'RWF ' + (n/1e3).toFixed(0) + 'K';
+    return 'RWF ' + n.toLocaleString();
+  }
+
+  function setType(type, btn) {
+    investType = type;
+    document.getElementById('typeFrac').classList.toggle('active', type === 'fractional');
+    document.getElementById('typeFull').classList.toggle('active', type === 'full');
+    // Adjust min for full asset
+    const slider = document.getElementById('investSlider');
+    if (type === 'full') {
+      slider.min = 50000000;
+      if (parseInt(slider.value) < 50000000) { slider.value = 50000000; syncInvest(50000000); }
+    } else {
+      slider.min = 500000;
+    }
+    calculate();
+  }
+
+  function syncInvest(v) {
+    v = parseInt(v);
+    document.getElementById('investLabel').textContent = fmtRWF(v);
+    document.getElementById('investInput').value = v;
+    calculate();
+  }
+  function syncInvestInput(v) {
+    v = parseInt(v) || 0;
+    document.getElementById('investSlider').value = Math.min(v, 500000000);
+    document.getElementById('investLabel').textContent = fmtRWF(v);
+    calculate();
+  }
+  function syncProj(v) {
+    v = parseInt(v);
+    document.getElementById('projLabel').textContent = fmtRWF(v);
+    calculate();
+  }
+  function syncHold(v) {
+    document.getElementById('holdLabel').textContent = v + ' months';
+    calculate();
+  }
+  function syncIRR(v) {
+    document.getElementById('irrLabel').textContent = v + '%';
+    calculate();
+  }
+  function syncYield(v) {
+    document.getElementById('yieldLabel').textContent = parseFloat(v).toFixed(1) + '%';
+    calculate();
+  }
+
+  function calculate() {
+    const invest = parseInt(document.getElementById('investInput').value) || parseInt(document.getElementById('investSlider').value);
+    const projTotal = parseInt(document.getElementById('projSlider').value);
+    const holdMonths = parseInt(document.getElementById('holdSlider').value);
+    const irr = parseFloat(document.getElementById('irrSlider').value) / 100;
+    const yieldPct = parseFloat(document.getElementById('yieldSlider').value) / 100;
+    const holdYears = holdMonths / 12;
+
+    const stakePct = invest / projTotal;
+    const grossReturn = invest * Math.pow(1 + irr, holdYears);
+    const annualYieldIncome = invest * stakePct * yieldPct * projTotal;
+    const totalYieldIncome = yieldPct * invest * holdYears;
+    const totalReturn = grossReturn + totalYieldIncome;
+    const fee = totalReturn * 0.025;
+    const netProfit = totalReturn - invest - fee;
+    const multiple = totalReturn / invest;
+
+    document.getElementById('resIRR').textContent = (irr * 100).toFixed(0) + '%';
+    document.getElementById('resMultiple').textContent = multiple.toFixed(2) + 'x';
+    document.getElementById('resGross').textContent = fmtRWF(Math.round(totalReturn));
+    document.getElementById('resGrossNote').textContent = 'Over ' + holdMonths + ' months';
+    document.getElementById('resProfit').textContent = fmtRWF(Math.round(netProfit));
+
+    // Stake visualisation
+    const stakeVis = document.getElementById('stakeVis');
+    const stakeWidth = Math.min(stakePct * 100, 100);
+    stakeVis.innerHTML = `
+      <div class="vis-bar-row"><span class="vis-bar-label">Your Stake</span><div class="vis-bar-track"><div class="vis-bar-fill" style="width:${stakeWidth.toFixed(2)}%"></div></div><span class="vis-bar-val">${(stakePct*100).toFixed(2)}%</span></div>
+      <div class="vis-bar-row"><span class="vis-bar-label">Co-investors</span><div class="vis-bar-track"><div class="vis-bar-fill" style="width:${(100-stakeWidth).toFixed(2)}%;background:rgba(245,240,232,0.15);"></div></div><span class="vis-bar-val" style="color:rgba(245,240,232,0.4);">${(100-stakePct*100).toFixed(2)}%</span></div>`;
+
+    // Year-by-year
+    const tbody = document.getElementById('yearTable');
+    tbody.innerHTML = '';
+    const years = Math.ceil(holdYears);
+    for (let y = 1; y <= years; y++) {
+      const portVal = projTotal * Math.pow(1 + irr, y);
+      const stakeVal = invest * Math.pow(1 + irr, Math.min(y, holdYears));
+      const cumYield = yieldPct * invest * Math.min(y, holdYears);
+      const gain = ((stakeVal + cumYield - invest) / invest * 100).toFixed(1);
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>Year ${y}</td>
+        <td>${fmtRWF(Math.round(portVal))}</td>
+        <td class="gold">${fmtRWF(Math.round(stakeVal))}</td>
+        <td class="pos">${fmtRWF(Math.round(cumYield))}</td>
+        <td class="pos">+${gain}%</td>`;
+      tbody.appendChild(tr);
+    }
+
+    // Scenario comparison
+    const scenarios = [
+      { label: 'Conservative (−5% IRR)', irr: Math.max(irr - 0.05, 0.05) },
+      { label: 'Base Case', irr: irr },
+      { label: 'Optimistic (+5% IRR)', irr: irr + 0.05 },
+    ];
+    const maxScen = Math.max(...scenarios.map(s => invest * Math.pow(1 + s.irr, holdYears)));
+    document.getElementById('scenarioVis').innerHTML = scenarios.map(s => {
+      const val = invest * Math.pow(1 + s.irr, holdYears);
+      const pct = (val / maxScen * 100).toFixed(1);
+      const colors = ['var(--terracotta)', 'var(--gold)', '#4caf7d'];
+      const idx = scenarios.indexOf(s);
+      return `<div class="vis-bar-row">
+        <span class="vis-bar-label" style="width:160px;flex-shrink:0;white-space:nowrap;">${s.label}</span>
+        <div class="vis-bar-track"><div class="vis-bar-fill" style="width:${pct}%;background:${colors[idx]};"></div></div>
+        <span class="vis-bar-val" style="color:${colors[idx]};width:100px;">${fmtRWF(Math.round(val))}</span>
+      </div>`;
+    }).join('');
+
+    document.getElementById('resultsEmpty').style.display = 'none';
+    document.getElementById('resultsActive').classList.add('visible');
+  }
+
+  function resetCalc() {
+    document.getElementById('resultsActive').classList.remove('visible');
+    document.getElementById('resultsEmpty').style.display = 'flex';
+  }
+
+  // Auto-calculate on load
+  calculate();
+</script>
+</body>
+</html>

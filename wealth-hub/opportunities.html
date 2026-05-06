@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investment Opportunities — The Wealth Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832; --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--gold); transform: translate(-8px,-8px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(10,10,15,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.05); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--cream); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--cream); }
+  .nav-cta { background: var(--gold); color: var(--ink); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: #c49a28; }
+
+  /* PAGE HEADER */
+  .page-header { padding: 8rem 4rem 3rem; border-bottom: 1px solid rgba(245,240,232,0.06); }
+  .page-header-inner { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 2rem; }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .page-sub { font-size: 0.88rem; color: rgba(245,240,232,0.4); line-height: 1.6; max-width: 420px; margin-top: 0.6rem; }
+
+  /* FILTER BAR */
+  .filter-bar { padding: 1.5rem 4rem; background: rgba(245,240,232,0.02); border-bottom: 1px solid rgba(245,240,232,0.06); display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .filter-select { background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.6rem; padding: 0.55rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; color: var(--cream); outline: none; cursor: none; }
+  .filter-select:focus { border-color: rgba(212,168,50,0.4); }
+  .filter-select option { background: #0d0d12; }
+  .filter-toggle { display: flex; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.6rem; overflow: hidden; }
+  .filter-toggle-btn { padding: 0.55rem 1rem; font-size: 0.78rem; cursor: none; transition: background 0.2s, color 0.2s; border: none; background: transparent; color: rgba(245,240,232,0.45); font-family: 'DM Sans', sans-serif; }
+  .filter-toggle-btn.active { background: rgba(212,168,50,0.12); color: var(--gold); }
+  .filter-count { margin-left: auto; font-size: 0.78rem; color: rgba(245,240,232,0.3); }
+
+  /* OPPORTUNITIES GRID */
+  .opp-grid-wrap { padding: 2.5rem 4rem 5rem; }
+  .opp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+  /* OPPORTUNITY CARD */
+  .opp-card { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.08); border-radius: 1.25rem; overflow: hidden; cursor: none; transition: background 0.3s, border-color 0.3s, transform 0.3s; display: flex; flex-direction: column; }
+  .opp-card:hover { background: rgba(245,240,232,0.06); border-color: rgba(212,168,50,0.2); transform: translateY(-3px); }
+  .opp-card.featured { border-color: rgba(212,168,50,0.25); position: relative; }
+  .opp-card.featured::before { content: 'Featured'; position: absolute; top: 1rem; right: 1rem; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; background: rgba(212,168,50,0.15); border: 1px solid rgba(212,168,50,0.3); color: var(--gold); border-radius: 2rem; padding: 0.2rem 0.6rem; z-index: 2; }
+
+  /* CARD THUMB */
+  .opp-thumb { height: 160px; overflow: hidden; position: relative; }
+  .opp-thumb svg { width: 100%; height: 100%; }
+  .opp-type-badge { position: absolute; bottom: 0.75rem; left: 0.75rem; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; border-radius: 2rem; padding: 0.22rem 0.65rem; }
+  .opp-type-badge.frac { background: rgba(200,82,26,0.85); color: white; }
+  .opp-type-badge.full { background: rgba(212,168,50,0.9); color: var(--ink); }
+  .opp-score { position: absolute; bottom: 0.75rem; right: 0.75rem; font-size: 0.68rem; font-family: 'Syne', sans-serif; font-weight: 700; background: rgba(76,175,124,0.9); color: white; border-radius: 2rem; padding: 0.22rem 0.65rem; }
+
+  /* CARD BODY */
+  .opp-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+  .opp-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; line-height: 1.25; }
+  .opp-loc { font-size: 0.72rem; color: rgba(245,240,232,0.35); margin-bottom: 1rem; }
+  .opp-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .opp-metric { background: rgba(245,240,232,0.04); border-radius: 0.5rem; padding: 0.5rem 0.6rem; text-align: center; }
+  .opp-metric-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 800; color: var(--gold); }
+  .opp-metric-val.green { color: #4caf7d; }
+  .opp-metric-label { font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-top: 0.15rem; }
+  .opp-progress { margin-bottom: 1rem; }
+  .opp-prog-header { display: flex; justify-content: space-between; font-size: 0.68rem; color: rgba(245,240,232,0.35); margin-bottom: 0.35rem; }
+  .prog-track { height: 5px; background: rgba(245,240,232,0.06); border-radius: 3px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 3px; }
+  .opp-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+  .opp-tag { font-size: 0.62rem; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.08); border-radius: 2rem; padding: 0.18rem 0.55rem; color: rgba(245,240,232,0.4); }
+  .opp-actions { margin-top: auto; display: flex; gap: 0.6rem; }
+  .btn-invest { flex: 1; background: var(--gold); color: var(--ink); border: none; border-radius: 0.6rem; padding: 0.65rem; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-invest:hover { background: #c49a28; }
+  .btn-save { width: 38px; height: 38px; background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.6rem; display: flex; align-items: center; justify-content: center; cursor: none; transition: background 0.2s, border-color 0.2s; font-size: 0.9rem; }
+  .btn-save:hover { background: rgba(212,168,50,0.08); border-color: rgba(212,168,50,0.2); }
+  .btn-save.saved { background: rgba(212,168,50,0.1); border-color: rgba(212,168,50,0.25); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.88); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #111118; border: 1px solid rgba(245,240,232,0.1); border-radius: 1.5rem; max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal-header { padding: 2rem 2rem 1.25rem; border-bottom: 1px solid rgba(245,240,232,0.07); display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-close { background: rgba(245,240,232,0.06); border: none; color: var(--cream); width: 32px; height: 32px; border-radius: 50%; cursor: none; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+  .modal-close:hover { background: rgba(245,240,232,0.12); }
+  .modal-body { padding: 1.5rem 2rem 2rem; }
+  .modal-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+  .modal-metric { background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.07); border-radius: 0.75rem; padding: 1rem; text-align: center; }
+  .modal-metric-val { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--gold); }
+  .modal-metric-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.07em; color: rgba(245,240,232,0.35); margin-top: 0.25rem; }
+  .modal-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin: 1.25rem 0 0.75rem; }
+  .modal-scorecard { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.25rem; }
+  .score-item { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 0.6rem; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .score-label { font-size: 0.78rem; color: rgba(245,240,232,0.5); }
+  .score-val { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; }
+  .score-val.pass { color: #4caf7d; }
+  .score-val.warn { color: var(--gold); }
+  .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .btn-modal-invest { flex: 1; background: var(--gold); color: var(--ink); border: none; border-radius: 0.75rem; padding: 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-modal-invest:hover { background: #c49a28; }
+  .btn-modal-calc { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); border-radius: 0.75rem; padding: 0.85rem 1.25rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: none; text-decoration: none; display: flex; align-items: center; }
+  .btn-modal-calc:hover { background: rgba(245,240,232,0.1); }
+
+  @media (max-width: 1024px) {
+    .opp-grid { grid-template-columns: 1fr 1fr; }
+    .filter-bar, .opp-grid-wrap, .page-header { padding-left: 1.5rem; padding-right: 1.5rem; }
+    nav { padding: 1rem 1.5rem; }
+    .modal-metrics { grid-template-columns: repeat(2, 1fr); }
+    .modal-scorecard { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Wealth Hub</div>
+  </a>
+  <div class="nav-right">
+    <a href="opportunities.html" class="nav-link" style="color:var(--gold);">Opportunities</a>
+    <a href="calculator.html" class="nav-link">Calculator</a>
+    <a href="dashboard.html" class="nav-link">Dashboard</a>
+    <a href="../index.html" class="nav-link" style="color:rgba(245,240,232,0.3);">← Imali.biz</a>
+    <a href="invest.html" class="nav-cta">Start Investing</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-inner">
+    <div>
+      <div class="page-eyebrow">All Opportunities</div>
+      <h1 class="page-title">Find your <em>investment</em></h1>
+      <p class="page-sub">Every project is Imali-vetted and scored on legal integrity, physical viability, infrastructure, and tokenisation readiness before it appears here.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.5rem;">
+      <div style="display:flex; gap:1rem;">
+        <div style="text-align:right;">
+          <div style="font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:var(--gold);">9</div>
+          <div style="font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.3);">Live Deals</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:800; color:#4caf7d;">RWF 4.2B</div>
+          <div style="font-size:0.65rem; letter-spacing:0.08em; text-transform:uppercase; color:rgba(245,240,232,0.3);">Total Funding</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-toggle" id="typeToggle">
+    <button class="filter-toggle-btn active" onclick="filterType('all', this)">All</button>
+    <button class="filter-toggle-btn" onclick="filterType('fractional', this)">Fractional</button>
+    <button class="filter-toggle-btn" onclick="filterType('full', this)">Full Asset</button>
+  </div>
+  <select class="filter-select" id="filterProvince" onchange="applyFilters()">
+    <option value="">All Provinces</option>
+    <option>Kigali City</option>
+    <option>Northern Province</option>
+    <option>Southern Province</option>
+    <option>Eastern Province</option>
+    <option>Western Province</option>
+  </select>
+  <select class="filter-select" id="filterReturn" onchange="applyFilters()">
+    <option value="">All Returns</option>
+    <option value="15">15%+ IRR</option>
+    <option value="20">20%+ IRR</option>
+    <option value="25">25%+ IRR</option>
+  </select>
+  <select class="filter-select" id="filterHold" onchange="applyFilters()">
+    <option value="">Any Hold Period</option>
+    <option value="24">Under 24 months</option>
+    <option value="36">Under 36 months</option>
+    <option value="48">Under 48 months</option>
+  </select>
+  <select class="filter-select" id="filterSort" onchange="applyFilters()">
+    <option value="featured">Sort: Featured</option>
+    <option value="irr">Sort: Highest IRR</option>
+    <option value="funding">Sort: Most Funded</option>
+  </select>
+  <span class="filter-count" id="filterCount">Showing 9 opportunities</span>
+</div>
+
+<div class="opp-grid-wrap">
+  <div class="opp-grid" id="oppGrid">
+    <!-- Cards rendered by JS -->
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div style="font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold); margin-bottom:0.4rem;" id="mType"></div>
+        <div style="font-family:'Syne',sans-serif; font-size:1.4rem; font-weight:800;" id="mName"></div>
+        <div style="font-size:0.78rem; color:rgba(245,240,232,0.4); margin-top:0.25rem;" id="mLoc"></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modalOverlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-metrics" id="mMetrics"></div>
+      <div class="modal-section-title">Project Description</div>
+      <p style="font-size:0.84rem; color:rgba(245,240,232,0.5); line-height:1.7;" id="mDesc"></p>
+      <div class="modal-section-title">Imali Readiness Scorecard</div>
+      <div class="modal-scorecard" id="mScorecard"></div>
+      <div class="modal-section-title">Funding Progress</div>
+      <div id="mProgress"></div>
+      <div class="modal-actions">
+        <button class="btn-modal-invest" onclick="window.location.href='invest.html'">Invest in This Project →</button>
+        <a href="calculator.html" class="btn-modal-calc">Model Returns</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0, my=0, rx=0, ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.left=(mx-5)+'px'; cursor.style.top=(my-5)+'px';
+  });
+  (function anim(){rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(anim);})();
+
+  const opportunities = [
+    { id:1, name:'Kimironko Mixed-Use Block', loc:'Gasabo, Kigali City', type:'fractional', province:'Kigali City', irr:22, multiple:3.2, hold:36, sqm:1200, funded:68, totalRaise:'RWF 500M', raised:'RWF 340M', score:91, featured:true, desc:'A prime mixed-use development in Kimironko — ground-floor retail with four floors of residential units above. High-absorption area with strong existing demand from young professionals. Phase 1 construction starts Q3 2025.', tags:['Mixed Use','Kigali','High Demand','NLA Verified'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','88/100','pass'],['Urban Alignment','92/100','pass'],['Infrastructure','85/100','pass'],['Tokenisation Ready','100/100','pass']] },
+    { id:2, name:'Huye Student Housing Campus', loc:'Huye, Southern Province', type:'fractional', province:'Southern Province', irr:19, multiple:2.7, hold:48, sqm:3500, funded:41, totalRaise:'RWF 440M', raised:'RWF 180M', score:83, featured:false, desc:'Purpose-built student accommodation adjacent to the University of Rwanda main campus. Huye is significantly under-supplied for quality student housing. Rental yield estimated at 11% annually from year 2.', tags:['Residential','Student Housing','High Yield','Huye'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','80/100','pass'],['Urban Alignment','88/100','pass'],['Infrastructure','75/100','pass'],['Tokenisation Ready','100/100','pass']] },
+    { id:3, name:'Rubavu Lakefront Villa Plots', loc:'Rubavu, Western Province', type:'full', province:'Western Province', irr:27, multiple:4.1, hold:60, sqm:8200, funded:90, totalRaise:'RWF 1.2B', raised:'RWF 1.08B', score:96, featured:true, desc:'Premium lakefront land on Lake Kivu, Rubavu. Tourism and hospitality demand is surging. Zoned for mixed residential and boutique hotel development. One buyer slot remaining — full title transfer with escrow.', tags:['Full Asset','Lakefront','Tourism','Rubavu'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','95/100','pass'],['Urban Alignment','90/100','pass'],['Infrastructure','88/100','pass'],['Tokenisation Ready','100/100','pass']] },
+    { id:4, name:'Nyagatare Agri-Commercial Hub', loc:'Nyagatare, Eastern Province', type:'fractional', province:'Eastern Province', irr:18, multiple:2.4, hold:42, sqm:12000, funded:24, totalRaise:'RWF 320M', raised:'RWF 77M', score:78, featured:false, desc:'Commercial warehousing and cold-chain facility in Nyagatare, East Rwanda's agricultural heartland. Serves exporters, processors, and distributors. Government-backed economic zone project.', tags:['Commercial','Agriculture','Eastern Province','Warehouse'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','76/100','pass'],['Urban Alignment','82/100','pass'],['Infrastructure','72/100','warn'],['Tokenisation Ready','100/100','pass']] },
+    { id:5, name:'Musanze Eco-Resort Land', loc:'Musanze, Northern Province', type:'full', province:'Northern Province', irr:25, multiple:3.7, hold:54, sqm:5600, funded:55, totalRaise:'RWF 780M', raised:'RWF 429M', score:89, featured:false, desc:'Prime tourism land near Volcanoes National Park — one of Rwanda\'s most visited sites. Zoned for eco-lodge and resort development. International operators already in discussions. Full-asset acquisition with Imali coordinating developers.', tags:['Full Asset','Tourism','Eco Resort','Musanze'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','88/100','pass'],['Urban Alignment','85/100','pass'],['Infrastructure','80/100','pass'],['Tokenisation Ready','100/100','pass']] },
+    { id:6, name:'Kicukiro Affordable Housing', loc:'Kicukiro, Kigali City', type:'fractional', province:'Kigali City', irr:16, multiple:2.2, hold:36, sqm:2400, funded:78, totalRaise:'RWF 380M', raised:'RWF 296M', score:87, featured:false, desc:'120-unit affordable residential development in Kicukiro targeting Rwanda\'s growing middle class. Demand-driven design: 2 and 3-bedroom apartments. Pre-sales at 60% before ground break.', tags:['Residential','Affordable Housing','Kigali','Pre-Sales'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','85/100','pass'],['Urban Alignment','90/100','pass'],['Infrastructure','88/100','pass'],['Tokenisation Ready','100/100','pass']] },
+    { id:7, name:'Nyarugenge Office Complex', loc:'Nyarugenge, Kigali City', type:'full', province:'Kigali City', irr:21, multiple:3.0, hold:48, sqm:3000, funded:30, totalRaise:'RWF 950M', raised:'RWF 285M', score:92, featured:false, desc:'Grade-A office development in Kigali\'s CBD. Rwanda\'s growing NGO, fintech, and government-affiliated sector creates strong commercial demand. Full-asset deal — single owner preferred.', tags:['Commercial','Office','CBD','Kigali'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','92/100','pass'],['Urban Alignment','95/100','pass'],['Infrastructure','90/100','pass'],['Tokenisation Ready','100/100','pass']] },
+    { id:8, name:'Rubavu Tech Village', loc:'Rubavu, Western Province', type:'fractional', province:'Western Province', irr:20, multiple:2.8, hold:42, sqm:4200, funded:15, totalRaise:'RWF 560M', raised:'RWF 84M', score:80, featured:false, desc:'Mixed residential and co-working community targeting remote workers and digital nomads drawn by Rubavu\'s lake access and growing fiber connectivity. New concept for Rwanda — high upside.', tags:['Mixed Use','Tech','Remote Work','Rubavu'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','82/100','pass'],['Urban Alignment','78/100','warn'],['Infrastructure','76/100','warn'],['Tokenisation Ready','100/100','pass']] },
+    { id:9, name:'Kamonyi Logistics Park', loc:'Kamonyi, Southern Province', type:'fractional', province:'Southern Province', irr:17, multiple:2.3, hold:36, sqm:9800, funded:48, totalRaise:'RWF 290M', raised:'RWF 139M', score:82, featured:false, desc:'Strategic logistics and light-industrial park along the Kigali–Butare corridor. Rwanda\'s fastest growing inland freight route. Anchor tenants already signed. Fractional ownership of income-producing asset from year 1.', tags:['Industrial','Logistics','Southern Province','Anchor Tenants'], scorecard:[['Legal & Title Integrity','100/100','pass'],['Physical Viability','84/100','pass'],['Urban Alignment','80/100','pass'],['Infrastructure','78/100','pass'],['Tokenisation Ready','100/100','pass']] },
+  ];
+
+  let activeType = 'all';
+  let savedCards = new Set();
+
+  function fmtRWF(n) { if(n>=1e9) return 'RWF '+(n/1e9).toFixed(1)+'B'; if(n>=1e6) return 'RWF '+(n/1e6).toFixed(0)+'M'; return 'RWF '+n.toLocaleString(); }
+  const thumbColors = { fractional: ['#0e1a2e','#1a3a5c','#0e2a1e'], full: ['#1a1000','#3a2800','#1a1a00'] };
+
+  function renderCards(list) {
+    const grid = document.getElementById('oppGrid');
+    grid.innerHTML = '';
+    document.getElementById('filterCount').textContent = `Showing ${list.length} opportunit${list.length===1?'y':'ies'}`;
+    list.forEach(o => {
+      const tc = thumbColors[o.type];
+      const card = document.createElement('div');
+      card.className = 'opp-card' + (o.featured ? ' featured' : '');
+      const fillColor = o.irr >= 22 ? 'var(--gold)' : (o.irr >= 19 ? '#4caf7d' : 'var(--terracotta)');
+      card.innerHTML = `
+        <div class="opp-thumb">
+          <svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="160" fill="${tc[0]}"/>
+            <rect x="0" y="0" width="400" height="160" fill="url(#grad${o.id})"/>
+            <defs><linearGradient id="grad${o.id}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="${tc[1]}" stop-opacity="0.6"/><stop offset="100%" stop-color="${tc[2]}" stop-opacity="0.2"/></linearGradient></defs>
+            <line x1="0" y1="60" x2="400" y2="60" stroke="rgba(245,240,232,0.04)" stroke-width="1"/>
+            <line x1="0" y1="110" x2="400" y2="110" stroke="rgba(245,240,232,0.04)" stroke-width="1"/>
+            <line x1="133" y1="0" x2="133" y2="160" stroke="rgba(245,240,232,0.04)" stroke-width="1"/>
+            <line x1="266" y1="0" x2="266" y2="160" stroke="rgba(245,240,232,0.04)" stroke-width="1"/>
+            <rect x="60" y="70" width="80" height="50" rx="3" fill="none" stroke="rgba(212,168,50,0.3)" stroke-width="1" stroke-dasharray="4,3"/>
+            <rect x="180" y="55" width="120" height="65" rx="3" fill="none" stroke="rgba(212,168,50,0.2)" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="200" y="88" font-family="Syne,sans-serif" font-size="20" font-weight="800" fill="rgba(245,240,232,0.06)" text-anchor="middle">${o.sqm.toLocaleString()} sqm</text>
+          </svg>
+          <span class="opp-type-badge ${o.type === 'fractional' ? 'frac' : 'full'}">${o.type === 'fractional' ? 'Fractional' : 'Full Asset'}</span>
+          <span class="opp-score">Score ${o.score}</span>
+        </div>
+        <div class="opp-body">
+          <div class="opp-name">${o.name}</div>
+          <div class="opp-loc">📍 ${o.loc} · ${o.sqm.toLocaleString()} sqm</div>
+          <div class="opp-metrics">
+            <div class="opp-metric"><div class="opp-metric-val">${o.irr}%</div><div class="opp-metric-label">Target IRR</div></div>
+            <div class="opp-metric"><div class="opp-metric-val">${o.multiple}x</div><div class="opp-metric-label">Equity Mult.</div></div>
+            <div class="opp-metric"><div class="opp-metric-val">${o.hold}mo</div><div class="opp-metric-label">Hold Period</div></div>
+          </div>
+          <div class="opp-progress">
+            <div class="opp-prog-header"><span>Funded</span><span>${o.funded}% · ${o.raised}</span></div>
+            <div class="prog-track"><div class="prog-fill" style="width:${o.funded}%; background:${fillColor};"></div></div>
+          </div>
+          <div class="opp-tags">${o.tags.map(t => `<span class="opp-tag">${t}</span>`).join('')}</div>
+          <div class="opp-actions">
+            <button class="btn-invest" onclick="openModal(${o.id})">View Details</button>
+            <button class="btn-save ${savedCards.has(o.id)?'saved':''}" id="save-${o.id}" onclick="toggleSave(${o.id}, this)">
+              ${savedCards.has(o.id) ? '★' : '☆'}
+            </button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  function applyFilters() {
+    let list = opportunities.filter(o => {
+      if (activeType !== 'all' && o.type !== activeType) return false;
+      const prov = document.getElementById('filterProvince').value;
+      if (prov && o.province !== prov) return false;
+      const ret = parseInt(document.getElementById('filterReturn').value);
+      if (ret && o.irr < ret) return false;
+      const hold = parseInt(document.getElementById('filterHold').value);
+      if (hold && o.hold > hold) return false;
+      return true;
+    });
+    const sort = document.getElementById('filterSort').value;
+    if (sort === 'irr') list.sort((a,b) => b.irr - a.irr);
+    else if (sort === 'funding') list.sort((a,b) => b.funded - a.funded);
+    else list.sort((a,b) => (b.featured?1:0) - (a.featured?1:0));
+    renderCards(list);
+  }
+
+  function filterType(type, btn) {
+    activeType = type;
+    document.querySelectorAll('.filter-toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilters();
+  }
+
+  function toggleSave(id, btn) {
+    if (savedCards.has(id)) { savedCards.delete(id); btn.textContent = '☆'; btn.classList.remove('saved'); }
+    else { savedCards.add(id); btn.textContent = '★'; btn.classList.add('saved'); }
+  }
+
+  function openModal(id) {
+    const o = opportunities.find(x => x.id === id);
+    if (!o) return;
+    document.getElementById('mType').textContent = o.type === 'fractional' ? '● Fractional Ownership' : '◆ Full Asset Acquisition';
+    document.getElementById('mName').textContent = o.name;
+    document.getElementById('mLoc').textContent = '📍 ' + o.loc + ' · ' + o.sqm.toLocaleString() + ' sqm';
+    document.getElementById('mMetrics').innerHTML = [
+      ['Target IRR', o.irr + '%'], ['Equity Multiple', o.multiple + 'x'], ['Hold Period', o.hold + ' months'], ['Imali Score', o.score + ' / 100']
+    ].map(([l,v]) => `<div class="modal-metric"><div class="modal-metric-val">${v}</div><div class="modal-metric-label">${l}</div></div>`).join('');
+    document.getElementById('mDesc').textContent = o.desc;
+    document.getElementById('mScorecard').innerHTML = o.scorecard.map(([l,v,cls]) =>
+      `<div class="score-item"><span class="score-label">${l}</span><span class="score-val ${cls}">${v}</span></div>`).join('');
+    const fill = o.irr >= 22 ? 'var(--gold)' : '#4caf7d';
+    document.getElementById('mProgress').innerHTML = `
+      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:rgba(245,240,232,0.4);margin-bottom:0.4rem;">
+        <span>${o.funded}% funded</span><span>${o.raised} of ${o.totalRaise}</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" style="width:${o.funded}%;background:${fill};height:8px;border-radius:4px;"></div></div>`;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('modalOverlay')) document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('modalOverlay').classList.remove('open'); });
+
+  // Init
+  applyFilters();
+
+  // Auto-filter from URL param
+  const urlType = new URLSearchParams(window.location.search).get('type');
+  if (urlType === 'fractional' || urlType === 'full') {
+    activeType = urlType;
+    document.querySelectorAll('.filter-toggle-btn').forEach(b => {
+      if (b.textContent.toLowerCase().includes(urlType.replace('full','full asset'))) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+    applyFilters();
+  }
+</script>
+</body>
+</html>
