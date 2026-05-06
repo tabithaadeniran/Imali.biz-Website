@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Land Listings — The Land Bank | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --terracotta: #c8521a;
+    --gold: #d4a832;
+    --forest: #1a3a2a;
+    --mist: #e8e2d8;
+    --warm-white: #faf7f2;
+    --text-muted: #6b6560;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--terracotta); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,82,26,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--terracotta); transform: translate(-10px, -10px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(10,10,15,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.05); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--cream); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(245,240,232,0.55); text-decoration: none; font-size: 0.82rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--cream); }
+  .nav-links a.active { color: var(--terracotta); }
+  .nav-cta { background: var(--terracotta); color: var(--cream) !important; padding: 0.55rem 1.25rem; border-radius: 2rem; font-weight: 500 !important; text-transform: none !important; letter-spacing: 0 !important; font-size: 0.82rem !important; transition: background 0.2s !important; }
+  .nav-cta:hover { background: #e05e20 !important; }
+
+  /* PAGE LAYOUT */
+  .page-wrap { padding-top: 72px; display: flex; flex-direction: column; min-height: 100vh; }
+  .search-bar-section { background: #0d0d12; border-bottom: 1px solid rgba(245,240,232,0.06); padding: 1.5rem 4rem; }
+  .search-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700; }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .result-count { font-size: 0.82rem; color: rgba(245,240,232,0.4); }
+
+  /* Filter bar */
+  .filter-bar { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+  .filter-input {
+    background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 0.6rem; padding: 0.55rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--cream);
+    outline: none; transition: border-color 0.2s; width: 220px; cursor: none;
+  }
+  .filter-input::placeholder { color: rgba(245,240,232,0.3); }
+  .filter-input:focus { border-color: rgba(200,82,26,0.5); }
+  .filter-select {
+    background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 0.6rem; padding: 0.55rem 1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--cream);
+    outline: none; cursor: none; transition: border-color 0.2s; min-width: 140px;
+  }
+  .filter-select:focus { border-color: rgba(200,82,26,0.5); }
+  .filter-select option { background: #0d0d12; }
+  .filter-toggle {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 0.6rem; padding: 0.55rem 1rem;
+    font-size: 0.8rem; color: rgba(245,240,232,0.5); cursor: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .filter-toggle.on { background: rgba(76,175,125,0.1); border-color: rgba(76,175,125,0.3); color: #4caf7d; }
+  .view-toggle { display: flex; gap: 0.35rem; margin-left: auto; }
+  .view-btn {
+    background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 0.5rem; padding: 0.5rem 0.75rem;
+    font-size: 0.8rem; color: rgba(245,240,232,0.4); cursor: none;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .view-btn.active { background: rgba(200,82,26,0.15); border-color: rgba(200,82,26,0.3); color: var(--terracotta); }
+
+  /* MAIN CONTENT */
+  .main-content { display: flex; flex: 1; }
+
+  /* MAP VIEW */
+  .map-view { flex: 1; position: relative; display: none; background: #0e1219; min-height: 75vh; }
+  .map-view.visible { display: block; }
+  .map-svg-full { width: 100%; height: 100%; }
+  .map-instruction { position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); background: rgba(10,10,15,0.85); border: 1px solid rgba(245,240,232,0.08); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.75rem; color: rgba(245,240,232,0.5); backdrop-filter: blur(8px); white-space: nowrap; }
+  /* Popup on map */
+  .map-popup { position: absolute; background: rgba(10,10,15,0.95); border: 1px solid rgba(245,240,232,0.1); border-radius: 12px; padding: 1rem 1.25rem; backdrop-filter: blur(12px); width: 200px; display: none; }
+  .map-popup.visible { display: block; }
+  .popup-loc { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .popup-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .popup-detail { font-size: 0.75rem; color: rgba(245,240,232,0.5); margin-bottom: 0.75rem; }
+  .popup-price { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--cream); }
+  .popup-btn { display: block; text-align: center; margin-top: 0.75rem; background: var(--terracotta); color: white; padding: 0.4rem 0.75rem; border-radius: 1rem; font-size: 0.72rem; text-decoration: none; cursor: none; transition: background 0.2s; }
+  .popup-btn:hover { background: #d65a1e; }
+
+  /* LIST VIEW */
+  .list-view { flex: 1; padding: 2rem 4rem; }
+  .list-view.hidden { display: none; }
+  .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+  /* Listing Cards */
+  .listing-card {
+    background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07);
+    border-radius: 16px; overflow: hidden; cursor: none;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  }
+  .listing-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.35); border-color: rgba(245,240,232,0.14); }
+  .card-img { width: 100%; height: 160px; background: #0e1219; position: relative; overflow: hidden; }
+  .card-img svg { width: 100%; height: 100%; }
+  .card-badge { position: absolute; top: 0.65rem; left: 0.65rem; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.55rem; border-radius: 1rem; }
+  .badge-new { background: var(--terracotta); color: white; }
+  .badge-hot { background: var(--gold); color: var(--ink); }
+  .badge-offer { background: rgba(76,175,125,0.2); border: 1px solid rgba(76,175,125,0.3); color: #4caf7d; }
+  .card-verified { position: absolute; top: 0.65rem; right: 0.65rem; background: rgba(10,10,15,0.85); border: 1px solid rgba(76,175,125,0.35); color: #4caf7d; font-size: 0.6rem; padding: 0.2rem 0.55rem; border-radius: 1rem; backdrop-filter: blur(4px); }
+  .save-btn { position: absolute; bottom: 0.65rem; right: 0.65rem; background: rgba(10,10,15,0.8); border: 1px solid rgba(245,240,232,0.1); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: none; backdrop-filter: blur(4px); transition: background 0.2s, border-color 0.2s; }
+  .save-btn:hover { background: rgba(200,82,26,0.2); border-color: rgba(200,82,26,0.3); }
+  .save-btn.saved { background: rgba(200,82,26,0.15); border-color: rgba(200,82,26,0.3); }
+  .card-body { padding: 1.25rem; }
+  .card-location { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.35rem; }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--cream); margin-bottom: 0.75rem; line-height: 1.3; }
+  .card-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .chip { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.08); border-radius: 0.4rem; padding: 0.25rem 0.6rem; font-size: 0.68rem; color: rgba(245,240,232,0.55); }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid rgba(245,240,232,0.06); }
+  .card-price { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--cream); }
+  .card-price small { font-size: 0.65rem; color: rgba(245,240,232,0.35); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+  .card-trust { display: flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; color: var(--gold); background: rgba(212,168,50,0.08); border: 1px solid rgba(212,168,50,0.15); padding: 0.25rem 0.6rem; border-radius: 2rem; }
+  .agent-row { display: flex; align-items: center; gap: 0.5rem; padding-top: 0.75rem; margin-top: 0.75rem; border-top: 1px solid rgba(245,240,232,0.05); }
+  .agent-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, var(--terracotta), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: white; flex-shrink: 0; }
+  .agent-name { font-size: 0.72rem; color: rgba(245,240,232,0.45); }
+  .agent-name strong { color: rgba(245,240,232,0.7); font-weight: 500; }
+  .card-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+  .btn-card { flex: 1; text-align: center; padding: 0.55rem; border-radius: 0.6rem; font-size: 0.78rem; font-weight: 500; cursor: none; text-decoration: none; transition: background 0.2s, border-color 0.2s, color 0.2s; }
+  .btn-card-primary { background: var(--terracotta); color: white; border: 1px solid var(--terracotta); }
+  .btn-card-primary:hover { background: #d65a1e; }
+  .btn-card-outline { background: transparent; color: rgba(245,240,232,0.6); border: 1px solid rgba(245,240,232,0.12); }
+  .btn-card-outline:hover { border-color: rgba(245,240,232,0.3); color: var(--cream); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(10,10,15,0.85); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #12121a; border: 1px solid rgba(245,240,232,0.1); border-radius: 20px; width: 100%; max-width: 780px; max-height: 90vh; overflow-y: auto; position: relative; }
+  .modal-close { position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: none; color: rgba(245,240,232,0.6); transition: background 0.2s; z-index: 1; }
+  .modal-close:hover { background: rgba(245,240,232,0.12); }
+  .modal-img { width: 100%; height: 260px; background: #0e1219; position: relative; overflow: hidden; }
+  .modal-img svg { width: 100%; height: 100%; }
+  .modal-body { padding: 2rem; }
+  .modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
+  .modal-location { font-size: 0.72rem; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; }
+  .modal-price { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--cream); text-align: right; }
+  .modal-price small { display: block; font-size: 0.7rem; color: rgba(245,240,232,0.35); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+  .modal-chips { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  .modal-chip { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.5rem; padding: 0.35rem 0.8rem; font-size: 0.75rem; color: rgba(245,240,232,0.6); }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.75rem; }
+  .modal-section-title { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.35); margin-bottom: 1rem; }
+  .modal-detail-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(245,240,232,0.05); font-size: 0.82rem; }
+  .modal-detail-row:last-child { border-bottom: none; }
+  .detail-label { color: rgba(245,240,232,0.45); }
+  .detail-value { color: var(--cream); font-weight: 500; }
+  .valuation-box { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.15); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.75rem; }
+  .val-title { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+  .val-range { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--cream); margin-bottom: 0.25rem; }
+  .val-note { font-size: 0.75rem; color: rgba(245,240,232,0.4); }
+  .owner-box { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+  .owner-left { display: flex; align-items: center; gap: 0.75rem; }
+  .owner-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--terracotta), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color: white; }
+  .owner-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .owner-meta { font-size: 0.72rem; color: rgba(245,240,232,0.45); }
+  .owner-trust { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; color: var(--gold); }
+  .modal-actions { display: flex; gap: 0.75rem; }
+  .btn-modal-primary { flex: 1; background: var(--terracotta); color: white; padding: 0.85rem; border-radius: 0.75rem; text-align: center; font-weight: 500; font-size: 0.875rem; text-decoration: none; cursor: none; transition: background 0.2s; }
+  .btn-modal-primary:hover { background: #d65a1e; }
+  .btn-modal-secondary { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); color: rgba(245,240,232,0.6); padding: 0.85rem 1.5rem; border-radius: 0.75rem; font-size: 0.875rem; cursor: none; transition: background 0.2s, color 0.2s; }
+  .btn-modal-secondary:hover { background: rgba(245,240,232,0.08); color: var(--cream); }
+  .report-link { font-size: 0.72rem; color: rgba(245,240,232,0.25); text-align: center; margin-top: 1rem; cursor: none; transition: color 0.2s; }
+  .report-link:hover { color: rgba(245,240,232,0.5); }
+
+  /* No results */
+  .no-results { text-align: center; padding: 5rem 2rem; color: rgba(245,240,232,0.35); }
+  .no-results-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+
+  /* FOOTER */
+  footer { background: #060609; padding: 2rem 4rem; border-top: 1px solid rgba(245,240,232,0.05); display: flex; align-items: center; justify-content: space-between; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--cream); text-decoration: none; }
+  .footer-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .footer-links-simple { display: flex; gap: 1.5rem; list-style: none; }
+  .footer-links-simple a { color: rgba(245,240,232,0.4); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; cursor: none; }
+  .footer-links-simple a:hover { color: var(--cream); }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 1.5rem; }
+    .search-bar-section { padding: 1.25rem 1.5rem; }
+    .list-view { padding: 1.5rem; }
+    .listings-grid { grid-template-columns: 1fr 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+    .modal-grid { grid-template-columns: 1fr; }
+    .filter-bar { gap: 0.5rem; }
+    .filter-input { width: 160px; }
+  }
+  @media (max-width: 640px) {
+    .listings-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali.biz<span>.</span></div>
+    <div class="nav-sub">The Land Bank</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="listings.html" class="active">Browse Listings</a></li>
+    <li><a href="list-land.html">List Your Land</a></li>
+    <li><a href="valuation.html">Valuation</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="list-land.html" class="nav-cta">+ List Land</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar-section">
+    <div class="search-top">
+      <h1 class="page-title">Browse <em>Land Listings</em></h1>
+      <span class="result-count" id="resultCount">Showing 9 listings</span>
+    </div>
+    <div class="filter-bar">
+      <input type="text" class="filter-input" placeholder="🔍  Location (e.g. Kigali, Musanze)" id="filterLocation">
+      <select class="filter-select" id="filterType">
+        <option value="">All Land Types</option>
+        <option value="residential">Residential</option>
+        <option value="commercial">Commercial</option>
+        <option value="agricultural">Agricultural</option>
+        <option value="mixed">Mixed Use</option>
+      </select>
+      <select class="filter-select" id="filterSize">
+        <option value="">Any Size</option>
+        <option value="small">Under 500 sqm</option>
+        <option value="medium">500 – 2,000 sqm</option>
+        <option value="large">2,000 – 10,000 sqm</option>
+        <option value="xlarge">10,000+ sqm</option>
+      </select>
+      <select class="filter-select" id="filterPrice">
+        <option value="">Any Price</option>
+        <option value="low">Under RWF 20M</option>
+        <option value="mid">RWF 20M – 50M</option>
+        <option value="high">RWF 50M – 150M</option>
+        <option value="premium">RWF 150M+</option>
+      </select>
+      <div class="filter-toggle" id="verifiedToggle">✓ Verified Only</div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btnList">☰ List</button>
+        <button class="view-btn" id="btnMap">⊕ Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP VIEW -->
+  <div class="map-view" id="mapView">
+    <div class="map-instruction">Click a hotspot to view listing details</div>
+    <svg class="map-svg-full" viewBox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <radialGradient id="mg1" cx="53%" cy="38%"><stop offset="0%" stop-color="#c8521a" stop-opacity="0.5"/><stop offset="100%" stop-color="#c8521a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mg2" cx="35%" cy="58%"><stop offset="0%" stop-color="#d4a832" stop-opacity="0.4"/><stop offset="100%" stop-color="#d4a832" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mg3" cx="68%" cy="65%"><stop offset="0%" stop-color="#c8521a" stop-opacity="0.3"/><stop offset="100%" stop-color="#c8521a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mg4" cx="45%" cy="75%"><stop offset="0%" stop-color="#d4a832" stop-opacity="0.3"/><stop offset="100%" stop-color="#d4a832" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="1200" height="680" fill="#0e1219"/>
+      <!-- Grid -->
+      <g stroke="rgba(245,240,232,0.035)" stroke-width="0.5">
+        <line x1="0" y1="170" x2="1200" y2="170"/><line x1="0" y1="340" x2="1200" y2="340"/><line x1="0" y1="510" x2="1200" y2="510"/>
+        <line x1="300" y1="0" x2="300" y2="680"/><line x1="600" y1="0" x2="600" y2="680"/><line x1="900" y1="0" x2="900" y2="680"/>
+      </g>
+      <!-- Rwanda outline -->
+      <path d="M390,140 L520,118 L610,138 L700,168 L730,220 L722,295 L698,368 L674,428 L634,490 L580,535 L530,555 L472,550 L418,526 L372,490 L344,450 L330,400 L326,348 L336,290 L354,232 L372,182 Z"
+        fill="rgba(26,58,42,0.55)" stroke="rgba(212,168,50,0.25)" stroke-width="1.5"/>
+      <!-- District lines -->
+      <path d="M528,160 L528,555" stroke="rgba(212,168,50,0.08)" stroke-width="1" stroke-dasharray="4,5"/>
+      <path d="M330,360 L730,360" stroke="rgba(212,168,50,0.08)" stroke-width="1" stroke-dasharray="4,5"/>
+      <!-- Glow areas -->
+      <ellipse cx="570" cy="268" rx="130" ry="110" fill="url(#mg1)"/>
+      <ellipse cx="415" cy="420" rx="90" ry="80" fill="url(#mg2)"/>
+      <ellipse cx="655" cy="445" rx="80" ry="70" fill="url(#mg3)"/>
+      <ellipse cx="490" cy="490" rx="70" ry="60" fill="url(#mg4)"/>
+
+      <!-- Kigali cluster -->
+      <circle cx="572" cy="268" r="32" fill="rgba(200,82,26,0.08)" stroke="rgba(200,82,26,0.3)" stroke-width="1">
+        <animate attributeName="r" values="28;38;28" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.7;0.3;0.7" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="572" cy="268" r="10" fill="rgba(200,82,26,0.25)" stroke="rgba(200,82,26,0.6)" stroke-width="1.5" class="map-hotspot" data-id="0" style="cursor:none"/>
+      <circle cx="572" cy="268" r="5" fill="#c8521a"/>
+      <text x="588" y="264" fill="rgba(245,240,232,0.8)" font-size="12" font-family="'DM Sans', sans-serif" font-weight="500">Kigali</text>
+
+      <!-- Musanze -->
+      <circle cx="432" cy="188" r="22" fill="rgba(212,168,50,0.07)" stroke="rgba(212,168,50,0.25)" stroke-width="1">
+        <animate attributeName="r" values="18;28;18" dur="4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="432" cy="188" r="8" fill="rgba(212,168,50,0.2)" stroke="rgba(212,168,50,0.5)" stroke-width="1.5" class="map-hotspot" data-id="1" style="cursor:none"/>
+      <circle cx="432" cy="188" r="4" fill="#d4a832"/>
+      <text x="446" y="184" fill="rgba(212,168,50,0.8)" font-size="11" font-family="'DM Sans', sans-serif">Musanze</text>
+
+      <!-- Huye -->
+      <circle cx="490" cy="488" r="18" fill="rgba(200,82,26,0.07)" stroke="rgba(200,82,26,0.2)" stroke-width="1">
+        <animate attributeName="r" values="14;22;14" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="490" cy="488" r="7" fill="rgba(200,82,26,0.2)" stroke="rgba(200,82,26,0.45)" stroke-width="1.5" class="map-hotspot" data-id="2" style="cursor:none"/>
+      <circle cx="490" cy="488" r="3.5" fill="#c8521a"/>
+      <text x="504" y="484" fill="rgba(245,240,232,0.65)" font-size="11" font-family="'DM Sans', sans-serif">Huye</text>
+
+      <!-- Rubavu -->
+      <circle cx="356" cy="298" r="16" fill="rgba(212,168,50,0.07)" stroke="rgba(212,168,50,0.2)" stroke-width="1">
+        <animate attributeName="r" values="12;20;12" dur="5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="356" cy="298" r="7" fill="rgba(212,168,50,0.15)" stroke="rgba(212,168,50,0.4)" stroke-width="1.5" class="map-hotspot" data-id="3" style="cursor:none"/>
+      <circle cx="356" cy="298" r="3.5" fill="#d4a832"/>
+      <text x="370" y="294" fill="rgba(212,168,50,0.7)" font-size="11" font-family="'DM Sans', sans-serif">Rubavu</text>
+
+      <!-- Nyagatare -->
+      <circle cx="670" cy="198" r="14" fill="rgba(200,82,26,0.06)" stroke="rgba(200,82,26,0.18)" stroke-width="1">
+        <animate attributeName="r" values="10;18;10" dur="4.5s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="670" cy="198" r="6" fill="rgba(200,82,26,0.15)" stroke="rgba(200,82,26,0.4)" stroke-width="1.5" class="map-hotspot" data-id="4" style="cursor:none"/>
+      <circle cx="670" cy="198" r="3" fill="#c8521a"/>
+      <text x="684" y="194" fill="rgba(245,240,232,0.6)" font-size="10" font-family="'DM Sans', sans-serif">Nyagatare</text>
+
+      <!-- Connection lines -->
+      <line x1="572" y1="268" x2="432" y2="188" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="4,4"/>
+      <line x1="572" y1="268" x2="490" y2="488" stroke="rgba(200,82,26,0.12)" stroke-width="0.8" stroke-dasharray="4,4"/>
+      <line x1="572" y1="268" x2="356" y2="298" stroke="rgba(212,168,50,0.1)" stroke-width="0.8" stroke-dasharray="4,4"/>
+      <line x1="572" y1="268" x2="670" y2="198" stroke="rgba(200,82,26,0.1)" stroke-width="0.8" stroke-dasharray="4,4"/>
+    </svg>
+
+    <!-- Map popup -->
+    <div class="map-popup" id="mapPopup">
+      <div class="popup-loc" id="popupLoc"></div>
+      <div class="popup-title" id="popupTitle"></div>
+      <div class="popup-detail" id="popupDetail"></div>
+      <div class="popup-price" id="popupPrice"></div>
+      <a href="#" class="popup-btn" id="popupBtn">View Full Listing</a>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div class="list-view" id="listView">
+    <div class="listings-grid" id="listingsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<!-- LISTING DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <div class="modal-img">
+      <svg viewBox="0 0 780 260" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="modSky" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1a2035"/><stop offset="100%" stop-color="#0e1219"/></linearGradient>
+          <linearGradient id="modLand" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1a3a2a"/><stop offset="100%" stop-color="#0f2018"/></linearGradient>
+          <radialGradient id="modGlow" cx="50%" cy="40%"><stop offset="0%" stop-color="rgba(212,168,50,0.25)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+        </defs>
+        <rect width="780" height="260" fill="url(#modSky)"/>
+        <ellipse cx="390" cy="100" rx="350" ry="250" fill="url(#modGlow)"/>
+        <path d="M0,160 Q100,120 200,145 Q330,100 460,138 Q560,110 680,132 Q730,118 780,128 L780,260 L0,260 Z" fill="url(#modLand)"/>
+        <path d="M0,190 Q150,165 300,182 Q420,160 560,180 Q660,162 780,175 L780,260 L0,260 Z" fill="rgba(26,58,42,0.6)"/>
+        <rect x="190" y="165" width="160" height="80" fill="none" stroke="rgba(212,168,50,0.45)" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <rect x="380" y="172" width="200" height="72" fill="none" stroke="rgba(200,82,26,0.45)" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <g stroke="rgba(212,168,50,0.06)" stroke-width="0.5">
+          <line x1="0" y1="130" x2="780" y2="130"/><line x1="0" y1="195" x2="780" y2="195"/>
+          <line x1="195" y1="80" x2="195" y2="260"/><line x1="390" y1="80" x2="390" y2="260"/><line x1="585" y1="80" x2="585" y2="260"/>
+        </g>
+        <circle cx="60" cy="35" r="1.2" fill="rgba(245,240,232,0.4)"/><circle cx="180" cy="20" r="1" fill="rgba(245,240,232,0.5)"/><circle cx="300" cy="28" r="1.5" fill="rgba(245,240,232,0.6)"/><circle cx="500" cy="15" r="1" fill="rgba(245,240,232,0.4)"/><circle cx="680" cy="30" r="1.2" fill="rgba(245,240,232,0.5)"/>
+      </svg>
+    </div>
+    <div class="modal-body">
+      <div class="modal-header">
+        <div>
+          <div class="modal-location" id="modalLocation"></div>
+          <div class="modal-title" id="modalTitle"></div>
+        </div>
+        <div>
+          <div class="modal-price" id="modalPrice"></div>
+        </div>
+      </div>
+      <div class="modal-chips" id="modalChips"></div>
+      <div class="valuation-box">
+        <div class="val-title">AI Valuation Estimate</div>
+        <div class="val-range" id="modalValuation"></div>
+        <div class="val-note">Based on location, title type, gradient, and market comparables</div>
+      </div>
+      <div class="modal-grid">
+        <div>
+          <div class="modal-section-title">Land Details</div>
+          <div id="modalDetails"></div>
+        </div>
+        <div>
+          <div class="modal-section-title">Documentation</div>
+          <div id="modalDocs"></div>
+        </div>
+      </div>
+      <div class="owner-box" id="ownerBox"></div>
+      <div class="modal-actions">
+        <a href="list-land.html" class="btn-modal-primary">Schedule a Viewing</a>
+        <button class="btn-modal-secondary">Message Owner</button>
+        <button class="btn-modal-secondary">Save Listing ♡</button>
+      </div>
+      <div class="report-link">Report this listing</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">Imali.biz<span>.</span> — Land Bank</a>
+  <ul class="footer-links-simple">
+    <li><a href="list-land.html">List Your Land</a></li>
+    <li><a href="valuation.html">Valuation</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="../index.html">← Imali.biz</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  function animateRing() {
+    rx += (mx - rx - 18) * 0.12; ry += (my - ry - 18) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Listing data
+  const listings = [
+    {
+      id: 0, location: 'Gasabo, Kigali', area: 'Kimironko',
+      title: 'Prime Residential Plot — Kimironko', size: '2,400 sqm',
+      type: 'Residential', title_type: 'Freehold', price: 'RWF 48M',
+      priceRaw: 48, sizeRaw: 2400, typeRaw: 'residential',
+      agent: 'Jean-Pierre M.', agentTrust: 92, trust: 87,
+      badge: 'badge-new', badgeText: 'Just Listed', verified: true,
+      valuation: 'RWF 42M – 55M', hotspotScore: 91,
+      slope: 'Gentle (2–5°)', utilities: 'Water, electricity, road access',
+      zoning: 'Residential R2', encumbrances: 'None', mapId: 0
+    },
+    {
+      id: 1, location: 'Kicukiro, Kigali', area: 'Gikondo',
+      title: 'Commercial Land — Gikondo Industrial Zone', size: '5,800 sqm',
+      type: 'Commercial', title_type: 'Leasehold 99yr', price: 'RWF 145M',
+      priceRaw: 145, sizeRaw: 5800, typeRaw: 'commercial',
+      agent: 'Claudine N.', agentTrust: 88, trust: 94,
+      badge: 'badge-hot', badgeText: 'High Demand', verified: true,
+      valuation: 'RWF 130M – 160M', hotspotScore: 88,
+      slope: 'Flat (0–1°)', utilities: 'Full infrastructure', zoning: 'Commercial C2',
+      encumbrances: 'Minor easement (road)', mapId: 0
+    },
+    {
+      id: 2, location: 'Nyarugenge, Kigali', area: 'Nyamirambo',
+      title: 'Mixed-Use Plot — Nyamirambo Centre', size: '800 sqm',
+      type: 'Mixed Use', title_type: 'Freehold', price: 'RWF 22M',
+      priceRaw: 22, sizeRaw: 800, typeRaw: 'mixed',
+      agent: 'Emmanuel R.', agentTrust: 79, trust: 76,
+      badge: '', badgeText: '', verified: false,
+      valuation: 'RWF 18M – 26M', hotspotScore: 73,
+      slope: 'Moderate (8–12°)', utilities: 'Water, electricity', zoning: 'Mixed Use',
+      encumbrances: 'None', mapId: 0
+    },
+    {
+      id: 3, location: 'Musanze', area: 'Northern Province',
+      title: 'Agricultural Land — Near Volcanoes NP', size: '12,000 sqm',
+      type: 'Agricultural', title_type: 'Freehold', price: 'RWF 18M',
+      priceRaw: 18, sizeRaw: 12000, typeRaw: 'agricultural',
+      agent: 'Agathe U.', agentTrust: 85, trust: 82,
+      badge: '', badgeText: '', verified: true,
+      valuation: 'RWF 15M – 22M', hotspotScore: 68,
+      slope: 'Hilly (15–20°)', utilities: 'Water available', zoning: 'Agricultural A1',
+      encumbrances: 'None', mapId: 1
+    },
+    {
+      id: 4, location: 'Rubavu', area: 'Western Province',
+      title: 'Lakeview Residential Plot — Lake Kivu', size: '1,500 sqm',
+      type: 'Residential', title_type: 'Digital Title', price: 'RWF 58M',
+      priceRaw: 58, sizeRaw: 1500, typeRaw: 'residential',
+      agent: 'Patrick K.', agentTrust: 91, trust: 89,
+      badge: 'badge-hot', badgeText: 'Premium', verified: true,
+      valuation: 'RWF 52M – 68M', hotspotScore: 86,
+      slope: 'Gentle slope to lake (5°)', utilities: 'Full access', zoning: 'Residential R1',
+      encumbrances: 'None', mapId: 3
+    },
+    {
+      id: 5, location: 'Huye', area: 'Southern Province',
+      title: 'Residential Plot — Near National University', size: '600 sqm',
+      type: 'Residential', title_type: 'Freehold', price: 'RWF 12M',
+      priceRaw: 12, sizeRaw: 600, typeRaw: 'residential',
+      agent: 'Marie-Claire B.', agentTrust: 74, trust: 71,
+      badge: '', badgeText: '', verified: false,
+      valuation: 'RWF 10M – 15M', hotspotScore: 62,
+      slope: 'Flat (0–2°)', utilities: 'Water, electricity', zoning: 'Residential R2',
+      encumbrances: 'None', mapId: 2
+    },
+    {
+      id: 6, location: 'Gasabo, Kigali', area: 'Remera',
+      title: 'Commercial Corner Plot — Remera Roundabout', size: '3,200 sqm',
+      type: 'Commercial', title_type: 'Digital Title', price: 'RWF 220M',
+      priceRaw: 220, sizeRaw: 3200, typeRaw: 'commercial',
+      agent: 'Jean-Pierre M.', agentTrust: 92, trust: 96,
+      badge: 'badge-offer', badgeText: 'Under Offer', verified: true,
+      valuation: 'RWF 200M – 245M', hotspotScore: 95,
+      slope: 'Flat (1°)', utilities: 'Full infrastructure', zoning: 'Commercial C1 (Prime)',
+      encumbrances: 'None', mapId: 0
+    },
+    {
+      id: 7, location: 'Nyagatare', area: 'Eastern Province',
+      title: 'Large Agricultural Block — Nyagatare Plains', size: '85,000 sqm',
+      type: 'Agricultural', title_type: 'Freehold', price: 'RWF 32M',
+      priceRaw: 32, sizeRaw: 85000, typeRaw: 'agricultural',
+      agent: 'Damascene T.', agentTrust: 80, trust: 78,
+      badge: '', badgeText: '', verified: true,
+      valuation: 'RWF 28M – 40M', hotspotScore: 65,
+      slope: 'Flat (0–1°)', utilities: 'Seasonal river access', zoning: 'Agricultural A1',
+      encumbrances: 'Minor irrigation right', mapId: 4
+    },
+    {
+      id: 8, location: 'Kicukiro, Kigali', area: 'Niboye',
+      title: 'Residential Plot — Niboye Quiet Zone', size: '950 sqm',
+      type: 'Residential', title_type: 'Freehold', price: 'RWF 28M',
+      priceRaw: 28, sizeRaw: 950, typeRaw: 'residential',
+      agent: 'Clarisse M.', agentTrust: 83, trust: 80,
+      badge: 'badge-new', badgeText: 'Just Listed', verified: false,
+      valuation: 'RWF 24M – 33M', hotspotScore: 74,
+      slope: 'Gentle (3°)', utilities: 'Water, electricity, tarmac road', zoning: 'Residential R2',
+      encumbrances: 'None', mapId: 0
+    }
+  ];
+
+  // Color SVGs for cards (one pattern, varied colors)
+  function cardSvg(index) {
+    const palettes = [
+      { bg: '#0e1219', land: '#1a3a2a', accent: '#c8521a' },
+      { bg: '#0e1015', land: '#0f1f2a', accent: '#d4a832' },
+      { bg: '#100e14', land: '#251a1a', accent: '#c8521a' },
+      { bg: '#0e1219', land: '#1a3a2a', accent: '#d4a832' },
+      { bg: '#0c101a', land: '#0f2035', accent: '#c8521a' }
+    ];
+    const p = palettes[index % palettes.length];
+    return `<svg viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+      <rect width="360" height="160" fill="${p.bg}"/>
+      <path d="M0,85 Q50,65 100,80 Q160,55 220,76 Q280,58 340,72 Q352,68 360,70 L360,160 L0,160 Z" fill="${p.land}"/>
+      <path d="M0,108 Q80,90 160,102 Q240,85 330,100 L360,98 L360,160 L0,160 Z" fill="${p.land}" opacity="0.6"/>
+      <rect x="80" y="90" width="70" height="45" fill="none" stroke="${p.accent}" stroke-width="1" stroke-dasharray="3,3" opacity="0.4"/>
+      <rect x="170" y="94" width="90" height="40" fill="none" stroke="${p.accent}" stroke-width="1" stroke-dasharray="3,3" opacity="0.35"/>
+      <g stroke="rgba(212,168,50,0.05)" stroke-width="0.4">
+        <line x1="0" y1="80" x2="360" y2="80"/><line x1="0" y1="120" x2="360" y2="120"/>
+        <line x1="90" y1="40" x2="90" y2="160"/><line x1="180" y1="40" x2="180" y2="160"/><line x1="270" y1="40" x2="270" y2="160"/>
+      </g>
+    </svg>`;
+  }
+
+  function renderListings(data) {
+    const grid = document.getElementById('listingsGrid');
+    document.getElementById('resultCount').textContent = `Showing ${data.length} listing${data.length !== 1 ? 's' : ''}`;
+    if (data.length === 0) {
+      grid.innerHTML = `<div class="no-results" style="grid-column:1/-1"><span class="no-results-icon">🔍</span>No listings match your filters. Try adjusting your search.</div>`;
+      return;
+    }
+    grid.innerHTML = data.map((l, i) => `
+      <div class="listing-card" data-id="${l.id}">
+        <div class="card-img">
+          ${cardSvg(l.id)}
+          ${l.badge ? `<span class="card-badge ${l.badge}">${l.badgeText}</span>` : ''}
+          ${l.verified ? `<span class="card-verified">✓ NLA Verified</span>` : ''}
+          <div class="save-btn" data-save="${l.id}">♡</div>
+        </div>
+        <div class="card-body">
+          <div class="card-location">
+            <svg width="9" height="9" viewBox="0 0 14 14" fill="none"><path d="M7 1C4.8 1 3 2.8 3 5c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4z" fill="currentColor"/></svg>
+            ${l.location}
+          </div>
+          <div class="card-title">${l.title}</div>
+          <div class="card-chips">
+            <span class="chip">${l.size}</span>
+            <span class="chip">${l.type}</span>
+            <span class="chip">${l.title_type}</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-price">${l.price} <small>asking</small></div>
+            <div class="card-trust">★ ${l.trust}</div>
+          </div>
+          <div class="agent-row">
+            <div class="agent-avatar">${l.agent[0]}</div>
+            <div class="agent-name">Listed by <strong>${l.agent}</strong> · Trust ${l.agentTrust}</div>
+          </div>
+          <div class="card-actions">
+            <a href="#" class="btn-card btn-card-primary view-detail" data-id="${l.id}">View Details</a>
+            <a href="#" class="btn-card btn-card-outline">Save ♡</a>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Attach detail listeners
+    document.querySelectorAll('.view-detail').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        openModal(parseInt(btn.dataset.id));
+      });
+    });
+    // Save toggles
+    document.querySelectorAll('.save-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('saved');
+        btn.textContent = btn.classList.contains('saved') ? '♥' : '♡';
+      });
+    });
+  }
+
+  // Modal
+  function openModal(id) {
+    const l = listings.find(x => x.id === id);
+    if (!l) return;
+    document.getElementById('modalLocation').textContent = l.location;
+    document.getElementById('modalTitle').textContent = l.title;
+    document.getElementById('modalPrice').innerHTML = `${l.price} <small>asking price</small>`;
+    document.getElementById('modalValuation').textContent = l.valuation;
+    document.getElementById('modalChips').innerHTML = [l.size, l.type, l.title_type, `Hotspot ${l.hotspotScore}/100`].map(c => `<span class="modal-chip">${c}</span>`).join('');
+    document.getElementById('modalDetails').innerHTML = [
+      ['Size', l.size], ['Zoning', l.zoning], ['Slope', l.slope], ['Utilities', l.utilities]
+    ].map(([k,v]) => `<div class="modal-detail-row"><span class="detail-label">${k}</span><span class="detail-value">${v}</span></div>`).join('');
+    document.getElementById('modalDocs').innerHTML = [
+      ['Title Type', l.title_type], ['NLA Verified', l.verified ? '✓ Yes' : '—'], ['Encumbrances', l.encumbrances]
+    ].map(([k,v]) => `<div class="modal-detail-row"><span class="detail-label">${k}</span><span class="detail-value">${v}</span></div>`).join('');
+    document.getElementById('ownerBox').innerHTML = `
+      <div class="owner-left">
+        <div class="owner-avatar">${l.agent[0]}</div>
+        <div>
+          <div class="owner-name">${l.agent}</div>
+          <div class="owner-meta">Verified Agent · ${l.verified ? 'NLA Registered' : 'Unverified'}</div>
+        </div>
+      </div>
+      <div class="owner-trust">★ Trust Score: ${l.agentTrust}</div>`;
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+
+  // View toggle
+  document.getElementById('btnList').addEventListener('click', () => {
+    document.getElementById('listView').classList.remove('hidden');
+    document.getElementById('mapView').classList.remove('visible');
+    document.getElementById('btnList').classList.add('active');
+    document.getElementById('btnMap').classList.remove('active');
+  });
+  document.getElementById('btnMap').addEventListener('click', () => {
+    document.getElementById('listView').classList.add('hidden');
+    document.getElementById('mapView').classList.add('visible');
+    document.getElementById('btnMap').classList.add('active');
+    document.getElementById('btnList').classList.remove('active');
+  });
+
+  // Map hotspots
+  const mapData = [
+    { loc: 'Kigali Cluster', title: 'Multiple listings in Kigali', detail: '6 active listings', price: 'From RWF 22M', id: 0 },
+    { loc: 'Musanze', title: 'Agricultural Land near Volcanoes NP', detail: '12,000 sqm · Agricultural', price: 'RWF 18M', id: 3 },
+    { loc: 'Huye', title: 'Residential Plot near NUR', detail: '600 sqm · Residential', price: 'RWF 12M', id: 5 },
+    { loc: 'Rubavu', title: 'Lakeview Plot — Lake Kivu', detail: '1,500 sqm · Residential', price: 'RWF 58M', id: 4 },
+    { loc: 'Nyagatare', title: 'Agricultural Block — Eastern Province', detail: '85,000 sqm · Agricultural', price: 'RWF 32M', id: 7 }
+  ];
+  document.querySelectorAll('.map-hotspot').forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      const idx = parseInt(dot.dataset.id);
+      const d = mapData[idx];
+      const popup = document.getElementById('mapPopup');
+      const rect = document.getElementById('mapView').getBoundingClientRect();
+      const x = e.clientX - rect.left + 15;
+      const y = e.clientY - rect.top - 60;
+      popup.style.left = Math.min(x, rect.width - 220) + 'px';
+      popup.style.top = Math.max(10, y) + 'px';
+      document.getElementById('popupLoc').textContent = d.loc;
+      document.getElementById('popupTitle').textContent = d.title;
+      document.getElementById('popupDetail').textContent = d.detail;
+      document.getElementById('popupPrice').textContent = d.price;
+      document.getElementById('popupBtn').onclick = (ev) => { ev.preventDefault(); openModal(d.id); };
+      popup.classList.add('visible');
+    });
+  });
+  document.getElementById('mapView').addEventListener('click', e => {
+    if (!e.target.classList.contains('map-hotspot')) document.getElementById('mapPopup').classList.remove('visible');
+  });
+
+  // Filtering
+  let verifiedOnly = false;
+  document.getElementById('verifiedToggle').addEventListener('click', () => {
+    verifiedOnly = !verifiedOnly;
+    document.getElementById('verifiedToggle').classList.toggle('on', verifiedOnly);
+    applyFilters();
+  });
+  ['filterLocation','filterType','filterSize','filterPrice'].forEach(id => {
+    document.getElementById(id).addEventListener('input', applyFilters);
+    document.getElementById(id).addEventListener('change', applyFilters);
+  });
+
+  function applyFilters() {
+    const loc = document.getElementById('filterLocation').value.toLowerCase();
+    const type = document.getElementById('filterType').value;
+    const size = document.getElementById('filterSize').value;
+    const price = document.getElementById('filterPrice').value;
+    const filtered = listings.filter(l => {
+      if (loc && !l.location.toLowerCase().includes(loc) && !l.area.toLowerCase().includes(loc) && !l.title.toLowerCase().includes(loc)) return false;
+      if (type && l.typeRaw !== type) return false;
+      if (verifiedOnly && !l.verified) return false;
+      if (size) {
+        const s = l.sizeRaw;
+        if (size === 'small' && s >= 500) return false;
+        if (size === 'medium' && (s < 500 || s > 2000)) return false;
+        if (size === 'large' && (s < 2000 || s > 10000)) return false;
+        if (size === 'xlarge' && s < 10000) return false;
+      }
+      if (price) {
+        const p = l.priceRaw;
+        if (price === 'low' && p >= 20) return false;
+        if (price === 'mid' && (p < 20 || p > 50)) return false;
+        if (price === 'high' && (p < 50 || p > 150)) return false;
+        if (price === 'premium' && p < 150) return false;
+      }
+      return true;
+    });
+    renderListings(filtered);
+  }
+
+  // Initial render
+  renderListings(listings);
+</script>
+</body>
+</html>

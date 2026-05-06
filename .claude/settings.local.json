@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pandoc \"C:\\\\Users\\\\User\\\\Documents\\\\Imali Biz\\\\My Docs\\\\Land Evaluation & Development Readiness Checklist.docx\" -t plain)"
+    ]
+  }
+}

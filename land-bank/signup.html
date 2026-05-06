@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Your Account — The Land Bank | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --terracotta: #c8521a;
+    --gold: #d4a832;
+    --forest: #1a3a2a;
+    --warm-white: #faf7f2;
+    --text-muted: #6b6560;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; min-height: 100vh; }
+
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--terracotta); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,82,26,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--terracotta); transform: translate(-10px,-10px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(10,10,15,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.05); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--cream); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--cream); }
+  .nav-login { background: rgba(245,240,232,0.07); border: 1px solid rgba(245,240,232,0.12); border-radius: 2rem; padding: 0.45rem 1.1rem; font-size: 0.8rem; color: var(--cream); text-decoration: none; transition: background 0.2s; cursor: none; }
+  .nav-login:hover { background: rgba(245,240,232,0.12); }
+
+  /* LAYOUT */
+  .page-wrap { display: grid; grid-template-columns: 1fr 460px; min-height: 100vh; padding-top: 70px; }
+
+  /* LEFT PANEL — brand / context */
+  .left-panel { background: linear-gradient(160deg, rgba(200,82,26,0.08) 0%, transparent 60%); border-right: 1px solid rgba(245,240,232,0.05); padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; position: sticky; top: 70px; height: calc(100vh - 70px); overflow: hidden; }
+  .left-panel::before { content: ''; position: absolute; top: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(200,82,26,0.06) 0%, transparent 70%); pointer-events: none; }
+  .left-eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terracotta); font-weight: 500; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .left-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--terracotta); }
+  .left-headline { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+  .left-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .left-sub { font-size: 0.95rem; color: rgba(245,240,232,0.5); line-height: 1.7; max-width: 380px; margin-bottom: 3rem; }
+  .left-perks { display: flex; flex-direction: column; gap: 1rem; }
+  .perk { display: flex; gap: 0.85rem; align-items: flex-start; }
+  .perk-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .perk-text { font-size: 0.82rem; color: rgba(245,240,232,0.55); line-height: 1.5; }
+  .perk-text strong { color: var(--cream); }
+  .left-bottom { margin-top: auto; padding-top: 3rem; font-size: 0.75rem; color: rgba(245,240,232,0.25); line-height: 1.6; }
+
+  /* RIGHT PANEL — form */
+  .right-panel { padding: 4rem 3rem 5rem; overflow-y: auto; }
+  .form-header { margin-bottom: 2.5rem; }
+  .form-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+  .form-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .form-subtitle { font-size: 0.875rem; color: rgba(245,240,232,0.45); line-height: 1.6; }
+
+  /* ROLE SELECTOR */
+  .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; margin-bottom: 2rem; }
+  .role-card { border: 1.5px solid rgba(245,240,232,0.1); border-radius: 1rem; padding: 1.25rem; cursor: none; transition: background 0.2s, border-color 0.2s; }
+  .role-card:hover { background: rgba(245,240,232,0.03); }
+  .role-card.selected { background: rgba(200,82,26,0.08); border-color: rgba(200,82,26,0.4); }
+  .role-card.selected .role-name { color: var(--terracotta); }
+  .role-card.selected .role-check { opacity: 1; }
+  .role-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+  .role-icon { font-size: 1.5rem; }
+  .role-check { width: 18px; height: 18px; border-radius: 50%; background: var(--terracotta); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; flex-shrink: 0; }
+  .role-check::after { content: '✓'; font-size: 0.65rem; color: white; font-weight: 700; }
+  .role-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.3rem; }
+  .role-desc { font-size: 0.72rem; color: rgba(245,240,232,0.4); line-height: 1.4; }
+
+  /* SECTION DIVIDER */
+  .form-section-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.3); font-weight: 500; margin: 1.75rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(245,240,232,0.06); }
+
+  /* FORM ELEMENTS */
+  .field-group { margin-bottom: 1.25rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  label { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.45); margin-bottom: 0.5rem; font-weight: 500; }
+  label .required { color: var(--terracotta); margin-left: 0.2rem; }
+  label .optional { color: rgba(245,240,232,0.2); font-size: 0.62rem; margin-left: 0.4rem; text-transform: none; letter-spacing: 0; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="password"], select {
+    width: 100%; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 0.75rem; padding: 0.8rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; color: var(--cream); outline: none; cursor: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  input:focus, select:focus { border-color: rgba(200,82,26,0.5); background: rgba(245,240,232,0.06); }
+  input::placeholder { color: rgba(245,240,232,0.22); }
+  select option { background: #0d0d12; }
+  .input-icon-wrap { position: relative; }
+  .input-icon { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; pointer-events: none; color: rgba(245,240,232,0.25); }
+  .pw-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 0.8rem; cursor: none; color: rgba(245,240,232,0.3); transition: color 0.2s; }
+  .pw-toggle:hover { color: rgba(245,240,232,0.6); }
+
+  /* AGENT-ONLY SECTION */
+  .agent-only { display: none; }
+  .agent-only.visible { display: block; }
+
+  /* KYC NOTICE */
+  .kyc-notice { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.18); border-radius: 0.85rem; padding: 1.1rem 1.25rem; display: flex; gap: 0.85rem; align-items: flex-start; margin-bottom: 1.5rem; }
+  .kyc-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .kyc-text { font-size: 0.76rem; color: rgba(245,240,232,0.5); line-height: 1.55; }
+  .kyc-text strong { color: var(--gold); }
+
+  /* TERMS */
+  .terms-box { background: rgba(245,240,232,0.02); border: 1px solid rgba(245,240,232,0.06); border-radius: 0.85rem; padding: 1.1rem 1.25rem; font-size: 0.75rem; color: rgba(245,240,232,0.35); line-height: 1.7; margin-bottom: 1.5rem; }
+  .terms-check { display: flex; align-items: flex-start; gap: 0.65rem; margin-top: 0.85rem; }
+  .terms-check input[type="checkbox"] { width: auto; margin-top: 0.15rem; accent-color: var(--terracotta); cursor: none; }
+  .terms-check label { font-size: 0.76rem; color: rgba(245,240,232,0.5); text-transform: none; letter-spacing: 0; font-weight: 300; cursor: none; }
+  .terms-check label a { color: var(--terracotta); text-decoration: none; }
+
+  /* SUBMIT */
+  .btn-submit { width: 100%; background: var(--terracotta); color: white; border: none; border-radius: 0.85rem; padding: 1rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.02em; cursor: none; transition: background 0.2s, transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+  .btn-submit:hover { background: #b34716; transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+
+  /* LOGIN LINK */
+  .login-prompt { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: rgba(245,240,232,0.35); }
+  .login-prompt a { color: var(--terracotta); text-decoration: none; font-weight: 500; }
+  .login-prompt a:hover { text-decoration: underline; }
+
+  /* SUCCESS STATE */
+  .success-panel { display: none; text-align: center; padding: 3rem 0; }
+  .success-panel.visible { display: block; }
+  .success-icon { font-size: 3.5rem; display: block; margin-bottom: 1.25rem; }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+  .success-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .success-desc { font-size: 0.88rem; color: rgba(245,240,232,0.5); line-height: 1.7; margin-bottom: 2rem; max-width: 360px; margin-left: auto; margin-right: auto; }
+  .success-btn { display: inline-block; background: var(--terracotta); color: white; text-decoration: none; border-radius: 0.85rem; padding: 0.9rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.02em; cursor: none; transition: background 0.2s; }
+  .success-btn:hover { background: #b34716; }
+  .success-btn-outline { display: inline-block; border: 1px solid rgba(245,240,232,0.15); color: rgba(245,240,232,0.6); text-decoration: none; border-radius: 0.85rem; padding: 0.9rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; margin-left: 0.75rem; transition: border-color 0.2s; }
+  .success-btn-outline:hover { border-color: rgba(245,240,232,0.3); color: var(--cream); }
+
+  @media (max-width: 1024px) {
+    .page-wrap { grid-template-columns: 1fr; }
+    .left-panel { display: none; }
+    .right-panel { padding: 2.5rem 1.5rem 4rem; }
+    nav { padding: 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Land Bank</div>
+  </a>
+  <div class="nav-right">
+    <a href="./listings.html" class="nav-link">Browse Listings</a>
+    <a href="./valuation.html" class="nav-link">Valuation Tool</a>
+    <a href="../index.html" class="nav-link">← Imali.biz</a>
+    <a href="#" class="nav-login">Already a member? Log in</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="left-eyebrow">The Land Bank</div>
+    <h1 class="left-headline">List your land.<br><em>Unlock</em> its<br>true value.</h1>
+    <p class="left-sub">Create your account and start connecting your land to investors, developers, and a transparent market — without handing control to a middleman.</p>
+    <div class="left-perks">
+      <div class="perk">
+        <span class="perk-icon">⚡</span>
+        <span class="perk-text"><strong>AI-powered valuation</strong> based on your UPI, location premium, title type, and market comparables.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">🔗</span>
+        <span class="perk-text"><strong>Equity instead of just cash.</strong> Choose to contribute your land as equity in a development project and earn token dividends.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">🛡️</span>
+        <span class="perk-text"><strong>NLA verification handled automatically.</strong> Submit your UPI and we cross-check with LAIS via API — no paperwork queues.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">📋</span>
+        <span class="perk-text"><strong>Development Readiness Assessment.</strong> We evaluate your land across legal, physical, infrastructure, and urban criteria and notify you when it's project-worthy.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">💸</span>
+        <span class="perk-text"><strong>Zero upfront cost.</strong> Listing is free. We take 2.5% only on a completed sale — nothing until your land sells.</span>
+      </div>
+    </div>
+    <div class="left-bottom">
+      Your data is encrypted and never shared without your consent. NID numbers are used for identity verification only and are not stored in plaintext.
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <!-- FORM -->
+    <div id="signupForm">
+      <div class="form-header">
+        <h2 class="form-title">Create your <em>account</em></h2>
+        <p class="form-subtitle">Takes about 2 minutes. You'll be listing land straight after.</p>
+      </div>
+
+      <!-- ROLE SELECTION -->
+      <div class="form-section-label">I am joining as</div>
+      <div class="role-grid">
+        <div class="role-card selected" id="roleOwner" onclick="selectRole('owner')">
+          <div class="role-header">
+            <span class="role-icon">🏡</span>
+            <span class="role-check" id="checkOwner"></span>
+          </div>
+          <div class="role-name">Landowner</div>
+          <div class="role-desc">I own land and want to list it, get a valuation, or explore equity options.</div>
+        </div>
+        <div class="role-card" id="roleAgent" onclick="selectRole('agent')">
+          <div class="role-header">
+            <span class="role-icon">🤝</span>
+            <span class="role-check" id="checkAgent"></span>
+          </div>
+          <div class="role-name">Agent</div>
+          <div class="role-desc">I represent landowners and list land on behalf of my clients.</div>
+        </div>
+      </div>
+
+      <!-- PERSONAL DETAILS -->
+      <div class="form-section-label">Personal details</div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label>First Name <span class="required">*</span></label>
+          <input type="text" id="firstName" placeholder="e.g. Jean Pierre" />
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Last Name <span class="required">*</span></label>
+          <input type="text" id="lastName" placeholder="e.g. Mutabazi" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Phone Number <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="tel" id="phone" placeholder="+250 7XX XXX XXX" />
+          <span class="input-icon">📱</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Email Address <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="email" id="email" placeholder="you@example.com" />
+          <span class="input-icon">✉️</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>National ID (NID) <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="text" id="nid" placeholder="16-digit Rwandan NID number" maxlength="16" />
+          <span class="input-icon">🪪</span>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Province</label>
+          <select id="province">
+            <option value="">Select province</option>
+            <option>Kigali City</option>
+            <option>Northern Province</option>
+            <option>Southern Province</option>
+            <option>Eastern Province</option>
+            <option>Western Province</option>
+          </select>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label>District / Sector</label>
+          <input type="text" id="district" placeholder="e.g. Gasabo / Kimironko" />
+        </div>
+      </div>
+
+      <!-- AGENT-ONLY FIELDS -->
+      <div class="agent-only" id="agentFields">
+        <div class="form-section-label">Agent details</div>
+
+        <div class="field-group">
+          <label>Agency / Company Name <span class="required">*</span></label>
+          <input type="text" id="agencyName" placeholder="e.g. Kigali Prime Realty" />
+        </div>
+
+        <div class="field-row">
+          <div class="field-group" style="margin-bottom:0;">
+            <label>Agent Licence Number <span class="optional">(if licensed)</span></label>
+            <input type="text" id="licenceNumber" placeholder="e.g. RDB-AGT-XXXX" />
+          </div>
+          <div class="field-group" style="margin-bottom:0;">
+            <label>Years Active</label>
+            <select id="yearsActive">
+              <option value="">Select</option>
+              <option>Less than 1 year</option>
+              <option>1–3 years</option>
+              <option>3–7 years</option>
+              <option>7+ years</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>How many clients' land do you currently manage?</label>
+          <select id="clientCount">
+            <option value="">Select</option>
+            <option>1–5 listings</option>
+            <option>6–20 listings</option>
+            <option>20+ listings</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ACCOUNT SECURITY -->
+      <div class="form-section-label">Account security</div>
+
+      <div class="field-group">
+        <label>Password <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="password" id="password" placeholder="At least 8 characters" />
+          <span class="pw-toggle" onclick="togglePw('password', this)">Show</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Confirm Password <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="password" id="confirmPassword" placeholder="Repeat your password" />
+          <span class="pw-toggle" onclick="togglePw('confirmPassword', this)">Show</span>
+        </div>
+      </div>
+
+      <!-- KYC NOTICE -->
+      <div class="kyc-notice">
+        <span class="kyc-icon">🔍</span>
+        <div class="kyc-text">
+          Your NID is used to verify your identity via Rwanda's <strong>NIDA database</strong>. Once verified, your profile will display a <strong>KYC Verified</strong> badge — increasing trust with buyers and investors. We do not store raw NID data after verification.
+        </div>
+      </div>
+
+      <!-- TERMS -->
+      <div class="terms-box">
+        By creating an account you agree to Imali.biz's <a href="#" style="color:var(--terracotta);">Terms of Service</a> and <a href="#" style="color:var(--terracotta);">Privacy Policy</a>. Your personal data is processed in accordance with Rwanda's data protection law. Listing is free — a 2.5% commission applies only on completed sales.
+        <div class="terms-check">
+          <input type="checkbox" id="termsAgree">
+          <label for="termsAgree">I have read and agree to the terms above</label>
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="handleSubmit()">
+        Create My Account
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="login-prompt">Already have an account? <a href="#">Log in here</a></div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-panel" id="successPanel">
+      <span class="success-icon">🎉</span>
+      <h2 class="success-title">Welcome to<br><em>The Land Bank</em></h2>
+      <p class="success-desc">Your account has been created. We've sent a verification link to your email. You're ready to list your first plot.</p>
+      <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:0.75rem; margin-top:0.5rem;">
+        <a href="list-land.html" class="success-btn">List My Land →</a>
+        <a href="dashboard.html" class="success-btn-outline">Go to Dashboard</a>
+      </div>
+    </div>
+
+  </div><!-- end right-panel -->
+</div>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px';
+    cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Role selection
+  let selectedRole = 'owner';
+  function selectRole(role) {
+    selectedRole = role;
+    document.getElementById('roleOwner').classList.toggle('selected', role === 'owner');
+    document.getElementById('roleAgent').classList.toggle('selected', role === 'agent');
+    document.getElementById('checkOwner').style.opacity = role === 'owner' ? '1' : '0';
+    document.getElementById('checkAgent').style.opacity = role === 'agent' ? '1' : '0';
+    document.getElementById('agentFields').classList.toggle('visible', role === 'agent');
+  }
+  // Init check states
+  document.getElementById('checkOwner').style.opacity = '1';
+
+  // Password toggle
+  function togglePw(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = 'Hide';
+    } else {
+      input.type = 'password';
+      btn.textContent = 'Show';
+    }
+  }
+
+  // Submit handler (prototype — no real auth)
+  function handleSubmit() {
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const nid = document.getElementById('nid').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const agreed = document.getElementById('termsAgree').checked;
+
+    if (!firstName || !lastName) { alert('Please enter your full name.'); return; }
+    if (!phone) { alert('Please enter your phone number.'); return; }
+    if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+    if (!nid || nid.length < 10) { alert('Please enter a valid National ID number.'); return; }
+    if (password.length < 8) { alert('Password must be at least 8 characters.'); return; }
+    if (password !== confirm) { alert('Passwords do not match.'); return; }
+    if (!agreed) { alert('Please agree to the terms to continue.'); return; }
+
+    // Show success
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('successPanel').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

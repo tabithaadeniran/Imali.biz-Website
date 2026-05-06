@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imali.biz — Rwanda's Real Estate Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --terracotta: #c8521a;
+    --gold: #d4a832;
+    --forest: #1a3a2a;
+    --mist: #e8e2d8;
+    --warm-white: #faf7f2;
+    --text-muted: #6b6560;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 10px; height: 10px;
+    background: var(--terracotta);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(200, 82, 26, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body:has(a:hover) .cursor-ring,
+  body:has(button:hover) .cursor-ring {
+    width: 56px; height: 56px;
+    border-color: var(--terracotta);
+    transform: translate(-10px, -10px) !important;
+  }
+
+  /* Noise overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9997;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(to bottom, rgba(10,10,15,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--cream);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo span {
+    color: var(--terracotta);
+    font-style: italic;
+    font-family: 'Instrument Serif', serif;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(245,240,232,0.6);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-cta {
+    background: var(--terracotta);
+    color: var(--cream) !important;
+    padding: 0.6rem 1.4rem;
+    border-radius: 2rem;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    font-size: 0.875rem !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: #e05e20 !important; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Animated background grid */
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212, 168, 50, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212, 168, 50, 0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridShift 20s linear infinite;
+  }
+  @keyframes gridShift {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  /* Glowing orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(200, 82, 26, 0.18), transparent 70%);
+    top: -100px; right: -100px;
+    animation: orbFloat 8s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(212, 168, 50, 0.12), transparent 70%);
+    bottom: -50px; left: 30%;
+    animation: orbFloat 12s ease-in-out infinite reverse;
+  }
+  @keyframes orbFloat {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .hero-left { position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 32px; height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 5.5vw, 6rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+  .hero-headline em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--terracotta);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(245,240,232,0.6);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 1.25rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--terracotta);
+    color: var(--cream);
+    padding: 0.9rem 2rem;
+    border-radius: 3rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none; cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(200, 82, 26, 0.35);
+    background: #d65a1e;
+  }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: rgba(245,240,232,0.7);
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: none;
+    transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--cream); }
+  .btn-secondary svg { transition: transform 0.2s; }
+  .btn-secondary:hover svg { transform: translateX(3px); }
+
+  /* Hero stats strip */
+  .hero-stats {
+    display: flex; gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(245,240,232,0.08);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cream);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: rgba(245,240,232,0.4);
+    text-transform: uppercase;
+  }
+
+  /* Hero right — GIS map card */
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; justify-content: flex-end; align-items: center;
+    padding-left: 3rem;
+    opacity: 0;
+    animation: fadeIn 1.2s ease 0.5s forwards;
+  }
+  .map-card {
+    width: 100%;
+    max-width: 520px;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .map-header {
+    padding: 1rem 1.25rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(245,240,232,0.06);
+  }
+  .map-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.5);
+    font-weight: 500;
+  }
+  .map-pills {
+    display: flex; gap: 0.4rem;
+  }
+  .map-pill {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 1rem;
+    letter-spacing: 0.06em;
+    cursor: none;
+  }
+  .map-pill.active {
+    background: var(--terracotta);
+    color: white;
+  }
+  .map-pill.inactive {
+    background: rgba(245,240,232,0.06);
+    color: rgba(245,240,232,0.4);
+  }
+
+  /* SVG map viz */
+  .map-body {
+    position: relative;
+    height: 300px;
+    background: #0e1219;
+    overflow: hidden;
+  }
+  .map-svg {
+    width: 100%; height: 100%;
+    opacity: 0.9;
+  }
+  /* Floating info cards on map */
+  .map-badge {
+    position: absolute;
+    background: rgba(10,10,15,0.9);
+    border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    backdrop-filter: blur(8px);
+  }
+  .map-badge.badge-1 { top: 20px; left: 20px; }
+  .map-badge.badge-2 { bottom: 20px; right: 20px; }
+  .badge-label { font-size: 0.65rem; color: rgba(245,240,232,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
+  .badge-value { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--gold); }
+  .badge-change { font-size: 0.7rem; color: #4caf7d; }
+
+  /* Hotspot dots */
+  .hotspot {
+    position: absolute;
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; box-shadow: 0 0 0 0 currentColor; }
+    50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 8px transparent; }
+  }
+
+  .map-footer {
+    padding: 1rem 1.25rem;
+    display: flex; align-items: center; gap: 1rem;
+    border-top: 1px solid rgba(245,240,232,0.06);
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.05em;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.3);
+    opacity: 0;
+    animation: fadeIn 1s ease 1.5s forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(245,240,232,0.3), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.3; }
+    50% { transform: scaleY(0.5); opacity: 0.8; }
+  }
+
+  /* SECTION SHARED */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.25rem;
+  }
+  .section-eyebrow::before {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+  .section-title em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--terracotta);
+  }
+
+  /* STAKEHOLDERS */
+  .stakeholders { background: var(--warm-white); color: var(--ink); }
+  .stakeholders .section-eyebrow { color: var(--terracotta); }
+  .stakeholders .section-eyebrow::before { background: var(--terracotta); }
+
+  .stakeholders-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin-top: 4rem;
+    background: rgba(10,10,15,0.1);
+    border: 1px solid rgba(10,10,15,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .stakeholder-card {
+    background: var(--warm-white);
+    padding: 2.5rem 2rem;
+    cursor: none;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .stakeholder-card:hover { background: var(--cream); }
+  .stakeholder-card:hover .s-arrow { transform: translateX(4px); }
+  .s-icon {
+    font-size: 2rem;
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  .s-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--ink);
+  }
+  .s-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .s-arrow {
+    display: inline-block; margin-top: 1.25rem;
+    color: var(--terracotta); font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+
+  /* PLATFORMS */
+  .features { background: var(--ink); }
+  .features-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: end;
+    margin-bottom: 5rem;
+  }
+  .features-right-text {
+    color: rgba(245,240,232,0.55);
+    font-size: 1rem;
+    line-height: 1.75;
+    padding-top: 3rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  /* Platform cards */
+  .platform-status {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+    font-weight: 600; border-radius: 2rem; padding: 0.25rem 0.65rem;
+    margin-bottom: 1.25rem;
+  }
+  .platform-status.live { background: rgba(76,175,124,0.12); color: #4caf7d; border: 1px solid rgba(76,175,124,0.25); }
+  .platform-status.soon { background: rgba(212,168,50,0.08); color: var(--gold); border: 1px solid rgba(212,168,50,0.2); }
+  .platform-status.live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4caf7d; animation: blink 1.4s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* TOOLS SECTION */
+  .tools-section { background: var(--warm-white); color: var(--ink); }
+  .tools-section .section-eyebrow { color: var(--terracotta); }
+  .tools-section .section-eyebrow::before { background: var(--terracotta); }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .tool-card {
+    background: var(--cream);
+    border: 1px solid rgba(10,10,15,0.08);
+    border-radius: 16px;
+    padding: 2rem;
+    cursor: none;
+    transition: background 0.3s, box-shadow 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+    text-decoration: none; color: inherit;
+  }
+  .tool-card:hover { background: white; box-shadow: 0 8px 32px rgba(10,10,15,0.1); transform: translateY(-2px); }
+  .tool-card:hover .tool-arrow { transform: translateX(4px); }
+  .tool-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+  .tool-tag { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta); font-weight: 600; margin-bottom: 0.5rem; }
+  .tool-name { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--ink); margin-bottom: 0.6rem; }
+  .tool-desc { font-size: 0.82rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 1.25rem; }
+  .tool-arrow { color: var(--terracotta); font-size: 0.8rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; transition: transform 0.2s; }
+  .tool-status-pill { display: inline-block; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600; border-radius: 2rem; padding: 0.2rem 0.6rem; margin-left: 0.5rem; vertical-align: middle; }
+  .tool-status-pill.live { background: rgba(76,175,124,0.12); color: #4caf7d; border: 1px solid rgba(76,175,124,0.2); }
+  .tool-status-pill.soon { background: rgba(212,168,50,0.1); color: #b8860b; border: 1px solid rgba(212,168,50,0.25); }
+
+  .feature-card {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid rgba(245,240,232,0.07);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    cursor: none;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 1.5rem; right: 1.5rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .feature-card:hover {
+    background: rgba(245,240,232,0.05);
+    border-color: rgba(245,240,232,0.12);
+    transform: translateY(-3px);
+  }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-card.featured {
+    background: var(--forest);
+    border-color: rgba(212,168,50,0.25);
+    grid-column: span 1;
+  }
+  .feature-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 1rem;
+    background: rgba(200, 82, 26, 0.15);
+    color: var(--terracotta);
+    margin-bottom: 1.25rem;
+    border: 1px solid rgba(200, 82, 26, 0.2);
+  }
+  .feature-tag.gold {
+    background: rgba(212,168,50,0.12);
+    color: var(--gold);
+    border-color: rgba(212,168,50,0.2);
+  }
+  .feature-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+  .feature-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--cream);
+  }
+  .feature-desc {
+    font-size: 0.82rem;
+    line-height: 1.65;
+    color: rgba(245,240,232,0.5);
+  }
+
+  /* HOW IT WORKS */
+  .how { background: #0d0d12; }
+  .how-steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: 4.5rem;
+    position: relative;
+  }
+  .how-steps::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 12.5%; right: 12.5%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,50,0.3), rgba(212,168,50,0.3), transparent);
+  }
+  .step {
+    text-align: center;
+    padding: 0 1.5rem;
+  }
+  .step-num {
+    width: 56px; height: 56px;
+    border: 1px solid rgba(212,168,50,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 0 auto 2rem;
+    background: var(--ink);
+    position: relative; z-index: 1;
+  }
+  .step-icon { font-size: 1.75rem; margin-bottom: 1rem; display: block; }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--cream);
+  }
+  .step-desc { font-size: 0.8rem; line-height: 1.6; color: rgba(245,240,232,0.45); }
+
+  /* TRUST / ECOSYSTEM */
+  .ecosystem {
+    background: var(--forest);
+    overflow: hidden;
+    position: relative;
+  }
+  .ecosystem::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(212,168,50,0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(200,82,26,0.06) 0%, transparent 50%);
+  }
+  .ecosystem-inner {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .eco-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 3.5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.5rem;
+  }
+  .eco-title em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+  .eco-desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: rgba(245,240,232,0.6);
+    margin-bottom: 2.5rem;
+  }
+  .eco-pillars {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .pillar {
+    background: rgba(245,240,232,0.05);
+    border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+  .pillar-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .pillar-desc { font-size: 0.75rem; color: rgba(245,240,232,0.5); line-height: 1.5; }
+
+  /* Token/circle diagram */
+  .eco-diagram {
+    position: relative;
+    width: 100%; aspect-ratio: 1;
+    max-width: 440px; margin: 0 auto;
+  }
+  .eco-circle-outer {
+    width: 100%; height: 100%;
+    border: 1px dashed rgba(212,168,50,0.2);
+    border-radius: 50%;
+    position: absolute;
+    animation: slowSpin 40s linear infinite;
+  }
+  .eco-circle-mid {
+    width: 72%; height: 72%;
+    top: 14%; left: 14%;
+    border: 1px dashed rgba(200,82,26,0.2);
+    border-radius: 50%;
+    position: absolute;
+    animation: slowSpin 25s linear infinite reverse;
+  }
+  @keyframes slowSpin { to { transform: rotate(360deg); } }
+  .eco-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px; height: 100px;
+    background: linear-gradient(135deg, var(--terracotta), var(--gold));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 40px rgba(200,82,26,0.3);
+  }
+  .orbit-node {
+    position: absolute;
+    width: 60px; height: 60px;
+    background: rgba(10,10,15,0.9);
+    border: 1px solid rgba(245,240,232,0.12);
+    border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.7);
+    text-align: center; gap: 0.2rem;
+    backdrop-filter: blur(4px);
+  }
+  .orbit-node span { font-size: 1.1rem; }
+
+  /* CTA */
+  .cta-section {
+    background: var(--ink);
+    text-align: center;
+    padding: 8rem 4rem;
+  }
+  .cta-section .section-eyebrow { justify-content: center; }
+  .cta-section .section-eyebrow::before { display: none; }
+  .cta-section .section-eyebrow::after {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--gold);
+  }
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 5rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+  }
+  .cta-title em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--terracotta);
+  }
+  .cta-sub {
+    color: rgba(245,240,232,0.5);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 500px;
+    margin: 0 auto 3rem;
+  }
+  .cta-buttons {
+    display: flex; align-items: center; justify-content: center; gap: 1.25rem;
+  }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid rgba(245,240,232,0.2);
+    color: rgba(245,240,232,0.7);
+    padding: 0.9rem 2rem;
+    border-radius: 3rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(245,240,232,0.5); color: var(--cream); }
+
+  /* FOOTER */
+  footer {
+    background: #060609;
+    padding: 4rem;
+    border-top: 1px solid rgba(245,240,232,0.05);
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand .nav-logo { font-size: 1.3rem; margin-bottom: 1rem; display: block; }
+  .footer-tagline {
+    font-size: 0.82rem; line-height: 1.6;
+    color: rgba(245,240,232,0.35); max-width: 280px;
+  }
+  .footer-col-title {
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(245,240,232,0.3); margin-bottom: 1.25rem;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 0.6rem; }
+  .footer-links a {
+    color: rgba(245,240,232,0.5); text-decoration: none;
+    font-size: 0.85rem; transition: color 0.2s;
+    cursor: none;
+  }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(245,240,232,0.05);
+    font-size: 0.75rem;
+    color: rgba(245,240,232,0.25);
+  }
+  .footer-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.06);
+    padding: 0.35rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.35);
+  }
+  .footer-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: #4caf7d;
+    border-radius: 50%;
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Scroll-triggered fade */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1; transform: none;
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1.25rem 2rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+    .hero-right { display: none; }
+    section { padding: 5rem 2rem; }
+    .stakeholders-grid { grid-template-columns: repeat(2, 1fr); }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .tools-grid { grid-template-columns: 1fr 1fr; }
+    .features-intro { grid-template-columns: 1fr; gap: 1rem; }
+    .how-steps { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+    .how-steps::before { display: none; }
+    .ecosystem-inner { grid-template-columns: 1fr; }
+    .eco-diagram { display: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    footer { padding: 3rem 2rem; }
+    .cta-section { padding: 5rem 2rem; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Imali.biz<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Platforms</a></li>
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#stakeholders">Who We Serve</a></li>
+    <li><a href="#ecosystem">Ecosystem</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#" class="nav-cta">Join the Waitlist</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">Rwanda Real Estate Intelligence</div>
+    <h1 class="hero-headline">
+      Where<br>
+      <em>Rwanda's</em><br>
+      Real Estate<br>
+      Connects
+    </h1>
+    <p class="hero-sub">
+      A unified intelligence platform eliminating fragmentation across Rwanda's property ecosystem — connecting landowners, investors, developers, agents, legal professionals, and financiers through data, trust, and tokenisation.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">
+        Explore the Platform
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="#how" class="btn-secondary">
+        See how it works
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">10+</span>
+        <span class="stat-label">Stakeholder groups</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">GIS</span>
+        <span class="stat-label">Intelligence layers</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">0%</span>
+        <span class="stat-label">Subscription fees</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP CARD -->
+  <div class="hero-right">
+    <div class="map-card">
+      <div class="map-header">
+        <span class="map-title">Live Intelligence Map</span>
+        <div class="map-pills">
+          <span class="map-pill active">Hotspots</span>
+          <span class="map-pill inactive">Valuation</span>
+          <span class="map-pill inactive">Zoning</span>
+        </div>
+      </div>
+      <div class="map-body">
+        <!-- Rwanda SVG outline -->
+        <svg class="map-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="mapGlow1" cx="55%" cy="40%">
+              <stop offset="0%" stop-color="#c8521a" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#c8521a" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="mapGlow2" cx="35%" cy="60%">
+              <stop offset="0%" stop-color="#d4a832" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#d4a832" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="mapGlow3" cx="70%" cy="65%">
+              <stop offset="0%" stop-color="#c8521a" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="#c8521a" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Background -->
+          <rect width="400" height="300" fill="#0e1219"/>
+
+          <!-- Grid lines -->
+          <g stroke="rgba(245,240,232,0.04)" stroke-width="0.5">
+            <line x1="0" y1="75" x2="400" y2="75"/>
+            <line x1="0" y1="150" x2="400" y2="150"/>
+            <line x1="0" y1="225" x2="400" y2="225"/>
+            <line x1="100" y1="0" x2="100" y2="300"/>
+            <line x1="200" y1="0" x2="200" y2="300"/>
+            <line x1="300" y1="0" x2="300" y2="300"/>
+          </g>
+
+          <!-- Rwanda shape (simplified) -->
+          <path d="M140,60 L185,52 L220,58 L255,70 L270,90 L268,120 L260,148 L252,170 L238,195 L218,215 L200,230 L180,228 L160,218 L142,200 L128,178 L120,155 L118,128 L122,100 L130,78 Z"
+            fill="rgba(26, 58, 42, 0.6)" stroke="rgba(212,168,50,0.3)" stroke-width="1.5"/>
+
+          <!-- District lines -->
+          <path d="M194,80 L194,230" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+          <path d="M128,155 L268,155" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+
+          <!-- Glow areas -->
+          <ellipse cx="210" cy="120" rx="55" ry="45" fill="url(#mapGlow1)"/>
+          <ellipse cx="155" cy="170" rx="40" ry="35" fill="url(#mapGlow2)"/>
+          <ellipse cx="238" cy="178" rx="35" ry="30" fill="url(#mapGlow3)"/>
+
+          <!-- Connection lines -->
+          <line x1="210" y1="120" x2="155" y2="170" stroke="rgba(212,168,50,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <line x1="210" y1="120" x2="238" y2="178" stroke="rgba(200,82,26,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
+          <line x1="155" y1="170" x2="238" y2="178" stroke="rgba(200,82,26,0.15)" stroke-width="0.8" stroke-dasharray="3,3"/>
+
+          <!-- Kigali hotspot (largest) -->
+          <circle cx="210" cy="120" r="16" fill="rgba(200,82,26,0.12)" stroke="rgba(200,82,26,0.4)" stroke-width="1">
+            <animate attributeName="r" values="14;20;14" dur="3s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="210" cy="120" r="5" fill="#c8521a"/>
+
+          <!-- Musanze -->
+          <circle cx="168" cy="82" r="10" fill="rgba(212,168,50,0.1)" stroke="rgba(212,168,50,0.35)" stroke-width="1">
+            <animate attributeName="r" values="8;13;8" dur="4s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="168" cy="82" r="3.5" fill="#d4a832"/>
+
+          <!-- Huye -->
+          <circle cx="180" cy="195" r="9" fill="rgba(200,82,26,0.1)" stroke="rgba(200,82,26,0.3)" stroke-width="1">
+            <animate attributeName="r" values="7;12;7" dur="3.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="180" cy="195" r="3" fill="#c8521a"/>
+
+          <!-- Rubavu -->
+          <circle cx="138" cy="118" r="8" fill="rgba(212,168,50,0.1)" stroke="rgba(212,168,50,0.25)" stroke-width="1">
+            <animate attributeName="r" values="6;10;6" dur="5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="138" cy="118" r="2.5" fill="#d4a832"/>
+
+          <!-- Nyagatare -->
+          <circle cx="248" cy="88" r="7" fill="rgba(200,82,26,0.08)" stroke="rgba(200,82,26,0.25)" stroke-width="1">
+            <animate attributeName="r" values="5;9;5" dur="4.5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="248" cy="88" r="2.5" fill="#c8521a"/>
+
+          <!-- Label -->
+          <text x="218" y="117" fill="rgba(245,240,232,0.8)" font-size="7" font-family="'DM Sans', sans-serif" font-weight="500">Kigali</text>
+          <text x="172" y="79" fill="rgba(212,168,50,0.7)" font-size="6" font-family="'DM Sans', sans-serif">Musanze</text>
+          <text x="145" y="205" fill="rgba(245,240,232,0.6)" font-size="6" font-family="'DM Sans', sans-serif">Huye</text>
+        </svg>
+
+        <!-- Overlay badges -->
+        <div class="map-badge badge-1">
+          <div class="badge-label">Avg. Valuation / sqm</div>
+          <div class="badge-value">RWF 285K</div>
+          <div class="badge-change">↑ 12.4% YoY</div>
+        </div>
+        <div class="map-badge badge-2">
+          <div class="badge-label">Investment Hotspot Score</div>
+          <div class="badge-value">94 / 100</div>
+          <div class="badge-change">Kigali CBD</div>
+        </div>
+      </div>
+      <div class="map-footer">
+        <div class="legend-item"><div class="legend-dot" style="background:#c8521a"></div>High potential</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#d4a832"></div>Growing</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(245,240,232,0.2)"></div>Monitoring</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    Scroll
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STAKEHOLDERS -->
+<section class="stakeholders" id="stakeholders">
+  <div class="section-eyebrow">Who We Serve</div>
+  <h2 class="section-title">One ecosystem.<br><em>Every stakeholder.</em></h2>
+
+  <div class="stakeholders-grid">
+    <a href="./land-bank/index.html" class="stakeholder-card reveal" style="text-decoration:none; display:block;">
+      <span class="s-icon">🏡</span>
+      <div class="s-name">The Land Bank</div>
+      <p class="s-desc">For landowners and agents. List your land, get AI-powered valuations, and unlock equity through tokenisation instead of a cash-only sale.</p>
+      <span class="s-arrow" style="color:var(--terracotta); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500;">Live now →</span>
+    </a>
+    <div class="stakeholder-card reveal reveal-delay-1">
+      <span class="s-icon">💼</span>
+      <div class="s-name">The Wealth Hub</div>
+      <p class="s-desc">For investors. Fractional and full-asset opportunities, portfolio tracking, hotspot intelligence, and off-plan projections.</p>
+      <span class="s-arrow" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; color:var(--text-muted);">Coming soon →</span>
+    </div>
+    <div class="stakeholder-card reveal reveal-delay-2">
+      <span class="s-icon">🏠</span>
+      <div class="s-name">Consumer Portal</div>
+      <p class="s-desc">For buyers and renters. Powerful search, neighbourhood intelligence, 3D tours, and side-by-side property comparisons.</p>
+      <span class="s-arrow" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; color:var(--text-muted);">Coming soon →</span>
+    </div>
+    <div class="stakeholder-card reveal reveal-delay-3">
+      <span class="s-icon">🧱</span>
+      <div class="s-name">Supply Chain</div>
+      <p class="s-desc">For material suppliers and contractors. Connect to active projects, submit quotes, and track delivery milestones with proof-of-supply.</p>
+      <span class="s-arrow" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; color:var(--text-muted);">Coming soon →</span>
+    </div>
+    <div class="stakeholder-card reveal">
+      <span class="s-icon">🔧</span>
+      <div class="s-name">Talent Forge</div>
+      <p class="s-desc">For service providers — architects, engineers, plumbers, electricians. Get matched to projects, build your trust score, and earn tokens.</p>
+      <span class="s-arrow" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; color:var(--text-muted);">Coming soon →</span>
+    </div>
+    <div class="stakeholder-card reveal reveal-delay-1">
+      <span class="s-icon">⚖️</span>
+      <div class="s-name">Compliance Hub</div>
+      <p class="s-desc">For legal professionals. Handle title verification, smart contract audits, conveyancing, and marital consent checks — all digitally.</p>
+      <span class="s-arrow" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; color:var(--text-muted);">Coming soon →</span>
+    </div>
+    <div class="stakeholder-card reveal reveal-delay-2">
+      <span class="s-icon">🏦</span>
+      <div class="s-name">Banking Partners</div>
+      <p class="s-desc">For partner banks and financiers. Integrate escrow, savings, and mortgage products into the ecosystem via a dedicated API landing page.</p>
+      <span class="s-arrow" style="font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500; color:var(--text-muted);">Coming soon →</span>
+    </div>
+    <div class="stakeholder-card reveal reveal-delay-3">
+      <span class="s-icon">🤝</span>
+      <div class="s-name">Partner Dashboard</div>
+      <p class="s-desc">Open to everyone. Refer any stakeholder — landowner, investor, buyer, supplier — and earn a commission on every transaction they complete.</p>
+      <span class="s-arrow" style="color:var(--terracotta); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:500;">Earn now →</span>
+    </div>
+  </div>
+</section>
+
+<!-- PLATFORMS -->
+<section class="features" id="features">
+  <div class="features-intro">
+    <div>
+      <div class="section-eyebrow">Our Platforms</div>
+      <h2 class="section-title">Seven portals.<br><em>One ecosystem.</em></h2>
+    </div>
+    <p class="features-right-text">
+      Each platform is purpose-built for a specific stakeholder — not a generic portal that tries to serve everyone poorly. Together, they form a connected intelligence layer over Rwanda's entire real estate value chain.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <a href="./land-bank/index.html" class="feature-card reveal" style="text-decoration:none; display:block;">
+      <span class="platform-status live">● Live</span>
+      <span class="feature-icon">🏡</span>
+      <div class="feature-title">The Land Bank</div>
+      <p class="feature-desc">For landowners and agents. List land, get development-readiness assessments, unlock equity through tokenisation, and manage offers — all without the traditional broker middleman.</p>
+      <span style="display:inline-block; margin-top:1rem; color:var(--terracotta); font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:600;">Open platform →</span>
+    </a>
+    <div class="feature-card reveal reveal-delay-1">
+      <span class="platform-status soon">Coming Soon</span>
+      <span class="feature-icon">💼</span>
+      <div class="feature-title">The Wealth Hub</div>
+      <p class="feature-desc">For investors. Browse fractional and full-asset opportunities, model returns with our calculator, track your portfolio, and access hotspot intelligence dashboards.</p>
+    </div>
+    <div class="feature-card featured reveal reveal-delay-2">
+      <span class="feature-tag gold">Core Innovation</span>
+      <span class="feature-icon">🔗</span>
+      <div class="feature-title">Fractional Ownership & Tokenisation</div>
+      <p class="feature-desc">Using Hedera (or Polygon/Avalanche), every stakeholder — landowner, marketer, lawyer, supplier — earns a % of the project through tokens. Making projects effectively "free" by removing mortgage dependency.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="platform-status soon">Coming Soon</span>
+      <span class="feature-icon">🏠</span>
+      <div class="feature-title">Consumer Portal</div>
+      <p class="feature-desc">For buyers and renters. Powerful search with GIS filters, neighbourhood intelligence, 3D virtual tours, side-by-side comparisons, and mortgage readiness tools.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <span class="platform-status soon">Coming Soon</span>
+      <span class="feature-icon">🧱</span>
+      <div class="feature-title">Supply Chain</div>
+      <p class="feature-desc">For material suppliers and contractors. Connect to active construction projects, submit itemised quotes, track delivery milestones with proof-of-supply, and earn through token allocation.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <span class="platform-status soon">Coming Soon</span>
+      <span class="feature-icon">🔧</span>
+      <div class="feature-title">Talent Forge</div>
+      <p class="feature-desc">For service providers — architects, engineers, QSs, plumbers, electricians. Get matched to verified projects, build your trust score, and earn through project tokens.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="platform-status soon">Coming Soon</span>
+      <span class="feature-icon">⚖️</span>
+      <div class="feature-title">Compliance Hub</div>
+      <p class="feature-desc">For legal professionals. Manage title verifications, conveyancing, smart contract audits, marital consent checks, and LAIS searches — digitally and traceably.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <span class="platform-status soon">Coming Soon</span>
+      <span class="feature-icon">🏦</span>
+      <div class="feature-title">Banking Partners</div>
+      <p class="feature-desc">For partner banks and financiers. Integrate escrow, savings, and mortgage products into every transaction via API. Reach creditworthy buyers actively preparing to purchase.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <span class="platform-status live">● Open Now</span>
+      <span class="feature-icon">🤝</span>
+      <div class="feature-title">Partner Dashboard</div>
+      <p class="feature-desc">Open to all Rwandans. Refer any stakeholder — landowner, investor, buyer, supplier — and earn a commission on every transaction they complete on the platform.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-section" id="tools">
+  <div class="section-eyebrow">Standalone Tools</div>
+  <h2 class="section-title">Intelligence tools.<br><em>Free to use.</em></h2>
+  <p style="font-size:1rem; color:var(--text-muted); max-width:560px; line-height:1.75; margin-top:1.5rem;">
+    No account needed. Use these tools to evaluate land, model investment returns, and understand Rwanda's market — before you commit to anything.
+  </p>
+
+  <div class="tools-grid">
+    <a href="./land-bank/valuation.html" class="tool-card reveal">
+      <span class="tool-tag">Land Intelligence</span>
+      <span class="tool-icon">⚡</span>
+      <div class="tool-name">AI Land Valuation Tool <span class="tool-status-pill live">Live</span></div>
+      <p class="tool-desc">Get an instant AI-powered estimate for any plot in Rwanda. Input location, size, title type, and key factors — get a value range, confidence score, and market comparison in seconds.</p>
+      <span class="tool-arrow">Try it free →</span>
+    </a>
+    <div class="tool-card reveal reveal-delay-1">
+      <span class="tool-tag">Development</span>
+      <span class="tool-icon">📋</span>
+      <div class="tool-name">Development Readiness Checker <span class="tool-status-pill soon">Soon</span></div>
+      <p class="tool-desc">See how "project-ready" any plot is. Our checklist scores land across legal integrity, physical viability, infrastructure access, and strategic urban alignment — the same way we do internally.</p>
+      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
+    </div>
+    <div class="tool-card reveal reveal-delay-2">
+      <span class="tool-tag">Investment</span>
+      <span class="tool-icon">📊</span>
+      <div class="tool-name">ROI Calculator <span class="tool-status-pill soon">Soon</span></div>
+      <p class="tool-desc">Model your projected returns on any property or project. Input your stake, GFA, unit mix, and rental assumptions — get IRR, equity multiple, and token appreciation estimates.</p>
+      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
+    </div>
+    <div class="tool-card reveal">
+      <span class="tool-tag">Market Data</span>
+      <span class="tool-icon">🗺️</span>
+      <div class="tool-name">Market Intelligence Explorer <span class="tool-status-pill soon">Soon</span></div>
+      <p class="tool-desc">Interactive GIS map overlaid with hotspot scores, price trends, absorption rates, flood zones, and infrastructure data — covering every district in Rwanda.</p>
+      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
+    </div>
+    <div class="tool-card reveal reveal-delay-1">
+      <span class="tool-tag">Construction</span>
+      <span class="tool-icon">🏗️</span>
+      <div class="tool-name">Project Cost Estimator <span class="tool-status-pill soon">Soon</span></div>
+      <p class="tool-desc">Estimate full construction costs for any project type. Input GFA, floor count, finish grade, and location — get a cost-per-sqm breakdown by trade and a total project budget range.</p>
+      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
+    </div>
+    <div class="tool-card reveal reveal-delay-2">
+      <span class="tool-tag">Neighbourhood</span>
+      <span class="tool-icon">🏘️</span>
+      <div class="tool-name">Neighbourhood Intelligence Report <span class="tool-status-pill soon">Soon</span></div>
+      <p class="tool-desc">Deep-dive on any district or sector — schools, hospitals, retail centres, public transport proximity, safety index, and community absorption data. Know a neighbourhood before you invest.</p>
+      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div style="text-align:center; max-width: 640px; margin: 0 auto;">
+    <div class="section-eyebrow" style="justify-content:center;">How It Works</div>
+    <h2 class="section-title">Your role in the <em>ecosystem</em></h2>
+  </div>
+  <div class="how-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <span class="step-icon">🪪</span>
+      <div class="step-title">Join & Verify</div>
+      <p class="step-desc">Create your profile for your stakeholder type. KYC through NLA and BK Techouse integration — fast, secure, and Rwandan-native.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <span class="step-icon">🤖</span>
+      <div class="step-title">Get Matched</div>
+      <p class="step-desc">Our AI matches you to the right properties, projects, investors, or services based on your goals, budget, and preferences.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <span class="step-icon">🏗️</span>
+      <div class="step-title">Transact & Build</div>
+      <p class="step-desc">Digital negotiation, escrow payments, smart contracts, and milestone tracking — every transaction is transparent and documented.</p>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-num">04</div>
+      <span class="step-icon">💰</span>
+      <div class="step-title">Earn Your Share</div>
+      <p class="step-desc">Everyone earns — from fractional ownership dividends and agent referral commissions to supplier payments and investor returns.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM / TRUST -->
+<section class="ecosystem">
+  <div class="ecosystem-inner">
+    <div>
+      <div class="section-eyebrow" style="color: var(--gold);">Our Philosophy</div>
+      <h2 class="eco-title">Data is our <em>core business</em></h2>
+      <p class="eco-desc">
+        Rwanda's biggest real estate problem isn't capital — it's fragmentation. Landowners don't know developers. Investors can't find vetted projects. Buyers lack neighbourhood intelligence. We fix fragmentation by being the data layer that connects everyone — and by earning only when our users earn.
+      </p>
+      <div class="eco-pillars">
+        <div class="pillar">
+          <div class="pillar-title">No Subscriptions</div>
+          <p class="pillar-desc">We earn commission on transactions. If you don't earn, we don't earn.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-title">Open Ecosystem</div>
+          <p class="pillar-desc">Not exclusive to one bank, one lawyer, or one developer. Anyone can join.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-title">Youth-First</div>
+          <p class="pillar-desc">Lowered barriers, referral rewards, and education for young Rwandans.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-title">Local Materials</div>
+          <p class="pillar-desc">Supporting Rwandan construction suppliers to reduce project costs for all.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orbital diagram -->
+    <div class="eco-diagram">
+      <div class="eco-circle-outer"></div>
+      <div class="eco-circle-mid"></div>
+      <div class="eco-center">Imali.biz<br>CORE</div>
+
+      <!-- Outer orbit nodes -->
+      <div class="orbit-node" style="top:-2%; left:42%;"><span>🏦</span>Banks</div>
+      <div class="orbit-node" style="top:20%; right:-5%;"><span>📈</span>Investors</div>
+      <div class="orbit-node" style="bottom:18%; right:-3%;"><span>🏗️</span>Developers</div>
+      <div class="orbit-node" style="bottom:-4%; left:40%;"><span>🏠</span>Buyers</div>
+      <div class="orbit-node" style="bottom:18%; left:-5%;"><span>⚖️</span>Legal</div>
+      <div class="orbit-node" style="top:20%; left:-3%;"><span>🏡</span>Landowners</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-eyebrow">Get Early Access</div>
+  <h2 class="cta-title">Be part of <em>Rwanda's</em> real estate revolution</h2>
+  <p class="cta-sub">Whether you're a landowner, investor, developer, or simply curious — join the waitlist and be first to experience the platform.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-primary">
+      Join the Waitlist
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="#" class="btn-outline">
+      Download Our Vision Brief
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo">Imali.biz<span>.</span></a>
+      <p class="footer-tagline">Rwanda's real estate intelligence platform — connecting every stakeholder through data, trust, and tokenisation.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="./land-bank/index.html">The Land Bank</a></li>
+        <li><a href="#">GIS Intelligence</a></li>
+        <li><a href="#">Property Search</a></li>
+        <li><a href="#">Tokenisation</a></li>
+        <li><a href="#">Investor Dashboard</a></li>
+        <li><a href="#">Virtual Tours</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Stakeholders</div>
+      <ul class="footer-links">
+        <li><a href="#">For Landowners</a></li>
+        <li><a href="#">For Investors</a></li>
+        <li><a href="#">For Developers</a></li>
+        <li><a href="#">For Agents</a></li>
+        <li><a href="#">For Buyers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">Our Vision</a></li>
+        <li><a href="#">Partnerships</a></li>
+        <li><a href="#">Education Hub</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Imali.biz. Rwanda Real Estate Intelligence Platform.</span>
+    <span class="footer-badge">Platform in Development</span>
+    <span>Kigali, Rwanda</span>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  function animateRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Animated counter
+  function animateNum(el, target, suffix='') {
+    let start = 0;
+    const step = target / 50;
+    const timer = setInterval(() => {
+      start = Math.min(start + step, target);
+      el.textContent = Math.round(start) + suffix;
+      if (start >= target) clearInterval(timer);
+    }, 30);
+  }
+</script>
+</body>
+</html>

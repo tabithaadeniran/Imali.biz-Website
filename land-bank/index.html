@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Land Bank — Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --terracotta: #c8521a;
+    --gold: #d4a832;
+    --forest: #1a3a2a;
+    --mist: #e8e2d8;
+    --warm-white: #faf7f2;
+    --text-muted: #6b6560;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Cursor */
+  .cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--terracotta); border-radius: 50%;
+    pointer-events: none; z-index: 9999; transition: transform 0.15s ease;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(200,82,26,0.4); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring {
+    width: 56px; height: 56px; border-color: var(--terracotta);
+    transform: translate(-10px, -10px) !important;
+  }
+
+  /* Noise */
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9997; opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: linear-gradient(to bottom, rgba(10,10,15,0.97) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.4rem;
+    letter-spacing: -0.02em; color: var(--cream); display: flex; align-items: center; gap: 0.4rem;
+  }
+  .nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub {
+    font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; margin-top: 0.1rem;
+  }
+  .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: rgba(245,240,232,0.6); text-decoration: none; font-size: 0.85rem;
+    letter-spacing: 0.06em; text-transform: uppercase; font-weight: 400; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-back {
+    color: rgba(245,240,232,0.35) !important;
+    font-size: 0.75rem !important;
+    border-left: 1px solid rgba(245,240,232,0.1);
+    padding-left: 1.5rem !important;
+  }
+  .nav-back:hover { color: rgba(245,240,232,0.6) !important; }
+  .nav-cta {
+    background: var(--terracotta); color: var(--cream) !important;
+    padding: 0.6rem 1.4rem; border-radius: 2rem; font-weight: 500 !important;
+    text-transform: none !important; letter-spacing: 0 !important;
+    font-size: 0.875rem !important; transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: #e05e20 !important; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding: 8rem 4rem 4rem; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212,168,50,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,168,50,0.04) 1px, transparent 1px);
+    background-size: 60px 60px; animation: gridShift 20s linear infinite;
+  }
+  @keyframes gridShift { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(200,82,26,0.18), transparent 70%);
+    top: -100px; right: -100px; animation: orbFloat 8s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(212,168,50,0.12), transparent 70%);
+    bottom: -50px; left: 30%; animation: orbFloat 12s ease-in-out infinite reverse;
+  }
+  @keyframes orbFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
+
+  .hero-left { position: relative; z-index: 2; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold); }
+  .hero-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 800; line-height: 0.95; letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+  }
+  .hero-headline em {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-weight: 400; color: var(--terracotta);
+  }
+  .hero-sub {
+    font-size: 1.05rem; line-height: 1.7; color: rgba(245,240,232,0.6);
+    max-width: 480px; margin-bottom: 2.5rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 1.25rem;
+    opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--terracotta); color: var(--cream);
+    padding: 0.9rem 2rem; border-radius: 3rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500;
+    text-decoration: none; border: none; cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px); box-shadow: 0 12px 32px rgba(200,82,26,0.35);
+    background: #d65a1e;
+  }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    color: rgba(245,240,232,0.7); font-size: 0.9rem; text-decoration: none; cursor: none;
+    transition: color 0.2s;
+  }
+  .btn-secondary:hover { color: var(--cream); }
+  .btn-secondary svg { transition: transform 0.2s; }
+  .btn-secondary:hover svg { transform: translateX(3px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid rgba(245,240,232,0.2); color: rgba(245,240,232,0.7);
+    padding: 0.9rem 2rem; border-radius: 3rem; font-size: 0.9rem;
+    text-decoration: none; cursor: none; transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: rgba(245,240,232,0.5); color: var(--cream); }
+
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3.5rem; padding-top: 2.5rem;
+    border-top: 1px solid rgba(245,240,232,0.08);
+    opacity: 0; animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 700;
+    color: var(--cream); display: block;
+  }
+  .stat-label { font-size: 0.75rem; letter-spacing: 0.08em; color: rgba(245,240,232,0.4); text-transform: uppercase; }
+
+  /* Hero right — listing card preview */
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; justify-content: flex-end; align-items: center;
+    padding-left: 3rem;
+    opacity: 0; animation: fadeIn 1.2s ease 0.5s forwards;
+  }
+  .listing-preview {
+    width: 100%; max-width: 440px;
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 20px; overflow: hidden;
+  }
+  .preview-header {
+    padding: 0.9rem 1.2rem; border-bottom: 1px solid rgba(245,240,232,0.06);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .preview-label {
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(245,240,232,0.4); font-weight: 500;
+  }
+  .preview-live {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.65rem; color: #4caf7d; letter-spacing: 0.08em;
+  }
+  .preview-live::before {
+    content: ''; width: 6px; height: 6px; background: #4caf7d;
+    border-radius: 50%; animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* Listing card inside preview */
+  .preview-img {
+    width: 100%; height: 180px; background: #0e1219;
+    position: relative; overflow: hidden;
+  }
+  .preview-img svg { width: 100%; height: 100%; }
+  .preview-badge {
+    position: absolute; top: 0.75rem; left: 0.75rem;
+    background: var(--terracotta); color: white;
+    font-size: 0.65rem; font-weight: 500; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 1rem;
+  }
+  .verified-badge {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    background: rgba(10,10,15,0.85); border: 1px solid rgba(76,175,125,0.4);
+    color: #4caf7d; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.06em;
+    padding: 0.25rem 0.6rem; border-radius: 1rem; backdrop-filter: blur(4px);
+  }
+  .preview-body { padding: 1.25rem; }
+  .preview-location {
+    font-size: 0.75rem; color: var(--gold); letter-spacing: 0.06em;
+    text-transform: uppercase; margin-bottom: 0.5rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .preview-title {
+    font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700;
+    color: var(--cream); margin-bottom: 0.75rem;
+  }
+  .preview-meta {
+    display: flex; gap: 1rem; margin-bottom: 1rem;
+  }
+  .meta-chip {
+    background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.08);
+    border-radius: 0.5rem; padding: 0.3rem 0.7rem;
+    font-size: 0.72rem; color: rgba(245,240,232,0.6);
+  }
+  .preview-price-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 0.75rem; border-top: 1px solid rgba(245,240,232,0.06);
+  }
+  .preview-price {
+    font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--cream);
+  }
+  .preview-price span { font-size: 0.7rem; color: rgba(245,240,232,0.4); font-family: 'DM Sans', sans-serif; font-weight: 300; }
+  .trust-score {
+    display: flex; align-items: center; gap: 0.4rem;
+    background: rgba(212,168,50,0.1); border: 1px solid rgba(212,168,50,0.2);
+    border-radius: 2rem; padding: 0.3rem 0.7rem;
+    font-size: 0.72rem; color: var(--gold); font-weight: 500;
+  }
+  .trust-score::before { content: '★'; font-size: 0.8rem; }
+
+  /* Mini listing cards below */
+  .preview-footer {
+    padding: 0.75rem 1.25rem; border-top: 1px solid rgba(245,240,232,0.06);
+    display: flex; gap: 0.75rem;
+  }
+  .mini-card {
+    flex: 1; background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.06);
+    border-radius: 10px; padding: 0.75rem; cursor: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .mini-card:hover { background: rgba(245,240,232,0.06); border-color: rgba(245,240,232,0.1); }
+  .mini-loc { font-size: 0.65rem; color: rgba(245,240,232,0.4); margin-bottom: 0.2rem; }
+  .mini-price { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--cream); }
+  .mini-size { font-size: 0.65rem; color: rgba(245,240,232,0.4); }
+
+  /* SECTIONS */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.25rem;
+  }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.5rem);
+    font-weight: 700; line-height: 1.05; letter-spacing: -0.025em;
+  }
+  .section-title em {
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-weight: 400; color: var(--terracotta);
+  }
+
+  /* AUDIENCE SECTION */
+  .audience { background: var(--warm-white); color: var(--ink); }
+  .audience .section-eyebrow { color: var(--terracotta); }
+  .audience .section-eyebrow::before { background: var(--terracotta); }
+  .audience-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2rem; margin-top: 4rem;
+  }
+  .audience-card {
+    background: white; border: 1px solid rgba(10,10,15,0.08);
+    border-radius: 20px; padding: 2.5rem; position: relative; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .audience-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(10,10,15,0.12); }
+  .audience-card.for-owner { border-top: 3px solid var(--terracotta); }
+  .audience-card.for-agent { border-top: 3px solid var(--gold); }
+  .audience-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.3rem 0.8rem; border-radius: 2rem; margin-bottom: 1.5rem;
+  }
+  .audience-card.for-owner .audience-tag { background: rgba(200,82,26,0.1); color: var(--terracotta); }
+  .audience-card.for-agent .audience-tag { background: rgba(212,168,50,0.1); color: #9a7820; }
+  .audience-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .audience-title {
+    font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 700;
+    margin-bottom: 0.75rem; color: var(--ink);
+  }
+  .audience-desc {
+    font-size: 0.875rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 1.75rem;
+  }
+  .audience-features { list-style: none; margin-bottom: 2rem; }
+  .audience-features li {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    font-size: 0.82rem; line-height: 1.5; color: var(--ink);
+    padding: 0.5rem 0; border-bottom: 1px solid rgba(10,10,15,0.05);
+  }
+  .audience-features li:last-child { border-bottom: none; }
+  .audience-features li::before { content: '✓'; color: var(--terracotta); font-weight: 700; flex-shrink: 0; }
+  .audience-card.for-agent .audience-features li::before { color: #9a7820; }
+  .btn-ink {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--ink); color: var(--cream);
+    padding: 0.85rem 1.75rem; border-radius: 3rem;
+    font-size: 0.875rem; font-weight: 500; text-decoration: none; cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-ink:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(10,10,15,0.2); }
+  .btn-gold {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--gold); color: var(--ink);
+    padding: 0.85rem 1.75rem; border-radius: 3rem;
+    font-size: 0.875rem; font-weight: 500; text-decoration: none; cursor: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(212,168,50,0.3); }
+
+  /* HOW IT WORKS */
+  .how { background: #0d0d12; }
+  .how-center { text-align: center; max-width: 640px; margin: 0 auto; }
+  .how-steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin-top: 4.5rem; position: relative;
+  }
+  .how-steps::before {
+    content: ''; position: absolute;
+    top: 28px; left: 12.5%; right: 12.5%; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,168,50,0.3), rgba(212,168,50,0.3), transparent);
+  }
+  .step { text-align: center; padding: 0 1.5rem; }
+  .step-num {
+    width: 56px; height: 56px;
+    border: 1px solid rgba(212,168,50,0.3); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700;
+    color: var(--gold); margin: 0 auto 2rem;
+    background: var(--ink); position: relative; z-index: 1;
+  }
+  .step-icon { font-size: 1.75rem; margin-bottom: 1rem; display: block; }
+  .step-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--cream); }
+  .step-desc { font-size: 0.8rem; line-height: 1.6; color: rgba(245,240,232,0.45); }
+
+  /* FEATURES */
+  .features { background: var(--ink); }
+  .features-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: end; margin-bottom: 5rem;
+  }
+  .features-right-text { color: rgba(245,240,232,0.55); font-size: 1rem; line-height: 1.75; padding-top: 3rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .feature-card {
+    background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07);
+    border-radius: 16px; padding: 2rem;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    cursor: none; position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: ''; position: absolute;
+    top: -1px; left: 1.5rem; right: 1.5rem; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-card:hover { background: rgba(245,240,232,0.05); border-color: rgba(245,240,232,0.12); transform: translateY(-3px); }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-tag {
+    display: inline-block; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.25rem 0.6rem; border-radius: 1rem;
+    background: rgba(200,82,26,0.15); color: var(--terracotta);
+    margin-bottom: 1.25rem; border: 1px solid rgba(200,82,26,0.2);
+  }
+  .feature-tag.gold { background: rgba(212,168,50,0.12); color: var(--gold); border-color: rgba(212,168,50,0.2); }
+  .feature-icon { font-size: 1.5rem; margin-bottom: 1rem; display: block; }
+  .feature-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--cream); }
+  .feature-desc { font-size: 0.82rem; line-height: 1.65; color: rgba(245,240,232,0.5); }
+
+  /* ECOSYSTEM BANNER */
+  .ecosystem-banner {
+    background: var(--forest); padding: 5rem 4rem;
+    border-top: 1px solid rgba(212,168,50,0.1);
+    border-bottom: 1px solid rgba(212,168,50,0.1);
+  }
+  .eco-banner-inner { text-align: center; }
+  .eco-banner-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1rem; justify-content: center;
+  }
+  .eco-banner-eyebrow::before, .eco-banner-eyebrow::after {
+    content: ''; display: block; width: 24px; height: 1px; background: var(--gold);
+  }
+  .eco-banner-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 700; margin-bottom: 0.75rem; letter-spacing: -0.02em;
+  }
+  .eco-banner-title em {
+    font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold);
+  }
+  .eco-banner-sub { color: rgba(245,240,232,0.5); font-size: 0.9rem; margin-bottom: 3rem; }
+  .eco-sites {
+    display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;
+  }
+  .eco-site-pill {
+    display: flex; align-items: center; gap: 0.6rem;
+    background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1);
+    border-radius: 2rem; padding: 0.6rem 1.25rem;
+    font-size: 0.8rem; color: rgba(245,240,232,0.65);
+    text-decoration: none; cursor: none; transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .eco-site-pill:hover { background: rgba(245,240,232,0.1); border-color: rgba(245,240,232,0.2); color: var(--cream); }
+  .eco-site-pill.active {
+    background: rgba(200,82,26,0.15); border-color: rgba(200,82,26,0.3); color: var(--terracotta);
+  }
+  .eco-site-pill span { font-size: 1rem; }
+
+  /* CTA SECTION */
+  .cta-section { background: var(--ink); text-align: center; padding: 8rem 4rem; }
+  .cta-section .section-eyebrow { justify-content: center; }
+  .cta-section .section-eyebrow::before { display: none; }
+  .cta-section .section-eyebrow::after { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .cta-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(2.5rem, 4vw, 5rem);
+    font-weight: 800; line-height: 1.0; letter-spacing: -0.03em;
+    max-width: 700px; margin: 0 auto 1.5rem;
+  }
+  .cta-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .cta-sub { color: rgba(245,240,232,0.5); font-size: 1rem; line-height: 1.7; max-width: 500px; margin: 0 auto 3rem; }
+  .cta-buttons { display: flex; align-items: center; justify-content: center; gap: 1.25rem; }
+
+  /* PARTNER BANNER */
+  .partner-banner {
+    background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.12);
+    border-radius: 16px; padding: 1.5rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 800px; margin: 3rem auto 0;
+  }
+  .partner-banner-left { display: flex; align-items: center; gap: 1rem; }
+  .partner-icon { font-size: 1.75rem; }
+  .partner-text { }
+  .partner-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--cream); margin-bottom: 0.2rem; }
+  .partner-desc { font-size: 0.8rem; color: rgba(245,240,232,0.5); }
+
+  /* FOOTER */
+  footer { background: #060609; padding: 4rem; border-top: 1px solid rgba(245,240,232,0.05); }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--cream); text-decoration: none; display: block; margin-bottom: 0.3rem; }
+  .footer-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .footer-sub { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+  .footer-tagline { font-size: 0.82rem; line-height: 1.6; color: rgba(245,240,232,0.35); max-width: 280px; }
+  .footer-col-title { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 1.25rem; }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 0.6rem; }
+  .footer-links a { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; cursor: none; }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 2rem; border-top: 1px solid rgba(245,240,232,0.05);
+    font-size: 0.75rem; color: rgba(245,240,232,0.25);
+  }
+  .footer-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.06);
+    padding: 0.35rem 0.8rem; border-radius: 1rem;
+    font-size: 0.7rem; color: rgba(245,240,232,0.35);
+  }
+  .footer-badge::before { content: ''; width: 6px; height: 6px; background: #4caf7d; border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+
+  /* Animations */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* Scroll hint */
+  .scroll-hint {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(245,240,232,0.3);
+    opacity: 0; animation: fadeIn 1s ease 1.5s forwards;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, rgba(245,240,232,0.3), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse { 0%, 100% { transform: scaleY(1); opacity: 0.3; } 50% { transform: scaleY(0.5); opacity: 0.8; } }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1.25rem 2rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+    .hero-right { display: none; }
+    section { padding: 5rem 2rem; }
+    .audience-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: repeat(2, 1fr); gap: 3rem; }
+    .how-steps::before { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .features-intro { grid-template-columns: 1fr; gap: 1rem; }
+    .eco-sites { gap: 0.6rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    footer { padding: 3rem 2rem; }
+    .cta-section { padding: 5rem 2rem; }
+    .partner-banner { flex-direction: column; gap: 1.5rem; text-align: center; }
+    .ecosystem-banner { padding: 4rem 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali.biz<span>.</span></div>
+    <div class="nav-sub">The Land Bank</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="listings.html">Browse Listings</a></li>
+    <li><a href="signup.html">List Your Land</a></li>
+    <li><a href="valuation.html">Valuation</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-back">← Imali.biz</a></li>
+    <li><a href="signup.html" class="nav-cta">List Your Land</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">The Land Bank — Imali.biz</div>
+    <h1 class="hero-headline">
+      Your Land.<br>
+      <em>Valued.</em><br>
+      Listed.<br>
+      Connected.
+    </h1>
+    <p class="hero-sub">
+      Rwanda's first dedicated land listing and valuation platform — built for landowners who want to know what their land is worth, and agents who want to move it faster.
+    </p>
+    <div class="hero-actions">
+      <a href="signup.html" class="btn-primary">
+        List Your Land
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="listings.html" class="btn-secondary">
+        Browse Listings
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">0%</span>
+        <span class="stat-label">Listing fee</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">AI</span>
+        <span class="stat-label">Instant valuation</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">NLA</span>
+        <span class="stat-label">Verified listings</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTING PREVIEW CARD -->
+  <div class="hero-right">
+    <div class="listing-preview">
+      <div class="preview-header">
+        <span class="preview-label">Featured Listing</span>
+        <span class="preview-live">Live</span>
+      </div>
+
+      <div class="preview-img">
+        <!-- Land illustration SVG -->
+        <svg viewBox="0 0 440 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="440" height="180" fill="#0e1219"/>
+          <!-- Sky gradient -->
+          <defs>
+            <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#1a2035"/>
+              <stop offset="100%" stop-color="#0e1219"/>
+            </linearGradient>
+            <linearGradient id="landGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#1a3a2a"/>
+              <stop offset="100%" stop-color="#0f2018"/>
+            </linearGradient>
+            <radialGradient id="sunGlow" cx="60%" cy="30%">
+              <stop offset="0%" stop-color="rgba(212,168,50,0.3)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+          <rect width="440" height="110" fill="url(#skyGrad)"/>
+          <ellipse cx="265" cy="55" rx="200" ry="160" fill="url(#sunGlow)"/>
+          <!-- Hills -->
+          <path d="M0,100 Q60,65 120,90 Q180,55 240,85 Q300,60 360,82 Q400,70 440,80 L440,180 L0,180 Z" fill="url(#landGrad)"/>
+          <path d="M0,120 Q80,95 160,110 Q220,90 300,108 Q360,92 440,105 L440,180 L0,180 Z" fill="rgba(26,58,42,0.7)"/>
+          <!-- Land plot markers -->
+          <rect x="100" y="108" width="80" height="50" fill="none" stroke="rgba(212,168,50,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <rect x="200" y="112" width="100" height="45" fill="none" stroke="rgba(200,82,26,0.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <!-- Stars -->
+          <circle cx="50" cy="20" r="1" fill="rgba(245,240,232,0.5)"/>
+          <circle cx="130" cy="12" r="0.8" fill="rgba(245,240,232,0.4)"/>
+          <circle cx="200" cy="18" r="1.2" fill="rgba(245,240,232,0.6)"/>
+          <circle cx="320" cy="10" r="0.9" fill="rgba(245,240,232,0.5)"/>
+          <circle cx="390" cy="22" r="1" fill="rgba(245,240,232,0.4)"/>
+          <!-- GIS grid overlay -->
+          <g stroke="rgba(212,168,50,0.08)" stroke-width="0.5">
+            <line x1="0" y1="90" x2="440" y2="90"/>
+            <line x1="0" y1="120" x2="440" y2="120"/>
+            <line x1="110" y1="60" x2="110" y2="180"/>
+            <line x1="220" y1="60" x2="220" y2="180"/>
+            <line x1="330" y1="60" x2="330" y2="180"/>
+          </g>
+        </svg>
+        <div class="preview-badge">Just Listed</div>
+        <div class="verified-badge">✓ NLA Verified</div>
+      </div>
+
+      <div class="preview-body">
+        <div class="preview-location">
+          <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1C4.8 1 3 2.8 3 5c0 3 4 8 4 8s4-5 4-8c0-2.2-1.8-4-4-4z" fill="currentColor"/>
+          </svg>
+          Gasabo, Kigali
+        </div>
+        <div class="preview-title">Prime Residential Plot — Kimironko</div>
+        <div class="preview-meta">
+          <span class="meta-chip">2,400 sqm</span>
+          <span class="meta-chip">Residential</span>
+          <span class="meta-chip">Freehold</span>
+        </div>
+        <div class="preview-price-row">
+          <div class="preview-price">RWF 48M <span>/ plot</span></div>
+          <div class="trust-score">Trust 87</div>
+        </div>
+      </div>
+
+      <div class="preview-footer">
+        <div class="mini-card">
+          <div class="mini-loc">Nyamirambo</div>
+          <div class="mini-price">RWF 22M</div>
+          <div class="mini-size">800 sqm</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-loc">Kicukiro</div>
+          <div class="mini-price">RWF 35M</div>
+          <div class="mini-size">1,200 sqm</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-loc">Musanze</div>
+          <div class="mini-price">RWF 18M</div>
+          <div class="mini-size">3,000 sqm</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">Scroll<div class="scroll-line"></div></div>
+</section>
+
+<!-- DUAL AUDIENCE -->
+<section class="audience" id="audience">
+  <div class="section-eyebrow">Who This Is For</div>
+  <h2 class="section-title">Built for <em>two purposes</em></h2>
+
+  <div class="audience-grid">
+    <!-- Landowners -->
+    <div class="audience-card for-owner reveal">
+      <div class="audience-tag">🏡 For Landowners</div>
+      <span class="audience-icon">🏡</span>
+      <div class="audience-title">Own land in Rwanda?</div>
+      <p class="audience-desc">
+        Whether you have a small plot in Nyamirambo or a large agricultural parcel in the Eastern Province, the Land Bank gives you the tools to understand its value, list it properly, and connect it to the right buyers — all without paying anything upfront.
+      </p>
+      <ul class="audience-features">
+        <li>AI-powered instant valuation based on your land's actual details</li>
+        <li>Equity model: accept a % of project tokens instead of cash</li>
+        <li>NLA title verification and digital documentation</li>
+        <li>See buyer enquiries and negotiate digitally</li>
+        <li>Schedule physical viewings through the platform</li>
+        <li>Fraud protection and reporting on all interactions</li>
+      </ul>
+      <a href="signup.html" class="btn-ink">
+        List Your Land Free
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Agents -->
+    <div class="audience-card for-agent reveal reveal-delay-2">
+      <div class="audience-tag">🤝 For Agents</div>
+      <span class="audience-icon">🤝</span>
+      <div class="audience-title">Help people sell their land?</div>
+      <p class="audience-desc">
+        The Land Bank gives agents a professional platform to list on behalf of clients, manage multiple listings, build a verified trust score, and earn commissions — without the friction of WhatsApp-only marketing.
+      </p>
+      <ul class="audience-features">
+        <li>List land on behalf of landowner clients</li>
+        <li>Manage a portfolio of multiple active listings</li>
+        <li>Build a public trust score through verified transactions</li>
+        <li>Earn commissions tracked and paid through the platform</li>
+        <li>Get matched to investors and developers looking for land</li>
+        <li>Partner Dashboard access: earn for every stakeholder you onboard</li>
+      </ul>
+      <a href="signup.html" class="btn-gold">
+        Start as an Agent
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-center">
+    <div class="section-eyebrow" style="justify-content:center;">How It Works</div>
+    <h2 class="section-title">From listing to <em>sale</em></h2>
+  </div>
+  <div class="how-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <span class="step-icon">🪪</span>
+      <div class="step-title">Register & Verify</div>
+      <p class="step-desc">Create your profile as a landowner or agent. KYC verification through NLA integration confirms your identity and land ownership documents.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <span class="step-icon">📍</span>
+      <div class="step-title">List Your Land</div>
+      <p class="step-desc">Enter your land details — location, size, type, and title information. Our team handles the technical assessment. Get an AI valuation estimate and choose your pricing or equity model. Publish in minutes.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <span class="step-icon">🤝</span>
+      <div class="step-title">Get Matched</div>
+      <p class="step-desc">Buyers, investors, and developers browse your listing. Our AI matches your land to the right stakeholders based on their goals and requirements.</p>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-num">04</div>
+      <span class="step-icon">💰</span>
+      <div class="step-title">Sell & Earn</div>
+      <p class="step-desc">Negotiate digitally, sign via smart contract, and complete the transaction through escrow with banks as custodians. Earn cash or tokens — your choice.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-intro">
+    <div>
+      <div class="section-eyebrow">Platform Features</div>
+      <h2 class="section-title">Everything your<br><em>land</em> deserves</h2>
+    </div>
+    <p class="features-right-text">
+      We built the Land Bank specifically for Rwanda's land market — from title deed types to slope-based valuation adjustments. No generic templates borrowed from other markets.
+    </p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <span class="feature-tag">AI Valuation</span>
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">Instant Land Valuation</div>
+      <p class="feature-desc">Input your land details and get an AI-powered value estimate immediately — accounting for location, gradient, title type, encumbrances, utilities access, and nearby hotspots.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <span class="feature-tag gold">Innovation</span>
+      <span class="feature-icon">🔗</span>
+      <div class="feature-title">Landowner Equity Model</div>
+      <p class="feature-desc">Don't want to sell outright? Contribute your land as equity in a development project and receive a percentage of tokens based on a transparent scoring system — title quality, slope, encumbrances.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <span class="feature-tag">GIS</span>
+      <span class="feature-icon">🗺️</span>
+      <div class="feature-title">Map & Hotspot Intelligence</div>
+      <p class="feature-desc">Every listing is geo-located and displayed on our multi-layer GIS map — with zoning overlays, flood zones, NLA registry data, and our proprietary investment hotspot layer.</p>
+    </div>
+    <div class="feature-card reveal">
+      <span class="feature-tag">Trust</span>
+      <span class="feature-icon">🛡️</span>
+      <div class="feature-title">Trust Scores</div>
+      <p class="feature-desc">Every landowner and agent has a visible trust score that grows through completed transactions and verified reviews. New users aren't locked out — they start fresh, not at zero.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <span class="feature-tag">Verification</span>
+      <span class="feature-icon">✅</span>
+      <div class="feature-title">NLA Title Verification</div>
+      <p class="feature-desc">Listings can be verified directly through our NLA API integration — confirming ownership, checking for encumbrances, and flagging title quality for buyers and investors.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <span class="feature-tag">Earnings</span>
+      <span class="feature-icon">🌱</span>
+      <div class="feature-title">Partner Dashboard</div>
+      <p class="feature-desc">Don't have land to sell but know people who do? Bring in landowners, agents, investors, or any stakeholder and earn commission for every successful onboarding you drive.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM BANNER -->
+<section class="ecosystem-banner">
+  <div class="eco-banner-inner">
+    <div class="eco-banner-eyebrow">Part of the Imali Ecosystem</div>
+    <h2 class="eco-banner-title">The Land Bank is one piece of a <em>bigger picture</em></h2>
+    <p class="eco-banner-sub">Every stakeholder in Rwanda's real estate has their own dedicated platform — all connected to Imali.biz at the core.</p>
+    <div class="eco-sites">
+      <a href="index.html" class="eco-site-pill active">
+        <span>🏡</span> The Land Bank
+      </a>
+      <a href="../wealth-hub/index.html" class="eco-site-pill">
+        <span>📈</span> The Wealth Hub
+      </a>
+      <a href="../consumer-portal/index.html" class="eco-site-pill">
+        <span>🏠</span> Consumer Portal
+      </a>
+      <a href="../supply-chain/index.html" class="eco-site-pill">
+        <span>🧱</span> Supply Chain
+      </a>
+      <a href="../talent-forge/index.html" class="eco-site-pill">
+        <span>🔧</span> Talent Forge
+      </a>
+      <a href="../compliance-hub/index.html" class="eco-site-pill">
+        <span>⚖️</span> Compliance Hub
+      </a>
+      <a href="../index.html#banks" class="eco-site-pill">
+        <span>🏦</span> Banking Partners
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-eyebrow">Get Started</div>
+  <h2 class="cta-title">Your land has <em>value</em>. Let's find it.</h2>
+  <p class="cta-sub">Free to list. Free to browse. We only earn when you earn — through a small commission on completed transactions.</p>
+  <div class="cta-buttons">
+    <a href="signup.html" class="btn-primary">
+      List Your Land
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="valuation.html" class="btn-outline">Get a Free Valuation</a>
+  </div>
+
+  <!-- Partner Banner -->
+  <div class="partner-banner">
+    <div class="partner-banner-left">
+      <span class="partner-icon">🌱</span>
+      <div class="partner-text">
+        <div class="partner-title">Don't have land? Earn anyway.</div>
+        <div class="partner-desc">The Partner Dashboard is open to everyone. Bring stakeholders to the platform and earn commission for every successful onboarding.</div>
+      </div>
+    </div>
+    <a href="dashboard.html#partner" class="btn-outline" style="white-space:nowrap; flex-shrink:0;">
+      Open Partner Dashboard →
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="../index.html" class="footer-logo">Imali.biz<span>.</span></a>
+      <div class="footer-sub">The Land Bank</div>
+      <p class="footer-tagline">Rwanda's dedicated land listing and valuation platform — part of the Imali.biz ecosystem.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Land Bank</div>
+      <ul class="footer-links">
+        <li><a href="listings.html">Browse Listings</a></li>
+        <li><a href="signup.html">List Your Land</a></li>
+        <li><a href="valuation.html">Valuation Tool</a></li>
+        <li><a href="dashboard.html">My Dashboard</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">For Stakeholders</div>
+      <ul class="footer-links">
+        <li><a href="index.html#audience">For Landowners</a></li>
+        <li><a href="index.html#audience">For Agents</a></li>
+        <li><a href="dashboard.html#partner">Partner Dashboard</a></li>
+        <li><a href="../index.html">Imali.biz Core</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Our Vision</a></li>
+        <li><a href="../index.html#ecosystem">The Ecosystem</a></li>
+        <li><a href="#">Partnerships</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Imali.biz — The Land Bank. Kigali, Rwanda.</span>
+    <span class="footer-badge">Prototype in Development</span>
+    <span>Part of the Imali.biz Ecosystem</span>
+  </div>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  function animateRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.transform = `translate(${rx}px, ${ry}px)`;
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wealth Hub — Invest in Rwanda's Real Estate | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --cream: #f5f0e8;
+    --terracotta: #c8521a;
+    --gold: #d4a832;
+    --forest: #1a3a2a;
+    --warm-white: #faf7f2;
+    --text-muted: #6b6560;
+    --sapphire: #1a3a5c;
+    --emerald: #1a5c3a;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--gold); transform: translate(-10px,-10px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(10,10,15,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.05); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--cream); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--cream); }
+  .nav-back { color: rgba(245,240,232,0.3); font-size: 0.78rem; }
+  .nav-cta { background: var(--gold); color: var(--ink); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s, transform 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: #c49a28; transform: translateY(-1px); }
+
+  /* HERO */
+  .hero { min-height: 100vh; padding: 8rem 4rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(212,168,50,0.06) 0%, transparent 65%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(26,58,92,0.15) 0%, transparent 65%); pointer-events: none; }
+  .hero-eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .hero-headline { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 4.5vw, 4.5rem); font-weight: 800; line-height: 1.06; letter-spacing: -0.035em; margin-bottom: 1.5rem; }
+  .hero-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-sub { font-size: 1.05rem; color: rgba(245,240,232,0.5); line-height: 1.75; max-width: 480px; margin-bottom: 2.5rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--gold); color: var(--ink); text-decoration: none; border-radius: 3rem; padding: 0.85rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; transition: background 0.2s, transform 0.2s; }
+  .btn-primary:hover { background: #c49a28; transform: translateY(-2px); }
+  .btn-outline { display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(245,240,232,0.15); color: var(--cream); text-decoration: none; border-radius: 3rem; padding: 0.85rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; transition: border-color 0.2s, background 0.2s; }
+  .btn-outline:hover { border-color: rgba(245,240,232,0.35); background: rgba(245,240,232,0.04); }
+
+  /* HERO STATS */
+  .hero-stats { display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid rgba(245,240,232,0.07); }
+  .stat-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; color: var(--gold); }
+  .stat-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.35); }
+
+  /* HERO RIGHT — opportunity cards preview */
+  .hero-right { position: relative; z-index: 1; }
+  .opp-preview { display: flex; flex-direction: column; gap: 1rem; }
+  .opp-card-mini { background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.08); border-radius: 1rem; padding: 1.25rem 1.5rem; transition: background 0.3s; }
+  .opp-card-mini:hover { background: rgba(245,240,232,0.07); }
+  .opp-mini-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+  .opp-mini-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; }
+  .opp-mini-type { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); background: rgba(212,168,50,0.08); border: 1px solid rgba(212,168,50,0.15); border-radius: 2rem; padding: 0.2rem 0.6rem; }
+  .opp-mini-loc { font-size: 0.75rem; color: rgba(245,240,232,0.35); margin-bottom: 0.85rem; }
+  .opp-mini-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+  .opp-metric { background: rgba(245,240,232,0.03); border-radius: 0.5rem; padding: 0.5rem 0.6rem; }
+  .opp-metric-val { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--cream); }
+  .opp-metric-label { font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-top: 0.1rem; }
+  .opp-mini-progress { margin-top: 0.85rem; }
+  .prog-bar-track { height: 4px; background: rgba(245,240,232,0.06); border-radius: 2px; overflow: hidden; }
+  .prog-bar-fill { height: 100%; border-radius: 2px; }
+  .prog-bar-fill.gold { background: var(--gold); }
+  .prog-bar-fill.green { background: #4caf7d; }
+  .prog-meta { display: flex; justify-content: space-between; margin-top: 0.35rem; font-size: 0.68rem; color: rgba(245,240,232,0.3); }
+
+  /* SECTION SHARED */
+  section { padding: 7rem 4rem; position: relative; }
+  .section-eyebrow { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; }
+  .section-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+
+  /* INVESTOR TYPES */
+  .investor-types { background: var(--warm-white); color: var(--ink); }
+  .investor-types .section-eyebrow { color: var(--terracotta); }
+  .investor-types .section-eyebrow::before { background: var(--terracotta); }
+  .investor-types .section-title em { color: var(--terracotta); }
+  .types-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 4rem; }
+  .type-card { border-radius: 1.25rem; padding: 2.5rem; position: relative; overflow: hidden; }
+  .type-card.fractional { background: var(--ink); color: var(--cream); }
+  .type-card.full-asset { background: linear-gradient(135deg, #0f1f35 0%, #0a0a0f 100%); color: var(--cream); border: 1px solid rgba(212,168,50,0.15); }
+  .type-badge { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 600; border-radius: 2rem; padding: 0.25rem 0.7rem; display: inline-block; margin-bottom: 1.5rem; }
+  .type-badge.frac { background: rgba(200,82,26,0.12); color: var(--terracotta); border: 1px solid rgba(200,82,26,0.2); }
+  .type-badge.full { background: rgba(212,168,50,0.1); color: var(--gold); border: 1px solid rgba(212,168,50,0.2); }
+  .type-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .type-name { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .type-name em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .type-desc { font-size: 0.88rem; color: rgba(245,240,232,0.55); line-height: 1.7; margin-bottom: 1.75rem; }
+  .type-features { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 2rem; }
+  .type-features li { display: flex; gap: 0.6rem; font-size: 0.82rem; color: rgba(245,240,232,0.7); }
+  .type-features li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+  .type-entry { background: rgba(212,168,50,0.08); border: 1px solid rgba(212,168,50,0.15); border-radius: 0.75rem; padding: 0.75rem 1rem; display: flex; justify-content: space-between; align-items: center; }
+  .entry-label { font-size: 0.72rem; color: rgba(245,240,232,0.4); }
+  .entry-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--gold); }
+  .btn-type { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; background: var(--gold); color: var(--ink); text-decoration: none; border-radius: 2rem; padding: 0.75rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-type:hover { background: #c49a28; }
+
+  /* HOW IT WORKS */
+  .how { background: var(--ink); }
+  .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 4rem; position: relative; }
+  .how-steps::before { content: ''; position: absolute; top: 2.25rem; left: 3rem; right: 3rem; height: 1px; background: rgba(212,168,50,0.15); z-index: 0; }
+  .how-step { position: relative; z-index: 1; }
+  .how-num { width: 48px; height: 48px; border-radius: 50%; background: rgba(212,168,50,0.1); border: 1px solid rgba(212,168,50,0.2); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--gold); margin-bottom: 1.25rem; }
+  .how-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .how-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .how-desc { font-size: 0.8rem; color: rgba(245,240,232,0.45); line-height: 1.6; }
+
+  /* FEATURES STRIP */
+  .features-strip { background: rgba(212,168,50,0.04); border-top: 1px solid rgba(212,168,50,0.08); border-bottom: 1px solid rgba(212,168,50,0.08); }
+  .features-strip section { padding: 5rem 4rem; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3.5rem; }
+  .feat-item { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 1rem; padding: 1.5rem; transition: background 0.3s; }
+  .feat-item:hover { background: rgba(245,240,232,0.06); }
+  .feat-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .feat-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.4rem; }
+  .feat-desc { font-size: 0.78rem; color: rgba(245,240,232,0.4); line-height: 1.55; }
+
+  /* ECOSYSTEM BANNER */
+  .ecosystem-banner { background: rgba(245,240,232,0.02); border-top: 1px solid rgba(245,240,232,0.06); padding: 3rem 4rem; }
+  .eco-label { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(245,240,232,0.25); margin-bottom: 1.25rem; }
+  .eco-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .eco-pill { background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.08); border-radius: 2rem; padding: 0.4rem 1rem; font-size: 0.75rem; color: rgba(245,240,232,0.4); text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s; cursor: none; }
+  .eco-pill:hover { background: rgba(245,240,232,0.08); color: var(--cream); border-color: rgba(245,240,232,0.15); }
+  .eco-pill.active { background: rgba(212,168,50,0.1); border-color: rgba(212,168,50,0.25); color: var(--gold); }
+
+  /* CTA */
+  .cta-section { background: linear-gradient(135deg, rgba(212,168,50,0.07) 0%, transparent 60%); text-align: center; }
+  .cta-section .section-eyebrow { justify-content: center; }
+  .cta-section .section-eyebrow::before { display: none; }
+  .cta-section .section-eyebrow::after { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .cta-headline { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.25rem; }
+  .cta-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .cta-sub { font-size: 0.95rem; color: rgba(245,240,232,0.45); line-height: 1.7; max-width: 520px; margin: 0 auto 2.5rem; }
+  .cta-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer { background: rgba(245,240,232,0.02); border-top: 1px solid rgba(245,240,232,0.06); padding: 3.5rem 4rem; }
+  .footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; }
+  .footer-brand-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; margin-bottom: 0.3rem; }
+  .footer-brand-name span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .footer-sub { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.85rem; }
+  .footer-tagline { font-size: 0.78rem; color: rgba(245,240,232,0.3); line-height: 1.6; }
+  .footer-col-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; color: rgba(245,240,232,0.5); }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { color: rgba(245,240,232,0.35); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-bottom { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid rgba(245,240,232,0.05); display: flex; justify-content: space-between; font-size: 0.72rem; color: rgba(245,240,232,0.2); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+    .hero-right { display: none; }
+    section { padding: 5rem 2rem; }
+    .types-grid { grid-template-columns: 1fr; }
+    .how-steps { grid-template-columns: repeat(2, 1fr); }
+    .how-steps::before { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-right { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Wealth Hub</div>
+  </a>
+  <ul style="display:flex; list-style:none; align-items:center; gap:1.5rem;">
+    <li><a href="opportunities.html" class="nav-link">Opportunities</a></li>
+    <li><a href="calculator.html" class="nav-link">Returns Calculator</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><a href="invest.html" class="nav-cta">Start Investing</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">The Wealth Hub</div>
+    <h1 class="hero-headline">Rwanda's real estate.<br><em>Your</em> returns.</h1>
+    <p class="hero-sub">Invest in verified, project-ready land and property — fractionally for as little as RWF 500K, or as a full-asset deal. Real intelligence. Real returns. No middlemen.</p>
+    <div class="hero-actions">
+      <a href="opportunities.html" class="btn-primary">
+        Browse Opportunities
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="calculator.html" class="btn-outline">
+        Model My Returns
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">RWF 500K</span>
+        <span class="stat-label">Minimum Entry</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">18–27%</span>
+        <span class="stat-label">Target IRR Range</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Imali-vetted Projects</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="opp-preview">
+      <!-- Preview card 1 -->
+      <div class="opp-card-mini">
+        <div class="opp-mini-top">
+          <div class="opp-mini-name">Kimironko Mixed-Use Block</div>
+          <span class="opp-mini-type">Fractional</span>
+        </div>
+        <div class="opp-mini-loc">📍 Gasabo, Kigali City · 1,200 sqm</div>
+        <div class="opp-mini-metrics">
+          <div class="opp-metric">
+            <div class="opp-metric-val">22%</div>
+            <div class="opp-metric-label">Target IRR</div>
+          </div>
+          <div class="opp-metric">
+            <div class="opp-metric-val">3.2x</div>
+            <div class="opp-metric-label">Equity Multiple</div>
+          </div>
+          <div class="opp-metric">
+            <div class="opp-metric-val">36mo</div>
+            <div class="opp-metric-label">Hold Period</div>
+          </div>
+        </div>
+        <div class="opp-mini-progress">
+          <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:rgba(245,240,232,0.4); margin-bottom:0.35rem;">
+            <span>Funding</span><span>68% · RWF 340M raised</span>
+          </div>
+          <div class="prog-bar-track"><div class="prog-bar-fill gold" style="width:68%"></div></div>
+        </div>
+      </div>
+      <!-- Preview card 2 -->
+      <div class="opp-card-mini">
+        <div class="opp-mini-top">
+          <div class="opp-mini-name">Huye Student Housing Campus</div>
+          <span class="opp-mini-type">Fractional</span>
+        </div>
+        <div class="opp-mini-loc">📍 Huye, Southern Province · 3,500 sqm</div>
+        <div class="opp-mini-metrics">
+          <div class="opp-metric">
+            <div class="opp-metric-val">19%</div>
+            <div class="opp-metric-label">Target IRR</div>
+          </div>
+          <div class="opp-metric">
+            <div class="opp-metric-val">2.7x</div>
+            <div class="opp-metric-label">Equity Multiple</div>
+          </div>
+          <div class="opp-metric">
+            <div class="opp-metric-val">48mo</div>
+            <div class="opp-metric-label">Hold Period</div>
+          </div>
+        </div>
+        <div class="opp-mini-progress">
+          <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:rgba(245,240,232,0.4); margin-bottom:0.35rem;">
+            <span>Funding</span><span>41% · RWF 180M raised</span>
+          </div>
+          <div class="prog-bar-track"><div class="prog-bar-fill green" style="width:41%"></div></div>
+        </div>
+      </div>
+      <!-- Preview card 3 -->
+      <div class="opp-card-mini">
+        <div class="opp-mini-top">
+          <div class="opp-mini-name">Rubavu Lakefront Villa Plots</div>
+          <span class="opp-mini-type" style="background:rgba(26,58,92,0.3); border-color:rgba(26,58,92,0.5); color:#6aacf0;">Full Asset</span>
+        </div>
+        <div class="opp-mini-loc">📍 Rubavu, Western Province · 8,200 sqm</div>
+        <div class="opp-mini-metrics">
+          <div class="opp-metric">
+            <div class="opp-metric-val">27%</div>
+            <div class="opp-metric-label">Target IRR</div>
+          </div>
+          <div class="opp-metric">
+            <div class="opp-metric-val">4.1x</div>
+            <div class="opp-metric-label">Equity Multiple</div>
+          </div>
+          <div class="opp-metric">
+            <div class="opp-metric-val">60mo</div>
+            <div class="opp-metric-label">Hold Period</div>
+          </div>
+        </div>
+        <div class="opp-mini-progress">
+          <div style="display:flex; justify-content:space-between; font-size:0.68rem; color:rgba(245,240,232,0.4); margin-bottom:0.35rem;">
+            <span>1 buyer slot remaining</span><span>RWF 1.2B total</span>
+          </div>
+          <div class="prog-bar-track"><div class="prog-bar-fill" style="width:90%; background:var(--terracotta);"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTOR TYPES -->
+<section class="investor-types">
+  <div class="section-eyebrow">Two Ways to Invest</div>
+  <h2 class="section-title">Pick your <em>model.</em></h2>
+
+  <div class="types-grid">
+    <!-- Fractional -->
+    <div class="type-card fractional reveal">
+      <span class="type-badge frac">Fractional Ownership</span>
+      <span class="type-icon">🔗</span>
+      <div class="type-name">Own a <em>slice.</em><br>Earn like a landlord.</div>
+      <p class="type-desc">Pool with other investors to co-own a verified development project. Each investor holds tokens representing their percentage stake and receives proportional returns at exit or through rental yield.</p>
+      <ul class="type-features">
+        <li>Start from RWF 500,000 — accessible to young professionals and first-time investors</li>
+        <li>Tokens on Hedera Hashgraph — transparent, auditable, legally backed</li>
+        <li>Automatic dividend distribution at milestone completions</li>
+        <li>Exit via token sale on secondary market or project completion payout</li>
+        <li>All projects are Imali-vetted and rated 75+ on our readiness scorecard</li>
+      </ul>
+      <div class="type-entry">
+        <span class="entry-label">Minimum investment</span>
+        <span class="entry-val">RWF 500,000</span>
+      </div>
+      <a href="opportunities.html?type=fractional" class="btn-type">
+        Browse Fractional Deals
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <!-- Full Asset -->
+    <div class="type-card full-asset reveal reveal-delay-1">
+      <span class="type-badge full">Full Asset Acquisition</span>
+      <span class="type-icon">🏛️</span>
+      <div class="type-name">Own <em>everything.</em><br>Control it all.</div>
+      <p class="type-desc">Acquire full ownership of verified, project-ready land or completed assets. For high-net-worth individuals, family offices, and institutional investors looking for single-asset control with full title transfer.</p>
+      <ul class="type-features">
+        <li>Full title transfer with legal due diligence handled by our Compliance Hub</li>
+        <li>Imali arranges the full stakeholder stack — developers, suppliers, talent</li>
+        <li>Earn through capital appreciation, rental income, or project sale</li>
+        <li>GIS intelligence and market comparable analysis at every stage</li>
+        <li>Escrow through partner banks — Imali never holds your funds</li>
+      </ul>
+      <div class="type-entry">
+        <span class="entry-label">Minimum investment</span>
+        <span class="entry-val">RWF 50,000,000+</span>
+      </div>
+      <a href="opportunities.html?type=full" class="btn-type" style="background:rgba(212,168,50,0.9); color:var(--ink);">
+        Browse Full Asset Deals
+        <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div style="text-align:center; max-width:640px; margin:0 auto;">
+    <div class="section-eyebrow" style="justify-content:center;">How It Works</div>
+    <h2 class="section-title">From interest to <em>return</em></h2>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="how-num">01</div>
+      <span class="how-icon">🪪</span>
+      <div class="how-title">Create & Verify</div>
+      <p class="how-desc">Sign up, complete KYC via NIDA, and choose your investor profile — fractional, full-asset, or both.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-1">
+      <div class="how-num">02</div>
+      <span class="how-icon">🔍</span>
+      <div class="how-title">Discover Opportunities</div>
+      <p class="how-desc">Browse Imali-vetted projects filtered by return target, location, hold period, and project type. Use our calculator to model scenarios.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-2">
+      <div class="how-num">03</div>
+      <span class="how-icon">💸</span>
+      <div class="how-title">Invest via Escrow</div>
+      <p class="how-desc">Commit your stake. Funds go into escrow with a partner bank. Tokens are issued to your wallet proportional to your investment.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-3">
+      <div class="how-num">04</div>
+      <span class="how-icon">📈</span>
+      <div class="how-title">Track & Earn</div>
+      <p class="how-desc">Monitor construction milestones and portfolio performance from your dashboard. Earn dividends at each milestone or on project sale.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES STRIP -->
+<div class="features-strip">
+  <section>
+    <div class="section-eyebrow">What You Get</div>
+    <h2 class="section-title">Investor-grade <em>intelligence</em></h2>
+    <div class="features-grid">
+      <div class="feat-item reveal">
+        <span class="feat-icon">📊</span>
+        <div class="feat-title">Portfolio Dashboard</div>
+        <p class="feat-desc">Track all investments in one place — token balances, milestone status, projected returns, and dividend history.</p>
+      </div>
+      <div class="feat-item reveal reveal-delay-1">
+        <span class="feat-icon">🗺️</span>
+        <div class="feat-title">GIS Hotspot Intelligence</div>
+        <p class="feat-desc">See which districts are high-demand / low-supply, price trend overlays, absorption rates, and infrastructure scores.</p>
+      </div>
+      <div class="feat-item reveal reveal-delay-2">
+        <span class="feat-icon">🧮</span>
+        <div class="feat-title">ROI Calculator</div>
+        <p class="feat-desc">Model IRR, equity multiple, and token appreciation across different stake sizes, hold periods, and project types.</p>
+      </div>
+      <div class="feat-item reveal">
+        <span class="feat-icon">📋</span>
+        <div class="feat-title">Readiness Scorecard</div>
+        <p class="feat-desc">Every project shows its Imali score — legal integrity, physical viability, infrastructure, and tokenisation readiness.</p>
+      </div>
+      <div class="feat-item reveal reveal-delay-1">
+        <span class="feat-icon">🔐</span>
+        <div class="feat-title">Escrow & Smart Contracts</div>
+        <p class="feat-desc">All funds are held in escrow via partner banks. Milestone-based releases — funds only move when work is verified.</p>
+      </div>
+      <div class="feat-item reveal reveal-delay-2">
+        <span class="feat-icon">🤝</span>
+        <div class="feat-title">Partner Earnings</div>
+        <p class="feat-desc">Refer another investor or bring a project to Imali and earn a referral commission — tracked in your Partner Dashboard tab.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-eyebrow">Ready to invest?</div>
+  <h2 class="cta-headline">Your next return is<br>already <em>on the map.</em></h2>
+  <p class="cta-sub">Browse live opportunities, model your returns with our calculator, and invest in Rwanda's most transparent real estate platform.</p>
+  <div class="cta-buttons">
+    <a href="opportunities.html" class="btn-primary">
+      Browse Opportunities
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="calculator.html" class="btn-outline">Model My Returns</a>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<div class="ecosystem-banner">
+  <div class="eco-label">Part of the Imali Ecosystem</div>
+  <div class="eco-pills">
+    <a href="../land-bank/index.html" class="eco-pill">🏡 The Land Bank</a>
+    <a href="#" class="eco-pill active">💼 The Wealth Hub</a>
+    <a href="#" class="eco-pill">🏠 Consumer Portal</a>
+    <a href="#" class="eco-pill">🧱 Supply Chain</a>
+    <a href="#" class="eco-pill">🔧 Talent Forge</a>
+    <a href="#" class="eco-pill">⚖️ Compliance Hub</a>
+    <a href="#" class="eco-pill">🏦 Banking Partners</a>
+    <a href="dashboard.html#partner" class="eco-pill">🤝 Partner Dashboard</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand-name">Imali<span>.</span>biz</div>
+      <div class="footer-sub">The Wealth Hub</div>
+      <p class="footer-tagline">Rwanda's real estate intelligence platform. Connecting investors to vetted, project-ready land and assets — transparently.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="opportunities.html">Opportunities</a></li>
+        <li><a href="invest.html">How to Invest</a></li>
+        <li><a href="calculator.html">Returns Calculator</a></li>
+        <li><a href="dashboard.html">My Portfolio</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Ecosystem</div>
+      <ul class="footer-links">
+        <li><a href="../land-bank/index.html">The Land Bank</a></li>
+        <li><a href="#">Consumer Portal</a></li>
+        <li><a href="#">Supply Chain</a></li>
+        <li><a href="#">Talent Forge</a></li>
+        <li><a href="#">Compliance Hub</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Imali.biz</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Imali.biz — Rwanda's Real Estate Intelligence Platform</span>
+    <span>Kigali, Rwanda · imali.biz</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px';
+    cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
