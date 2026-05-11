@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tokenisation — Own a Piece of Rwanda's Future | The Wealth Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
 <style>
   /* ── BASE THEME VARIABLES ─────────────────────────────────── */
   :root {
@@ -968,13 +969,13 @@
 <script>
 // ── THEME ─────────────────────────────────────────────────────
 (function() {
-  var saved = localStorage.getItem('imali-theme') || 'dark';
+  var saved = localStorage.getItem('imali-theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
 })();
 
 function toggleTheme() {
   var html = document.documentElement;
-  var current = html.getAttribute('data-theme') || 'dark';
+  var current = html.getAttribute('data-theme') || 'light';
   var next = current === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
   localStorage.setItem('imali-theme', next);
@@ -983,11 +984,11 @@ function toggleTheme() {
 function updateToggleUI(theme) {
   var icon = document.getElementById('themeIcon');
   var label = document.getElementById('themeLabel');
-  if (theme === 'light') { icon.textContent = '🌙'; label.textContent = 'Dark'; }
+  if (theme === 'dark') { icon.textContent = '🌙'; label.textContent = 'Dark'; }
   else { icon.textContent = '☀️'; label.textContent = 'Light'; }
 }
 document.addEventListener('DOMContentLoaded', function() {
-  updateToggleUI(document.documentElement.getAttribute('data-theme') || 'dark');
+  updateToggleUI(document.documentElement.getAttribute('data-theme') || 'light');
 });
 
 // ── CURSOR ───────────────────────────────────────────────────

@@ -1,35 +1,42 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
 <head>
-<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Returns Calculator — The Wealth Hub | Imali.biz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
 <style>
-  :root { --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832; --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560; }
+  :root {
+    --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832; --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560; --sapphire: #1a3a5c; --emerald: #1a5c3a; --mist: #e8e2d8;
+    --bg: #faf7f2; --bg-alt: #ede7db; --bg-card: #ffffff; --surface: rgba(0,0,0,0.04); --surface-hover: rgba(0,0,0,0.07); --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.17); --text: #1a1814; --text-dim: rgba(26,24,20,0.6); --text-faint: rgba(26,24,20,0.38); --nav-bg: rgba(250,247,242,0.97); --input-bg: rgba(0,0,0,0.05); --input-border: rgba(0,0,0,0.14); --inv-bg: #f5f0e8; --inv-text: #1a1814; --inv-muted: rgba(26,24,20,0.55); --scrollbar-thumb: rgba(200,82,26,0.3);
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0f; --bg-alt: #0f0f16; --bg-card: rgba(245,240,232,0.04); --surface: rgba(245,240,232,0.04); --surface-hover: rgba(245,240,232,0.08); --border: rgba(245,240,232,0.08); --border-strong: rgba(245,240,232,0.15); --text: #f5f0e8; --text-dim: rgba(245,240,232,0.55); --text-faint: rgba(245,240,232,0.3); --nav-bg: rgba(10,10,15,0.97); --input-bg: rgba(245,240,232,0.06); --input-border: rgba(245,240,232,0.14); --inv-bg: #f5f0e8; --inv-text: #0a0a0f; --inv-muted: #6b6560; --scrollbar-thumb: rgba(212,168,50,0.3);
+  }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; min-height: 100vh; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; min-height: 100vh; }
   .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
   .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
   body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--gold); transform: translate(-8px,-8px) !important; }
   body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
 
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: rgba(10,10,15,0.97); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(245,240,232,0.05); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
   .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
-  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--cream); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
   .nav-logo span { color: var(--gold); font-style: italic; font-family: 'Instrument Serif', serif; }
   .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
   .nav-right { display: flex; align-items: center; gap: 1.5rem; }
-  .nav-link { color: rgba(245,240,232,0.5); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
-  .nav-link:hover { color: var(--cream); }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
   .nav-cta { background: var(--gold); color: var(--ink); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
   .nav-cta:hover { background: #c49a28; }
 
   /* PAGE LAYOUT */
   .calc-layout { display: grid; grid-template-columns: 420px 1fr; gap: 0; min-height: 100vh; padding-top: 70px; }
-  .calc-panel { padding: 3.5rem 3rem; border-right: 1px solid rgba(245,240,232,0.06); position: sticky; top: 70px; height: calc(100vh - 70px); overflow-y: auto; }
+  .calc-panel { padding: 3.5rem 3rem; background: var(--bg-alt); border-right: 1px solid var(--border); position: sticky; top: 70px; height: calc(100vh - 70px); overflow-y: auto; }
   .result-panel { padding: 3.5rem 3rem; }
 
   /* PAGE TITLE */
@@ -37,27 +44,27 @@
   .calc-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
   .calc-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 0.5rem; }
   .calc-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
-  .calc-subtitle { font-size: 0.82rem; color: rgba(245,240,232,0.4); line-height: 1.6; margin-bottom: 2.5rem; }
+  .calc-subtitle { font-size: 0.82rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 2.5rem; }
 
   /* FORM ELEMENTS */
   .field-group { margin-bottom: 1.5rem; }
-  .field-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.45); margin-bottom: 0.55rem; font-weight: 500; display: flex; justify-content: space-between; }
+  .field-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.55rem; font-weight: 500; display: flex; justify-content: space-between; }
   .field-label span { color: var(--gold); font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; text-transform: none; letter-spacing: 0; }
   input[type="range"] { width: 100%; accent-color: var(--gold); cursor: none; height: 4px; }
-  input[type="number"], select { width: 100%; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.65rem; padding: 0.7rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; color: var(--cream); outline: none; cursor: none; transition: border-color 0.2s; }
+  input[type="number"], select { width: 100%; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 0.65rem; padding: 0.7rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; color: var(--text); outline: none; cursor: none; transition: border-color 0.2s; }
   input[type="number"]:focus, select:focus { border-color: rgba(212,168,50,0.45); }
-  input::placeholder { color: rgba(245,240,232,0.2); }
-  select option { background: #0d0d12; }
-  .range-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: rgba(245,240,232,0.25); margin-top: 0.3rem; }
-  .field-separator { height: 1px; background: rgba(245,240,232,0.06); margin: 1.5rem 0; }
+  input::placeholder { color: var(--text-faint); }
+  select option { background: var(--bg-alt); }
+  .range-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-faint); margin-top: 0.3rem; }
+  .field-separator { height: 1px; background: var(--border); margin: 1.5rem 0; }
 
   /* INVESTMENT TYPE TOGGLE */
-  .type-toggle { display: flex; background: rgba(245,240,232,0.04); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.65rem; overflow: hidden; margin-bottom: 1.5rem; }
-  .type-btn { flex: 1; padding: 0.65rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600; text-align: center; cursor: none; border: none; background: transparent; color: rgba(245,240,232,0.4); transition: background 0.2s, color 0.2s; }
+  .type-toggle { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: 0.65rem; overflow: hidden; margin-bottom: 1.5rem; }
+  .type-btn { flex: 1; padding: 0.65rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600; text-align: center; cursor: none; border: none; background: transparent; color: var(--text-faint); transition: background 0.2s, color 0.2s; }
   .type-btn.active { background: rgba(212,168,50,0.12); color: var(--gold); }
 
   /* RESULTS */
-  .results-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; color: rgba(245,240,232,0.25); }
+  .results-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; color: var(--text-faint); }
   .results-empty-icon { font-size: 3rem; margin-bottom: 1rem; }
   .results-empty-text { font-size: 0.88rem; line-height: 1.7; max-width: 320px; }
   .results-active { display: none; }
@@ -67,73 +74,51 @@
   .result-headline { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
   .result-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
   .big-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
-  .big-metric { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 1rem; padding: 1.5rem; }
+  .big-metric { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; }
   .big-metric.highlight { background: rgba(212,168,50,0.06); border-color: rgba(212,168,50,0.18); }
-  .big-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.35); margin-bottom: 0.5rem; }
+  .big-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.5rem; }
   .big-val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; color: var(--gold); letter-spacing: -0.03em; }
-  .big-val.white { color: var(--cream); }
+  .big-val.white { color: var(--text); }
   .big-val.green { color: #4caf7d; }
-  .big-sub { font-size: 0.72rem; color: rgba(245,240,232,0.3); margin-top: 0.25rem; }
+  .big-sub { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.25rem; }
 
   /* YEAR-BY-YEAR TABLE */
-  .result-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin: 1.75rem 0 0.85rem; }
+  .result-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin: 1.75rem 0 0.85rem; }
   .year-table { width: 100%; border-collapse: collapse; }
-  .year-table th { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,240,232,0.3); text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid rgba(245,240,232,0.07); }
-  .year-table td { font-size: 0.82rem; padding: 0.55rem 0.75rem; border-bottom: 1px solid rgba(245,240,232,0.04); color: rgba(245,240,232,0.65); }
-  .year-table td:first-child { color: rgba(245,240,232,0.35); font-size: 0.72rem; }
+  .year-table th { font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); text-align: left; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .year-table td { font-size: 0.82rem; padding: 0.55rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text-dim); }
+  .year-table td:first-child { color: var(--text-faint); font-size: 0.72rem; }
   .year-table td.pos { color: #4caf7d; font-family: 'Syne', sans-serif; font-weight: 700; }
   .year-table td.gold { color: var(--gold); font-family: 'Syne', sans-serif; font-weight: 700; }
 
   /* VISUAL BAR */
   .vis-bar-wrap { margin-bottom: 1.75rem; }
   .vis-bar-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-  .vis-bar-label { font-size: 0.72rem; color: rgba(245,240,232,0.4); width: 80px; flex-shrink: 0; }
-  .vis-bar-track { flex: 1; height: 8px; background: rgba(245,240,232,0.05); border-radius: 4px; overflow: hidden; }
+  .vis-bar-label { font-size: 0.72rem; color: var(--text-dim); width: 80px; flex-shrink: 0; }
+  .vis-bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
   .vis-bar-fill { height: 100%; border-radius: 4px; background: var(--gold); transition: width 0.6s ease; }
   .vis-bar-val { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--gold); width: 70px; text-align: right; flex-shrink: 0; }
 
   /* DISCLAIMER */
-  .disclaimer { background: rgba(245,240,232,0.02); border: 1px solid rgba(245,240,232,0.06); border-radius: 0.75rem; padding: 1rem 1.25rem; font-size: 0.72rem; color: rgba(245,240,232,0.3); line-height: 1.6; margin-top: 2rem; }
+  .disclaimer { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem 1.25rem; font-size: 0.72rem; color: var(--text-faint); line-height: 1.6; margin-top: 2rem; }
 
   /* CTA */
   .result-cta { display: flex; gap: 0.75rem; margin-top: 1.75rem; }
   .btn-browse { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--gold); color: var(--ink); text-decoration: none; border-radius: 0.75rem; padding: 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
   .btn-browse:hover { background: #c49a28; }
-  .btn-calc-outline { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.12); color: var(--cream); border-radius: 0.75rem; padding: 0.85rem 1.25rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: none; transition: background 0.2s; }
-  .btn-calc-outline:hover { background: rgba(245,240,232,0.09); }
+  .btn-calc-outline { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); border-radius: 0.75rem; padding: 0.85rem 1.25rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: none; transition: background 0.2s; }
+  .btn-calc-outline:hover { background: var(--surface-hover); }
 
   @media (max-width: 1024px) {
     .calc-layout { grid-template-columns: 1fr; }
-    .calc-panel { position: static; height: auto; padding: 3rem 1.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(245,240,232,0.06); }
+    .calc-panel { position: static; height: auto; padding: 3rem 1.5rem 2rem; border-right: none; border-bottom: 1px solid var(--border); }
     .result-panel { padding: 2.5rem 1.5rem 4rem; }
     nav { padding: 1rem 1.5rem; }
     .big-metrics { grid-template-columns: 1fr 1fr; }
   }
-  /* LIGHT MODE */
-  [data-theme="light"] body { background: #faf7f2 !important; color: #1a1814 !important; }
-  [data-theme="light"] nav { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
-  [data-theme="light"] nav a:not(.nav-cta) { color: rgba(26,24,20,0.6) !important; }
-  [data-theme="light"] .nav-logo { color: #1a1814 !important; }
-  [data-theme="light"] .calc-panel { background: #f0ebe0 !important; border-color: rgba(0,0,0,0.08) !important; }
-  [data-theme="light"] .calc-title, [data-theme="light"] .calc-eyebrow { color: #1a1814 !important; }
-  [data-theme="light"] .slider-label, [data-theme="light"] .slider-label-val { color: rgba(26,24,20,0.7) !important; }
-  [data-theme="light"] .slider-input { background: rgba(0,0,0,0.06) !important; }
-  [data-theme="light"] .calc-input, [data-theme="light"] .calc-select { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1814 !important; }
-  [data-theme="light"] .toggle-btn:not(.active) { background: rgba(0,0,0,0.05) !important; color: rgba(26,24,20,0.6) !important; border-color: rgba(0,0,0,0.1) !important; }
-  [data-theme="light"] .result-panel { background: #faf7f2 !important; }
-  [data-theme="light"] .big-metric-val { color: #1a1814 !important; }
-  [data-theme="light"] .big-metric-label { color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .result-section-title { color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .year-table { background: rgba(0,0,0,0.03) !important; border-color: rgba(0,0,0,0.08) !important; }
-  [data-theme="light"] .year-table th { background: rgba(0,0,0,0.05) !important; color: rgba(26,24,20,0.6) !important; }
-  [data-theme="light"] .year-table td { border-color: rgba(0,0,0,0.06) !important; color: #1a1814 !important; }
-  [data-theme="light"] .scenario-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
-  [data-theme="light"] .scenario-name { color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .scenario-val { color: #1a1814 !important; }
-  .theme-toggle { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: rgba(245,240,232,0.55); transition: all 0.2s; }
-  .theme-toggle:hover { background: rgba(245,240,232,0.1); color: #f5f0e8; }
-  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
-  [data-theme="light"] .theme-toggle:hover { color: #1a1814; background: rgba(0,0,0,0.09); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+  ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
 </style>
 </head>
 <body>
@@ -149,7 +134,7 @@
     <a href="opportunities.html" class="nav-link">Opportunities</a>
     <a href="calculator.html" class="nav-link" style="color:var(--gold);">Calculator</a>
     <a href="dashboard.html" class="nav-link">Dashboard</a>
-    <a href="../index.html" class="nav-link" style="color:rgba(245,240,232,0.3);">← Imali.biz</a>
+    <a href="../index.html" class="nav-link" style="color:var(--text-faint);">← Imali.biz</a>
     <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
     <a href="invest.html" class="nav-cta">Start Investing</a>
   </div>
@@ -275,7 +260,7 @@
       <div class="vis-bar-wrap" id="scenarioVis"></div>
 
       <div class="disclaimer">
-        <strong style="color:rgba(245,240,232,0.5);">Important:</strong> These projections are illustrative only, based on your inputs and Imali's market data. Actual returns depend on project execution, market conditions, and exit timing. Past performance does not guarantee future results. Always review full project documents before committing funds.
+        <strong style="color:var(--text-dim);">Important:</strong> These projections are illustrative only, based on your inputs and Imali's market data. Actual returns depend on project execution, market conditions, and exit timing. Past performance does not guarantee future results. Always review full project documents before committing funds.
       </div>
 
       <div class="result-cta">
@@ -378,7 +363,7 @@
     const stakeWidth = Math.min(stakePct * 100, 100);
     stakeVis.innerHTML = `
       <div class="vis-bar-row"><span class="vis-bar-label">Your Stake</span><div class="vis-bar-track"><div class="vis-bar-fill" style="width:${stakeWidth.toFixed(2)}%"></div></div><span class="vis-bar-val">${(stakePct*100).toFixed(2)}%</span></div>
-      <div class="vis-bar-row"><span class="vis-bar-label">Co-investors</span><div class="vis-bar-track"><div class="vis-bar-fill" style="width:${(100-stakeWidth).toFixed(2)}%;background:rgba(245,240,232,0.15);"></div></div><span class="vis-bar-val" style="color:rgba(245,240,232,0.4);">${(100-stakePct*100).toFixed(2)}%</span></div>`;
+      <div class="vis-bar-row"><span class="vis-bar-label">Co-investors</span><div class="vis-bar-track"><div class="vis-bar-fill" style="width:${(100-stakeWidth).toFixed(2)}%;background:var(--border);"></div></div><span class="vis-bar-val" style="color:var(--text-faint);">${(100-stakePct*100).toFixed(2)}%</span></div>`;
 
     // Year-by-year
     const tbody = document.getElementById('yearTable');
@@ -437,14 +422,14 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    icon.textContent = next === 'light' ? '🌙' : '☀️';
-    label.textContent = next === 'light' ? 'Dark' : 'Light';
+    if(icon) { icon.textContent = next === 'dark' ? '🌙' : '☀️'; label.textContent = next === 'dark' ? 'Dark' : 'Light'; }
   }
   document.addEventListener('DOMContentLoaded', function() {
-    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+    if (icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
   });
 </script>
 </body>
 </html>
+

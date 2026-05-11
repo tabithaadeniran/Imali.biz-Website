@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="light">
 <head>
-<script>(function(){var t=localStorage.getItem('imali-theme')||'dark';document.documentElement.setAttribute('data-theme',t);})();</script>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Portfolio — The Wealth Hub | Imali.biz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
 <style>
   :root { --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832; --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560; --sidebar-w: 240px; --topbar-h: 60px; }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--ink); color: var(--cream); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; transition: background 0.3s, color 0.3s; }
   .cursor { position: fixed; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; }
   .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(212,168,50,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
   body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 52px; height: 52px; border-color: var(--gold); transform: translate(-8px,-8px) !important; }
@@ -110,10 +111,15 @@
     .partner-stats { grid-template-columns: 1fr 1fr; }
     .earn-cards { grid-template-columns: 1fr 1fr; }
   }
-  /* LIGHT MODE */
+  /* THEME TOGGLE */
+  .theme-toggle { background: var(--surface,rgba(245,240,232,0.07)); border: 1px solid var(--border,rgba(245,240,232,0.12)); border-radius: 2rem; padding: 0.3rem 0.65rem; cursor: none; display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--text-dim,rgba(245,240,232,0.5)); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover,rgba(245,240,232,0.12)); color: var(--text,#f5f0e8); }
+
+  /* LIGHT MODE — comprehensive overrides with correct class names */
   [data-theme="light"] body { background: #f0ebe0 !important; color: #1a1814 !important; }
   [data-theme="light"] .topbar { background: rgba(250,247,242,0.97) !important; border-color: rgba(0,0,0,0.09) !important; }
-  [data-theme="light"] .topbar-logo, [data-theme="light"] .topbar-user { color: #1a1814 !important; }
+  [data-theme="light"] .topbar-logo { color: #1a1814 !important; }
+  [data-theme="light"] .topbar-user { color: rgba(26,24,20,0.65) !important; }
   [data-theme="light"] .topbar-sub { color: var(--gold) !important; }
   [data-theme="light"] .topbar-btn { background: rgba(0,0,0,0.07) !important; color: rgba(26,24,20,0.7) !important; border-color: rgba(0,0,0,0.12) !important; }
   [data-theme="light"] .sidebar { background: #faf7f2 !important; border-color: rgba(0,0,0,0.09) !important; }
@@ -121,32 +127,40 @@
   [data-theme="light"] .sidebar-item:hover, [data-theme="light"] .sidebar-item.active { background: rgba(0,0,0,0.05) !important; color: #1a1814 !important; }
   [data-theme="light"] .sidebar-section { color: rgba(26,24,20,0.35) !important; }
   [data-theme="light"] .main { background: #f0ebe0 !important; }
-  [data-theme="light"] .tab-title { color: #1a1814 !important; }
+  /* panel titles + subtitles */
+  [data-theme="light"] .panel-title { color: #1a1814 !important; }
+  [data-theme="light"] .panel-sub { color: rgba(26,24,20,0.5) !important; }
+  /* stat cards */
   [data-theme="light"] .stat-card { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
-  [data-theme="light"] .stat-card-label { color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .stat-card-val { color: #1a1814 !important; }
+  [data-theme="light"] .stat-eyebrow { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .stat-val { color: #1a1814 !important; }
+  [data-theme="light"] .stat-val.gold { color: var(--gold) !important; }
+  [data-theme="light"] .stat-val.white { color: #1a1814 !important; }
+  [data-theme="light"] .stat-val.green { color: #3d9e6b !important; }
+  [data-theme="light"] .stat-sub { color: rgba(26,24,20,0.45) !important; }
+  /* section labels */
+  [data-theme="light"] .section-label { color: rgba(26,24,20,0.4) !important; }
+  /* portfolio cards */
   [data-theme="light"] .portfolio-card { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
-  [data-theme="light"] .pc-name, [data-theme="light"] .pc-loc { color: #1a1814 !important; }
-  [data-theme="light"] .pc-loc { color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .metric-label { color: rgba(26,24,20,0.45) !important; }
-  [data-theme="light"] .metric-val { color: #1a1814 !important; }
-  [data-theme="light"] .activity-table { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
-  [data-theme="light"] .activity-table th { background: rgba(0,0,0,0.04) !important; color: rgba(26,24,20,0.5) !important; border-color: rgba(0,0,0,0.07) !important; }
-  [data-theme="light"] .activity-table td { border-color: rgba(0,0,0,0.06) !important; color: rgba(26,24,20,0.75) !important; }
-  [data-theme="light"] .investments-table th { background: rgba(0,0,0,0.04) !important; color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .investments-table td { border-color: rgba(0,0,0,0.06) !important; color: rgba(26,24,20,0.75) !important; }
-  [data-theme="light"] .partner-stat { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.09) !important; }
-  [data-theme="light"] .partner-stat-label { color: rgba(26,24,20,0.5) !important; }
-  [data-theme="light"] .partner-stat-val { color: #1a1814 !important; }
-  [data-theme="light"] .ref-box { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; }
+  [data-theme="light"] .portfolio-card-name { color: #1a1814 !important; }
+  [data-theme="light"] .portfolio-card-loc { color: rgba(26,24,20,0.45) !important; }
+  [data-theme="light"] .pm-item { background: rgba(0,0,0,0.04) !important; }
+  [data-theme="light"] .pm-label { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .ms-header { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .ms-track { background: rgba(0,0,0,0.1) !important; }
+  [data-theme="light"] .ms-stage { color: rgba(26,24,20,0.5) !important; }
+  /* tables */
+  [data-theme="light"] .table-card { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; }
+  [data-theme="light"] .data-table th { color: rgba(26,24,20,0.5) !important; border-bottom-color: rgba(0,0,0,0.09) !important; background: rgba(0,0,0,0.03) !important; }
+  [data-theme="light"] .data-table td { color: rgba(26,24,20,0.75) !important; border-bottom-color: rgba(0,0,0,0.05) !important; }
+  [data-theme="light"] .data-table td:first-child { color: #1a1814 !important; }
+  /* partner section */
+  [data-theme="light"] .partner-ref-box { background: rgba(212,168,50,0.08) !important; border-color: rgba(212,168,50,0.2) !important; }
+  [data-theme="light"] .ref-label { color: rgba(26,24,20,0.5) !important; }
+  [data-theme="light"] .ref-link { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.1) !important; }
   [data-theme="light"] .earn-card { background: rgba(0,0,0,0.04) !important; border-color: rgba(0,0,0,0.09) !important; }
-  [data-theme="light"] .earn-card-title, [data-theme="light"] .earn-card-desc { color: rgba(26,24,20,0.7) !important; }
-  [data-theme="light"] .settings-group label { color: rgba(26,24,20,0.6) !important; }
-  [data-theme="light"] .settings-input { background: rgba(0,0,0,0.05) !important; border-color: rgba(0,0,0,0.12) !important; color: #1a1814 !important; }
-  .theme-toggle { background: rgba(245,240,232,0.07); border: 1px solid rgba(245,240,232,0.12); border-radius: 2rem; padding: 0.3rem 0.65rem; cursor: none; display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: rgba(245,240,232,0.5); transition: all 0.2s; }
-  .theme-toggle:hover { color: #f5f0e8; background: rgba(245,240,232,0.12); }
-  [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); color: rgba(26,24,20,0.6); }
-  [data-theme="light"] .theme-toggle:hover { color: #1a1814; }
+  [data-theme="light"] .earn-card-type { color: #1a1814 !important; }
+  [data-theme="light"] .earn-card-desc { color: rgba(26,24,20,0.6) !important; }
 </style>
 </head>
 <body>
@@ -200,7 +214,7 @@
     <span class="sidebar-icon">⚙️</span> Settings
   </a>
   <div class="sidebar-bottom">
-    <a href="../index.html" class="sidebar-item" style="font-size:0.75rem; color:rgba(245,240,232,0.25);">
+    <a href="../index.html" class="sidebar-item" style="font-size:0.75rem; color:var(--text-faint,rgba(26,24,20,0.38));">
       <span class="sidebar-icon">←</span> Imali.biz
     </a>
   </div>
@@ -314,10 +328,10 @@
       <table class="data-table">
         <thead><tr><th>Activity</th><th>Project</th><th>Date</th><th>Amount</th><th>Type</th></tr></thead>
         <tbody>
-          <tr><td>Dividend paid</td><td style="color:rgba(245,240,232,0.5);">Kimironko Mixed-Use</td><td style="color:rgba(245,240,232,0.35);">2 May 2025</td><td class="td-green">+RWF 420K</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Milestone 2 payout</td></tr>
-          <tr><td>Dividend paid</td><td style="color:rgba(245,240,232,0.5);">Huye Student Housing</td><td style="color:rgba(245,240,232,0.35);">18 Apr 2025</td><td class="td-green">+RWF 380K</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Milestone 1 payout</td></tr>
-          <tr><td>Investment committed</td><td style="color:rgba(245,240,232,0.5);">Kicukiro Affordable</td><td style="color:rgba(245,240,232,0.35);">3 Apr 2025</td><td class="td-gold">RWF 2.5M</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Fractional stake</td></tr>
-          <tr><td>Tokens issued</td><td style="color:rgba(245,240,232,0.5);">Kicukiro Affordable</td><td style="color:rgba(245,240,232,0.35);">3 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">0.6% stake</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Hedera HTS</td></tr>
+          <tr><td>Dividend paid</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Kimironko Mixed-Use</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">2 May 2025</td><td class="td-green">+RWF 420K</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Milestone 2 payout</td></tr>
+          <tr><td>Dividend paid</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Huye Student Housing</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">18 Apr 2025</td><td class="td-green">+RWF 380K</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Milestone 1 payout</td></tr>
+          <tr><td>Investment committed</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Kicukiro Affordable</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">3 Apr 2025</td><td class="td-gold">RWF 2.5M</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Fractional stake</td></tr>
+          <tr><td>Tokens issued</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Kicukiro Affordable</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">3 Apr 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">0.6% stake</td><td style="color:rgba(245,240,232,0.35); font-size:0.72rem;">Hedera HTS</td></tr>
         </tbody>
       </table>
     </div>
@@ -331,10 +345,10 @@
       <table class="data-table">
         <thead><tr><th>Project</th><th>Type</th><th>Invested</th><th>Current Value</th><th>IRR</th><th>Progress</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>Kimironko Mixed-Use Block</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 9M</td><td class="td-gold">RWF 10.8M</td><td class="td-green">22%</td><td style="color:rgba(245,240,232,0.5);">68%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
-          <tr><td>Huye Student Housing</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 8M</td><td class="td-gold">RWF 9.1M</td><td class="td-green">19%</td><td style="color:rgba(245,240,232,0.5);">41%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
-          <tr><td>Musanze Eco-Resort</td><td style="color:var(--gold); font-size:0.75rem;">Full Asset</td><td>RWF 5M</td><td class="td-gold">RWF 6.2M</td><td class="td-green">25%</td><td style="color:rgba(245,240,232,0.5);">22%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
-          <tr><td>Kicukiro Affordable Housing</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 2.5M</td><td class="td-gold">RWF 2.9M</td><td class="td-green">16%</td><td style="color:rgba(245,240,232,0.5);">78%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Kimironko Mixed-Use Block</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 9M</td><td class="td-gold">RWF 10.8M</td><td class="td-green">22%</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">68%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Huye Student Housing</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 8M</td><td class="td-gold">RWF 9.1M</td><td class="td-green">19%</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">41%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Musanze Eco-Resort</td><td style="color:var(--gold); font-size:0.75rem;">Full Asset</td><td>RWF 5M</td><td class="td-gold">RWF 6.2M</td><td class="td-green">25%</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">22%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
+          <tr><td>Kicukiro Affordable Housing</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td>RWF 2.5M</td><td class="td-gold">RWF 2.9M</td><td class="td-green">16%</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">78%</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Active</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -356,10 +370,10 @@
       <table class="data-table">
         <thead><tr><th>Date</th><th>Project</th><th>Milestone</th><th>Amount</th><th>Type</th></tr></thead>
         <tbody>
-          <tr><td>2 May 2025</td><td style="color:rgba(245,240,232,0.6);">Kimironko Mixed-Use</td><td style="color:rgba(245,240,232,0.4);">Structural completion</td><td class="td-green">RWF 420,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
-          <tr><td>18 Apr 2025</td><td style="color:rgba(245,240,232,0.6);">Huye Student Housing</td><td style="color:rgba(245,240,232,0.4);">Foundation complete</td><td class="td-green">RWF 380,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
-          <tr><td>22 Mar 2025</td><td style="color:rgba(245,240,232,0.6);">Kimironko Mixed-Use</td><td style="color:rgba(245,240,232,0.4);">Ground break</td><td class="td-green">RWF 210,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
-          <tr><td>5 Mar 2025</td><td style="color:rgba(245,240,232,0.6);">Musanze Eco-Resort</td><td style="color:rgba(245,240,232,0.4);">Planning permit issued</td><td class="td-green">RWF 190,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>2 May 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Kimironko Mixed-Use</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">Structural completion</td><td class="td-green">RWF 420,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>18 Apr 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Huye Student Housing</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">Foundation complete</td><td class="td-green">RWF 380,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>22 Mar 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Kimironko Mixed-Use</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">Ground break</td><td class="td-green">RWF 210,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
+          <tr><td>5 Mar 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Musanze Eco-Resort</td><td style="color:var(--text-faint,rgba(26,24,20,0.38));">Planning permit issued</td><td class="td-green">RWF 190,000</td><td style="font-size:0.72rem; color:rgba(245,240,232,0.35);">Milestone payout</td></tr>
         </tbody>
       </table>
     </div>
@@ -373,8 +387,8 @@
       <table class="data-table">
         <thead><tr><th>Project</th><th>Type</th><th>IRR</th><th>Funded</th><th>Score</th><th>Action</th></tr></thead>
         <tbody>
-          <tr><td>Rubavu Lakefront Villa Plots</td><td style="color:var(--gold); font-size:0.75rem;">Full Asset</td><td class="td-gold">27%</td><td style="color:rgba(245,240,232,0.5);">90%</td><td class="td-green">96/100</td><td><a href="opportunities.html" style="font-size:0.75rem; color:var(--gold); text-decoration:none;">View →</a></td></tr>
-          <tr><td>Nyagatare Agri-Commercial Hub</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td class="td-gold">18%</td><td style="color:rgba(245,240,232,0.5);">24%</td><td class="td-green">78/100</td><td><a href="opportunities.html" style="font-size:0.75rem; color:var(--gold); text-decoration:none;">View →</a></td></tr>
+          <tr><td>Rubavu Lakefront Villa Plots</td><td style="color:var(--gold); font-size:0.75rem;">Full Asset</td><td class="td-gold">27%</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">90%</td><td class="td-green">96/100</td><td><a href="opportunities.html" style="font-size:0.75rem; color:var(--gold); text-decoration:none;">View →</a></td></tr>
+          <tr><td>Nyagatare Agri-Commercial Hub</td><td style="color:var(--terracotta); font-size:0.75rem;">Fractional</td><td class="td-gold">18%</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">24%</td><td class="td-green">78/100</td><td><a href="opportunities.html" style="font-size:0.75rem; color:var(--gold); text-decoration:none;">View →</a></td></tr>
         </tbody>
       </table>
     </div>
@@ -448,9 +462,9 @@
       <table class="data-table">
         <thead><tr><th>Date</th><th>Referred Stakeholder</th><th>Type</th><th>Commission</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>28 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">Eric N. (Investor)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Fractional</td><td class="td-green">RWF 45,000</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Paid</span></td></tr>
-          <tr><td>12 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">Sandrine U. (Landowner)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Land listing</td><td class="td-green">RWF 15,000</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Paid</span></td></tr>
-          <tr><td>3 Apr 2025</td><td style="color:rgba(245,240,232,0.5);">Patrick K. (Investor)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Full Asset</td><td class="td-gold">RWF 85,000</td><td><span style="background:rgba(212,168,50,0.1); color:var(--gold); border:1px solid rgba(212,168,50,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Pending</span></td></tr>
+          <tr><td>28 Apr 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Eric N. (Investor)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Fractional</td><td class="td-green">RWF 45,000</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Paid</span></td></tr>
+          <tr><td>12 Apr 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Sandrine U. (Landowner)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Land listing</td><td class="td-green">RWF 15,000</td><td><span style="background:rgba(76,175,124,0.1); color:#4caf7d; border:1px solid rgba(76,175,124,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Paid</span></td></tr>
+          <tr><td>3 Apr 2025</td><td style="color:var(--text-dim,rgba(26,24,20,0.6));">Patrick K. (Investor)</td><td style="font-size:0.75rem; color:rgba(245,240,232,0.4);">Full Asset</td><td class="td-gold">RWF 85,000</td><td><span style="background:rgba(212,168,50,0.1); color:var(--gold); border:1px solid rgba(212,168,50,0.2); border-radius:2rem; padding:0.18rem 0.55rem; font-size:0.62rem; font-weight:700;">Pending</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -461,12 +475,12 @@
     <div class="panel-title">Account <em>Settings</em></div>
     <p class="panel-sub">Manage your investor profile, KYC status, and notification preferences</p>
     <div style="max-width:540px; display:flex; flex-direction:column; gap:1.25rem;">
-      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:block; margin-bottom:0.5rem;">Full Name</label><input type="text" value="Amara Mutabazi" style="width:100%; background:rgba(245,240,232,0.04); border:1px solid rgba(245,240,232,0.1); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--cream); outline:none; cursor:none;"></div>
-      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:block; margin-bottom:0.5rem;">Email</label><input type="email" value="amara@example.com" style="width:100%; background:rgba(245,240,232,0.04); border:1px solid rgba(245,240,232,0.1); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--cream); outline:none; cursor:none;"></div>
-      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(245,240,232,0.4); display:block; margin-bottom:0.5rem;">Phone</label><input type="tel" value="+250 788 123 456" style="width:100%; background:rgba(245,240,232,0.04); border:1px solid rgba(245,240,232,0.1); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--cream); outline:none; cursor:none;"></div>
+      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint,rgba(26,24,20,0.38)); display:block; margin-bottom:0.5rem;">Full Name</label><input type="text" value="Amara Mutabazi" style="width:100%; background:var(--input-bg,rgba(0,0,0,0.05)); border:1px solid var(--input-border,rgba(0,0,0,0.12)); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--text,#1a1814); outline:none; cursor:none;"></div>
+      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint,rgba(26,24,20,0.38)); display:block; margin-bottom:0.5rem;">Email</label><input type="email" value="amara@example.com" style="width:100%; background:var(--input-bg,rgba(0,0,0,0.05)); border:1px solid var(--input-border,rgba(0,0,0,0.12)); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--text,#1a1814); outline:none; cursor:none;"></div>
+      <div><label style="font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint,rgba(26,24,20,0.38)); display:block; margin-bottom:0.5rem;">Phone</label><input type="tel" value="+250 788 123 456" style="width:100%; background:var(--input-bg,rgba(0,0,0,0.05)); border:1px solid var(--input-border,rgba(0,0,0,0.12)); border-radius:0.65rem; padding:0.75rem 1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--text,#1a1814); outline:none; cursor:none;"></div>
       <div style="background:rgba(76,175,124,0.06); border:1px solid rgba(76,175,124,0.18); border-radius:0.75rem; padding:0.85rem 1rem; display:flex; justify-content:space-between; align-items:center;">
-        <div><div style="font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:#4caf7d;">✓ KYC Verified</div><div style="font-size:0.72rem; color:rgba(245,240,232,0.4); margin-top:0.15rem;">NIDA verified · Investor level clearance</div></div>
-        <span style="font-size:0.65rem; color:rgba(245,240,232,0.3);">Since Mar 2025</span>
+        <div><div style="font-family:'Syne',sans-serif; font-size:0.82rem; font-weight:700; color:#4caf7d;">✓ KYC Verified</div><div style="font-size:0.72rem; color:var(--text-dim,rgba(26,24,20,0.6)); margin-top:0.15rem;">NIDA verified · Investor level clearance</div></div>
+        <span style="font-size:0.65rem; color:var(--text-faint,rgba(26,24,20,0.38));">Since Mar 2025</span>
       </div>
       <button style="background:var(--gold); color:var(--ink); border:none; border-radius:0.65rem; padding:0.8rem 1.5rem; font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; cursor:none; align-self:flex-start; transition:background 0.2s;" onmouseover="this.style.background='#c49a28'" onmouseout="this.style.background='var(--gold)'">Save Changes</button>
     </div>
@@ -509,13 +523,13 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    icon.textContent = next === 'light' ? '🌙' : '☀️';
-    label.textContent = next === 'light' ? 'Dark' : 'Light';
+    icon.textContent = next === 'dark' ? '🌙' : '☀️';
+    label.textContent = next === 'dark' ? 'Dark' : 'Light';
   }
   document.addEventListener('DOMContentLoaded', function() {
-    var t = document.documentElement.getAttribute('data-theme') || 'dark';
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if (icon) { icon.textContent = t === 'light' ? '🌙' : '☀️'; label.textContent = t === 'light' ? 'Dark' : 'Light'; }
+    if (icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
   });
 </script>
 </body>

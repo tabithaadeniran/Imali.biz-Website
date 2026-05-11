@@ -1,0 +1,423 @@
+/*
+ * ─────────────────────────────────────────────────────────────
+ *  Imali.biz — Shared Design System  |  styles.css
+ *  Loaded by every page via:
+ *    land-bank/*  →  ../styles.css
+ *    wealth-hub/* →  ../styles.css
+ *    root         →  ./styles.css
+ *
+ *  What lives here: design tokens, reset, cursor, noise,
+ *  nav, footer, theme-toggle, common form inputs, card-photo
+ *  utilities, scrollbar, and responsive breakpoints.
+ *
+ *  What does NOT live here: page-specific layout, unique
+ *  components (listing cards, opp cards, forms, dashboards).
+ * ─────────────────────────────────────────────────────────────
+ */
+
+/* ══════════════════════════════════════════════════════════════
+   1. DESIGN TOKENS (CSS VARIABLES)
+   Light mode is the default; dark mode overrides follow.
+   All colours in component CSS must use var(--token-name).
+   ══════════════════════════════════════════════════════════════ */
+:root {
+  /* ── Brand constants (never change with theme) ── */
+  --ink:        #0a0a0f;
+  --cream:      #f5f0e8;
+  --terracotta: #c8521a;
+  --gold:       #d4a832;
+  --forest:     #1a3a2a;
+  --warm-white: #faf7f2;
+  --text-muted: #6b6560;
+  --sapphire:   #1a3a5c;
+  --emerald:    #1a5c3a;
+  --mist:       #e8e2d8;
+
+  /* ── Semantic tokens — LIGHT MODE (default) ── */
+  --bg:           #faf7f2;
+  --bg-alt:       #ede7db;
+  --bg-card:      #ffffff;
+  --surface:      rgba(0,0,0,0.04);
+  --surface-hover:rgba(0,0,0,0.07);
+  --border:       rgba(0,0,0,0.09);
+  --border-strong:rgba(0,0,0,0.17);
+  --text:         #1a1814;
+  --text-dim:     rgba(26,24,20,0.60);
+  --text-faint:   rgba(26,24,20,0.38);
+  --nav-bg:       rgba(250,247,242,0.97);
+  --input-bg:     rgba(0,0,0,0.05);
+  --input-border: rgba(0,0,0,0.14);
+
+  /* ── Inverted sections (hero dark bands etc.) ── */
+  --inv-bg:    #f5f0e8;
+  --inv-text:  #1a1814;
+  --inv-muted: rgba(26,24,20,0.55);
+
+  /* ── Scrollbar ── */
+  --scrollbar-thumb: rgba(200,82,26,0.30);
+
+  /* ── Per-site accent (override in page <style> if needed) ── */
+  --accent:           var(--terracotta);
+  --accent-hover:     #d65a1e;
+  --cursor-color:     var(--terracotta);
+  --cursor-ring:      rgba(200,82,26,0.35);
+}
+
+/* ── DARK MODE overrides ── */
+[data-theme="dark"] {
+  --bg:           #0a0a0f;
+  --bg-alt:       #0f0f16;
+  --bg-card:      rgba(245,240,232,0.04);
+  --surface:      rgba(245,240,232,0.04);
+  --surface-hover:rgba(245,240,232,0.08);
+  --border:       rgba(245,240,232,0.08);
+  --border-strong:rgba(245,240,232,0.15);
+  --text:         #f5f0e8;
+  --text-dim:     rgba(245,240,232,0.55);
+  --text-faint:   rgba(245,240,232,0.30);
+  --nav-bg:       rgba(10,10,15,0.97);
+  --input-bg:     rgba(245,240,232,0.06);
+  --input-border: rgba(245,240,232,0.14);
+  --inv-bg:       #f5f0e8;
+  --inv-text:     #0a0a0f;
+  --inv-muted:    #6b6560;
+  --scrollbar-thumb: rgba(212,168,50,0.30);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   2. RESET & BASE
+   ══════════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html { scroll-behavior: smooth; }
+body {
+  background:   var(--bg);
+  color:        var(--text);
+  font-family:  'DM Sans', sans-serif;
+  font-weight:  300;
+  overflow-x:   hidden;
+  cursor:       none;
+  transition:   background 0.3s, color 0.3s;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3. CUSTOM CURSOR
+   ══════════════════════════════════════════════════════════════ */
+.cursor {
+  position:       fixed;
+  width:          10px;
+  height:         10px;
+  background:     var(--cursor-color);
+  border-radius:  50%;
+  pointer-events: none;
+  z-index:        9999;
+  transform:      translate(-5px, -5px);
+}
+.cursor-ring {
+  position:       fixed;
+  width:          36px;
+  height:         36px;
+  border:         1px solid var(--cursor-ring);
+  border-radius:  50%;
+  pointer-events: none;
+  z-index:        9998;
+  transition:     transform 0.4s ease, width 0.3s, height 0.3s, border-color 0.3s;
+}
+body:has(a:hover) .cursor-ring,
+body:has(button:hover) .cursor-ring {
+  width:        56px;
+  height:       56px;
+  border-color: var(--cursor-color);
+  transform:    translate(-10px, -10px) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4. NOISE TEXTURE OVERLAY
+   ══════════════════════════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9997;
+  opacity: 0.6;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5. NAVIGATION (shared across all sites)
+   ══════════════════════════════════════════════════════════════ */
+nav {
+  position:        fixed;
+  top: 0; left: 0; right: 0;
+  z-index:         100;
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  padding:         1.25rem 4rem;
+  background:      var(--nav-bg);
+  backdrop-filter: blur(8px);
+  border-bottom:   1px solid var(--border);
+  transition:      background 0.3s, border-color 0.3s;
+}
+
+/* Logo (used on every mini-site) */
+.nav-logo-wrap {
+  display:        flex;
+  flex-direction: column;
+  gap:            0;
+  text-decoration: none;
+}
+.nav-logo {
+  font-family:     'Syne', sans-serif;
+  font-weight:     800;
+  font-size:       1.3rem;
+  letter-spacing:  -0.02em;
+  color:           var(--text);
+  display:         flex;
+  align-items:     center;
+  gap:             0.4rem;
+  transition:      color 0.3s;
+}
+.nav-logo .terracotta-dot { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+.nav-logo .gold-dot       { color: var(--gold);       font-style: italic; font-family: 'Instrument Serif', serif; }
+.nav-sub {
+  font-size:       0.58rem;
+  letter-spacing:  0.14em;
+  text-transform:  uppercase;
+  color:           var(--gold);
+  font-weight:     500;
+}
+
+/* ── Land Bank nav pattern (ul > li > a) ── */
+.nav-links {
+  display:     flex;
+  align-items: center;
+  gap:         2rem;
+  list-style:  none;
+}
+.nav-links a {
+  color:           var(--text-dim);
+  text-decoration: none;
+  font-size:       0.82rem;
+  letter-spacing:  0.06em;
+  text-transform:  uppercase;
+  font-weight:     400;
+  transition:      color 0.2s;
+  cursor:          none;
+}
+.nav-links a:hover    { color: var(--text); }
+.nav-links a.active   { color: var(--terracotta); }
+
+/* Land Bank CTA (terracotta pill) */
+.nav-links .nav-cta,
+a.nav-cta-terracotta {
+  background:     var(--terracotta) !important;
+  color:          var(--cream) !important;
+  padding:        0.55rem 1.25rem !important;
+  border-radius:  2rem !important;
+  font-weight:    500 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size:      0.82rem !important;
+  transition:     background 0.2s !important;
+  cursor:         none !important;
+}
+.nav-links .nav-cta:hover,
+a.nav-cta-terracotta:hover { background: #e05e20 !important; }
+
+/* ── Wealth Hub nav pattern (div > a) ── */
+.nav-right {
+  display:     flex;
+  align-items: center;
+  gap:         1.5rem;
+}
+.nav-link {
+  color:           var(--text-dim);
+  text-decoration: none;
+  font-size:       0.82rem;
+  transition:      color 0.2s;
+  cursor:          none;
+}
+.nav-link:hover { color: var(--text); }
+
+/* Wealth Hub CTA (gold pill) */
+.nav-right .nav-cta,
+a.nav-cta-gold {
+  background:    var(--gold);
+  color:         var(--ink) !important;
+  border-radius: 2rem;
+  padding:       0.5rem 1.25rem;
+  font-size:     0.82rem;
+  font-weight:   600;
+  text-decoration: none;
+  cursor:        none;
+  transition:    background 0.2s;
+  font-family:   'Syne', sans-serif;
+}
+.nav-right .nav-cta:hover,
+a.nav-cta-gold:hover { background: #c49a28; }
+
+/* ══════════════════════════════════════════════════════════════
+   6. THEME TOGGLE BUTTON
+   ══════════════════════════════════════════════════════════════ */
+.theme-toggle {
+  background:  var(--surface);
+  border:      1px solid var(--border);
+  border-radius: 2rem;
+  padding:     0.35rem 0.75rem;
+  cursor:      none;
+  display:     inline-flex;
+  align-items: center;
+  gap:         0.5rem;
+  font-size:   0.78rem;
+  color:       var(--text-dim);
+  transition:  background 0.2s, border-color 0.2s, color 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  color:      var(--text);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7. FOOTER (always dark — brand constant across all themes)
+   ══════════════════════════════════════════════════════════════ */
+footer {
+  background:  #060609;
+  padding:     2rem 4rem;
+  border-top:  1px solid rgba(245,240,232,0.05);
+  display:     flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-logo {
+  font-family:     'Syne', sans-serif;
+  font-weight:     800;
+  font-size:       1.1rem;
+  color:           var(--cream);
+  text-decoration: none;
+}
+.footer-logo span {
+  color:       var(--terracotta);
+  font-style:  italic;
+  font-family: 'Instrument Serif', serif;
+}
+.footer-logo .gold-accent { color: var(--gold); }
+.footer-links-simple {
+  display:    flex;
+  gap:        1.5rem;
+  list-style: none;
+}
+.footer-links-simple a {
+  color:           rgba(245,240,232,0.4);
+  text-decoration: none;
+  font-size:       0.8rem;
+  transition:      color 0.2s;
+  cursor:          none;
+}
+.footer-links-simple a:hover { color: var(--cream); }
+
+/* ══════════════════════════════════════════════════════════════
+   8. SHARED FORM INPUTS
+   ══════════════════════════════════════════════════════════════ */
+.filter-input {
+  background:   var(--input-bg);
+  border:       1px solid var(--input-border);
+  border-radius:0.6rem;
+  padding:      0.55rem 1rem;
+  font-family:  'DM Sans', sans-serif;
+  font-size:    0.82rem;
+  color:        var(--text);
+  outline:      none;
+  transition:   border-color 0.2s;
+  cursor:       none;
+}
+.filter-input::placeholder { color: var(--text-faint); }
+.filter-input:focus         { border-color: rgba(200,82,26,0.5); }
+
+.filter-select {
+  background:   var(--input-bg);
+  border:       1px solid var(--input-border);
+  border-radius:0.6rem;
+  padding:      0.55rem 1rem;
+  font-family:  'DM Sans', sans-serif;
+  font-size:    0.82rem;
+  color:        var(--text);
+  outline:      none;
+  cursor:       none;
+  transition:   border-color 0.2s;
+  appearance:   none;
+}
+.filter-select:focus   { border-color: rgba(212,168,50,0.4); }
+.filter-select option  { background: var(--bg-alt); color: var(--text); }
+
+/* ══════════════════════════════════════════════════════════════
+   9. SHARED CHIP / BADGE
+   ══════════════════════════════════════════════════════════════ */
+.chip {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: 0.4rem;
+  padding:       0.25rem 0.6rem;
+  font-size:     0.68rem;
+  color:         var(--text-dim);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   10. CARD PHOTO UTILITIES
+   Real photos with cover-fit, zoom-on-hover, gradient overlay.
+   Applied to .card-img-photo (land listings) and
+   .opp-thumb-photo (wealth hub opportunity cards).
+   ══════════════════════════════════════════════════════════════ */
+.card-photo-img {
+  width:        100%;
+  height:       100%;
+  object-fit:   cover;
+  object-position: center;
+  display:      block;
+  transition:   transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+/* Parent wrapper must be position:relative; overflow:hidden */
+.card-photo-wrap { position: relative; width: 100%; height: 100%; overflow: hidden; }
+.card-photo-wrap:hover .card-photo-img { transform: scale(1.07); }
+
+/* Gradient overlay that fades the bottom of card images */
+.card-photo-overlay {
+  position:   absolute;
+  inset:      0;
+  background: linear-gradient(
+    to top,
+    rgba(10,10,15,0.55) 0%,
+    rgba(10,10,15,0.15) 45%,
+    transparent        100%
+  );
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   11. SCROLLBAR
+   ══════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+/* ══════════════════════════════════════════════════════════════
+   12. COMMON ANIMATIONS
+   ══════════════════════════════════════════════════════════════ */
+@keyframes blink    { 0%,100%{opacity:1}  50%{opacity:0.3} }
+@keyframes fadeUp   { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse    { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+/* ══════════════════════════════════════════════════════════════
+   13. RESPONSIVE BREAKPOINTS (nav & footer only)
+   Page-level grid/layout breakpoints live in each page's <style>
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  nav    { padding: 1rem 1.5rem; }
+  footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+  .footer-links-simple { flex-wrap: wrap; justify-content: center; }
+}
