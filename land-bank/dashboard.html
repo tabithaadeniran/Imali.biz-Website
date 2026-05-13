@@ -90,11 +90,11 @@
   .notif-dot { position: absolute; top: 6px; right: 6px; width: 7px; height: 7px; background: var(--terracotta); border-radius: 50%; border: 1.5px solid var(--bg); animation: blink 2s ease-in-out infinite; }
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-  /* LAYOUT */
-  .app-layout { display: flex; padding-top: 60px; min-height: 100vh; }
+  /* LAYOUT — app-shell: sidebar + main sit side-by-side below the fixed topnav */
+  .app-layout { display: flex; margin-top: 60px; height: calc(100vh - 60px); overflow: hidden; }
 
-  /* SIDEBAR */
-  .sidebar { width: var(--sidebar-w); flex-shrink: 0; position: fixed; top: 60px; left: 0; bottom: 0; background: var(--bg-card); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; }
+  /* SIDEBAR — natural flex child on the left, scrolls independently */
+  .sidebar { width: var(--sidebar-w); flex-shrink: 0; height: 100%; overflow-y: auto; background: var(--bg-card); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
   .sidebar-nav { padding: 1.5rem 0; flex: 1; }
   .sidebar-section-label { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); padding: 0 1.25rem; margin: 0.75rem 0 0.5rem; }
   .sidebar-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.65rem 1.25rem; cursor: none; transition: background 0.2s, color 0.2s; text-decoration: none; color: var(--text-dim); font-size: 0.82rem; position: relative; border-radius: 0; }
@@ -108,8 +108,9 @@
   .sidebar-back { display: flex; align-items: center; gap: 0.5rem; color: var(--text-faint); font-size: 0.75rem; text-decoration: none; cursor: none; transition: color 0.2s; }
   .sidebar-back:hover { color: var(--text-dim); }
 
-  /* MAIN CONTENT */
-  .main-content { flex: 1; margin-left: var(--sidebar-w); min-height: calc(100vh - 60px); }
+  /* MAIN CONTENT — flex: 1 takes remaining width, scrolls independently */
+  .main-content { flex: 1; min-width: 0; height: 100%; overflow-y: auto; }
+  .listing-thumb { width: 40px; height: 32px; background: var(--bg-alt); border-radius: 6px; overflow: hidden; flex-shrink: 0; }
 
   /* TAB PANELS */
   .tab-panel { display: none; padding: 2.5rem 3rem; }
@@ -159,8 +160,7 @@
   .action-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.3rem 0.6rem; font-size: 0.7rem; color: var(--text-dim); cursor: none; transition: background 0.2s, color 0.2s; }
   .action-btn:hover { background: var(--surface-hover); color: var(--text); }
   .action-btn.danger:hover { background: rgba(239,83,80,0.1); color: #ef5350; border-color: rgba(239,83,80,0.2); }
-  .listing-thumb { width: 40px; height: 32px; background: #0e1219; border-radius: 6px; overflow: hidden; flex-shrink: 0; }
-  .listing-thumb svg { width: 100%; height: 100%; }
+  .listing-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .listing-name-cell { display: flex; align-items: center; gap: 0.75rem; }
   .listing-name { font-weight: 500; color: var(--text); }
   .listing-loc { font-size: 0.72rem; color: var(--text-faint); }
@@ -281,7 +281,6 @@
   }
   @media (max-width: 900px) {
     .sidebar { display: none; }
-    .main-content { margin-left: 0; }
     .tab-panel { padding: 1.5rem; }
     .topnav { padding: 0 1.25rem; }
     .trust-hero { flex-direction: column; gap: 1.5rem; }
@@ -321,7 +320,7 @@
   <div class="topnav-right">
     <a href="listings.html" class="topnav-link">Browse Listings</a>
     <a href="list-land.html" class="topnav-link">+ List Land</a>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
     <div class="notif-btn">🔔<div class="notif-dot"></div></div>
     <div class="user-pill">
       <div class="user-avatar">JM</div>
@@ -337,7 +336,7 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar">
-    <nav class="sidebar-nav">
+    <div class="sidebar-nav">
       <div class="sidebar-section-label">Main</div>
       <a href="#" class="sidebar-item active" data-tab="overview">
         <span class="sidebar-icon">📊</span> Overview
@@ -365,7 +364,7 @@
       <a href="#" class="sidebar-item" data-tab="settings">
         <span class="sidebar-icon">⚙️</span> Settings
       </a>
-    </nav>
+    </div>
     <div class="sidebar-footer">
       <a href="index.html" class="sidebar-back">← Back to Land Bank</a>
     </div>
@@ -425,7 +424,7 @@
                 <tr>
                   <td>
                     <div class="listing-name-cell">
-                      <div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#0e1219"/><path d="M0,18 Q10,12 20,16 Q30,10 40,14 L40,32 L0,32Z" fill="#1a3a2a"/></svg></div>
+                      <div class="listing-thumb"><img src="https://images.unsplash.com/photo-1708772565599-2c4e4b3ed9db?w=80&h=64&fit=crop&q=80" alt="Kimironko Plot"></div>
                       <div><div class="listing-name">Kimironko Plot</div><div class="listing-loc">Gasabo, Kigali</div></div>
                     </div>
                   </td>
@@ -435,7 +434,7 @@
                 <tr>
                   <td>
                     <div class="listing-name-cell">
-                      <div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#0e1015"/><path d="M0,20 Q10,14 20,18 Q30,12 40,16 L40,32 L0,32Z" fill="#0f1f2a"/></svg></div>
+                      <div class="listing-thumb"><img src="https://images.unsplash.com/photo-1682773083896-95176d8aecf8?w=80&h=64&fit=crop&q=80" alt="Remera Corner Plot"></div>
                       <div><div class="listing-name">Remera Corner Plot</div><div class="listing-loc">Gasabo, Kigali</div></div>
                     </div>
                   </td>
@@ -445,7 +444,7 @@
                 <tr>
                   <td>
                     <div class="listing-name-cell">
-                      <div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#100e14"/><path d="M0,18 Q10,13 20,16 Q30,11 40,14 L40,32 L0,32Z" fill="#251a1a"/></svg></div>
+                      <div class="listing-thumb"><img src="https://images.unsplash.com/photo-1668875438994-4388304392ef?w=80&h=64&fit=crop&q=80" alt="Gikondo Commercial"></div>
                       <div><div class="listing-name">Gikondo Commercial</div><div class="listing-loc">Kicukiro, Kigali</div></div>
                     </div>
                   </td>
@@ -532,7 +531,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><div class="listing-name-cell"><div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#0e1219"/><path d="M0,18 Q10,12 20,16 Q30,10 40,14 L40,32 L0,32Z" fill="#1a3a2a"/></svg></div><div><div class="listing-name">Kimironko Residential Plot</div><div class="listing-loc">Gasabo, Kigali · 2,400 sqm</div></div></div></td>
+              <td><div class="listing-name-cell"><div class="listing-thumb"><img src="https://images.unsplash.com/photo-1708772565599-2c4e4b3ed9db?w=80&h=64&fit=crop&q=80" alt="Kimironko Residential Plot"></div><div><div class="listing-name">Kimironko Residential Plot</div><div class="listing-loc">Gasabo, Kigali · 2,400 sqm</div></div></div></td>
               <td><span class="status-pill status-active">● Active</span></td>
               <td>RWF 48M</td>
               <td>482</td>
@@ -541,7 +540,7 @@
               <td><div class="table-actions"><button class="action-btn">Edit</button><button class="action-btn">View</button><button class="action-btn danger">Archive</button></div></td>
             </tr>
             <tr>
-              <td><div class="listing-name-cell"><div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#0e1015"/><path d="M0,20 Q10,14 20,18 Q30,12 40,16 L40,32 L0,32Z" fill="#0f1f2a"/></svg></div><div><div class="listing-name">Remera Corner Plot</div><div class="listing-loc">Gasabo, Kigali · 3,200 sqm</div></div></div></td>
+              <td><div class="listing-name-cell"><div class="listing-thumb"><img src="https://images.unsplash.com/photo-1682773083896-95176d8aecf8?w=80&h=64&fit=crop&q=80" alt="Remera Corner Plot"></div><div><div class="listing-name">Remera Corner Plot</div><div class="listing-loc">Gasabo, Kigali · 3,200 sqm</div></div></div></td>
               <td><span class="status-pill status-offer">◑ Under Offer</span></td>
               <td>RWF 220M</td>
               <td>391</td>
@@ -550,7 +549,7 @@
               <td><div class="table-actions"><button class="action-btn">Edit</button><button class="action-btn">View Offer</button></div></td>
             </tr>
             <tr>
-              <td><div class="listing-name-cell"><div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#100e14"/><path d="M0,18 Q10,13 20,16 Q30,11 40,14 L40,32 L0,32Z" fill="#251a1a"/></svg></div><div><div class="listing-name">Gikondo Commercial Land</div><div class="listing-loc">Kicukiro, Kigali · 5,800 sqm</div></div></div></td>
+              <td><div class="listing-name-cell"><div class="listing-thumb"><img src="https://images.unsplash.com/photo-1668875438994-4388304392ef?w=80&h=64&fit=crop&q=80" alt="Gikondo Commercial Land"></div><div><div class="listing-name">Gikondo Commercial Land</div><div class="listing-loc">Kicukiro, Kigali · 5,800 sqm</div></div></div></td>
               <td><span class="status-pill status-active">● Active</span></td>
               <td>RWF 145M</td>
               <td>274</td>
@@ -559,7 +558,7 @@
               <td><div class="table-actions"><button class="action-btn">Edit</button><button class="action-btn">View</button><button class="action-btn danger">Archive</button></div></td>
             </tr>
             <tr>
-              <td><div class="listing-name-cell"><div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#0e1219"/><path d="M0,20 Q10,15 20,18 Q30,13 40,16 L40,32 L0,32Z" fill="#1a3a2a" opacity="0.6"/></svg></div><div><div class="listing-name">Nyamirambo Mixed Plot</div><div class="listing-loc">Nyarugenge, Kigali · 800 sqm</div></div></div></td>
+              <td><div class="listing-name-cell"><div class="listing-thumb"><img src="https://images.unsplash.com/photo-1682773083924-6f0f5a700d8b?w=80&h=64&fit=crop&q=80" alt="Nyamirambo Mixed Plot"></div><div><div class="listing-name">Nyamirambo Mixed Plot</div><div class="listing-loc">Nyarugenge, Kigali · 800 sqm</div></div></div></td>
               <td><span class="status-pill status-active">● Active</span></td>
               <td>RWF 22M</td>
               <td>100</td>
@@ -568,7 +567,7 @@
               <td><div class="table-actions"><button class="action-btn">Edit</button><button class="action-btn">View</button><button class="action-btn danger">Archive</button></div></td>
             </tr>
             <tr>
-              <td><div class="listing-name-cell"><div class="listing-thumb"><svg viewBox="0 0 40 32"><rect width="40" height="32" fill="#0c101a"/><path d="M0,18 Q10,13 20,16 Q30,11 40,14 L40,32 L0,32Z" fill="#0f2035"/></svg></div><div><div class="listing-name">Lakeview Rubavu Plot</div><div class="listing-loc">Rubavu · 1,500 sqm · Sold</div></div></div></td>
+              <td><div class="listing-name-cell"><div class="listing-thumb"><img src="https://images.unsplash.com/photo-1651860282296-47055c68580e?w=80&h=64&fit=crop&q=80" alt="Lakeview Rubavu Plot"></div><div><div class="listing-name">Lakeview Rubavu Plot</div><div class="listing-loc">Rubavu · 1,500 sqm · Sold</div></div></div></td>
               <td><span class="status-pill status-sold">✓ Sold</span></td>
               <td>RWF 58M</td>
               <td>318</td>
@@ -966,12 +965,12 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = next === 'dark' ? '🌙' : '☀️'; label.textContent = next === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
   }
   document.addEventListener('DOMContentLoaded', function() {
     var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
   });
 </script>
 </body>

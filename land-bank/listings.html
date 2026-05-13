@@ -103,7 +103,7 @@
   .badge-hot   { background: var(--gold); color: var(--ink); }
   .badge-offer { background: rgba(76,175,125,0.85); color: white; }
   .card-verified { position: absolute; top: 0.65rem; right: 0.65rem; background: rgba(10,10,15,0.82); border: 1px solid rgba(76,175,125,0.4); color: #4caf7d; font-size: 0.6rem; padding: 0.2rem 0.55rem; border-radius: 1rem; backdrop-filter: blur(4px); z-index: 2; }
-  .save-btn { position: absolute; bottom: 0.65rem; right: 0.65rem; background: rgba(10,10,15,0.75); border: 1px solid rgba(245,240,232,0.15); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: none; backdrop-filter: blur(4px); transition: background 0.2s, border-color 0.2s; z-index: 2; }
+  .save-btn { position: absolute; bottom: 0.65rem; right: 0.65rem; color: rgba(245,240,232,0.9); background: rgba(10,10,15,0.75); border: 1px solid rgba(245,240,232,0.15); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: none; backdrop-filter: blur(4px); transition: background 0.2s, border-color 0.2s; z-index: 2; }
   .save-btn:hover { background: rgba(200,82,26,0.25); border-color: rgba(200,82,26,0.4); }
   .save-btn.saved { background: rgba(200,82,26,0.2); border-color: rgba(200,82,26,0.4); }
 
@@ -203,7 +203,7 @@
     <li><a href="list-land.html">List Your Land</a></li>
     <li><a href="valuation.html">Valuation</a></li>
     <li><a href="dashboard.html">Dashboard</a></li>
-    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
     <li><a href="signup.html" class="nav-cta">+ List Land</a></li>
   </ul>
 </nav>
@@ -710,8 +710,8 @@
   function syncThemeUI(t) {
     const icon  = document.getElementById('themeIcon');
     const label = document.getElementById('themeLabel');
-    if (icon)  icon.textContent  = t === 'dark' ? '🌙' : '☀️';
-    if (label) label.textContent = t === 'dark' ? 'Dark' : 'Light';
+    if (icon)  icon.textContent  = t === 'dark' ? '☀️' : '🌙';
+    if (label) label.textContent = t === 'dark' ? 'Light' : 'Dark';
   }
   document.addEventListener('DOMContentLoaded', () => {
     syncThemeUI(document.documentElement.getAttribute('data-theme') || 'light');

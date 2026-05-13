@@ -248,9 +248,7 @@
     <li><a href="tokenisation.html" class="nav-link">Tokenisation</a></li>
     <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
   </ul>
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
-    <span id="themeIcon">☀️</span><span id="themeLabel">Light</span>
-  </button>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
   <a href="invest.html" class="nav-cta">Start Investing</a>
 </nav>
 
@@ -290,6 +288,9 @@
     <div class="opp-preview">
       <!-- Preview card 1 -->
       <div class="opp-card-mini">
+        <div style="height:90px;margin:-1.25rem -1.5rem 1rem;border-radius:1rem 1rem 0 0;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=300&fit=crop&q=80&auto=format" alt="Kimironko Mixed-Use Block" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <div class="opp-mini-top">
           <div class="opp-mini-name">Kimironko Mixed-Use Block</div>
           <span class="opp-mini-type">Fractional</span>
@@ -318,6 +319,9 @@
       </div>
       <!-- Preview card 2 -->
       <div class="opp-card-mini">
+        <div style="height:90px;margin:-1.25rem -1.5rem 1rem;border-radius:1rem 1rem 0 0;overflow:hidden;">
+          <img src="https://images.pexels.com/photos/10902660/pexels-photo-10902660.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop" alt="Huye Student Housing Campus" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <div class="opp-mini-top">
           <div class="opp-mini-name">Huye Student Housing Campus</div>
           <span class="opp-mini-type">Fractional</span>
@@ -346,6 +350,9 @@
       </div>
       <!-- Preview card 3 -->
       <div class="opp-card-mini">
+        <div style="height:90px;margin:-1.25rem -1.5rem 1rem;border-radius:1rem 1rem 0 0;overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=600&h=300&fit=crop&q=80&auto=format" alt="Rubavu Lakefront Villa Plots" style="width:100%;height:100%;object-fit:cover;">
+        </div>
         <div class="opp-mini-top">
           <div class="opp-mini-name">Rubavu Lakefront Villa Plots</div>
           <span class="opp-mini-type" style="background:rgba(26,58,92,0.3); border-color:rgba(26,58,92,0.5); color:#6aacf0;">Full Asset</span>
@@ -612,12 +619,12 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = next === 'dark' ? '🌙' : '☀️'; label.textContent = next === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
   }
   document.addEventListener('DOMContentLoaded', function() {
     var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if (icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
+    if (icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
   });
 </script>
 </body>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -347,8 +347,8 @@
       <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
     </ul>
     <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle light/dark mode">
-      <span class="toggle-icon" id="themeIcon">☀️</span>
-      <span id="themeLabel">Light</span>
+      <span class="toggle-icon" id="themeIcon">🌙</span>
+      <span id="themeLabel">Dark</span>
     </button>
     <a href="invest.html" class="nav-cta">Start Investing</a>
   </div>
@@ -984,8 +984,8 @@ function toggleTheme() {
 function updateToggleUI(theme) {
   var icon = document.getElementById('themeIcon');
   var label = document.getElementById('themeLabel');
-  if (theme === 'dark') { icon.textContent = '🌙'; label.textContent = 'Dark'; }
-  else { icon.textContent = '☀️'; label.textContent = 'Light'; }
+  if (theme === 'dark') { icon.textContent = '☀️'; label.textContent = 'Light'; }
+  else { icon.textContent = '🌙'; label.textContent = 'Dark'; }
 }
 document.addEventListener('DOMContentLoaded', function() {
   updateToggleUI(document.documentElement.getAttribute('data-theme') || 'light');

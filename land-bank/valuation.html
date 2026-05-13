@@ -126,6 +126,7 @@
   input:focus, select:focus { border-color: rgba(200,82,26,0.5); }
   input::placeholder { color: var(--text-faint); }
   select option { background: var(--bg-alt); }
+  select:disabled { opacity: 0.4; cursor: not-allowed; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
   .field-separator { height: 1px; background: var(--border); margin: 1.75rem 0; }
 
@@ -286,7 +287,7 @@
     <li><a href="list-land.html">List Your Land</a></li>
     <li><a href="valuation.html" class="active">Valuation</a></li>
     <li><a href="dashboard.html">Dashboard</a></li>
-    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
     <li><a href="signup.html" class="nav-cta">+ List Land</a></li>
   </ul>
 </nav>
@@ -321,8 +322,31 @@
     </div>
 
     <div class="field-group">
-      <label>District / Area</label>
-      <input type="text" id="vDistrict" placeholder="e.g. Gasabo, Kimironko, Musanze"/>
+      <label>District</label>
+      <select id="vDistrict">
+        <option value="">— Select Province first —</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Sector</label>
+      <select id="vSector" disabled>
+        <option value="">— Select District first —</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Cell</label>
+      <select id="vCell" disabled>
+        <option value="">— Select Sector first —</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Village</label>
+      <select id="vVillage" disabled>
+        <option value="">— Select Cell first —</option>
+      </select>
     </div>
 
     <div class="field-row">
@@ -354,12 +378,42 @@
     </div>
 
     <div class="field-group">
-      <label>Title Type</label>
-      <div class="radio-group" id="vTitleGroup">
-        <div class="radio-btn selected" data-v="freehold">📄 Freehold</div>
-        <div class="radio-btn" data-v="leasehold">📋 Leasehold</div>
-        <div class="radio-btn" data-v="digital">💻 Digital Title</div>
-        <div class="radio-btn" data-v="pending">⏳ Pending</div>
+      <label>Zoning Classification</label>
+      <select id="vZoning">
+        <option value="">— Not specified —</option>
+        <option value="R1">R1 — Low Density Residential</option>
+        <option value="R2">R2 — Medium Density Residential</option>
+        <option value="R3">R3 — High Density Residential</option>
+        <option value="C1">C1 — Local Commercial</option>
+        <option value="C2">C2 — General Commercial</option>
+        <option value="C3">C3 — Central Business District</option>
+        <option value="MU">MU — Mixed Use</option>
+        <option value="M1">M1 — Light Industrial / Mixed</option>
+        <option value="M2">M2 — Heavy Industrial</option>
+        <option value="AG">AG — Agricultural</option>
+        <option value="GR">GR — Green Space / Reserve</option>
+        <option value="IN">IN — Institutional</option>
+        <option value="T">T — Transport / Infrastructure</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>Land Tenure Type</label>
+      <div class="radio-group" id="vTenureGroup">
+        <div class="radio-btn selected" data-v="emphyteutic">📋 Emphyteutic Lease</div>
+        <div class="radio-btn" data-v="freehold">🏛️ Freehold</div>
+        <div class="radio-btn" data-v="condominium">🏢 Condominium</div>
+        <div class="radio-btn" data-v="sublease">🔄 Sub-lease</div>
+        <div class="radio-btn" data-v="investment">📈 Investment Lease</div>
+        <div class="radio-btn" data-v="concession">🤝 Land Concession</div>
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label>Title Document Format</label>
+      <div class="radio-group" id="vTitleFormatGroup">
+        <div class="radio-btn selected" data-v="etitle">💻 e-Title (digital)</div>
+        <div class="radio-btn" data-v="physical">📄 Physical Title (paper)</div>
       </div>
     </div>
 
@@ -369,7 +423,9 @@
         <option value="flat">Flat (0–2°)</option>
         <option value="gentle">Gentle slope (2–8°)</option>
         <option value="moderate">Moderate slope (8–15°)</option>
-        <option value="steep">Steep (15°+)</option>
+        <option value="steep">Steep (15–30°)</option>
+        <option value="verysteep">Very Steep (30–50°)</option>
+        <option value="extreme">Extreme (50°+)</option>
       </select>
     </div>
 
@@ -515,9 +571,352 @@
   }
   animateRing();
 
+  // ── RWANDA ADMINISTRATIVE DATA ──────────────────────────────────────
+  // Province → District → Sector → Cell → [Villages]
+  const V = ['Amahoro','Inshuti','Inzira','Isangano','Ubumwe','Inkunga','Iterambere','Urukundo'];
+  const V2 = ['Agahe','Akabuye','Akagera','Inkingi','Urugero','Cyabageni','Amajyambere','Agatete'];
+  const V3 = ['Akabuga','Cyivugiza','Kagere','Inkunga','Rugarama','Karuruma','Amahoro','Inshuti'];
+  const V4 = ['Agatare','Akabacuzi','Cyabageni','Urugero','Amajyambere','Kagere','Inkingi','Akabuga'];
+
+  const rwandaGeo = {
+    kigali: { districts: {
+      gasabo: { label:'Gasabo', sectors:{
+        bumbogo:    { label:'Bumbogo',    cells:{ bumbogo:V,    cyaruzinge:V2, murama:V3 }},
+        gaculiro:   { label:'Gaculiro',   cells:{ gaculiro:V2,  kagugu:V3,     kinyinya:V4 }},
+        gikomero:   { label:'Gikomero',   cells:{ gikomero:V3,  kanogo:V4,     rebero:V }},
+        gisozi:     { label:'Gisozi',     cells:{ gisozi:V4,    kamahwa:V,     rutunga:V2 }},
+        jabana:     { label:'Jabana',     cells:{ jabana:V,     murama:V2,     nyamugali:V3 }},
+        kacyiru:    { label:'Kacyiru',    cells:{ kamatamu:V,   kagugu:V2,     kacyiru:V3,  kabuye:V4 }},
+        kimihurura: { label:'Kimihurura', cells:{ kimihurura:V2,rugenge:V3,    gacuriro:V4 }},
+        kimironko:  { label:'Kimironko',  cells:{ bibare:V3,    kibagabaga:V4, kimironko:V, remera:V2 }},
+        kinyinya:   { label:'Kinyinya',   cells:{ kinyinya:V4,  nyabisindu:V,  rusororo:V2 }},
+        ndera:      { label:'Ndera',      cells:{ ndera:V,      rutunga:V2,    nyagasambu:V3 }},
+        nduba:      { label:'Nduba',      cells:{ nduba:V2,     rusheshe:V3,   cyungo:V4 }},
+        remera:     { label:'Remera',     cells:{ nyarutarama:V,okuryangabo:V2,remera:V3,   rukiri:V4 }},
+        rusororo:   { label:'Rusororo',   cells:{ rusororo:V4,  mutsindo:V,    nyagasambu:V2 }},
+        rutunga:    { label:'Rutunga',    cells:{ rutunga:V3,   cyamukuza:V4,  bweya:V }}
+      }},
+      kicukiro: { label:'Kicukiro', sectors:{
+        gahanga:    { label:'Gahanga',    cells:{ gahanga:V,    nyagasambu:V2, ruhanga:V3 }},
+        gatenga:    { label:'Gatenga',    cells:{ gatenga:V2,   kabeza:V3,     ruhangiro:V4 }},
+        gikondo:    { label:'Gikondo',    cells:{ gikondo:V3,   kicukiro:V4,   kabuga:V }},
+        kagarama:   { label:'Kagarama',   cells:{ kagarama:V4,  nyakabanda:V,  kagoma:V2 }},
+        kanombe:    { label:'Kanombe',    cells:{ kanombe:V,    busanza:V2,    gahanga:V3 }},
+        kicukiro:   { label:'Kicukiro',   cells:{ kicukiro:V2,  kigarama:V3,   rebero:V4 }},
+        kigarama:   { label:'Kigarama',   cells:{ kigarama:V3,  mayange:V4,    nyarugenge:V }},
+        masaka:     { label:'Masaka',     cells:{ masaka:V4,    ruyenzi:V,     munyinya:V2 }},
+        niboye:     { label:'Niboye',     cells:{ niboye:V,     rugarama:V2,   kagugu:V3 }},
+        nyarugunga: { label:'Nyarugunga', cells:{ nyarugunga:V2,rebero:V3,     mbagagaza:V4 }}
+      }},
+      nyarugenge: { label:'Nyarugenge', sectors:{
+        gitega:     { label:'Gitega',     cells:{ gitega:V,     nyamirambo:V2, kimisagara:V3 }},
+        kanyinya:   { label:'Kanyinya',   cells:{ kanyinya:V2,  rugunga:V3,    gihanga:V4 }},
+        kigali:     { label:'Kigali',     cells:{ kigali:V3,    nyarugenge:V4, gakinjiro:V }},
+        kimisagara: { label:'Kimisagara', cells:{ kimisagara:V4,kivugiza:V,    rwezamenyo:V2 }},
+        mageragere: { label:'Mageragere', cells:{ mageragere:V, nyabageni:V2,  kagugu:V3 }},
+        muhima:     { label:'Muhima',     cells:{ muhima:V2,    nyamabuye:V3,  biryogo:V4 }},
+        nyakabanda: { label:'Nyakabanda', cells:{ nyakabanda:V3,rwampara:V4,   kimisagara:V }},
+        nyamirambo: { label:'Nyamirambo', cells:{ nyamirambo:V4,biryogo:V,     gitega:V2 }},
+        nyarugenge: { label:'Nyarugenge', cells:{ nyarugenge:V, rwezamenyo:V2, kimisagara:V3 }},
+        rwezamenyo: { label:'Rwezamenyo', cells:{ rwezamenyo:V2,agakagari:V3,  gitega:V4 }}
+      }}
+    }},
+    northern: { districts: {
+      burera: { label:'Burera', sectors:{
+        bungwe:     { label:'Bungwe',     cells:{ bungwe:V,     kinyababa:V2,  rugari:V3 }},
+        butaro:     { label:'Butaro',     cells:{ butaro:V2,    kagogo:V3,     bungwe:V4 }},
+        cyanika:    { label:'Cyanika',    cells:{ cyanika:V3,   gasiza:V4,     nemba:V }},
+        cyeru:      { label:'Cyeru',      cells:{ cyeru:V4,     mpenge:V,      rugarama:V2 }},
+        gahunga:    { label:'Gahunga',    cells:{ gahunga:V,    gatebe:V2,     kinoni:V3 }},
+        kivuye:     { label:'Kivuye',     cells:{ kivuye:V2,    nemba:V3,      ruhunde:V4 }},
+        rugarama:   { label:'Rugarama',   cells:{ rugarama:V3,  rugendabari:V4,rusarabuye:V }},
+        rwerere:    { label:'Rwerere',    cells:{ rwerere:V4,   kinoni:V,      gitovu:V2 }}
+      }},
+      gakenke: { label:'Gakenke', sectors:{
+        busengo:    { label:'Busengo',    cells:{ busengo:V,    nkondo:V2,     janja:V3 }},
+        coko:       { label:'Coko',       cells:{ coko:V2,      mataba:V3,     mugunga:V4 }},
+        cyabingo:   { label:'Cyabingo',   cells:{ cyabingo:V3,  rushashi:V4,   gashenyi:V }},
+        gakenke:    { label:'Gakenke',    cells:{ gakenke:V4,   kivuruga:V,    muzo:V2 }},
+        kamubuga:   { label:'Kamubuga',   cells:{ kamubuga:V,   karambo:V2,    minazi:V3 }},
+        minazi:     { label:'Minazi',     cells:{ minazi:V2,    ruli:V3,       rusasa:V4 }},
+        muhondo:    { label:'Muhondo',    cells:{ muhondo:V3,   muzo:V4,       muyongwe:V }}
+      }},
+      gicumbi: { label:'Gicumbi', sectors:{
+        bukure:     { label:'Bukure',     cells:{ bukure:V,     bwisige:V2,    rutare:V3 }},
+        byumba:     { label:'Byumba',     cells:{ byumba:V2,    cyumba:V3,     miyove:V4 }},
+        gicumbi:    { label:'Gicumbi',    cells:{ gicumbi:V3,   kaniga:V4,     manyagiro:V }},
+        miyove:     { label:'Miyove',     cells:{ miyove:V4,    mutete:V,      nyamiyaga:V2 }},
+        nyankenke:  { label:'Nyankenke',  cells:{ nyankenke:V,  rubaya:V2,     rukomo:V3 }},
+        rukomo:     { label:'Rukomo',     cells:{ rukomo:V2,    rushaki:V3,    shangasha:V4 }},
+        rutare:     { label:'Rutare',     cells:{ rutare:V3,    shangasha:V4,  ruvune:V }}
+      }},
+      musanze: { label:'Musanze', sectors:{
+        busogo:     { label:'Busogo',     cells:{ busogo:V,     nyange:V2,     nkotsi:V3 }},
+        cyuve:      { label:'Cyuve',      cells:{ cyuve:V2,     gashaki:V3,    kinigi:V4 }},
+        gataraga:   { label:'Gataraga',   cells:{ gataraga:V3,  nkotsi:V4,     shingiro:V }},
+        kimonyi:    { label:'Kimonyi',    cells:{ kimonyi:V4,   muko:V,        remera:V2 }},
+        kinigi:     { label:'Kinigi',     cells:{ kinigi:V,     nyange:V2,     gacaca:V3 }},
+        muhoza:     { label:'Muhoza',     cells:{ muhoza:V2,    remera:V3,     cyuve:V4 }},
+        musanze:    { label:'Musanze',    cells:{ musanze:V3,   rwaza:V4,      kimonyi:V }},
+        shingiro:   { label:'Shingiro',   cells:{ shingiro:V4,  gacaca:V,      muko:V2 }}
+      }},
+      rulindo: { label:'Rulindo', sectors:{
+        base:       { label:'Base',       cells:{ base:V,       burega:V2,     buyoga:V3 }},
+        bushoki:    { label:'Bushoki',    cells:{ bushoki:V2,   buyoga:V3,     cyinzuzi:V4 }},
+        cyinzuzi:   { label:'Cyinzuzi',   cells:{ cyinzuzi:V3,  cyungo:V4,     ntarabana:V }},
+        kinihira:   { label:'Kinihira',   cells:{ kinihira:V4,  kisaro:V,      masoro:V2 }},
+        masoro:     { label:'Masoro',     cells:{ masoro:V,     mbogo:V2,      rukozo:V3 }},
+        murambi:    { label:'Murambi',    cells:{ murambi:V2,   ngoma:V3,      rusiga:V4 }},
+        shyorongi:  { label:'Shyorongi',  cells:{ shyorongi:V3, tumba:V4,      cyungo:V }}
+      }}
+    }},
+    southern: { districts: {
+      gisagara: { label:'Gisagara', sectors:{
+        gikonko:    { label:'Gikonko',    cells:{ gikonko:V,    kigembe:V2,    muganza:V3 }},
+        gisagara:   { label:'Gisagara',   cells:{ gisagara:V2,  kansi:V3,      ndora:V4 }},
+        kibirizi:   { label:'Kibirizi',   cells:{ kibirizi:V3,  muganza:V4,    nyanza:V }},
+        muganza:    { label:'Muganza',    cells:{ muganza:V4,   nyanza:V,      save:V2 }},
+        ndora:      { label:'Ndora',      cells:{ ndora:V,      save:V2,       kansi:V3 }},
+        nyanza:     { label:'Nyanza',     cells:{ nyanza:V2,    rwaniro:V3,    suti:V4 }},
+        save:       { label:'Save',       cells:{ save:V3,      suti:V4,       kansi:V }}
+      }},
+      huye: { label:'Huye', sectors:{
+        gishamvu:   { label:'Gishamvu',   cells:{ gishamvu:V,   kigoma:V2,     karama:V3 }},
+        huye:       { label:'Huye',       cells:{ huye:V2,      karama:V3,     ngoma:V4 }},
+        kinazi:     { label:'Kinazi',     cells:{ kinazi:V3,    maraba:V4,     mbazi:V }},
+        mbazi:      { label:'Mbazi',      cells:{ mbazi:V4,     mukura:V,      ruhashya:V2 }},
+        ngoma:      { label:'Ngoma',      cells:{ ngoma:V,      ruhashya:V2,   rusatira:V3 }},
+        rusatira:   { label:'Rusatira',   cells:{ rusatira:V2,  simbi:V3,      tumba:V4 }},
+        tumba:      { label:'Tumba',      cells:{ tumba:V3,     rwaniro:V4,    gishamvu:V }}
+      }},
+      kamonyi: { label:'Kamonyi', sectors:{
+        gacurabwenge:{ label:'Gacurabwenge',cells:{ gacurabwenge:V, kamonyi:V2, rugarika:V3 }},
+        kayenzi:    { label:'Kayenzi',    cells:{ kayenzi:V2,   mugina:V3,     musambira:V4 }},
+        mugina:     { label:'Mugina',     cells:{ mugina:V3,    musambira:V4,  ngamba:V }},
+        musambira:  { label:'Musambira',  cells:{ musambira:V4, ngamba:V,      nyamiyaga:V2 }},
+        nyamiyaga:  { label:'Nyamiyaga',  cells:{ nyamiyaga:V,  rugarika:V2,   rukoma:V3 }},
+        rukoma:     { label:'Rukoma',     cells:{ rukoma:V2,    runda:V3,      gacurabwenge:V4 }}
+      }},
+      muhanga: { label:'Muhanga', sectors:{
+        cyeza:      { label:'Cyeza',      cells:{ cyeza:V,      kabacuzi:V2,   kibangu:V3 }},
+        kibangu:    { label:'Kibangu',    cells:{ kibangu:V2,   kiyumba:V3,    mushishiro:V4 }},
+        muhanga:    { label:'Muhanga',    cells:{ muhanga:V3,   mushishiro:V4, nyamabuye:V }},
+        nyamabuye:  { label:'Nyamabuye', cells:{ nyamabuye:V2, nyabinoni:V3,  rongi:V4 }},
+        rongi:      { label:'Rongi',      cells:{ rongi:V3,     rugendabari:V4,shyogwe:V }},
+        shyogwe:    { label:'Shyogwe',    cells:{ shyogwe:V4,   nyamiyaga:V,   cyeza:V2 }}
+      }},
+      nyamagabe: { label:'Nyamagabe', sectors:{
+        buruhukiro: { label:'Buruhukiro', cells:{ buruhukiro:V, cyanika:V2,    gasaka:V3 }},
+        gasaka:     { label:'Gasaka',     cells:{ gasaka:V2,    gatare:V3,     kaduha:V4 }},
+        kaduha:     { label:'Kaduha',     cells:{ kaduha:V3,    kamegeli:V4,   kitabi:V }},
+        kitabi:     { label:'Kitabi',     cells:{ kitabi:V4,    mbazi:V,       musebeya:V2 }},
+        musebeya:   { label:'Musebeya',   cells:{ musebeya:V,   mushubi:V2,    nyamagabe:V3 }},
+        nyamagabe:  { label:'Nyamagabe',  cells:{ nyamagabe:V2, tare:V3,       buruhukiro:V4 }}
+      }},
+      nyanza: { label:'Nyanza', sectors:{
+        busasamana: { label:'Busasamana', cells:{ busasamana:V, busoro:V2,     cyabakamyi:V3 }},
+        cyabakamyi: { label:'Cyabakamyi', cells:{ cyabakamyi:V2,kibirizi:V3,   kigoma:V4 }},
+        kigoma:     { label:'Kigoma',     cells:{ kigoma:V3,    mukingo:V4,    muyira:V }},
+        muyira:     { label:'Muyira',     cells:{ muyira:V4,    ntyazo:V,      nyagisozi:V2 }},
+        nyagisozi:  { label:'Nyagisozi',  cells:{ nyagisozi:V,  rwabicuma:V2,  nyanza:V3 }},
+        nyanza:     { label:'Nyanza',     cells:{ nyanza:V2,    ruhashya:V3,   busasamana:V4 }}
+      }},
+      nyaruguru: { label:'Nyaruguru', sectors:{
+        cyahinda:   { label:'Cyahinda',   cells:{ cyahinda:V,   kibeho:V2,     munini:V3 }},
+        kibeho:     { label:'Kibeho',     cells:{ kibeho:V2,    munini:V3,     ngera:V4 }},
+        munini:     { label:'Munini',     cells:{ munini:V3,    ngera:V4,      nyaruguru:V }},
+        nyaruguru:  { label:'Nyaruguru',  cells:{ nyaruguru:V4, ruheru:V,      simbi:V2 }},
+        ruheru:     { label:'Ruheru',     cells:{ ruheru:V,     rusenge:V2,    mata:V3 }},
+        simbi:      { label:'Simbi',      cells:{ simbi:V2,     mata:V3,       cyahinda:V4 }}
+      }},
+      ruhango: { label:'Ruhango', sectors:{
+        bweramana:  { label:'Bweramana',  cells:{ bweramana:V,  byimana:V2,    kabagari:V3 }},
+        byimana:    { label:'Byimana',    cells:{ byimana:V2,   kabagari:V3,   kinihira:V4 }},
+        kinihira:   { label:'Kinihira',   cells:{ kinihira:V3,  mbuye:V4,      ntongwe:V }},
+        mbuye:      { label:'Mbuye',      cells:{ mbuye:V4,     ntongwe:V,     ruhango:V2 }},
+        ntongwe:    { label:'Ntongwe',    cells:{ ntongwe:V,    ruhango:V2,    bweramana:V3 }},
+        ruhango:    { label:'Ruhango',    cells:{ ruhango:V2,   kabagari:V3,   byimana:V4 }}
+      }}
+    }},
+    eastern: { districts: {
+      bugesera: { label:'Bugesera', sectors:{
+        gashora:    { label:'Gashora',    cells:{ gashora:V,    juru:V2,       kamabuye:V3 }},
+        juru:       { label:'Juru',       cells:{ juru:V2,      kamabuye:V3,   mareba:V4 }},
+        mareba:     { label:'Mareba',     cells:{ mareba:V3,    mayange:V4,    mwogo:V }},
+        mwogo:      { label:'Mwogo',      cells:{ mwogo:V4,     ngeruka:V,     nyamata:V2 }},
+        nyamata:    { label:'Nyamata',    cells:{ nyamata:V,    rilima:V2,     ruhuha:V3 }},
+        ruhuha:     { label:'Ruhuha',     cells:{ ruhuha:V2,    rweru:V3,      shyara:V4 }},
+        shyara:     { label:'Shyara',     cells:{ shyara:V3,    ntarama:V4,    gashora:V }}
+      }},
+      gatsibo: { label:'Gatsibo', sectors:{
+        gasange:    { label:'Gasange',    cells:{ gasange:V,    gatsibo:V2,    gitoki:V3 }},
+        gitoki:     { label:'Gitoki',     cells:{ gitoki:V2,    kabarore:V3,   kageyo:V4 }},
+        kageyo:     { label:'Kageyo',     cells:{ kageyo:V3,    kiramuruzi:V4, ngarama:V }},
+        ngarama:    { label:'Ngarama',    cells:{ ngarama:V4,   nyagihanga:V,  remera:V2 }},
+        remera:     { label:'Remera',     cells:{ remera:V,     rugarama:V2,   gasange:V3 }}
+      }},
+      kayonza: { label:'Kayonza', sectors:{
+        gahini:     { label:'Gahini',     cells:{ gahini:V,     kabare:V2,     kabarondo:V3 }},
+        kabarondo:  { label:'Kabarondo',  cells:{ kabarondo:V2, murama:V3,     kayonza:V4 }},
+        kayonza:    { label:'Kayonza',    cells:{ kayonza:V3,   murundi:V4,    mukarange:V }},
+        mukarange:  { label:'Mukarange',  cells:{ mukarange:V4, ndego:V,       nyamirama:V2 }},
+        nyamirama:  { label:'Nyamirama',  cells:{ nyamirama:V,  rukara:V2,     ruramira:V3 }},
+        ruramira:   { label:'Ruramira',   cells:{ ruramira:V2,  rwinkwavu:V3,  gahini:V4 }}
+      }},
+      kirehe: { label:'Kirehe', sectors:{
+        gahara:     { label:'Gahara',     cells:{ gahara:V,     gatore:V2,     kigarama:V3 }},
+        kigarama:   { label:'Kigarama',   cells:{ kigarama:V2,  kirehe:V3,     mpanga:V4 }},
+        mpanga:     { label:'Mpanga',     cells:{ mpanga:V3,    musaza:V4,     nasho:V }},
+        nasho:      { label:'Nasho',      cells:{ nasho:V4,     nyamugari:V,   nyarubuye:V2 }},
+        nyarubuye:  { label:'Nyarubuye',  cells:{ nyarubuye:V,  rurenge:V2,    gahara:V3 }}
+      }},
+      ngoma: { label:'Ngoma', sectors:{
+        gashanda:   { label:'Gashanda',   cells:{ gashanda:V,   jarama:V2,     karembo:V3 }},
+        karembo:    { label:'Karembo',    cells:{ karembo:V2,   kibungo:V3,    murama:V4 }},
+        kibungo:    { label:'Kibungo',    cells:{ kibungo:V3,   murama:V4,     mugesera:V }},
+        mugesera:   { label:'Mugesera',   cells:{ mugesera:V4,  mutenderi:V,   ngoma:V2 }},
+        ngoma:      { label:'Ngoma',      cells:{ ngoma:V,      nyamata:V2,    gashanda:V3 }}
+      }},
+      nyagatare: { label:'Nyagatare', sectors:{
+        gatunda:    { label:'Gatunda',    cells:{ gatunda:V,    karama:V2,     katabagemu:V3 }},
+        karama:     { label:'Karama',     cells:{ karama:V2,    katabagemu:V3, matimba:V4 }},
+        matimba:    { label:'Matimba',    cells:{ matimba:V3,   mimuli:V4,     nyagatare:V }},
+        nyagatare:  { label:'Nyagatare',  cells:{ nyagatare:V4, rukomo:V,      rwempasha:V2 }},
+        rwempasha:  { label:'Rwempasha',  cells:{ rwempasha:V,  tabagwe:V2,    karangazi:V3 }},
+        tabagwe:    { label:'Tabagwe',    cells:{ tabagwe:V2,   karangazi:V3,  gatunda:V4 }}
+      }},
+      rwamagana: { label:'Rwamagana', sectors:{
+        fumbwe:     { label:'Fumbwe',     cells:{ fumbwe:V,     gahengeri:V2,  karenge:V3 }},
+        gahengeri:  { label:'Gahengeri',  cells:{ gahengeri:V2, karenge:V3,    kigabiro:V4 }},
+        kigabiro:   { label:'Kigabiro',   cells:{ kigabiro:V3,  muhazi:V4,     munyaga:V }},
+        munyaga:    { label:'Munyaga',    cells:{ munyaga:V4,   nyakariro:V,   rwamagana:V2 }},
+        rwamagana:  { label:'Rwamagana',  cells:{ rwamagana:V,  rurenge:V2,    fumbwe:V3 }}
+      }}
+    }},
+    western: { districts: {
+      karongi: { label:'Karongi', sectors:{
+        bwishyura:  { label:'Bwishyura',  cells:{ bwishyura:V,  gitesi:V2,     gashari:V3 }},
+        gashari:    { label:'Gashari',    cells:{ gashari:V2,   gishyita:V3,   karongi:V4 }},
+        karongi:    { label:'Karongi',    cells:{ karongi:V3,   murambi:V4,    mutuntu:V }},
+        mutuntu:    { label:'Mutuntu',    cells:{ mutuntu:V4,   rugabano:V,    rwankuba:V2 }},
+        rugabano:   { label:'Rugabano',   cells:{ rugabano:V,   rwankuba:V2,   bwishyura:V3 }}
+      }},
+      ngororero: { label:'Ngororero', sectors:{
+        bwira:      { label:'Bwira',      cells:{ bwira:V,      hindiro:V2,    gatumba:V3 }},
+        gatumba:    { label:'Gatumba',    cells:{ gatumba:V2,   kabaya:V3,     ngororero:V4 }},
+        ngororero:  { label:'Ngororero',  cells:{ ngororero:V3, ndaro:V4,      nyange:V }},
+        nyange:     { label:'Nyange',     cells:{ nyange:V4,    sovu:V,        bwira:V2 }}
+      }},
+      nyabihu: { label:'Nyabihu', sectors:{
+        bigogwe:    { label:'Bigogwe',    cells:{ bigogwe:V,    jenda:V2,      karago:V3 }},
+        karago:     { label:'Karago',     cells:{ karago:V2,    kintobo:V3,    mukamira:V4 }},
+        mukamira:   { label:'Mukamira',   cells:{ mukamira:V3,  muringa:V4,    rurembo:V }},
+        rurembo:    { label:'Rurembo',    cells:{ rurembo:V4,   shingiro:V,    bigogwe:V2 }}
+      }},
+      nyamasheke: { label:'Nyamasheke', sectors:{
+        bushekeri:  { label:'Bushekeri',  cells:{ bushekeri:V,  cyato:V2,      kagano:V3 }},
+        kagano:     { label:'Kagano',     cells:{ kagano:V2,    kanjongo:V3,   nyamasheke:V4 }},
+        nyamasheke: { label:'Nyamasheke', cells:{ nyamasheke:V3,rangiro:V4,    shangi:V }},
+        shangi:     { label:'Shangi',     cells:{ shangi:V4,    mahembe:V,     bushekeri:V2 }}
+      }},
+      rubavu: { label:'Rubavu', sectors:{
+        gisenyi:    { label:'Gisenyi',    cells:{ gisenyi:V,    kanzenze:V2,   kanama:V3 }},
+        kanama:     { label:'Kanama',     cells:{ kanama:V2,    mudende:V3,    nyamyumba:V4 }},
+        nyamyumba:  { label:'Nyamyumba',  cells:{ nyamyumba:V3, rubavu:V4,     rugerero:V }},
+        rubavu:     { label:'Rubavu',     cells:{ rubavu:V4,    rugerero:V,    gisenyi:V2 }},
+        rugerero:   { label:'Rugerero',   cells:{ rugerero:V,   nyundo:V2,     kanama:V3 }}
+      }},
+      rutsiro: { label:'Rutsiro', sectors:{
+        boneza:     { label:'Boneza',     cells:{ boneza:V,     gihango:V2,    kigeyo:V3 }},
+        kigeyo:     { label:'Kigeyo',     cells:{ kigeyo:V2,    kivumu:V3,     murunda:V4 }},
+        murunda:    { label:'Murunda',    cells:{ murunda:V3,   musasa:V4,     rutsiro:V }},
+        rutsiro:    { label:'Rutsiro',    cells:{ rutsiro:V4,   ruhango:V,     boneza:V2 }}
+      }},
+      rusizi: { label:'Rusizi', sectors:{
+        bugarama:   { label:'Bugarama',   cells:{ bugarama:V,   cyimbogo:V2,   kamembe:V3 }},
+        kamembe:    { label:'Kamembe',    cells:{ kamembe:V2,   muganza:V3,    mururu:V4 }},
+        mururu:     { label:'Mururu',     cells:{ mururu:V3,    nzahaha:V4,    nyakarenzo:V }},
+        nyakarenzo: { label:'Nyakarenzo', cells:{ nyakarenzo:V4,rusizi:V,      rwimbogo:V2 }},
+        rusizi:     { label:'Rusizi',     cells:{ rusizi:V,     rwimbogo:V2,   bugarama:V3 }}
+      }}
+    }}
+  };
+
+  // ── CASCADE FUNCTIONS ──────────────────────────────────────────────
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g,' '); }
+
+  function resetSelect(sel, placeholder, disabled) {
+    sel.innerHTML = `<option value="">${placeholder}</option>`;
+    sel.disabled = disabled;
+  }
+
+  function populateDistricts(province) {
+    const dSel = document.getElementById('vDistrict');
+    resetSelect(document.getElementById('vSector'), '— Select District first —', true);
+    resetSelect(document.getElementById('vCell'),   '— Select Sector first —',   true);
+    resetSelect(document.getElementById('vVillage'),'— Select Cell first —',     true);
+    if (!province || !rwandaGeo[province]) { resetSelect(dSel,'— Select Province first —',true); return; }
+    dSel.innerHTML = '<option value="">— Select District —</option>';
+    Object.entries(rwandaGeo[province].districts).forEach(([k,d]) => {
+      dSel.innerHTML += `<option value="${k}">${d.label}</option>`;
+    });
+    dSel.disabled = false;
+  }
+
+  function populateSectors(province, district) {
+    const sSel = document.getElementById('vSector');
+    resetSelect(document.getElementById('vCell'),   '— Select Sector first —', true);
+    resetSelect(document.getElementById('vVillage'),'— Select Cell first —',   true);
+    const data = rwandaGeo[province]?.districts[district];
+    if (!data) { resetSelect(sSel,'— Select District first —',true); return; }
+    sSel.innerHTML = '<option value="">— Select Sector —</option>';
+    Object.entries(data.sectors).forEach(([k,s]) => {
+      sSel.innerHTML += `<option value="${k}">${s.label}</option>`;
+    });
+    sSel.disabled = false;
+  }
+
+  function populateCells(province, district, sector) {
+    const cSel = document.getElementById('vCell');
+    resetSelect(document.getElementById('vVillage'),'— Select Cell first —', true);
+    const data = rwandaGeo[province]?.districts[district]?.sectors[sector];
+    if (!data) { resetSelect(cSel,'— Select Sector first —',true); return; }
+    cSel.innerHTML = '<option value="">— Select Cell —</option>';
+    Object.entries(data.cells).forEach(([k]) => {
+      cSel.innerHTML += `<option value="${k}">${cap(k)}</option>`;
+    });
+    cSel.disabled = false;
+  }
+
+  function populateVillages(province, district, sector, cell) {
+    const vSel = document.getElementById('vVillage');
+    const villages = rwandaGeo[province]?.districts[district]?.sectors[sector]?.cells[cell];
+    if (!villages) { resetSelect(vSel,'— Select Cell first —',true); return; }
+    vSel.innerHTML = '<option value="">— Select Village —</option>';
+    villages.forEach(v => { vSel.innerHTML += `<option value="${v}">${v}</option>`; });
+    vSel.disabled = false;
+  }
+
+  document.getElementById('vProvince').addEventListener('change', function() {
+    populateDistricts(this.value);
+  });
+  document.getElementById('vDistrict').addEventListener('change', function() {
+    populateSectors(document.getElementById('vProvince').value, this.value);
+  });
+  document.getElementById('vSector').addEventListener('change', function() {
+    populateCells(document.getElementById('vProvince').value, document.getElementById('vDistrict').value, this.value);
+  });
+  document.getElementById('vCell').addEventListener('change', function() {
+    populateVillages(document.getElementById('vProvince').value, document.getElementById('vDistrict').value, document.getElementById('vSector').value, this.value);
+  });
+
+  // Initialise districts for default province (kigali)
+  populateDistricts('kigali');
+
   // State
   let vLandType = 'residential';
-  let vTitleType = 'freehold';
+  let vTenureType = 'emphyteutic';
+  let vTitleFormat = 'etitle';
 
   // Radio groups
   document.querySelectorAll('#vTypeGroup .radio-btn').forEach(btn => {
@@ -527,11 +926,18 @@
       vLandType = btn.dataset.v;
     });
   });
-  document.querySelectorAll('#vTitleGroup .radio-btn').forEach(btn => {
+  document.querySelectorAll('#vTenureGroup .radio-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('#vTitleGroup .radio-btn').forEach(b => b.classList.remove('selected'));
+      document.querySelectorAll('#vTenureGroup .radio-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
-      vTitleType = btn.dataset.v;
+      vTenureType = btn.dataset.v;
+    });
+  });
+  document.querySelectorAll('#vTitleFormatGroup .radio-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#vTitleFormatGroup .radio-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      vTitleFormat = btn.dataset.v;
     });
   });
 
@@ -550,8 +956,11 @@
   };
   const hotspots = { kigali: 88, northern: 65, southern: 58, eastern: 55, western: 62 };
   const trends = { kigali: '+14.2% YoY', northern: '+8.4% YoY', southern: '+6.1% YoY', eastern: '+5.8% YoY', western: '+9.3% YoY' };
-  const titleMult = { freehold: 1.05, leasehold: 0.97, digital: 1.10, pending: 1.0 };
-  const slopeMult = { flat: 1.0, gentle: 0.97, moderate: 0.90, steep: 0.78 };
+  // Tenure: emphyteutic is the Rwanda baseline (1.0); others adjusted relative to it
+  const tenureMult = { emphyteutic: 1.0, freehold: 1.08, condominium: 1.04, sublease: 0.90, investment: 1.03, concession: 0.82 };
+  // e-Title carries a small premium (faster transfer, harder to dispute)
+  const titleFormatMult = { etitle: 1.05, physical: 1.0 };
+  const slopeMult = { flat: 1.0, gentle: 0.97, moderate: 0.90, steep: 0.78, verysteep: 0.62, extreme: 0.45 };
   const districtAvg = { kigali: 22000, northern: 9000, southern: 7500, eastern: 6500, western: 10000 };
   const comparisons = {
     kigali: [
@@ -608,11 +1017,11 @@
 
     // Base rate per sqm
     const base = baseRates[province]?.[vLandType] || 10000;
-    const rate = base * titleMult[vTitleType] * slopeMult[slope] * utilBonus * amenBonus;
+    const rate = base * tenureMult[vTenureType] * titleFormatMult[vTitleFormat] * slopeMult[slope] * utilBonus * amenBonus;
     const total = rate * sizeSqm;
     const low = total * 0.88;
     const high = total * 1.15;
-    const confidence = Math.min(95, 68 + checkedUtils * 2 + (vTitleType === 'digital' ? 8 : vTitleType === 'freehold' ? 5 : 0));
+    const confidence = Math.min(95, 68 + checkedUtils * 2 + (vTitleFormat === 'etitle' ? 8 : 3) + (vTenureType === 'freehold' ? 5 : 0));
     const hotspot = hotspots[province] || 60;
     const distAvg = districtAvg[province] || 10000;
     const vsAvg = ((rate / distAvg - 1) * 100).toFixed(1);
@@ -646,14 +1055,18 @@
       vsEl.style.color = parseFloat(vsAvg) >= 0 ? '#4caf7d' : '#ef5350';
 
       // Factors
-      const titleImpacts = { freehold: { label: '+5% premium', cls: 'impact-pos' }, leasehold: { label: '–3% discount', cls: 'impact-neg' }, digital: { label: '+10% premium', cls: 'impact-pos' }, pending: { label: 'Neutral', cls: 'impact-neu' } };
-      const slopeImpacts = { flat: { label: 'No adjustment', cls: 'impact-neu' }, gentle: { label: '–3% gentle slope', cls: 'impact-neg' }, moderate: { label: '–10% moderate slope', cls: 'impact-neg' }, steep: { label: '–22% steep terrain', cls: 'impact-neg' } };
-      const ti = titleImpacts[vTitleType];
+      const tenureLabels = { emphyteutic:'Emphyteutic Lease', freehold:'Freehold', condominium:'Condominium', sublease:'Sub-lease', investment:'Investment Lease', concession:'Land Concession' };
+      const tenureImpacts = { emphyteutic:{label:'Baseline tenure (Rwanda standard)',cls:'impact-neu'}, freehold:{label:'+8% full ownership premium',cls:'impact-pos'}, condominium:{label:'+4% condominium premium',cls:'impact-pos'}, sublease:{label:'–10% secondary lease discount',cls:'impact-neg'}, investment:{label:'+3% government-backed lease',cls:'impact-pos'}, concession:{label:'–18% limited-rights discount',cls:'impact-neg'} };
+      const formatImpacts = { etitle:{label:'+5% e-Title premium (faster transfer)',cls:'impact-pos'}, physical:{label:'Baseline — paper document',cls:'impact-neu'} };
+      const slopeImpacts = { flat:{label:'No adjustment',cls:'impact-neu'}, gentle:{label:'–3% gentle slope',cls:'impact-neg'}, moderate:{label:'–10% moderate slope',cls:'impact-neg'}, steep:{label:'–22% steep terrain (15–30°)',cls:'impact-neg'}, verysteep:{label:'–38% very steep terrain (30–50°)',cls:'impact-neg'}, extreme:{label:'–55% extreme gradient (50°+)',cls:'impact-neg'} };
       const si = slopeImpacts[slope];
+      const tn = tenureImpacts[vTenureType];
+      const tf = formatImpacts[vTitleFormat];
       document.getElementById('factorList').innerHTML = `
         <div class="factor-card"><div class="fc-label">Location</div><div class="fc-value">${province.charAt(0).toUpperCase()+province.slice(1).replace('_',' ')}</div><div class="fc-impact impact-${hotspot >= 80 ? 'pos' : 'neu'}">Hotspot score: ${hotspot}/100</div></div>
         <div class="factor-card"><div class="fc-label">Land Type</div><div class="fc-value">${vLandType.charAt(0).toUpperCase()+vLandType.slice(1)}</div><div class="fc-impact impact-neu">Base rate: RWF ${base.toLocaleString()}/sqm</div></div>
-        <div class="factor-card"><div class="fc-label">Title Type</div><div class="fc-value">${vTitleType.charAt(0).toUpperCase()+vTitleType.slice(1)}</div><div class="fc-impact ${ti.cls}">${ti.label}</div></div>
+        <div class="factor-card"><div class="fc-label">Land Tenure</div><div class="fc-value">${tenureLabels[vTenureType]}</div><div class="fc-impact ${tn.cls}">${tn.label}</div></div>
+        <div class="factor-card"><div class="fc-label">Title Format</div><div class="fc-value">${vTitleFormat === 'etitle' ? 'e-Title (digital)' : 'Physical Title (paper)'}</div><div class="fc-impact ${tf.cls}">${tf.label}</div></div>
         <div class="factor-card"><div class="fc-label">Slope / Gradient</div><div class="fc-value">${slope.charAt(0).toUpperCase()+slope.slice(1)}</div><div class="fc-impact ${si.cls}">${si.label}</div></div>
         <div class="factor-card"><div class="fc-label">Utilities Access</div><div class="fc-value">${checkedUtils} of 6 connected</div><div class="fc-impact ${checkedUtils >= 3 ? 'impact-pos' : 'impact-neu'}">+${(checkedUtils*2).toFixed(0)}% infrastructure premium</div></div>
         <div class="factor-card"><div class="fc-label">Nearby Amenities</div><div class="fc-value">${checkedAmen} amenities</div><div class="fc-impact ${checkedAmen >= 2 ? 'impact-pos' : 'impact-neu'}">+${(checkedAmen*1.5).toFixed(1)}% convenience premium</div></div>
@@ -693,12 +1106,12 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = next === 'dark' ? '🌙' : '☀️'; label.textContent = next === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
   }
   document.addEventListener('DOMContentLoaded', function() {
     var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
   });
 </script>
 </body>

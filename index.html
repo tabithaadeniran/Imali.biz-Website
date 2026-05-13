@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
@@ -16,6 +16,7 @@
     --terracotta: #c8521a;
     --gold: #d4a832;
     --forest: #1a3a2a;
+    --forest1: #418663;
     --warm-white: #faf7f2;
     --text-muted: #6b6560;
     --sapphire: #1a3a5c;
@@ -125,6 +126,26 @@
     background: linear-gradient(to bottom, var(--nav-bg) 0%, transparent 100%);
     backdrop-filter: blur(2px);
   }
+  /* Light mode: solid nav so dark text is always legible over the hero image */
+  [data-theme="light"] nav {
+    background: linear-gradient(to bottom, var(--nav-bg) 0%, var(--nav-bg) 70%, transparent 100%);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  /* Light mode: brighten the hero image significantly */
+  [data-theme="light"] .hero-banner-img {
+    filter: brightness(1.55) saturate(1.05);
+  }
+  /* Light mode: lighten the dark overlay so the brighter image shows through */
+  [data-theme="light"] .hero-banner-overlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(10,10,15,0.3) 0%,
+      rgba(10,10,15,0.05) 28%,
+      rgba(10,10,15,0.52) 60%,
+      rgba(10,10,15,0.86) 100%
+    );
+  }
   .nav-logo {
     font-family: 'Syne', sans-serif;
     font-weight: 800;
@@ -173,6 +194,8 @@
     overflow: hidden;
   }
   .hero-banner-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -186,15 +209,15 @@
       to bottom,
       rgba(10,10,15,0.35) 0%,
       rgba(10,10,15,0.05) 28%,
-      rgba(10,10,15,0.4) 65%,
-      rgba(10,10,15,0.97) 100%
+      rgba(10,10,15,0.55) 60%,
+      rgba(10,10,15,0.88) 100%
     );
   }
   .hero-banner-tag {
     position: absolute;
-    bottom: 5.5rem;
+    bottom: 1.8rem;
     left: 4rem;
-    font-size: 0.72rem;
+    font-size: 0.62rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba(245,240,232,0.75);
@@ -203,7 +226,7 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(245,240,232,0.14);
     border-radius: 2rem;
-    padding: 0.45rem 1.1rem;
+    padding: 0.3rem 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -245,7 +268,7 @@
   }
   /* light mode for banner */
   [data-theme="light"] .hero-banner-overlay {
-    background: linear-gradient(to bottom, rgba(26,24,20,0.25) 0%, rgba(26,24,20,0.0) 28%, rgba(26,24,20,0.35) 65%, rgba(26,24,20,0.92) 100%);
+    background: linear-gradient(to bottom, rgba(10,10,15,0.3) 0%, rgba(10,10,15,0.05) 28%, rgba(10,10,15,0.52) 60%, rgba(10,10,15,0.86) 100%);
   }
 
   /* HERO */
@@ -690,7 +713,7 @@
   }
   .feature-card:hover::before { opacity: 1; }
   .feature-card.featured {
-    background: var(--forest);
+    background: var(--forest1);
     border-color: rgba(212,168,50,0.25);
     grid-column: span 1;
   }
@@ -1005,9 +1028,9 @@
   @media (max-width: 1024px) {
     nav { padding: 1.25rem 2rem; }
     .nav-links { display: none; }
-    .hero-banner-tag { left: 1.5rem; bottom: 5rem; }
-    .hero { grid-template-columns: 1fr; padding: 5rem 2rem 4rem; }
-    .hero-right { display: none; }
+    .hero-banner-tag { left: 1.5rem; bottom: 1.8rem; }
+    .hero-banner-body { grid-template-columns: 1fr; top: 80px; bottom: 16%; left: 1.5rem; right: 1.5rem; gap: 0; }
+    .hero-banner-body .hero-right { display: none; }
     section { padding: 5rem 2rem; }
     .stakeholders-grid { grid-template-columns: repeat(2, 1fr); }
     .features-grid { grid-template-columns: 1fr 1fr; }
@@ -1041,6 +1064,93 @@
     color: var(--text);
   }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
+
+  /* ── HERO BANNER BODY — absolutely positioned so it can never enter the nav zone ── */
+  .hero-banner-body {
+    position: absolute;
+    top: 90px;       /* hard floor: navbar is 60px, 30px breathing room */
+    bottom: 14%;     /* raised floor — pushes bottom-aligned content upward */
+    left: 4rem;
+    right: 4rem;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: flex-end;
+    overflow: hidden; /* if content is somehow taller, clip rather than overflow nav */
+  }
+  /* Left column: text content */
+  .hero-banner-content .hero-eyebrow {
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+    margin-bottom: 0.5rem;   /* tighter */
+  }
+  .hero-banner-content .hero-headline {
+    color: #f5f0e8;
+    font-size: clamp(1.9rem, 2.8vw, 3.2rem);   /* slightly smaller to save vertical space */
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.4s forwards;
+    margin-bottom: 0.65rem;  /* tighter */
+  }
+  .hero-banner-content .hero-sub {
+    color: rgba(245,240,232,0.8);
+    font-size: 0.85rem;      /* smaller */
+    line-height: 1.55;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+    margin-bottom: 1rem;     /* tighter */
+  }
+  .hero-banner-content .hero-actions {
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.8s forwards;
+  }
+  .hero-banner-content .btn-secondary { color: rgba(245,240,232,0.8); }
+  .hero-banner-content .btn-secondary:hover { color: #f5f0e8; }
+  /* Stats strip — compact inside banner */
+  .hero-banner-content .hero-stats {
+    border-top-color: rgba(245,240,232,0.14);
+    margin-top: 0.85rem;    /* was 1.5rem */
+    padding-top: 0.85rem;   /* was 1.5rem */
+    gap: 1.5rem;            /* was 2.5rem */
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+  }
+  .hero-banner-content .stat-num {
+    color: var(--gold);
+    font-size: 1.3rem;      /* was 1.8rem — much smaller */
+  }
+  .hero-banner-content .stat-label { color: rgba(245,240,232,0.55); font-size: 0.68rem; }
+  /* Right column: map card — always dark since it's over the photo */
+  .hero-banner-body .hero-right {
+    padding-left: 0;
+    opacity: 0;
+    animation: fadeIn 1.2s ease 0.5s forwards;
+  }
+  .hero-banner-body .map-card {
+    background: rgba(10,10,15,0.72);
+    border-color: rgba(245,240,232,0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  /* Shrink the map body height so the card fits within the banner */
+  .hero-banner-body .map-body {
+    height: 200px;          /* was 300px */
+  }
+  .hero-banner-body .map-header { padding: 0.65rem 1rem; }
+  .hero-banner-body .map-footer { padding: 0.6rem 1rem; }
+  .hero-banner-body .map-header,
+  .hero-banner-body .map-footer { border-color: rgba(245,240,232,0.1); }
+  .hero-banner-body .map-title { color: rgba(245,240,232,0.65); }
+  .hero-banner-body .map-pill.inactive { background: rgba(245,240,232,0.08); color: rgba(245,240,232,0.4); }
+  .hero-banner-body .legend-item { color: rgba(245,240,232,0.45); }
+  /* Scale down the floating badges on the smaller map */
+  .hero-banner-body .map-badge { padding: 0.4rem 0.65rem; }
+  .hero-banner-body .badge-value { font-size: 0.82rem; }
+  .hero-banner-body .badge-label { font-size: 0.58rem; }
+  .hero-banner-body .badge-change { font-size: 0.62rem; }
+  .hero-banner-body .map-badge.badge-1 { top: 10px; left: 10px; }
+  .hero-banner-body .map-badge.badge-2 { bottom: 10px; right: 10px; }
 </style>
 </head>
 <body>
@@ -1058,7 +1168,7 @@
     <li><a href="#stakeholders">Who We Serve</a></li>
     <li><a href="#ecosystem">Ecosystem</a></li>
     <li><a href="#how">How It Works</a></li>
-    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
     <li><a href="#" class="nav-cta">Join the Waitlist</a></li>
   </ul>
 </nav>
@@ -1072,8 +1182,142 @@
     loading="eager"
   />
   <div class="hero-banner-overlay"></div>
+
+  <!-- HERO BODY: text (left) + map (right) -->
+  <div class="hero-banner-body">
+
+    <!-- LEFT: text content -->
+    <div class="hero-banner-content">
+      <div class="hero-eyebrow">Rwanda Real Estate Intelligence</div>
+      <h1 class="hero-headline">
+        Where <em>Rwanda's</em><br>
+        Real Estate<br>
+        Connects
+      </h1>
+      <p class="hero-sub">
+        A unified intelligence platform eliminating fragmentation across Rwanda's property ecosystem — connecting landowners, investors, developers, agents, legal professionals, and financiers through data, trust, and tokenisation.
+      </p>
+      <div class="hero-actions">
+        <a href="#stakeholders" class="btn-primary">
+          Explore the Platform
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a href="#how" class="btn-secondary">
+          See how it works
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">10+</span>
+          <span class="stat-label">Stakeholder groups</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">GIS</span>
+          <span class="stat-label">Intelligence layers</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">0%</span>
+          <span class="stat-label">Subscription fees</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Live Intelligence Map -->
+    <div class="hero-right">
+      <div class="map-card">
+        <div class="map-header">
+          <span class="map-title">Live Intelligence Map</span>
+          <div class="map-pills">
+            <span class="map-pill active">Hotspots</span>
+            <span class="map-pill inactive">Valuation</span>
+            <span class="map-pill inactive">Zoning</span>
+          </div>
+        </div>
+        <div class="map-body">
+          <svg class="map-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mapGlow1" cx="55%" cy="40%">
+                <stop offset="0%" stop-color="#c8521a" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#c8521a" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="mapGlow2" cx="35%" cy="60%">
+                <stop offset="0%" stop-color="#d4a832" stop-opacity="0.3"/>
+                <stop offset="100%" stop-color="#d4a832" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="mapGlow3" cx="70%" cy="65%">
+                <stop offset="0%" stop-color="#c8521a" stop-opacity="0.25"/>
+                <stop offset="100%" stop-color="#c8521a" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect width="400" height="300" fill="#0e1219"/>
+            <g stroke="rgba(245,240,232,0.04)" stroke-width="0.5">
+              <line x1="0" y1="75" x2="400" y2="75"/><line x1="0" y1="150" x2="400" y2="150"/>
+              <line x1="0" y1="225" x2="400" y2="225"/><line x1="100" y1="0" x2="100" y2="300"/>
+              <line x1="200" y1="0" x2="200" y2="300"/><line x1="300" y1="0" x2="300" y2="300"/>
+            </g>
+            <path d="M140,60 L185,52 L220,58 L255,70 L270,90 L268,120 L260,148 L252,170 L238,195 L218,215 L200,230 L180,228 L160,218 L142,200 L128,178 L120,155 L118,128 L122,100 L130,78 Z"
+              fill="rgba(26,58,42,0.6)" stroke="rgba(212,168,50,0.3)" stroke-width="1.5"/>
+            <path d="M194,80 L194,230" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+            <path d="M128,155 L268,155" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+            <ellipse cx="210" cy="120" rx="55" ry="45" fill="url(#mapGlow1)"/>
+            <ellipse cx="155" cy="170" rx="40" ry="35" fill="url(#mapGlow2)"/>
+            <ellipse cx="238" cy="178" rx="35" ry="30" fill="url(#mapGlow3)"/>
+            <line x1="210" y1="120" x2="155" y2="170" stroke="rgba(212,168,50,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
+            <line x1="210" y1="120" x2="238" y2="178" stroke="rgba(200,82,26,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
+            <line x1="155" y1="170" x2="238" y2="178" stroke="rgba(200,82,26,0.15)" stroke-width="0.8" stroke-dasharray="3,3"/>
+            <circle cx="210" cy="120" r="16" fill="rgba(200,82,26,0.12)" stroke="rgba(200,82,26,0.4)" stroke-width="1">
+              <animate attributeName="r" values="14;20;14" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="210" cy="120" r="5" fill="#c8521a"/>
+            <circle cx="168" cy="82" r="10" fill="rgba(212,168,50,0.1)" stroke="rgba(212,168,50,0.35)" stroke-width="1">
+              <animate attributeName="r" values="8;13;8" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="168" cy="82" r="3.5" fill="#d4a832"/>
+            <circle cx="180" cy="195" r="9" fill="rgba(200,82,26,0.1)" stroke="rgba(200,82,26,0.3)" stroke-width="1">
+              <animate attributeName="r" values="7;12;7" dur="3.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="180" cy="195" r="3" fill="#c8521a"/>
+            <circle cx="138" cy="118" r="8" fill="rgba(212,168,50,0.1)" stroke="rgba(212,168,50,0.25)" stroke-width="1">
+              <animate attributeName="r" values="6;10;6" dur="5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="138" cy="118" r="2.5" fill="#d4a832"/>
+            <circle cx="248" cy="88" r="7" fill="rgba(200,82,26,0.08)" stroke="rgba(200,82,26,0.25)" stroke-width="1">
+              <animate attributeName="r" values="5;9;5" dur="4.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="248" cy="88" r="2.5" fill="#c8521a"/>
+            <text x="218" y="117" fill="rgba(245,240,232,0.8)" font-size="7" font-family="'DM Sans', sans-serif" font-weight="500">Kigali</text>
+            <text x="172" y="79" fill="rgba(212,168,50,0.7)" font-size="6" font-family="'DM Sans', sans-serif">Musanze</text>
+            <text x="145" y="205" fill="rgba(245,240,232,0.6)" font-size="6" font-family="'DM Sans', sans-serif">Huye</text>
+          </svg>
+          <div class="map-badge badge-1">
+            <div class="badge-label">Avg. Valuation / sqm</div>
+            <div class="badge-value">RWF 285K</div>
+            <div class="badge-change">↑ 12.4% YoY</div>
+          </div>
+          <div class="map-badge badge-2">
+            <div class="badge-label">Investment Hotspot Score</div>
+            <div class="badge-value">94 / 100</div>
+            <div class="badge-change">Kigali CBD</div>
+          </div>
+        </div>
+        <div class="map-footer">
+          <div class="legend-item"><div class="legend-dot" style="background:#c8521a"></div>High potential</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#d4a832"></div>Growing</div>
+          <div class="legend-item"><div class="legend-dot" style="background:rgba(245,240,232,0.2)"></div>Monitoring</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end hero-banner-body -->
+
   <div class="hero-banner-tag">📍 Kigali, Rwanda — Real Estate Intelligence</div>
-  <div class="hero-banner-scroll" onclick="document.getElementById('heroContent').scrollIntoView({behavior:'smooth'})">
+  <div class="hero-banner-scroll" onclick="document.getElementById('stakeholders').scrollIntoView({behavior:'smooth'})">
     <span>Explore the platform</span>
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <path d="M8 3v10M4 9l4 4 4-4" stroke="rgba(212,168,50,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1081,175 +1325,6 @@
   </div>
 </div>
 
-<!-- HERO CONTENT -->
-<section class="hero" id="heroContent">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-
-  <div class="hero-left">
-    <div class="hero-eyebrow">Rwanda Real Estate Intelligence</div>
-    <h1 class="hero-headline">
-      Where<br>
-      <em>Rwanda's</em><br>
-      Real Estate<br>
-      Connects
-    </h1>
-    <p class="hero-sub">
-      A unified intelligence platform eliminating fragmentation across Rwanda's property ecosystem — connecting landowners, investors, developers, agents, legal professionals, and financiers through data, trust, and tokenisation.
-    </p>
-    <div class="hero-actions">
-      <a href="#" class="btn-primary">
-        Explore the Platform
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-      <a href="#how" class="btn-secondary">
-        See how it works
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-          <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-num">10+</span>
-        <span class="stat-label">Stakeholder groups</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">GIS</span>
-        <span class="stat-label">Intelligence layers</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-num">0%</span>
-        <span class="stat-label">Subscription fees</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAP CARD -->
-  <div class="hero-right">
-    <div class="map-card">
-      <div class="map-header">
-        <span class="map-title">Live Intelligence Map</span>
-        <div class="map-pills">
-          <span class="map-pill active">Hotspots</span>
-          <span class="map-pill inactive">Valuation</span>
-          <span class="map-pill inactive">Zoning</span>
-        </div>
-      </div>
-      <div class="map-body">
-        <!-- Rwanda SVG outline -->
-        <svg class="map-svg" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="mapGlow1" cx="55%" cy="40%">
-              <stop offset="0%" stop-color="#c8521a" stop-opacity="0.4"/>
-              <stop offset="100%" stop-color="#c8521a" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="mapGlow2" cx="35%" cy="60%">
-              <stop offset="0%" stop-color="#d4a832" stop-opacity="0.3"/>
-              <stop offset="100%" stop-color="#d4a832" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="mapGlow3" cx="70%" cy="65%">
-              <stop offset="0%" stop-color="#c8521a" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="#c8521a" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-
-          <!-- Background -->
-          <rect width="400" height="300" fill="#0e1219"/>
-
-          <!-- Grid lines -->
-          <g stroke="rgba(245,240,232,0.04)" stroke-width="0.5">
-            <line x1="0" y1="75" x2="400" y2="75"/>
-            <line x1="0" y1="150" x2="400" y2="150"/>
-            <line x1="0" y1="225" x2="400" y2="225"/>
-            <line x1="100" y1="0" x2="100" y2="300"/>
-            <line x1="200" y1="0" x2="200" y2="300"/>
-            <line x1="300" y1="0" x2="300" y2="300"/>
-          </g>
-
-          <!-- Rwanda shape (simplified) -->
-          <path d="M140,60 L185,52 L220,58 L255,70 L270,90 L268,120 L260,148 L252,170 L238,195 L218,215 L200,230 L180,228 L160,218 L142,200 L128,178 L120,155 L118,128 L122,100 L130,78 Z"
-            fill="rgba(26, 58, 42, 0.6)" stroke="rgba(212,168,50,0.3)" stroke-width="1.5"/>
-
-          <!-- District lines -->
-          <path d="M194,80 L194,230" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
-          <path d="M128,155 L268,155" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
-
-          <!-- Glow areas -->
-          <ellipse cx="210" cy="120" rx="55" ry="45" fill="url(#mapGlow1)"/>
-          <ellipse cx="155" cy="170" rx="40" ry="35" fill="url(#mapGlow2)"/>
-          <ellipse cx="238" cy="178" rx="35" ry="30" fill="url(#mapGlow3)"/>
-
-          <!-- Connection lines -->
-          <line x1="210" y1="120" x2="155" y2="170" stroke="rgba(212,168,50,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
-          <line x1="210" y1="120" x2="238" y2="178" stroke="rgba(200,82,26,0.2)" stroke-width="0.8" stroke-dasharray="3,3"/>
-          <line x1="155" y1="170" x2="238" y2="178" stroke="rgba(200,82,26,0.15)" stroke-width="0.8" stroke-dasharray="3,3"/>
-
-          <!-- Kigali hotspot (largest) -->
-          <circle cx="210" cy="120" r="16" fill="rgba(200,82,26,0.12)" stroke="rgba(200,82,26,0.4)" stroke-width="1">
-            <animate attributeName="r" values="14;20;14" dur="3s" repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="210" cy="120" r="5" fill="#c8521a"/>
-
-          <!-- Musanze -->
-          <circle cx="168" cy="82" r="10" fill="rgba(212,168,50,0.1)" stroke="rgba(212,168,50,0.35)" stroke-width="1">
-            <animate attributeName="r" values="8;13;8" dur="4s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="168" cy="82" r="3.5" fill="#d4a832"/>
-
-          <!-- Huye -->
-          <circle cx="180" cy="195" r="9" fill="rgba(200,82,26,0.1)" stroke="rgba(200,82,26,0.3)" stroke-width="1">
-            <animate attributeName="r" values="7;12;7" dur="3.5s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="180" cy="195" r="3" fill="#c8521a"/>
-
-          <!-- Rubavu -->
-          <circle cx="138" cy="118" r="8" fill="rgba(212,168,50,0.1)" stroke="rgba(212,168,50,0.25)" stroke-width="1">
-            <animate attributeName="r" values="6;10;6" dur="5s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="138" cy="118" r="2.5" fill="#d4a832"/>
-
-          <!-- Nyagatare -->
-          <circle cx="248" cy="88" r="7" fill="rgba(200,82,26,0.08)" stroke="rgba(200,82,26,0.25)" stroke-width="1">
-            <animate attributeName="r" values="5;9;5" dur="4.5s" repeatCount="indefinite"/>
-          </circle>
-          <circle cx="248" cy="88" r="2.5" fill="#c8521a"/>
-
-          <!-- Label -->
-          <text x="218" y="117" fill="rgba(245,240,232,0.8)" font-size="7" font-family="'DM Sans', sans-serif" font-weight="500">Kigali</text>
-          <text x="172" y="79" fill="rgba(212,168,50,0.7)" font-size="6" font-family="'DM Sans', sans-serif">Musanze</text>
-          <text x="145" y="205" fill="rgba(245,240,232,0.6)" font-size="6" font-family="'DM Sans', sans-serif">Huye</text>
-        </svg>
-
-        <!-- Overlay badges -->
-        <div class="map-badge badge-1">
-          <div class="badge-label">Avg. Valuation / sqm</div>
-          <div class="badge-value">RWF 285K</div>
-          <div class="badge-change">↑ 12.4% YoY</div>
-        </div>
-        <div class="map-badge badge-2">
-          <div class="badge-label">Investment Hotspot Score</div>
-          <div class="badge-value">94 / 100</div>
-          <div class="badge-change">Kigali CBD</div>
-        </div>
-      </div>
-      <div class="map-footer">
-        <div class="legend-item"><div class="legend-dot" style="background:#c8521a"></div>High potential</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#d4a832"></div>Growing</div>
-        <div class="legend-item"><div class="legend-dot" style="background:rgba(245,240,232,0.2)"></div>Monitoring</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="scroll-hint">
-    Scroll
-    <div class="scroll-line"></div>
-  </div>
-</section>
 
 <!-- STAKEHOLDERS -->
 <section class="stakeholders" id="stakeholders">
@@ -1628,12 +1703,12 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = next === 'dark' ? '🌙' : '☀️'; label.textContent = next === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
   }
   document.addEventListener('DOMContentLoaded', function() {
     var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
   });
 </script>
 </body>

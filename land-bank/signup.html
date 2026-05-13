@@ -207,7 +207,7 @@
     <a href="./listings.html" class="nav-link">Browse Listings</a>
     <a href="./valuation.html" class="nav-link">Valuation Tool</a>
     <a href="../index.html" class="nav-link">← Imali.biz</a>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
     <a href="#" class="nav-login">Already a member? Log in</a>
   </div>
 </nav>
@@ -502,12 +502,12 @@
     html.setAttribute('data-theme', next);
     localStorage.setItem('imali-theme', next);
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = next === 'dark' ? '🌙' : '☀️'; label.textContent = next === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
   }
   document.addEventListener('DOMContentLoaded', function() {
     var t = document.documentElement.getAttribute('data-theme') || 'light';
     var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    if(icon) { icon.textContent = t === 'dark' ? '🌙' : '☀️'; label.textContent = t === 'dark' ? 'Dark' : 'Light'; }
+    if(icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
   });
   document.addEventListener('DOMContentLoaded', function() {
     var t = document.documentElement.getAttribute('data-theme') || 'dark';
