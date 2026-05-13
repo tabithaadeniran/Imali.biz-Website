@@ -125,11 +125,80 @@
   .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
   .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
+
+  /* SIDE RAILS — visible on wide screens only */
+  .side-rails { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 6; display: flex; justify-content: space-between; }
+  @media (max-width: 1380px) { .side-rails { display: none; } }
+  .rail { width: 72px; height: 100%; display: flex; flex-direction: column; align-items: center; padding: 5rem 0 3rem; }
+  .rail-l { border-right: 1px solid var(--border); }
+  .rail-r { border-left: 1px solid var(--border); }
+  .rail-label {
+    writing-mode: vertical-rl; text-orientation: mixed;
+    font-family: 'Syne', sans-serif; font-size: 0.6rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--text-faint); margin: auto 0;
+  }
+  .rail-l .rail-label { transform: rotate(180deg); }
+  .rail-dots { display: flex; flex-direction: column; gap: 6px; }
+  .rail-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); opacity: 0.25; }
+  .rail-dot.accent { opacity: 0.6; background: var(--terracotta); width: 6px; height: 6px; }
+  .rail-line { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--gold), transparent); opacity: 0.3; margin: 1.5rem 0; }
+  .rail-step {
+    font-family: 'Syne', sans-serif; font-size: 0.55rem; font-weight: 700;
+    letter-spacing: 0.1em; color: var(--text-faint); margin: 6px 0;
+    writing-mode: vertical-rl; text-orientation: mixed;
+  }
+  .rail-r .rail-step { transform: rotate(180deg); }
 </style>
 </head>
 <body>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
+
+<div class="side-rails" aria-hidden="true">
+  <div class="rail rail-l">
+    <div class="rail-dots">
+      <div class="rail-dot accent"></div>
+      <div class="rail-dot"></div>
+      <div class="rail-dot"></div>
+    </div>
+    <div class="rail-line"></div>
+    <div class="rail-step">01</div>
+    <div class="rail-step">02</div>
+    <div class="rail-step">03</div>
+    <div class="rail-step">04</div>
+    <div class="rail-line"></div>
+    <div class="rail-label">How to Invest · Imali.biz</div>
+    <div class="rail-line"></div>
+    <div class="rail-dots">
+      <div class="rail-dot"></div>
+      <div class="rail-dot"></div>
+      <div class="rail-dot accent"></div>
+    </div>
+  </div>
+  <div class="rail rail-r">
+    <div class="rail-dots">
+      <div class="rail-dot accent"></div>
+      <div class="rail-dot"></div>
+      <div class="rail-dot"></div>
+    </div>
+    <div class="rail-line"></div>
+    <div class="rail-label">The Wealth Hub</div>
+    <div class="rail-line"></div>
+    <div class="rail-dots">
+      <div class="rail-dot"></div>
+      <div class="rail-dot accent"></div>
+      <div class="rail-dot"></div>
+    </div>
+    <div class="rail-line"></div>
+    <div class="rail-label">Real Estate · Rwanda</div>
+    <div class="rail-line"></div>
+    <div class="rail-dots">
+      <div class="rail-dot"></div>
+      <div class="rail-dot"></div>
+      <div class="rail-dot accent"></div>
+    </div>
+  </div>
+</div>
 
 <nav>
   <a href="./index.html" class="nav-logo-wrap">
