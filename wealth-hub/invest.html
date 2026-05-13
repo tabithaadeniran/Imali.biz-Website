@@ -80,8 +80,29 @@
   .faq-a { font-size: 0.84rem; color: var(--text-dim); line-height: 1.7; padding-bottom: 1.25rem; display: none; }
   .faq-a.open { display: block; }
 
+  /* HERO BACKGROUND */
+  .hero { padding: 7rem 4rem 3rem; position: relative; overflow: hidden; }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='520' viewBox='0 0 900 520'%3E%3Cellipse cx='720' cy='140' rx='340' ry='210' fill='none' stroke='%23d4a832' stroke-width='1.2' stroke-opacity='0.13'/%3E%3Cellipse cx='720' cy='140' rx='440' ry='295' fill='none' stroke='%23c8521a' stroke-width='0.9' stroke-opacity='0.09'/%3E%3Cellipse cx='720' cy='140' rx='540' ry='380' fill='none' stroke='%23d4a832' stroke-width='0.7' stroke-opacity='0.07'/%3E%3Cellipse cx='720' cy='140' rx='640' ry='460' fill='none' stroke='%23c8521a' stroke-width='0.6' stroke-opacity='0.05'/%3E%3Cellipse cx='120' cy='430' rx='180' ry='120' fill='none' stroke='%23d4a832' stroke-width='0.9' stroke-opacity='0.1'/%3E%3Cellipse cx='120' cy='430' rx='260' ry='180' fill='none' stroke='%23c8521a' stroke-width='0.7' stroke-opacity='0.07'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero > * { position: relative; z-index: 1; }
+
+  /* TIGHTER SPACING */
+  .steps-section { padding-bottom: 3rem; }
+  .invest-step { padding: 1.75rem 0; }
+  .protect-section { padding: 3.5rem 4rem; }
+  .faq-section { padding: 3.5rem 4rem; }
+
   /* CTA */
-  .cta-section { text-align: center; padding: 6rem 4rem; }
+  .cta-section { text-align: center; padding: 5rem 4rem; }
   .cta-title { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; letter-spacing: -0.025em; margin-bottom: 1rem; }
   .cta-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
   .cta-sub { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; max-width: 480px; margin: 0 auto 2.5rem; }

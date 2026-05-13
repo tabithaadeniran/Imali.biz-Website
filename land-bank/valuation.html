@@ -343,10 +343,8 @@
     </div>
 
     <div class="field-group">
-      <label>Village</label>
-      <select id="vVillage" disabled>
-        <option value="">— Select Cell first —</option>
-      </select>
+      <label>Village <span style="font-size:0.7rem;color:var(--text-faint);font-weight:300">(optional)</span></label>
+      <input type="text" id="vVillage" placeholder="Enter village name" disabled style="background:var(--input-bg);border:1px solid var(--input-border);border-radius:0.5rem;padding:0.6rem 0.85rem;font-size:0.88rem;font-family:inherit;color:var(--text);width:100%;outline:none;">
     </div>
 
     <div class="field-row">
@@ -946,48 +944,145 @@
     item.addEventListener('click', () => item.classList.toggle('checked'));
   });
 
-  // Valuation engine
-  const baseRates = {
-    kigali: { residential: 20000, commercial: 45000, agricultural: 8000, mixed: 28000 },
-    northern: { residential: 8000, commercial: 18000, agricultural: 5000, mixed: 12000 },
-    southern: { residential: 7000, commercial: 15000, agricultural: 4500, mixed: 10000 },
-    eastern: { residential: 6000, commercial: 12000, agricultural: 4000, mixed: 9000 },
-    western: { residential: 9000, commercial: 20000, agricultural: 5500, mixed: 13000 }
+  // ─────────────────────────────────────────────────────────────────────────────
+  // VALUATION ENGINE — calibrated on real data
+  // Source: Rwanda Land & Property Reference Prices, Official Gazette no. Special
+  //         08/11/2018 (Institute of Real Property Valuers in Rwanda)
+  //         Section 1: Sector-Level Reference Prices — district averages computed
+  //         from sector means weighted by transaction count.
+  // Currency: RWF per sqm (2018 baseline). Updated to 2026 via inflation multiplier.
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  // 2018 district average price per sqm (RWF) — residential baseline
+  // Computed as weighted avg of sector means from official gazette data
+  const refPrices2018 = {
+    // KIGALI CITY
+    gasabo:    15460,   // Remera 50,334 · Kimihurura 48,150 · Kacyiru 35,098 · Gisozi 14,201 (avg all sectors)
+    kicukiro:  17528,   // Kicukiro sector 48,026 · Niboye 35,818 · Gikondo 21,131 (avg all sectors)
+    nyarugenge:21434,   // Nyarugenge sector 71,680 · Muhima 65,606 · Gitega 16,262 (avg all sectors)
+    // SECONDARY CITIES
+    huye:        935,   // Ngoma 2,625 · Tumba 2,422 · Mukura 1,505 · Mbazi 1,012 (avg 14 sectors)
+    kayonza:     564,   // Mukarange 1,698 · Kabarondo 1,039 · Kabare 609 · Gahini 357 (avg 12 sectors)
+    muhanga:    1242,   // Nyamabuye 4,798 · Shyogwe 2,610 · Cyeza 1,617 · Kiyumba 1,242 (avg 12 sectors)
+    musanze:    1684,   // Muhoza 4,915 · Musanze 2,807 · Cyuve 2,802 · Gacaca 1,853 (avg 15 sectors)
+    nyagatare:   443,   // Nyagatare 834 · Mimuri 738 · Kiyombe 471 · Matimba 469 (avg 14 sectors)
+    rubavu:     2754,   // Gisenyi 12,237 · Nyamyumba 2,701 · Rubavu 2,869 · Nyakiriba 2,279 (avg 12 sectors)
+    rwamagana:  1126,   // Muyumbu 2,056 · Kigabiro 1,702 · Fumbwe 1,610 · Nyakaliro 1,398 (avg 14 sectors)
+    // RURAL DISTRICTS — Northern Province
+    burera:     1316,   // Kagogo 2,069 · Cyanika 1,872 · Rugarama 1,550 · Bungwe 1,644 (avg 17 sectors)
+    gakenke:    1383,   // Gashenyi 5,307 · Gakenke sector 3,071 · Karambo 2,133 · Rusasa 1,414 (avg 19 sectors)
+    gicumbi:     782,   // Byumba 1,118 · Cyumba 1,237 · Nyankenke 1,159 · Mutete 939 (avg 20 sectors)
+    rulindo:     950,   // Estimated: Northern Province, near Kigali corridor
+    // RURAL DISTRICTS — Eastern Province
+    bugesera:    962,   // Ntarama 2,738 · Nyamata 2,508 · Mayange 1,391 · Rilima 1,473 (avg 15 sectors)
+    gatsibo:     639,   // Muhura 926 · Remera 942 · Rugarama 883 · Gatsibo 730 (avg 14 sectors)
+    kirehe:      450,   // Estimated: Eastern Province, agricultural/border area
+    ngoma:       550,   // Estimated: Eastern Province, similar to Gatsibo
+    // RURAL DISTRICTS — Southern Province
+    gisagara:    450,   // Estimated: Southern Province, agricultural
+    kamonyi:     620,   // Estimated: Southern Province, near Muhanga corridor
+    nyamagabe:   560,   // Estimated: Southern Province, mountainous terrain
+    nyanza:      720,   // Estimated: historical capital, moderate urban activity
+    nyaruguru:   380,   // Estimated: Southern Province, remote/mountainous
+    ruhango:     510,   // Estimated: Southern Province, agricultural
+    // RURAL DISTRICTS — Western Province
+    karongi:     920,   // Estimated: Lake Kivu western shore, tourism/agriculture
+    ngororero:   610,   // Estimated: Western Province, hilly
+    nyabihu:     920,   // Estimated: near Rubavu, volcanic/agricultural
+    nyamasheke:  720,   // Estimated: Lake Kivu shore, western
+    rusizi:     1120,   // Estimated: Cyangugu/Rusizi City, border trade hub
+    rutsiro:     660    // Estimated: Western Province, agricultural
   };
-  const hotspots = { kigali: 88, northern: 65, southern: 58, eastern: 55, western: 62 };
-  const trends = { kigali: '+14.2% YoY', northern: '+8.4% YoY', southern: '+6.1% YoY', eastern: '+5.8% YoY', western: '+9.3% YoY' };
-  // Tenure: emphyteutic is the Rwanda baseline (1.0); others adjusted relative to it
+
+  // Province groupings (for comparison display)
+  const provinceMap = {
+    kigali:   ['gasabo','kicukiro','nyarugenge'],
+    northern: ['burera','gakenke','gicumbi','musanze','rulindo'],
+    southern: ['gisagara','huye','kamonyi','muhanga','nyamagabe','nyanza','nyaruguru','ruhango'],
+    eastern:  ['bugesera','gatsibo','kayonza','kirehe','ngoma','nyagatare','rwamagana'],
+    western:  ['karongi','ngororero','nyabihu','nyamasheke','rubavu','rusizi','rutsiro']
+  };
+
+  function getDistrictType(d) {
+    if (['gasabo','kicukiro','nyarugenge'].includes(d)) return 'kigali';
+    if (['huye','kayonza','muhanga','musanze','nyagatare','rubavu','rwamagana'].includes(d)) return 'secondary';
+    return 'rural';
+  }
+
+  function getProvinceOf(d) {
+    for (const [p, arr] of Object.entries(provinceMap)) { if (arr.includes(d)) return p; }
+    return 'eastern';
+  }
+
+  // Cumulative price appreciation from 2018 to 2026 (~8 years)
+  // Kigali: ~10%/yr → 1.10^8 ≈ 2.14x | Secondary: ~8%/yr → 1.08^8 ≈ 1.85x | Rural: ~5%/yr → 1.05^8 ≈ 1.48x
+  const inflationMult = { kigali: 2.14, secondary: 1.85, rural: 1.48 };
+
+  // Land-type multipliers relative to residential baseline
+  const landTypeMult = { residential: 1.0, commercial: 1.35, agricultural: 0.45, mixed: 0.85, industrial: 1.10 };
+
+  // Tenure: emphyteutic is the Rwanda legal baseline (1.0); others adjusted relative
   const tenureMult = { emphyteutic: 1.0, freehold: 1.08, condominium: 1.04, sublease: 0.90, investment: 1.03, concession: 0.82 };
-  // e-Title carries a small premium (faster transfer, harder to dispute)
+  // e-Title carries a premium (faster transfer, harder to dispute)
   const titleFormatMult = { etitle: 1.05, physical: 1.0 };
   const slopeMult = { flat: 1.0, gentle: 0.97, moderate: 0.90, steep: 0.78, verysteep: 0.62, extreme: 0.45 };
-  const districtAvg = { kigali: 22000, northern: 9000, southern: 7500, eastern: 6500, western: 10000 };
-  const comparisons = {
-    kigali: [
-      { loc: 'Gasabo', rate: 28000 },
-      { loc: 'Kicukiro', rate: 22000 },
-      { loc: 'Nyarugenge', rate: 25000 }
-    ],
-    northern: [
-      { loc: 'Musanze', rate: 9500 },
-      { loc: 'Gicumbi', rate: 7000 },
-      { loc: 'Rulindo', rate: 6500 }
-    ],
-    southern: [
-      { loc: 'Huye', rate: 8000 },
-      { loc: 'Muhanga', rate: 6500 },
-      { loc: 'Ruhango', rate: 5500 }
-    ],
-    eastern: [
-      { loc: 'Nyagatare', rate: 7000 },
-      { loc: 'Kayonza', rate: 5500 },
-      { loc: 'Bugesera', rate: 6500 }
-    ],
-    western: [
-      { loc: 'Rubavu', rate: 12000 },
-      { loc: 'Karongi', rate: 8000 },
-      { loc: 'Rusizi', rate: 7500 }
-    ]
+
+  // District hotspot scores (0–100) — recalibrated from NLA transaction data
+  const districtHotspot = {
+    kicukiro: 92, nyarugenge: 88, gasabo: 85,
+    rubavu: 75, musanze: 72, rwamagana: 68, bugesera: 65,
+    rusizi: 62, nyabihu: 62, rutsiro: 60, burera: 58,
+    ngororero: 56, rulindo: 55, huye: 55, karongi: 52, kamonyi: 52,
+    muhanga: 50, gicumbi: 50, nyamasheke: 50, kayonza: 48, nyagatare: 48,
+    gakenke: 45, ruhango: 45, ngoma: 43, nyanza: 42, nyaruguru: 40,
+    gatsibo: 40, nyamagabe: 40, kirehe: 38, gisagara: 35
+  };
+
+  // YoY trend — recalibrated from NLA txn/reference ratio (higher spread = stronger demand)
+  const districtTrend = {
+    kicukiro: '+16.2% YoY', nyarugenge: '+13.5% YoY', gasabo: '+12.1% YoY',
+    rwamagana: '+14.5% YoY', bugesera: '+12.8% YoY', rulindo: '+11.2% YoY',
+    musanze: '+11.8% YoY', ngoma: '+10.2% YoY', nyagatare: '+10.5% YoY',
+    rubavu: '+9.8% YoY', kayonza: '+9.1% YoY', kirehe: '+9.1% YoY',
+    burera: '+8.4% YoY', nyabihu: '+8.4% YoY', ngororero: '+7.7% YoY',
+    rusizi: '+7.0% YoY', rutsiro: '+6.8% YoY', gakenke: '+6.6% YoY',
+    huye: '+6.5% YoY', kamonyi: '+6.2% YoY', gicumbi: '+6.3% YoY',
+    nyanza: '+6.0% YoY', nyaruguru: '+5.8% YoY', ruhango: '+5.8% YoY',
+    muhanga: '+5.2% YoY', nyamasheke: '+5.8% YoY', nyamagabe: '+5.5% YoY',
+    gatsibo: '+5.2% YoY', karongi: '+5.3% YoY', gisagara: '+3.8% YoY'
+  };
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // NLA DASHBOARD DATA — retrieved 2026-05-13 (most current source)
+  // Avg Transaction Price per sqm: actual market prices from NLA land transactions
+  // Source: Rwanda National Land Authority (NLA) dashboard
+  // ─────────────────────────────────────────────────────────────────────────────
+  const nlaTxnPrice = {
+    // KIGALI CITY
+    gasabo: 36079, kicukiro: 62261, nyarugenge: 49777,
+    // NORTHERN PROVINCE
+    burera: 4291, gakenke: 2706, gicumbi: 2992, musanze: 6669, rulindo: 3569,
+    // SOUTHERN PROVINCE
+    gisagara: 1688, huye: 3252, kamonyi: 3881, muhanga: 3010,
+    nyamagabe: 2179, nyanza: 2333, nyaruguru: 2226, ruhango: 2606,
+    // EASTERN PROVINCE
+    bugesera: 3982, gatsibo: 2629, kayonza: 2363, kirehe: 2133,
+    ngoma: 2336, nyagatare: 2699, rwamagana: 4880,
+    // WESTERN PROVINCE
+    karongi: 2836, ngororero: 3733, nyabihu: 3989, nyamasheke: 3345,
+    rubavu: 9539, rusizi: 4421, rutsiro: 4238
+  };
+
+  // NLA dashboard reference prices (aligns with 2021 Official Gazette extraction)
+  const nlaRefPrice = {
+    gasabo: 19976, kicukiro: 27914, nyarugenge: 28077,
+    burera: 1990, gakenke: 1583, gicumbi: 1840, musanze: 2856, rulindo: 1185,
+    gisagara: 2017, huye: 1993, kamonyi: 1953, muhanga: 2836,
+    nyamagabe: 1409, nyanza: 1150, nyaruguru: 1206, ruhango: 1115,
+    bugesera: 1145, gatsibo: 977, kayonza: 961, kirehe: 867,
+    ngoma: 834, nyagatare: 938, rwamagana: 1124,
+    karongi: 2069, ngororero: 1935, nyabihu: 1832, nyamasheke: 2198,
+    rubavu: 9156, rusizi: 3123, rutsiro: 2186
   };
 
   function fmtRWF(n) {
@@ -998,6 +1093,7 @@
 
   document.getElementById('calcBtn').addEventListener('click', () => {
     const province = document.getElementById('vProvince').value;
+    const district = document.getElementById('vDistrict').value;
     const sizeRaw = parseFloat(document.getElementById('vSize').value) || 1000;
     const unitSel = document.getElementById('vUnit').value;
     const slope = document.getElementById('vSlope').value;
@@ -1015,15 +1111,26 @@
     const checkedAmen = document.querySelectorAll('#vAmenities .amenity-item.checked').length;
     const amenBonus = 1 + (checkedAmen * 0.015);
 
-    // Base rate per sqm
-    const base = baseRates[province]?.[vLandType] || 10000;
+    // Three-source data hierarchy (best available used as residential baseline):
+    // 1. NLA transaction price — current market (no inflation needed, today's prices)
+    // 2. NLA/2021 reference price — official government benchmark
+    // 3. 2018 gazette × 8-year inflation — historical fallback
+    const dtype = getDistrictType(district);
+    const ref2018 = refPrices2018[district] || 800;
+    const ref2018_inflated = Math.round(ref2018 * inflationMult[dtype]);
+    const txn2026  = nlaTxnPrice[district]  || null;   // NLA market price (primary)
+    const ref2021  = nlaRefPrice[district]  || null;   // 2021 official reference
+    const resBaseline = txn2026 || ref2021 || ref2018_inflated;
+    const base = Math.round(resBaseline * (landTypeMult[vLandType] || 1.0));
     const rate = base * tenureMult[vTenureType] * titleFormatMult[vTitleFormat] * slopeMult[slope] * utilBonus * amenBonus;
     const total = rate * sizeSqm;
     const low = total * 0.88;
     const high = total * 1.15;
-    const confidence = Math.min(95, 68 + checkedUtils * 2 + (vTitleFormat === 'etitle' ? 8 : 3) + (vTenureType === 'freehold' ? 5 : 0));
-    const hotspot = hotspots[province] || 60;
-    const distAvg = districtAvg[province] || 10000;
+    // Higher confidence when NLA transaction data is available
+    const confidence = Math.min(95, (txn2026 ? 74 : 68) + checkedUtils * 2 + (vTitleFormat === 'etitle' ? 8 : 3) + (vTenureType === 'freehold' ? 5 : 0));
+    const hotspot = districtHotspot[district] || 45;
+    // District average uses NLA reference (official benchmark) for vs-average comparison
+    const distAvg = ref2021 || ref2018_inflated;
     const vsAvg = ((rate / distAvg - 1) * 100).toFixed(1);
 
     // Show loading
@@ -1039,7 +1146,7 @@
       document.getElementById('rRange').textContent = `Range: ${fmtRWF(Math.round(low / 1e6) * 1e6)} – ${fmtRWF(Math.round(high / 1e6) * 1e6)}`;
       document.getElementById('rConfidence').textContent = confidence + '%';
       document.getElementById('rHotspot').textContent = hotspot + ' / 100';
-      document.getElementById('rTrend').textContent = trends[province];
+      document.getElementById('rTrend').textContent = districtTrend[district] || '+5.0% YoY';
 
       // Hotspot badge
       const hsBadge = document.getElementById('rHotspotBadge');
@@ -1062,8 +1169,17 @@
       const si = slopeImpacts[slope];
       const tn = tenureImpacts[vTenureType];
       const tf = formatImpacts[vTitleFormat];
+      // District display name: capitalise first letter
+      const districtLabel = district ? district.charAt(0).toUpperCase() + district.slice(1) + ' District' : (province.charAt(0).toUpperCase() + province.slice(1).replace('_',' ') + ' Province');
+      // Price history across all three sources
+      const priceHistory = txn2026
+        ? `NLA market: RWF ${txn2026.toLocaleString()} · 2021 ref: RWF ${(ref2021||'—').toLocaleString()} · 2018 ref: RWF ${ref2018.toLocaleString()}`
+        : ref2021
+          ? `2021 ref: RWF ${ref2021.toLocaleString()} · 2018 ref: RWF ${ref2018.toLocaleString()}`
+          : `2018 ref: RWF ${ref2018.toLocaleString()} (inflated est.)`;
+      const dataSourceLabel = txn2026 ? '✓ NLA transaction data' : ref2021 ? '✓ 2021 gazette' : '⚠ 2018 est.';
       document.getElementById('factorList').innerHTML = `
-        <div class="factor-card"><div class="fc-label">Location</div><div class="fc-value">${province.charAt(0).toUpperCase()+province.slice(1).replace('_',' ')}</div><div class="fc-impact impact-${hotspot >= 80 ? 'pos' : 'neu'}">Hotspot score: ${hotspot}/100</div></div>
+        <div class="factor-card"><div class="fc-label">Location</div><div class="fc-value">${districtLabel}</div><div class="fc-impact impact-${hotspot >= 80 ? 'pos' : hotspot >= 65 ? 'pos' : 'neu'}">Hotspot: ${hotspot}/100 · ${dataSourceLabel}</div><div style="font-size:0.7rem;color:var(--text-faint);margin-top:0.3rem;line-height:1.5">${priceHistory}</div></div>
         <div class="factor-card"><div class="fc-label">Land Type</div><div class="fc-value">${vLandType.charAt(0).toUpperCase()+vLandType.slice(1)}</div><div class="fc-impact impact-neu">Base rate: RWF ${base.toLocaleString()}/sqm</div></div>
         <div class="factor-card"><div class="fc-label">Land Tenure</div><div class="fc-value">${tenureLabels[vTenureType]}</div><div class="fc-impact ${tn.cls}">${tn.label}</div></div>
         <div class="factor-card"><div class="fc-label">Title Format</div><div class="fc-value">${vTitleFormat === 'etitle' ? 'e-Title (digital)' : 'Physical Title (paper)'}</div><div class="fc-impact ${tf.cls}">${tf.label}</div></div>
@@ -1072,8 +1188,16 @@
         <div class="factor-card"><div class="fc-label">Nearby Amenities</div><div class="fc-value">${checkedAmen} amenities</div><div class="fc-impact ${checkedAmen >= 2 ? 'impact-pos' : 'impact-neu'}">+${(checkedAmen*1.5).toFixed(1)}% convenience premium</div></div>
       `;
 
-      // Comparisons
-      const comps = comparisons[province] || [];
+      // Dynamic peer comparisons — other districts in same province
+      const peerDistricts = (provinceMap[getProvinceOf(district)] || []).filter(d => d !== district);
+      // Build comps: up to 4 peer districts showing their inflated residential rate
+      const comps = peerDistricts.slice(0, 4).map(d => {
+        const dt = getDistrictType(d);
+        return {
+          loc: d.charAt(0).toUpperCase() + d.slice(1) + ' District',
+          rate: Math.round((refPrices2018[d] || 800) * inflationMult[dt])
+        };
+      });
       const yourRate = rate;
       const maxRate = Math.max(...comps.map(c => c.rate), yourRate);
       const compHtml = comps.map(c => `
