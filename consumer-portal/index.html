@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Consumer Portal — Find Your Home in Rwanda | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --ink: #0a0a0f; --cream: #f5f0e8; --terracotta: #c8521a; --gold: #d4a832;
+    --forest: #1a3a2a; --warm-white: #faf7f2; --text-muted: #6b6560;
+    --sapphire: #1a6bc8; --emerald: #1a5c3a; --mist: #e8e2d8;
+    --bg: #faf7f2; --bg-alt: #ede7db; --bg-card: #ffffff;
+    --surface: rgba(0,0,0,0.04); --surface-hover: rgba(0,0,0,0.07);
+    --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.17);
+    --text: #1a1814; --text-dim: rgba(26,24,20,0.6); --text-faint: rgba(26,24,20,0.38);
+    --nav-bg: rgba(250,247,242,0.97); --input-bg: rgba(0,0,0,0.05); --input-border: rgba(0,0,0,0.14);
+    --inv-bg: #f5f0e8; --inv-text: #1a1814; --inv-muted: rgba(26,24,20,0.55);
+    --scrollbar-thumb: rgba(200,82,26,0.3);
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0f; --bg-alt: #0f0f16; --bg-card: rgba(245,240,232,0.04);
+    --surface: rgba(245,240,232,0.04); --surface-hover: rgba(245,240,232,0.08);
+    --border: rgba(245,240,232,0.08); --border-strong: rgba(245,240,232,0.15);
+    --text: #f5f0e8; --text-dim: rgba(245,240,232,0.55); --text-faint: rgba(245,240,232,0.3);
+    --nav-bg: rgba(10,10,15,0.97); --input-bg: rgba(245,240,232,0.06); --input-border: rgba(245,240,232,0.14);
+    --inv-bg: #f5f0e8; --inv-text: #0a0a0f; --inv-muted: #6b6560;
+    --scrollbar-thumb: rgba(212,168,50,0.3);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--terracotta); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,82,26,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--terracotta); transform: translate(-10px,-10px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sapphire); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-cta { background: var(--terracotta); color: #fff !important; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: #e05e20; }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* HERO */
+  .hero { padding: 7rem 4rem 0; background: var(--ink); position: relative; overflow: hidden; min-height: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .hero::before { content: ''; position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='520' viewBox='0 0 900 520'%3E%3Cellipse cx='700' cy='180' rx='380' ry='240' fill='none' stroke='%23c8521a' stroke-width='1' stroke-opacity='0.12'/%3E%3Cellipse cx='700' cy='180' rx='480' ry='320' fill='none' stroke='%23d4a832' stroke-width='0.8' stroke-opacity='0.08'/%3E%3Cellipse cx='700' cy='180' rx='580' ry='400' fill='none' stroke='%23c8521a' stroke-width='0.6' stroke-opacity='0.06'/%3E%3Cellipse cx='100' cy='450' rx='200' ry='130' fill='none' stroke='%23d4a832' stroke-width='0.8' stroke-opacity='0.1'/%3E%3C/svg%3E");
+    background-size: cover; background-position: right center; pointer-events: none; z-index: 0; }
+  .hero::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top, var(--bg), transparent); pointer-events: none; z-index: 1; }
+  .hero-inner { position: relative; z-index: 2; text-align: center; max-width: 860px; width: 100%; padding-bottom: 3rem; }
+  .hero-eyebrow { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1.5rem; display: inline-flex; align-items: center; gap: 0.75rem; }
+  .hero-eyebrow::before, .hero-eyebrow::after { content: ''; display: block; width: 24px; height: 1px; background: var(--terracotta); }
+  .hero-title { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -0.03em; color: #f5f0e8; margin-bottom: 1.25rem; }
+  .hero-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-sub { font-size: 1rem; color: rgba(245,240,232,0.6); line-height: 1.7; max-width: 520px; margin: 0 auto 2.5rem; }
+
+  /* SEARCH BOX */
+  .search-box { background: var(--bg-card); border-radius: 1.25rem; padding: 1.5rem; max-width: 780px; margin: 0 auto; box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+  .search-tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
+  .search-tab { padding: 0.45rem 1.25rem; border-radius: 2rem; font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: none; border: 1px solid var(--border); background: transparent; color: var(--text-dim); transition: all 0.2s; }
+  .search-tab.active { background: var(--terracotta); color: #fff; border-color: var(--terracotta); }
+  .search-fields { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 0.75rem; align-items: end; }
+  .search-field label { display: block; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.35rem; font-weight: 500; }
+  .search-field input, .search-field select { width: 100%; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 0.6rem; padding: 0.65rem 0.9rem; font-size: 0.88rem; font-family: inherit; color: var(--text); outline: none; transition: border-color 0.2s; }
+  .search-field input:focus, .search-field select:focus { border-color: var(--terracotta); }
+  .btn-search { background: var(--terracotta); color: #fff; border: none; border-radius: 0.6rem; padding: 0.7rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; transition: background 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem; }
+  .btn-search:hover { background: #e05e20; }
+
+  /* STATS STRIP */
+  .stats-strip { background: var(--bg-alt); border-bottom: 1px solid var(--border); padding: 1.5rem 4rem; }
+  .stats-row { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; }
+  .stat-item { text-align: center; }
+  .stat-val { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); }
+  .stat-label { font-size: 0.7rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.15rem; }
+  .stat-divider { width: 1px; height: 32px; background: var(--border); }
+
+  /* CATEGORIES */
+  .categories-section { padding: 4rem 4rem 2rem; max-width: 960px; margin: 0 auto; }
+  .section-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.75rem; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 1.75rem; }
+  .section-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .cat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; }
+  .cat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem 1rem; text-align: center; cursor: none; transition: all 0.25s; text-decoration: none; color: var(--text); }
+  .cat-card:hover { background: var(--surface-hover); border-color: var(--terracotta); transform: translateY(-2px); }
+  .cat-icon { font-size: 2rem; margin-bottom: 0.6rem; display: block; }
+  .cat-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .cat-count { font-size: 0.7rem; color: var(--text-faint); }
+
+  /* FEATURED LISTINGS */
+  .listings-section { padding: 2rem 4rem 4rem; max-width: 1100px; margin: 0 auto; }
+  .listings-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 1.75rem; }
+  .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .prop-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; transition: all 0.25s; cursor: none; }
+  .prop-card:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-color: var(--terracotta); }
+  .prop-img { width: 100%; height: 180px; background: var(--bg-alt); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .prop-img-bg { position: absolute; inset: 0; background: linear-gradient(135deg, var(--bg-alt) 0%, var(--mist) 100%); }
+  .prop-img-icon { font-size: 2.5rem; position: relative; z-index: 1; opacity: 0.4; }
+  .prop-badge { position: absolute; top: 0.75rem; left: 0.75rem; background: var(--terracotta); color: #fff; font-family: 'Syne', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 2rem; z-index: 2; }
+  .prop-badge.rent { background: var(--sapphire); }
+  .prop-badge.verified { background: var(--emerald); }
+  .prop-save { position: absolute; top: 0.75rem; right: 0.75rem; width: 32px; height: 32px; background: rgba(255,255,255,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; z-index: 2; cursor: none; transition: background 0.2s; }
+  .prop-save:hover { background: #fff; }
+  .prop-body { padding: 1.1rem; }
+  .prop-price { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.2rem; }
+  .prop-price .unit { font-size: 0.72rem; color: var(--text-faint); font-weight: 400; }
+  .prop-title { font-size: 0.88rem; font-weight: 500; margin-bottom: 0.35rem; color: var(--text); }
+  .prop-loc { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.3rem; }
+  .prop-specs { display: flex; gap: 1rem; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+  .prop-spec { font-size: 0.72rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.3rem; }
+  .link-arrow { color: var(--terracotta); text-decoration: none; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; cursor: none; }
+  .link-arrow:hover { gap: 0.7rem; }
+
+  /* AUDIENCE TRACKS */
+  .tracks-section { background: var(--bg-alt); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 5rem 4rem; }
+  .tracks-inner { max-width: 960px; margin: 0 auto; }
+  .tracks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem; }
+  .track-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.5rem; padding: 2.5rem; position: relative; overflow: hidden; }
+  .track-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 150px; height: 150px; border-radius: 50%; opacity: 0.06; }
+  .track-card.buyers::before { background: var(--terracotta); }
+  .track-card.renters::before { background: var(--sapphire); }
+  .track-badge { display: inline-block; font-family: 'Syne', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 2rem; margin-bottom: 1.25rem; }
+  .track-badge.buyers { background: rgba(200,82,26,0.1); color: var(--terracotta); }
+  .track-badge.renters { background: rgba(26,58,92,0.08); color: var(--sapphire); }
+  [data-theme="dark"] .track-badge.renters { background: rgba(100,150,200,0.12); color: #6aa0d0; }
+  .track-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+  .track-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1.75rem; }
+  .track-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+  .track-features li { font-size: 0.82rem; color: var(--text-dim); display: flex; align-items: flex-start; gap: 0.6rem; }
+  .track-features li::before { content: '✓'; color: var(--gold); font-weight: 700; font-size: 0.75rem; margin-top: 0.1rem; flex-shrink: 0; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--terracotta); color: #fff; text-decoration: none; border-radius: 3rem; padding: 0.8rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-primary:hover { background: #e05e20; }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--sapphire); color: #fff; text-decoration: none; border-radius: 3rem; padding: 0.8rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-secondary:hover { background: #254d7a; }
+
+  /* TOOLS */
+  .tools-section { padding: 5rem 4rem; max-width: 960px; margin: 0 auto; }
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 2.5rem; }
+  .tool-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1.25rem; padding: 2rem; transition: all 0.25s; text-decoration: none; color: var(--text); display: flex; flex-direction: column; gap: 0.75rem; cursor: none; }
+  .tool-card:hover { background: var(--surface-hover); transform: translateY(-2px); border-color: var(--gold); }
+  .tool-icon { width: 48px; height: 48px; background: rgba(212,168,50,0.1); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+  .tool-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; }
+  .tool-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; flex: 1; }
+  .tool-cta { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 0.4rem; }
+
+  /* HOW IT WORKS */
+  .hiw-section { background: var(--ink); padding: 5rem 4rem; }
+  .hiw-inner { max-width: 960px; margin: 0 auto; }
+  .hiw-title { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 800; letter-spacing: -0.025em; color: #f5f0e8; margin-bottom: 3.5rem; }
+  .hiw-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .hiw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+  .hiw-step { position: relative; }
+  .hiw-num { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: rgba(212,168,50,0.15); line-height: 1; margin-bottom: 1rem; }
+  .hiw-step-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: #f5f0e8; margin-bottom: 0.5rem; }
+  .hiw-step-desc { font-size: 0.8rem; color: rgba(245,240,232,0.5); line-height: 1.65; }
+  .hiw-step-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .hiw-connector { position: absolute; top: 1.5rem; right: -1rem; width: 2rem; height: 1px; background: rgba(212,168,50,0.2); }
+  .hiw-step:last-child .hiw-connector { display: none; }
+
+  /* ECOSYSTEM */
+  .eco-section { background: var(--bg-alt); border-top: 1px solid var(--border); padding: 4rem; }
+  .eco-inner { max-width: 960px; margin: 0 auto; text-align: center; }
+  .eco-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .eco-sub { font-size: 0.82rem; color: var(--text-dim); margin-bottom: 2.5rem; }
+  .eco-grid { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .eco-chip { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.5rem 1.1rem; text-decoration: none; color: var(--text-dim); font-size: 0.78rem; font-weight: 500; transition: all 0.2s; cursor: none; }
+  .eco-chip:hover { border-color: var(--gold); color: var(--text); }
+  .eco-chip.active { border-color: var(--terracotta); color: var(--terracotta); background: rgba(200,82,26,0.06); }
+
+  /* FOOTER */
+  footer { background: var(--ink); border-top: 1px solid rgba(245,240,232,0.08); padding: 3rem 4rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #f5f0e8; text-decoration: none; }
+  .footer-logo span { color: var(--terracotta); font-family: 'Instrument Serif', serif; font-style: italic; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { color: rgba(245,240,232,0.4); text-decoration: none; font-size: 0.78rem; transition: color 0.2s; }
+  .footer-links a:hover { color: rgba(245,240,232,0.8); }
+  .footer-copy { font-size: 0.72rem; color: rgba(245,240,232,0.3); }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.55s ease, transform 0.55s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 0; }
+    .search-fields { grid-template-columns: 1fr 1fr; }
+    .cat-grid { grid-template-columns: repeat(3, 1fr); }
+    .listings-grid, .tracks-grid, .tools-grid { grid-template-columns: 1fr 1fr; }
+    .hiw-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .categories-section, .listings-section, .tools-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .tracks-section, .hiw-section, .eco-section { padding: 3.5rem 1.5rem; }
+    footer { padding: 2.5rem 1.5rem; }
+    .stats-strip { padding: 1.5rem; }
+    .stats-row { gap: 1.5rem; }
+    .stat-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Consumer Portal</div>
+  </a>
+  <div class="nav-right">
+    <a href="listings.html" class="nav-link">Browse Properties</a>
+    <a href="mortgage-calculator.html" class="nav-link">Mortgage Calc</a>
+    <a href="market-reports.html" class="nav-link">Market Reports</a>
+    <a href="agent-finder.html" class="nav-link">Find an Agent</a>
+    <a href="../index.html" class="nav-link" style="color:var(--text-faint)">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+    <a href="dashboard.html" class="nav-cta">My Account</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Imali.biz Consumer Portal</div>
+    <h1 class="hero-title">Find your next home<br>in <em>Rwanda</em></h1>
+    <p class="hero-sub">Browse NLA-verified listings, calculate your mortgage, and connect with trusted agents — all in one place.</p>
+
+    <div class="search-box">
+      <div class="search-tabs">
+        <button class="search-tab active" onclick="setTab(this,'buy')">🏠 Buy</button>
+        <button class="search-tab" onclick="setTab(this,'rent')">🔑 Rent</button>
+        <button class="search-tab" onclick="setTab(this,'new')">✨ New Developments</button>
+      </div>
+      <div class="search-fields">
+        <div class="search-field">
+          <label>Location</label>
+          <input type="text" placeholder="Kigali, Gasabo, Musanze…" id="searchLoc">
+        </div>
+        <div class="search-field">
+          <label>Property Type</label>
+          <select id="searchType">
+            <option value="">Any Type</option>
+            <option>Apartment</option>
+            <option>House / Villa</option>
+            <option>Commercial</option>
+            <option>Land</option>
+            <option>New Development</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label>Max Budget (RWF)</label>
+          <select id="searchBudget">
+            <option value="">Any Budget</option>
+            <option>Up to 20,000,000</option>
+            <option>Up to 50,000,000</option>
+            <option>Up to 100,000,000</option>
+            <option>Up to 200,000,000</option>
+            <option>200M+</option>
+          </select>
+        </div>
+        <button class="btn-search" onclick="doSearch()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10 10l2.5 2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-val">2,400+</div>
+      <div class="stat-label">Active Listings</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-val">30</div>
+      <div class="stat-label">Districts Covered</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-val">NLA</div>
+      <div class="stat-label">Title Verified</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-val">480+</div>
+      <div class="stat-label">Verified Agents</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="stat-val">Free</div>
+      <div class="stat-label">To Browse</div>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="categories-section">
+  <div class="section-eyebrow">Browse by Type</div>
+  <h2 class="section-title">What are you <em>looking for?</em></h2>
+  <div class="cat-grid">
+    <a href="listings.html?type=apartment" class="cat-card reveal">
+      <span class="cat-icon">🏢</span>
+      <div class="cat-name">Apartments</div>
+      <div class="cat-count">840 listings</div>
+    </a>
+    <a href="listings.html?type=house" class="cat-card reveal">
+      <span class="cat-icon">🏠</span>
+      <div class="cat-name">Houses & Villas</div>
+      <div class="cat-count">620 listings</div>
+    </a>
+    <a href="listings.html?type=commercial" class="cat-card reveal">
+      <span class="cat-icon">🏬</span>
+      <div class="cat-name">Commercial</div>
+      <div class="cat-count">315 listings</div>
+    </a>
+    <a href="../land-bank/listings.html" class="cat-card reveal">
+      <span class="cat-icon">🌿</span>
+      <div class="cat-name">Land</div>
+      <div class="cat-count">Via Land Bank</div>
+    </a>
+    <a href="listings.html?type=new" class="cat-card reveal">
+      <span class="cat-icon">🏗️</span>
+      <div class="cat-name">New Developments</div>
+      <div class="cat-count">128 projects</div>
+    </a>
+  </div>
+</section>
+
+<!-- FEATURED LISTINGS -->
+<section class="listings-section">
+  <div class="listings-header">
+    <div>
+      <div class="section-eyebrow">Featured Properties</div>
+      <h2 class="section-title" style="margin-bottom:0">Handpicked <em>listings</em></h2>
+    </div>
+    <a href="listings.html" class="link-arrow">View all listings <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+
+  <div class="listings-grid">
+    <!-- Card 1 -->
+    <div class="prop-card reveal">
+      <div class="prop-img">
+        <div class="prop-img-bg"></div>
+        <span class="prop-img-icon">🏠</span>
+        <div class="prop-badge">For Sale</div>
+        <div class="prop-badge verified" style="left:auto;right:0.75rem;top:2.5rem">✓ Verified</div>
+        <div class="prop-save">♡</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">RWF 65,000,000 <span class="unit"></span></div>
+        <div class="prop-title">3-Bedroom Family Home</div>
+        <div class="prop-loc">📍 Kimihurura, Gasabo, Kigali</div>
+        <div class="prop-specs">
+          <div class="prop-spec">🛏 3 Beds</div>
+          <div class="prop-spec">🚿 2 Baths</div>
+          <div class="prop-spec">📐 220 m²</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="prop-card reveal">
+      <div class="prop-img">
+        <div class="prop-img-bg" style="background:linear-gradient(135deg,#e8f0e8,#d0e8d0)"></div>
+        <span class="prop-img-icon">🏢</span>
+        <div class="prop-badge rent">For Rent</div>
+        <div class="prop-badge verified" style="left:auto;right:0.75rem;top:2.5rem">✓ Verified</div>
+        <div class="prop-save">♡</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">RWF 750,000 <span class="unit">/ month</span></div>
+        <div class="prop-title">Modern 2-Bedroom Apartment</div>
+        <div class="prop-loc">📍 Kacyiru, Gasabo, Kigali</div>
+        <div class="prop-specs">
+          <div class="prop-spec">🛏 2 Beds</div>
+          <div class="prop-spec">🚿 2 Baths</div>
+          <div class="prop-spec">📐 95 m²</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="prop-card reveal">
+      <div class="prop-img">
+        <div class="prop-img-bg" style="background:linear-gradient(135deg,#f0ece0,#e8d8c0)"></div>
+        <span class="prop-img-icon">🏡</span>
+        <div class="prop-badge">For Sale</div>
+        <div class="prop-badge verified" style="left:auto;right:0.75rem;top:2.5rem">✓ Verified</div>
+        <div class="prop-save">♡</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">RWF 120,000,000 <span class="unit"></span></div>
+        <div class="prop-title">4-Bedroom Villa with Garden</div>
+        <div class="prop-loc">📍 Nyarutarama, Gasabo, Kigali</div>
+        <div class="prop-specs">
+          <div class="prop-spec">🛏 4 Beds</div>
+          <div class="prop-spec">🚿 3 Baths</div>
+          <div class="prop-spec">📐 380 m²</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="prop-card reveal">
+      <div class="prop-img">
+        <div class="prop-img-bg" style="background:linear-gradient(135deg,#e0e8f0,#c8d8e8)"></div>
+        <span class="prop-img-icon">🏢</span>
+        <div class="prop-badge rent">For Rent</div>
+        <div class="prop-save">♡</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">RWF 450,000 <span class="unit">/ month</span></div>
+        <div class="prop-title">Studio Apartment, City Centre</div>
+        <div class="prop-loc">📍 Remera, Gasabo, Kigali</div>
+        <div class="prop-specs">
+          <div class="prop-spec">🛏 Studio</div>
+          <div class="prop-spec">🚿 1 Bath</div>
+          <div class="prop-spec">📐 42 m²</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="prop-card reveal">
+      <div class="prop-img">
+        <div class="prop-img-bg" style="background:linear-gradient(135deg,#ece8f0,#d8d0e8)"></div>
+        <span class="prop-img-icon">🏬</span>
+        <div class="prop-badge">For Sale</div>
+        <div class="prop-badge verified" style="left:auto;right:0.75rem;top:2.5rem">✓ Verified</div>
+        <div class="prop-save">♡</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">RWF 85,000,000 <span class="unit"></span></div>
+        <div class="prop-title">Commercial Space, Kigali CBD</div>
+        <div class="prop-loc">📍 Nyarugenge, Kigali</div>
+        <div class="prop-specs">
+          <div class="prop-spec">📐 310 m²</div>
+          <div class="prop-spec">🏢 Ground Floor</div>
+          <div class="prop-spec">🅿 Parking</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="prop-card reveal">
+      <div class="prop-img">
+        <div class="prop-img-bg" style="background:linear-gradient(135deg,#e8f0e4,#d4e8cc)"></div>
+        <span class="prop-img-icon">🏗️</span>
+        <div class="prop-badge" style="background:var(--gold);color:var(--ink)">New Dev</div>
+        <div class="prop-save">♡</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-price">From RWF 28,000,000 <span class="unit"></span></div>
+        <div class="prop-title">Horizon Residences — Phase 1</div>
+        <div class="prop-loc">📍 Kicukiro, Kigali</div>
+        <div class="prop-specs">
+          <div class="prop-spec">🏢 48 Units</div>
+          <div class="prop-spec">🛏 1–3 Beds</div>
+          <div class="prop-spec">📅 Q2 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE TRACKS -->
+<section class="tracks-section">
+  <div class="tracks-inner">
+    <div style="text-align:center;margin-bottom:0.5rem">
+      <div class="section-eyebrow" style="justify-content:center">Your Path</div>
+      <h2 class="section-title" style="text-align:center">Buying or <em>renting?</em></h2>
+    </div>
+    <div class="tracks-grid">
+      <div class="track-card buyers reveal">
+        <span class="track-badge buyers">For Buyers</span>
+        <h3 class="track-title">Buy your piece of Rwanda</h3>
+        <p class="track-desc">Access verified properties, get an instant mortgage estimate, and close with confidence — with full NLA title support throughout.</p>
+        <ul class="track-features">
+          <li>NLA-verified title on every listing</li>
+          <li>Instant mortgage calculator with Rwanda bank rates</li>
+          <li>Affordability check based on your income</li>
+          <li>Legal due diligence via Compliance Hub</li>
+          <li>Step-by-step buying guide for Rwanda</li>
+        </ul>
+        <a href="listings.html?mode=buy" class="btn-primary">Browse Properties for Sale →</a>
+      </div>
+      <div class="track-card renters reveal">
+        <span class="track-badge renters">For Renters</span>
+        <h3 class="track-title">Find your next rental home</h3>
+        <p class="track-desc">Discover verified rental properties across Rwanda. Filter by budget, location, and amenities. Move in with peace of mind.</p>
+        <ul class="track-features">
+          <li>Verified landlord profiles and reviews</li>
+          <li>Digital lease agreements</li>
+          <li>Rent-to-own options available</li>
+          <li>Affordability calculator for renters</li>
+          <li>Neighbourhood guides and school zones</li>
+        </ul>
+        <a href="listings.html?mode=rent" class="btn-secondary">Browse Rentals →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools-section">
+  <div class="section-eyebrow">Consumer Tools</div>
+  <h2 class="section-title">Make smarter <em>decisions</em></h2>
+  <div class="tools-grid">
+    <a href="mortgage-calculator.html" class="tool-card reveal">
+      <div class="tool-icon">🏦</div>
+      <div class="tool-title">Mortgage Calculator</div>
+      <div class="tool-desc">Calculate monthly repayments using Rwanda's current bank rates. See the full amortization schedule.</div>
+      <div class="tool-cta">Calculate now →</div>
+    </a>
+    <a href="affordability.html" class="tool-card reveal">
+      <div class="tool-icon">💰</div>
+      <div class="tool-title">Affordability Check</div>
+      <div class="tool-desc">Enter your monthly income and expenses to find your maximum property budget in Rwanda.</div>
+      <div class="tool-cta">Check affordability →</div>
+    </a>
+    <a href="market-reports.html" class="tool-card reveal">
+      <div class="tool-icon">📊</div>
+      <div class="tool-title">Market Reports</div>
+      <div class="tool-desc">Price trends by district, rental yield data, and supply/demand signals for Rwanda's property market.</div>
+      <div class="tool-cta">View reports →</div>
+    </a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="hiw-section">
+  <div class="hiw-inner">
+    <h2 class="hiw-title">How buying works <em>with Imali</em></h2>
+    <div class="hiw-grid">
+      <div class="hiw-step reveal">
+        <div class="hiw-connector"></div>
+        <div class="hiw-num">01</div>
+        <span class="hiw-step-icon">👤</span>
+        <div class="hiw-step-title">Create your free profile</div>
+        <div class="hiw-step-desc">Sign up and complete your buyer profile. Get access to all listings and tools instantly.</div>
+      </div>
+      <div class="hiw-step reveal">
+        <div class="hiw-connector"></div>
+        <div class="hiw-num">02</div>
+        <span class="hiw-step-icon">🔍</span>
+        <div class="hiw-step-title">Browse verified listings</div>
+        <div class="hiw-step-desc">Every property has passed NLA title verification. Filter by location, type, and price.</div>
+      </div>
+      <div class="hiw-step reveal">
+        <div class="hiw-connector"></div>
+        <div class="hiw-num">03</div>
+        <span class="hiw-step-icon">🏦</span>
+        <div class="hiw-step-title">Get pre-qualified</div>
+        <div class="hiw-step-desc">Use our mortgage calculator and connect with partner banks for pre-approval.</div>
+      </div>
+      <div class="hiw-step reveal">
+        <div class="hiw-num">04</div>
+        <span class="hiw-step-icon">🤝</span>
+        <div class="hiw-step-title">Close with confidence</div>
+        <div class="hiw-step-desc">Our Compliance Hub handles due diligence and title transfer so your purchase is legally sound.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section class="eco-section">
+  <div class="eco-inner">
+    <div class="eco-title">Part of the Imali Ecosystem</div>
+    <p class="eco-sub">Every tool you need, connected across Rwanda's real estate journey.</p>
+    <div class="eco-grid">
+      <a href="../land-bank/index.html" class="eco-chip">🌿 Land Bank</a>
+      <a href="../wealth-hub/index.html" class="eco-chip">💰 Wealth Hub</a>
+      <a href="./index.html" class="eco-chip active">🏠 Consumer Portal</a>
+      <a href="#" class="eco-chip">🔧 Supply Chain</a>
+      <a href="#" class="eco-chip">👷 Talent Forge</a>
+      <a href="#" class="eco-chip">⚖️ Compliance Hub</a>
+      <a href="#" class="eco-chip">🏦 Banks — Partner with Us</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="./index.html" class="footer-logo">Imali<span>.</span>biz — Consumer Portal</a>
+  <ul class="footer-links">
+    <li><a href="listings.html">Browse Properties</a></li>
+    <li><a href="mortgage-calculator.html">Mortgage Calculator</a></li>
+    <li><a href="agent-finder.html">Find an Agent</a></li>
+    <li><a href="dashboard.html">My Account</a></li>
+    <li><a href="../index.html">← Imali.biz</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 Imali.biz — Rwanda Real Estate Intelligence</div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  });
+  (function anim(){ rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.transform=`translate(${rx}px,${ry}px)`; requestAnimationFrame(anim); })();
+
+  // Search tabs
+  function setTab(el, mode) {
+    document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function doSearch() {
+    const loc = document.getElementById('searchLoc').value;
+    const type = document.getElementById('searchType').value;
+    const budget = document.getElementById('searchBudget').value;
+    window.location.href = `listings.html?loc=${encodeURIComponent(loc)}&type=${encodeURIComponent(type)}&budget=${encodeURIComponent(budget)}`;
+  }
+
+  // Reveal
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Theme
+  function toggleTheme() {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const t = document.documentElement.getAttribute('data-theme') || 'light';
+    document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Calculator — Consumer Portal · Imali.biz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─── */
+    :root {
+      /* Brand — constant in both modes */
+      --terracotta: #c8521a;
+      --terra-dim:  #a04215;
+      --gold:       #d4a832;
+      --gold-dim:   #a8831f;
+      --sapphire:   #1a6bc8;
+      --radius:     12px;
+      --radius-lg:  18px;
+
+      /* LIGHT MODE (default) */
+      --ink:        #faf7f2;
+      --ink-2:      #ffffff;
+      --ink-3:      #ede7db;
+      --cream:      #1a1814;
+      --cream-dim:  #3a3530;
+      --text:       rgba(26,24,20,0.92);
+      --text-mid:   rgba(26,24,20,0.60);
+      --text-faint: rgba(26,24,20,0.38);
+      --border:     rgba(0,0,0,0.09);
+      --border-mid: rgba(0,0,0,0.14);
+      --card-bg:    rgba(0,0,0,0.04);
+      --card-hover: rgba(0,0,0,0.07);
+      --nav-bg:     rgba(250,247,242,0.97);
+    }
+
+    [data-theme="dark"] {
+      --ink:        #0a0a0f;
+      --ink-2:      #12121a;
+      --ink-3:      #1c1c28;
+      --cream:      #f5f0e8;
+      --cream-dim:  #ede7da;
+      --text:       rgba(245,240,232,0.92);
+      --text-mid:   rgba(245,240,232,0.60);
+      --text-faint: rgba(245,240,232,0.30);
+      --border:     rgba(245,240,232,0.08);
+      --border-mid: rgba(245,240,232,0.14);
+      --card-bg:    rgba(245,240,232,0.04);
+      --card-hover: rgba(245,240,232,0.07);
+      --nav-bg:     rgba(10,10,15,0.88);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ink);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9997; opacity: 0.6;
+    }
+
+    /* ─── CURSOR ─── */
+    .cursor { position: fixed; width: 10px; height: 10px; background: var(--terracotta); border-radius: 50%; pointer-events: none; z-index: 9999; }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,82,26,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+    body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--terracotta); transform: translate(-10px,-10px) !important; }
+    @media (hover: none) { .cursor, .cursor-ring { display: none; } }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.25rem 4rem;
+      background: var(--nav-bg);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+    .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+    .nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+    .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sapphire); font-weight: 500; }
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+    .nav-link { color: var(--text-mid); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+    .nav-link:hover { color: var(--text); }
+    .nav-link.active { color: var(--terracotta); font-weight: 500; }
+    .nav-cta { background: var(--terracotta); color: #fff !important; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+    .nav-cta:hover { background: var(--terra-dim); }
+    .theme-toggle { background: var(--card-bg); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-mid); transition: all 0.2s; }
+    .theme-toggle:hover { background: var(--card-hover); color: var(--text); }
+    @media (max-width: 1024px) { nav { padding: 1rem 1.5rem; } }
+    @media (max-width: 768px) { .nav-right .nav-link { display: none; } }
+
+    /* ─── PAGE HEADER ─── */
+    .page-header {
+      padding: 7rem 4rem 3.5rem;
+      background: var(--ink-3);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='340'%3E%3Cellipse cx='450' cy='170' rx='400' ry='120' fill='none' stroke='rgba(212,168,50,0.07)' stroke-width='1'/%3E%3Cellipse cx='450' cy='170' rx='340' ry='90' fill='none' stroke='rgba(212,168,50,0.06)' stroke-width='1'/%3E%3Cellipse cx='450' cy='170' rx='280' ry='65' fill='none' stroke='rgba(200,82,26,0.06)' stroke-width='1'/%3E%3Cellipse cx='450' cy='170' rx='220' ry='45' fill='none' stroke='rgba(200,82,26,0.07)' stroke-width='1'/%3E%3Cellipse cx='450' cy='170' rx='160' ry='28' fill='none' stroke='rgba(212,168,50,0.08)' stroke-width='1'/%3E%3Cellipse cx='150' cy='80' rx='180' ry='60' fill='none' stroke='rgba(26,107,200,0.05)' stroke-width='1'/%3E%3Cellipse cx='750' cy='260' rx='200' ry='55' fill='none' stroke='rgba(26,107,200,0.05)' stroke-width='1'/%3E%3C/svg%3E");
+      background-size: cover; background-position: center;
+      pointer-events: none; z-index: 0;
+    }
+    .page-header > * { position: relative; z-index: 1; }
+    .breadcrumb { display: flex; align-items: center; gap: .5rem; font-size: 0.75rem; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .breadcrumb a { color: var(--text-faint); text-decoration: none; transition: color .2s; }
+    .breadcrumb a:hover { color: var(--text-mid); }
+    .breadcrumb span { color: var(--text-mid); }
+    .page-header h1 { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; color: var(--cream); margin-bottom: .75rem; }
+    .page-header h1 em { font-style: italic; font-family: 'Instrument Serif', serif; color: var(--gold); }
+    .page-header p { font-size: 1.05rem; color: var(--text-mid); max-width: 520px; line-height: 1.65; }
+    @media (max-width: 768px) { .page-header { padding: 6rem 1.5rem 2.5rem; } }
+
+    /* ─── MAIN LAYOUT ─── */
+    .calc-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      padding: 2.5rem 4rem 5rem;
+      max-width: 1260px;
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) {
+      .calc-layout { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem 2rem 4rem; }
+    }
+    @media (max-width: 768px) {
+      .calc-layout { padding: 1.5rem 1.25rem 3rem; }
+    }
+
+    /* ─── INPUT PANEL ─── */
+    .input-panel {
+      background: var(--ink-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+      padding: 2.5rem;
+    }
+    @media (max-width: 1024px) { .input-panel { border-radius: var(--radius-lg); } }
+
+    .panel-title { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1.75rem; }
+
+    .form-group { margin-bottom: 1.6rem; }
+    .form-label {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 0.82rem; font-weight: 500; color: var(--text-mid);
+      letter-spacing: 0.03em; margin-bottom: .55rem;
+    }
+    .form-label .hint { font-size: 0.72rem; color: var(--text-faint); font-weight: 400; }
+    .form-input {
+      width: 100%;
+      background: var(--ink-3);
+      border: 1px solid var(--border-mid);
+      border-radius: 8px;
+      padding: .75rem 1rem;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color .2s;
+      outline: none;
+      appearance: none;
+    }
+    .form-input:focus { border-color: rgba(200,82,26,.5); }
+    .form-input::placeholder { color: var(--text-faint); }
+    .form-input-prefix { position: relative; }
+    .form-input-prefix .prefix {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      font-size: 0.82rem; color: var(--text-faint); pointer-events: none;
+      font-family: 'Syne', sans-serif; font-weight: 600; letter-spacing: 0.04em;
+    }
+    .form-input-prefix input { padding-left: 3.2rem; }
+
+    .range-wrapper { display: grid; grid-template-columns: 1fr auto; gap: .75rem; align-items: center; }
+    .range-input {
+      width: 100%;
+      -webkit-appearance: none; appearance: none;
+      height: 4px; background: var(--ink-3);
+      border-radius: 2px; outline: none; cursor: pointer;
+    }
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      background: var(--terracotta); border-radius: 50%;
+      cursor: pointer; transition: transform .15s;
+      border: 3px solid var(--ink-2);
+    }
+    .range-input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .range-val {
+      background: var(--ink-3); border: 1px solid var(--border-mid);
+      border-radius: 6px; padding: .4rem .7rem;
+      font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700;
+      color: var(--gold); white-space: nowrap; min-width: 60px; text-align: center;
+    }
+    .range-tracks { display: flex; justify-content: space-between; margin-top: .25rem; font-size: 0.67rem; color: var(--text-faint); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    select.form-input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(26,24,20,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 1rem center;
+      padding-right: 2.5rem; cursor: pointer;
+    }
+    [data-theme="dark"] select.form-input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(245,240,232,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+    select.form-input option { background: var(--ink-3); color: var(--cream); }
+
+    .bank-rates {
+      background: rgba(212,168,50,.06);
+      border: 1px solid rgba(212,168,50,.15);
+      border-radius: 8px; padding: .9rem 1.1rem; margin-top: .6rem;
+    }
+    .bank-rates-title { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; }
+    .bank-rates-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .3rem; }
+    .bank-rate-item { font-size: 0.76rem; color: var(--text-mid); }
+    .bank-rate-item strong { color: var(--cream); font-weight: 600; }
+
+    .calc-btn {
+      width: 100%; padding: .9rem;
+      background: var(--terracotta); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; transition: background .2s, transform .15s;
+      margin-top: .5rem;
+    }
+    .calc-btn:hover { background: var(--terra-dim); transform: translateY(-1px); }
+    .calc-btn:active { transform: translateY(0); }
+
+    /* ─── RESULTS PANEL ─── */
+    .results-panel {
+      background: var(--ink-2);
+      border: 1px solid var(--border);
+      border-left: none;
+      border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+      padding: 2.5rem;
+      position: relative; overflow: hidden;
+    }
+    @media (max-width: 1024px) {
+      .results-panel { border-radius: var(--radius-lg); border-left: 1px solid var(--border); }
+    }
+    .results-empty {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      height: 100%; min-height: 320px;
+      text-align: center; color: var(--text-faint); gap: 1rem;
+    }
+    .results-empty .icon { font-size: 3rem; opacity: .3; }
+    .results-empty p { font-size: 0.88rem; line-height: 1.6; max-width: 240px; }
+    .results-content { display: none; }
+    .results-content.visible { display: block; }
+    .results-empty.hidden { display: none; }
+
+    .monthly-hero { text-align: center; padding: 1.5rem 1rem 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+    .monthly-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--sapphire); margin-bottom: .4rem; }
+    .monthly-amount { font-family: 'Syne', sans-serif; font-size: clamp(2.2rem, 4vw, 3rem); font-weight: 800; color: var(--cream); letter-spacing: -0.03em; line-height: 1; }
+    .monthly-amount span { font-size: 1.1rem; font-weight: 500; color: var(--text-mid); margin-right: .3rem; }
+    .monthly-period { font-size: 0.82rem; color: var(--text-faint); margin-top: .3rem; }
+
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 2rem; }
+    .summary-cell { background: var(--ink-3); padding: 1rem .75rem; text-align: center; }
+    .summary-cell-label { font-size: 0.67rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-faint); margin-bottom: .3rem; }
+    .summary-cell-val { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--cream); }
+    .summary-cell-val.gold { color: var(--gold-dim); }
+    [data-theme="dark"] .summary-cell-val.gold { color: var(--gold); }
+    .summary-cell-val.terra { color: var(--terracotta); }
+
+    /* ─── DONUT CHART ─── */
+    .chart-section { margin-bottom: 2rem; }
+    .chart-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 1rem; }
+    .donut-wrap { display: flex; align-items: center; gap: 2rem; }
+    .donut-canvas-wrap { position: relative; flex-shrink: 0; }
+    canvas#donutChart { display: block; }
+    .donut-center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; pointer-events: none;
+    }
+    .donut-center-pct { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--cream); line-height: 1; }
+    .donut-center-sub { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-top: 3px; }
+    .donut-legend { flex: 1; display: flex; flex-direction: column; gap: .75rem; }
+    .legend-item { display: flex; align-items: center; gap: .6rem; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .legend-dot.principal { background: var(--terracotta); }
+    .legend-dot.interest { background: var(--gold); }
+    .legend-dot.extra { background: var(--sapphire); }
+    .legend-info { flex: 1; }
+    .legend-label { font-size: 0.78rem; color: var(--text-mid); }
+    .legend-val { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--cream); }
+
+    /* ─── BREAKDOWN BARS ─── */
+    .breakdown-section { margin-bottom: 2rem; }
+    .breakdown-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 1rem; }
+    .breakdown-bar-total {
+      height: 10px; background: var(--ink-3); border-radius: 5px; overflow: hidden; margin-bottom: 1.2rem; display: flex;
+    }
+    .bar-principal { height: 100%; background: var(--terracotta); transition: width .5s cubic-bezier(.4,0,.2,1); border-radius: 5px 0 0 5px; }
+    .bar-interest  { height: 100%; background: var(--gold); transition: width .5s cubic-bezier(.4,0,.2,1); }
+    .breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: .5rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .breakdown-row:last-child { border-bottom: none; }
+    .breakdown-key { color: var(--text-mid); display: flex; align-items: center; gap: .5rem; }
+    .breakdown-key::before { content: ''; width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .breakdown-key.principal::before { background: var(--terracotta); }
+    .breakdown-key.interest::before { background: var(--gold); }
+    .breakdown-key.total::before { background: var(--text-faint); }
+    .breakdown-key.rate::before { background: var(--sapphire); }
+    .breakdown-val { font-family: 'Syne', sans-serif; font-weight: 600; color: var(--cream); }
+    .breakdown-val.gold { color: var(--gold-dim); }
+    [data-theme="dark"] .breakdown-val.gold { color: var(--gold); }
+
+    /* ─── AMORTIZATION TABLE ─── */
+    .amort-section { padding: 0 4rem 5rem; max-width: 1260px; margin: 0 auto; }
+    @media (max-width: 1024px) { .amort-section { padding: 0 2rem 4rem; } }
+    @media (max-width: 768px) { .amort-section { padding: 0 1.25rem 3rem; } }
+    .amort-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem 1.5rem;
+      cursor: pointer; transition: background .2s;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.88rem; letter-spacing: 0.06em; color: var(--cream);
+    }
+    .amort-toggle:hover { background: var(--card-hover); }
+    .amort-toggle svg { transition: transform .3s; }
+    .amort-toggle.open svg { transform: rotate(180deg); }
+    .amort-body { display: none; margin-top: .5rem; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .amort-body.open { display: block; }
+    .amort-table { width: 100%; border-collapse: collapse; }
+    .amort-table th {
+      background: var(--ink-3); padding: .75rem 1.1rem;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-faint); text-align: right;
+    }
+    .amort-table th:first-child { text-align: left; }
+    .amort-table td { padding: .65rem 1.1rem; font-size: 0.82rem; color: var(--text-mid); text-align: right; border-top: 1px solid var(--border); background: var(--ink-2); }
+    .amort-table td:first-child { text-align: left; color: var(--cream); font-weight: 600; font-family: 'Syne', sans-serif; }
+    .amort-table tr:hover td { background: var(--card-hover); }
+    .amort-table td.terra { color: var(--terracotta); }
+    .amort-table td.gold { color: var(--gold-dim); }
+    [data-theme="dark"] .amort-table td.gold { color: var(--gold); }
+
+    /* ─── TIPS SECTION ─── */
+    .tips-section { padding: 3rem 4rem 4rem; max-width: 1260px; margin: 0 auto; }
+    @media (max-width: 1024px) { .tips-section { padding: 2rem 2rem 3rem; } }
+    @media (max-width: 768px) { .tips-section { padding: 2rem 1.25rem 3rem; } }
+    .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    @media (max-width: 768px) { .tips-grid { grid-template-columns: 1fr; } }
+    .tip-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; }
+    .tip-icon { font-size: 1.5rem; margin-bottom: .75rem; }
+    .tip-card h4 { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--cream); margin-bottom: .4rem; }
+    .tip-card p { font-size: 0.8rem; color: var(--text-mid); line-height: 1.6; }
+
+    /* ─── CTA STRIP ─── */
+    .cta-strip {
+      margin: 0 4rem 5rem;
+      background: linear-gradient(135deg, var(--ink-3) 0%, rgba(200,82,26,.08) 100%);
+      border: 1px solid rgba(200,82,26,.2);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 3rem;
+      display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
+    }
+    @media (max-width: 768px) { .cta-strip { margin: 0 1.25rem 3rem; padding: 2rem 1.5rem; grid-template-columns: 1fr; } }
+    .cta-strip h3 { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--cream); margin-bottom: .4rem; }
+    .cta-strip p { font-size: 0.88rem; color: var(--text-mid); }
+    .cta-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--terracotta); color: #fff;
+      padding: .75rem 1.5rem; border-radius: 8px;
+      font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.06em; text-decoration: none; white-space: nowrap;
+      transition: background .2s; cursor: none;
+    }
+    .btn-primary:hover { background: var(--terra-dim); }
+    .btn-ghost {
+      background: transparent; color: var(--text);
+      padding: .75rem 1.5rem; border-radius: 8px;
+      border: 1px solid var(--border-mid);
+      font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.06em; text-decoration: none; white-space: nowrap;
+      transition: border-color .2s, background .2s; cursor: none;
+    }
+    .btn-ghost:hover { border-color: var(--text-mid); background: var(--card-hover); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink-2);
+      border-top: 1px solid var(--border);
+      padding: 3rem 4rem;
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem;
+    }
+    @media (max-width: 768px) { footer { grid-template-columns: 1fr; gap: 2rem; padding: 2.5rem 1.5rem; } }
+    .footer-brand h3 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--cream); }
+    .footer-brand .tagline { font-size: 0.78rem; color: var(--sapphire); letter-spacing: 0.12em; text-transform: uppercase; margin-top: .2rem; }
+    .footer-brand p { font-size: 0.8rem; color: var(--text-faint); line-height: 1.7; margin-top: .75rem; max-width: 260px; }
+    .footer-col h4 { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 1rem; }
+    .footer-col a { display: block; font-size: 0.82rem; color: var(--text-mid); text-decoration: none; margin-bottom: .5rem; transition: color .2s; }
+    .footer-col a:hover { color: var(--cream); }
+    .footer-bottom {
+      background: var(--ink-2);
+      border-top: 1px solid var(--border); padding: 1.5rem 4rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    @media (max-width: 768px) { .footer-bottom { padding: 1.5rem 1.5rem; flex-direction: column; gap: .75rem; } }
+    .footer-bottom p { font-size: 0.75rem; color: var(--text-faint); }
+
+    /* ─── ANIMATIONS ─── */
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- Nav — matches consumer-portal/index.html exactly -->
+  <nav>
+    <a href="./index.html" class="nav-logo-wrap">
+      <div class="nav-logo">Imali<span>.</span>biz</div>
+      <div class="nav-sub">Consumer Portal</div>
+    </a>
+    <div class="nav-right">
+      <a href="listings.html" class="nav-link">Browse Properties</a>
+      <a href="mortgage-calculator.html" class="nav-link active">Mortgage Calc</a>
+      <a href="market-reports.html" class="nav-link">Market Reports</a>
+      <a href="agent-finder.html" class="nav-link">Find an Agent</a>
+      <a href="../index.html" class="nav-link" style="color:var(--text-faint)">← Imali.biz</a>
+      <button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+      <a href="dashboard.html" class="nav-cta">My Account</a>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div class="breadcrumb">
+      <a href="../index.html">Imali.biz</a>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <a href="./index.html">Consumer Portal</a>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3 1l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span>Mortgage Calculator</span>
+    </div>
+    <h1>Your <em>mortgage</em>,<br>calculated clearly.</h1>
+    <p>Enter your loan details below to see your estimated monthly payment, total cost, and full amortization breakdown — tailored for Rwanda's home finance market.</p>
+  </header>
+
+  <!-- Calculator -->
+  <main>
+    <div class="calc-layout">
+
+      <!-- Input Panel -->
+      <div class="input-panel reveal">
+        <div class="panel-title">Loan Details</div>
+
+        <div class="form-group">
+          <label class="form-label" for="propertyPrice">
+            Property Price
+            <span class="hint">RWF</span>
+          </label>
+          <div class="form-input-prefix">
+            <span class="prefix">RWF</span>
+            <input type="text" id="propertyPrice" class="form-input" placeholder="e.g. 45,000,000" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="downPaymentPct">
+            Down Payment
+            <span class="hint" id="dpAmountHint">—</span>
+          </label>
+          <div class="range-wrapper">
+            <input type="range" class="range-input" id="downPaymentRange" min="10" max="60" value="20" step="1" />
+            <span class="range-val" id="downPaymentVal">20%</span>
+          </div>
+          <div class="range-tracks"><span>10%</span><span>60%</span></div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="loanTerm">Loan Term</label>
+            <select id="loanTerm" class="form-input">
+              <option value="5">5 years</option>
+              <option value="10">10 years</option>
+              <option value="15" selected>15 years</option>
+              <option value="20">20 years</option>
+              <option value="25">25 years</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="loanType">Payment Type</label>
+            <select id="loanType" class="form-input">
+              <option value="reducing">Reducing Balance</option>
+              <option value="flat">Flat Rate</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="interestRate">
+            Annual Interest Rate
+            <span class="hint" id="rateHint">% per year</span>
+          </label>
+          <div class="range-wrapper">
+            <input type="range" class="range-input" id="interestRange" min="8" max="25" value="15" step="0.5" />
+            <span class="range-val" id="interestVal">15.0%</span>
+          </div>
+          <div class="range-tracks"><span>8%</span><span>25%</span></div>
+
+          <div class="bank-rates">
+            <div class="bank-rates-title">Rwanda bank reference rates (2024)</div>
+            <div class="bank-rates-grid">
+              <div class="bank-rate-item">Bank of Kigali <strong>14–17%</strong></div>
+              <div class="bank-rate-item">Equity Bank <strong>15–18%</strong></div>
+              <div class="bank-rate-item">I&amp;M Bank <strong>14–16%</strong></div>
+              <div class="bank-rate-item">Cogebanque <strong>15–18%</strong></div>
+              <div class="bank-rate-item">KCB Rwanda <strong>14–17%</strong></div>
+              <div class="bank-rate-item">GT Bank <strong>16–19%</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="extraPayment">
+            Extra Monthly Payment
+            <span class="hint">optional</span>
+          </label>
+          <div class="form-input-prefix">
+            <span class="prefix">RWF</span>
+            <input type="text" id="extraPayment" class="form-input" placeholder="0" inputmode="numeric" />
+          </div>
+        </div>
+
+        <button class="calc-btn" id="calcBtn" onclick="calculate()">Calculate Mortgage</button>
+      </div>
+
+      <!-- Results Panel -->
+      <div class="results-panel reveal">
+        <div class="panel-title">Your Results</div>
+
+        <div class="results-empty" id="resultsEmpty">
+          <div class="icon">🏠</div>
+          <p>Enter your property price above and hit Calculate to see your mortgage breakdown.</p>
+        </div>
+
+        <div class="results-content" id="resultsContent">
+
+          <div class="monthly-hero">
+            <div class="monthly-label">Estimated Monthly Payment</div>
+            <div class="monthly-amount"><span>RWF</span><span id="resMonthly">—</span></div>
+            <div class="monthly-period" id="resPeriod">—</div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-cell">
+              <div class="summary-cell-label">Loan Amount</div>
+              <div class="summary-cell-val" id="resLoan">—</div>
+            </div>
+            <div class="summary-cell">
+              <div class="summary-cell-label">Total Paid</div>
+              <div class="summary-cell-val gold" id="resTotal">—</div>
+            </div>
+            <div class="summary-cell">
+              <div class="summary-cell-label">Total Interest</div>
+              <div class="summary-cell-val terra" id="resInterest">—</div>
+            </div>
+          </div>
+
+          <div class="chart-section">
+            <div class="chart-title">Payment Breakdown</div>
+            <div class="donut-wrap">
+              <div class="donut-canvas-wrap">
+                <canvas id="donutChart" width="130" height="130"></canvas>
+                <div class="donut-center">
+                  <div class="donut-center-pct" id="donutPct">—</div>
+                  <div class="donut-center-sub">Principal</div>
+                </div>
+              </div>
+              <div class="donut-legend">
+                <div class="legend-item">
+                  <div class="legend-dot principal"></div>
+                  <div class="legend-info">
+                    <div class="legend-label">Principal</div>
+                    <div class="legend-val" id="legendPrincipal">—</div>
+                  </div>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot interest"></div>
+                  <div class="legend-info">
+                    <div class="legend-label">Total Interest</div>
+                    <div class="legend-val" id="legendInterest">—</div>
+                  </div>
+                </div>
+                <div class="legend-item" id="extraLegendItem" style="display:none">
+                  <div class="legend-dot extra"></div>
+                  <div class="legend-info">
+                    <div class="legend-label">Extra Payments</div>
+                    <div class="legend-val" id="legendExtra">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="breakdown-section">
+            <div class="breakdown-title">Summary</div>
+            <div class="breakdown-bar-total">
+              <div class="bar-principal" id="barPrincipal" style="width:0%"></div>
+              <div class="bar-interest" id="barInterest" style="width:0%"></div>
+            </div>
+            <div class="breakdown-row">
+              <span class="breakdown-key principal">Loan (Principal)</span>
+              <span class="breakdown-val" id="brkPrincipal">—</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="breakdown-key interest">Total Interest Cost</span>
+              <span class="breakdown-val gold" id="brkInterest">—</span>
+            </div>
+            <div class="breakdown-row" id="brkExtraRow" style="display:none">
+              <span class="breakdown-key rate">Savings via Extra Payments</span>
+              <span class="breakdown-val" id="brkSavings">—</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="breakdown-key total">Total Amount Paid</span>
+              <span class="breakdown-val" id="brkTotal">—</span>
+            </div>
+            <div class="breakdown-row">
+              <span class="breakdown-key rate">Effective Monthly Rate</span>
+              <span class="breakdown-val" id="brkRate">—</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Amortization Schedule -->
+    <div class="amort-section" id="amortSection" style="display:none">
+      <button class="amort-toggle" id="amortToggle" onclick="toggleAmort()">
+        <span>Year-by-Year Amortization Schedule</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+      <div class="amort-body" id="amortBody">
+        <table class="amort-table">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Principal Paid</th>
+              <th>Interest Paid</th>
+              <th>Total Paid</th>
+              <th>Balance Remaining</th>
+            </tr>
+          </thead>
+          <tbody id="amortRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="tips-section reveal">
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-icon">🏦</div>
+          <h4>Reducing vs Flat Rate</h4>
+          <p>Reducing balance means interest is calculated on the outstanding loan only — you pay less as you pay down the principal. Flat rate charges interest on the full original amount throughout the term, often costing significantly more overall.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">📈</div>
+          <h4>Rwanda Mortgage Tips</h4>
+          <p>Most Rwandan banks require a minimum 10–20% down payment for residential mortgages. A higher down payment reduces your monthly cost and typically secures a better interest rate. Loan terms of 10–20 years are most common.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-icon">💡</div>
+          <h4>Extra Payments Save Thousands</h4>
+          <p>Even a small extra monthly payment of 5–10% above the minimum can cut years off your loan and save you a substantial amount in interest. Use the Extra Monthly Payment field above to model the impact.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Strip -->
+    <div class="cta-strip reveal">
+      <div>
+        <h3>Ready to find your home?</h3>
+        <p>Browse 2,400+ verified listings across Rwanda or speak with an NLA-registered agent today.</p>
+      </div>
+      <div class="cta-btns">
+        <a href="./index.html" class="btn-primary">Browse Listings</a>
+        <a href="./index.html" class="btn-ghost">Find an Agent</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-brand">
+      <h3>Imali.biz</h3>
+      <div class="tagline">Consumer Portal</div>
+      <p>Rwanda's home for real estate intelligence — connecting buyers, renters, agents, and lenders on one trusted platform.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Tools</h4>
+      <a href="mortgage-calculator.html">Mortgage Calculator</a>
+      <a href="#">Affordability Check</a>
+      <a href="#">Market Reports</a>
+      <a href="../land-bank/valuation.html">Land Valuation</a>
+    </div>
+    <div class="footer-col">
+      <h4>Ecosystem</h4>
+      <a href="../land-bank/index.html">The Land Bank</a>
+      <a href="../wealth-hub/index.html">The Wealth Hub</a>
+      <a href="../index.html">Imali.biz</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+      <a href="#">Disclaimer</a>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 Imali.biz · All calculations are estimates only. Consult a licensed financial adviser.</p>
+    <p>Kigali, Rwanda</p>
+  </div>
+
+  <script>
+    /* ─── CURSOR ─── */
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+    });
+    (function animRing() {
+      rx += (mx - rx - 18) * 0.12;
+      ry += (my - ry - 18) * 0.12;
+      ring.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(animRing);
+    })();
+
+    /* ─── THEME ─── */
+    function toggleTheme() {
+      var html  = document.documentElement;
+      var next  = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('imali-theme', next);
+      var icon  = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+      if (icon)  icon.textContent  = next === 'dark' ? '☀️' : '🌙';
+      if (label) label.textContent = next === 'dark' ? 'Light' : 'Dark';
+      /* Redraw donut if results are showing */
+      var pct = document.getElementById('donutPct').textContent;
+      if (pct !== '—') drawDonut(parseInt(pct), 100 - parseInt(pct));
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var t     = document.documentElement.getAttribute('data-theme') || 'light';
+      var icon  = document.getElementById('themeIcon');
+      var label = document.getElementById('themeLabel');
+      if (icon)  icon.textContent  = t === 'dark' ? '☀️' : '🌙';
+      if (label) label.textContent = t === 'dark' ? 'Light' : 'Dark';
+    });
+
+    /* ─── SCROLL REVEAL ─── */
+    const revEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    }), { threshold: 0.08 });
+    revEls.forEach(el => obs.observe(el));
+
+    /* ─── RANGE INPUTS ─── */
+    const dpRange = document.getElementById('downPaymentRange');
+    const dpVal   = document.getElementById('downPaymentVal');
+    const irRange = document.getElementById('interestRange');
+    const irVal   = document.getElementById('interestVal');
+
+    dpRange.addEventListener('input', () => { dpVal.textContent = dpRange.value + '%'; updateDpHint(); });
+    irRange.addEventListener('input', () => { irVal.textContent = parseFloat(irRange.value).toFixed(1) + '%'; });
+
+    function updateDpHint() {
+      const price = parseRwf(document.getElementById('propertyPrice').value);
+      if (!price) { document.getElementById('dpAmountHint').textContent = '% of price'; return; }
+      document.getElementById('dpAmountHint').textContent = '≈ ' + fmtRwf(price * (parseInt(dpRange.value) / 100));
+    }
+    document.getElementById('propertyPrice').addEventListener('input', () => {
+      const raw = parseRwf(document.getElementById('propertyPrice').value);
+      if (raw) document.getElementById('propertyPrice').value = fmtRwfInput(raw);
+      updateDpHint();
+    });
+    document.getElementById('extraPayment').addEventListener('input', () => {
+      const raw = parseRwf(document.getElementById('extraPayment').value);
+      if (raw) document.getElementById('extraPayment').value = fmtRwfInput(raw);
+    });
+
+    /* ─── NUMBER FORMATTING ─── */
+    function parseRwf(s) { return s ? (parseInt(s.replace(/[^0-9]/g, '')) || 0) : 0; }
+    function fmtRwfInput(n) { return n.toLocaleString('en-RW'); }
+    function fmtRwf(n, short = false) {
+      if (short) {
+        if (n >= 1e9) return (n/1e9).toFixed(1) + 'B';
+        if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+        if (n >= 1e3) return (n/1e3).toFixed(0) + 'K';
+        return n.toFixed(0);
+      }
+      return 'RWF ' + Math.round(n).toLocaleString('en-RW');
+    }
+
+    /* ─── CALCULATE ─── */
+    function calculate() {
+      const price   = parseRwf(document.getElementById('propertyPrice').value);
+      const dpPct   = parseInt(dpRange.value);
+      const term    = parseInt(document.getElementById('loanTerm').value);
+      const rate    = parseFloat(irRange.value);
+      const type    = document.getElementById('loanType').value;
+      const extra   = parseRwf(document.getElementById('extraPayment').value);
+
+      if (!price || price < 1000000) { alert('Please enter a property price (minimum RWF 1,000,000).'); return; }
+
+      const principal   = price * (1 - dpPct / 100);
+      const months      = term * 12;
+      const monthlyRate = rate / 100 / 12;
+
+      let baseMonthly, totalPaid, totalInterest;
+
+      if (type === 'reducing') {
+        baseMonthly   = monthlyRate === 0 ? principal / months
+                        : principal * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+        totalPaid     = baseMonthly * months;
+        totalInterest = totalPaid - principal;
+      } else {
+        totalInterest = principal * (rate / 100) * term;
+        totalPaid     = principal + totalInterest;
+        baseMonthly   = totalPaid / months;
+      }
+
+      let interestSaved = 0, monthsEarly = 0;
+      if (extra > 0 && type === 'reducing') {
+        let bal = principal, mo = 0, paidExtra = 0;
+        while (bal > 0 && mo < months * 2) {
+          const iCharge = bal * monthlyRate;
+          bal -= (baseMonthly - iCharge + extra);
+          if (bal < 0) bal = 0;
+          paidExtra += baseMonthly + extra;
+          mo++;
+        }
+        interestSaved = totalInterest - (paidExtra - principal);
+        monthsEarly   = months - mo;
+      }
+
+      const amortRows = buildAmort(principal, months, monthlyRate, baseMonthly, extra, type, rate);
+      showResults({ monthly: baseMonthly, totalPaid, totalInterest, principal, term, interestSaved, monthsEarly, extraPayment: extra, amortRows, rate });
+    }
+
+    function buildAmort(principal, months, monthlyRate, baseMonthly, extra, type, rate) {
+      const rows = []; let balance = principal;
+      for (let yr = 1; yr <= months / 12; yr++) {
+        let yrP = 0, yrI = 0, yrT = 0;
+        for (let m = 0; m < 12 && balance > 0; m++) {
+          const interest  = type === 'reducing' ? balance * monthlyRate : principal * (rate / 100 / 12);
+          const princPay  = Math.min((type === 'reducing' ? baseMonthly - interest + extra : baseMonthly - interest), balance);
+          yrP += princPay; yrI += interest; yrT += interest + princPay;
+          balance -= princPay; if (balance < 0) balance = 0;
+        }
+        rows.push({ year: yr, principal: yrP, interest: yrI, total: yrT, balance });
+      }
+      return rows;
+    }
+
+    function showResults(d) {
+      document.getElementById('resultsEmpty').classList.add('hidden');
+      document.getElementById('resultsContent').classList.add('visible');
+      document.getElementById('amortSection').style.display = 'block';
+
+      document.getElementById('resMonthly').textContent  = Math.round(d.monthly).toLocaleString('en-RW');
+      document.getElementById('resPeriod').textContent   = `per month · ${d.term}-year term`;
+      document.getElementById('resLoan').textContent     = fmtRwf(d.principal, true);
+      document.getElementById('resTotal').textContent    = fmtRwf(d.totalPaid, true);
+      document.getElementById('resInterest').textContent = fmtRwf(d.totalInterest, true);
+
+      const pctPrincipal = Math.round(d.principal / d.totalPaid * 100);
+      document.getElementById('donutPct').textContent        = pctPrincipal + '%';
+      document.getElementById('legendPrincipal').textContent = fmtRwf(d.principal, true);
+      document.getElementById('legendInterest').textContent  = fmtRwf(d.totalInterest, true);
+
+      if (d.extraPayment > 0) {
+        document.getElementById('extraLegendItem').style.display = 'flex';
+        document.getElementById('legendExtra').textContent        = fmtRwf(d.interestSaved, true) + ' saved';
+        document.getElementById('brkExtraRow').style.display      = 'flex';
+        document.getElementById('brkSavings').textContent         = fmtRwf(d.interestSaved, true) + ' interest saved';
+      } else {
+        document.getElementById('extraLegendItem').style.display = 'none';
+        document.getElementById('brkExtraRow').style.display     = 'none';
+      }
+
+      document.getElementById('brkPrincipal').textContent = fmtRwf(d.principal);
+      document.getElementById('brkInterest').textContent  = fmtRwf(d.totalInterest);
+      document.getElementById('brkTotal').textContent     = fmtRwf(d.totalPaid);
+      document.getElementById('brkRate').textContent      = (d.rate / 12).toFixed(3) + '% / month';
+
+      document.getElementById('barPrincipal').style.width = (d.principal / d.totalPaid * 100).toFixed(1) + '%';
+      document.getElementById('barInterest').style.width  = (d.totalInterest / d.totalPaid * 100).toFixed(1) + '%';
+
+      drawDonut(pctPrincipal, 100 - pctPrincipal);
+      renderAmort(d.amortRows);
+    }
+
+    /* ─── DONUT CHART ─── */
+    function drawDonut(pctPrincipal) {
+      const canvas = document.getElementById('donutChart');
+      const ctx    = canvas.getContext('2d');
+      const cx = canvas.width / 2, cy = canvas.height / 2, r = 52, iR = 36;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const start1 = -Math.PI / 2;
+      const end1   = start1 + (2 * Math.PI * pctPrincipal / 100);
+      const gap    = 0.03;
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, start1, end1 - gap);
+      ctx.arc(cx, cy, iR, end1 - gap, start1, true);
+      ctx.closePath();
+      ctx.fillStyle = '#c8521a';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, end1, start1 + 2 * Math.PI - gap);
+      ctx.arc(cx, cy, iR, start1 + 2 * Math.PI - gap, end1, true);
+      ctx.closePath();
+      ctx.fillStyle = '#d4a832';
+      ctx.fill();
+
+      /* Centre hole — matches panel background in any theme */
+      ctx.beginPath();
+      ctx.arc(cx, cy, iR - 4, 0, 2 * Math.PI);
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--ink-2').trim() || '#ffffff';
+      ctx.fill();
+    }
+
+    /* ─── AMORTIZATION TABLE ─── */
+    function renderAmort(rows) {
+      const tbody = document.getElementById('amortRows');
+      tbody.innerHTML = '';
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>Year ${r.year}</td><td class="terra">${fmtRwf(r.principal,true)}</td><td class="gold">${fmtRwf(r.interest,true)}</td><td>${fmtRwf(r.total,true)}</td><td>${fmtRwf(r.balance,true)}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleAmort() {
+      document.getElementById('amortToggle').classList.toggle('open');
+      document.getElementById('amortBody').classList.toggle('open');
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+  </script>
+</body>
+</html>
