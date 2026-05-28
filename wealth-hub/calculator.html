@@ -119,6 +119,40 @@
   .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
   .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
+
+  /* ─── FIELD NOTES ─── */
+  .field-note { font-size: 0.72rem; color: var(--text-faint); line-height: 1.5; margin-top: 0.35rem; padding: 0.3rem 0.6rem 0.3rem 0.75rem; border-left: 2px solid rgba(212,168,50,0.25); }
+  .field-note strong { color: var(--text-dim); font-weight: 500; }
+
+  /* ─── PLAIN RESULT BOX ─── */
+  .plain-result-box { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.18); border-radius: 1rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: none; }
+  .plain-result-box.visible { display: block; }
+  .prb-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .prb-text { font-size: 0.88rem; color: var(--text); line-height: 1.65; }
+  .prb-text strong { color: var(--text); font-weight: 600; }
+
+  /* ─── IRR BENCHMARK ─── */
+  .irr-benchmark { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: none; }
+  .irr-benchmark.visible { display: block; }
+  .irr-bench-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.65rem; }
+  .irr-bench-scale { display: flex; border-radius: 6px; overflow: hidden; height: 8px; margin-bottom: 0.4rem; }
+  .irr-seg { flex: 1; }
+  .irr-seg.s1 { background: rgba(100,150,200,0.45); }
+  .irr-seg.s2 { background: rgba(212,168,50,0.55); }
+  .irr-seg.s3 { background: rgba(76,175,125,0.65); }
+  .irr-seg.s4 { background: rgba(200,82,26,0.65); }
+  .irr-bench-labels { display: flex; justify-content: space-between; font-size: 0.63rem; color: var(--text-faint); margin-bottom: 0.4rem; }
+  .irr-bench-your { font-size: 0.78rem; color: var(--text-dim); }
+  .irr-bench-your strong { font-weight: 600; }
+
+  /* ─── GROWTH COMPARISON CHART ─── */
+  .growth-chart-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem 1.25rem 0.85rem; margin-bottom: 1.75rem; }
+  .growth-chart-eyebrow { font-size: 0.63rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.2rem; }
+  .growth-chart-note { font-size: 0.75rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 0.85rem; }
+  #growthChart { width: 100%; display: block; }
+  .growth-legend { display: flex; gap: 1.25rem; margin-top: 0.5rem; font-size: 0.7rem; color: var(--text-dim); flex-wrap: wrap; padding-bottom: 0.25rem; }
+  .gl-invest { color: #d4a832; }
+  .gl-savings { color: #6496c8; }
 </style>
 </head>
 <body>
@@ -151,11 +185,13 @@
       <button class="type-btn active" id="typeFrac" onclick="setType('fractional', this)">Fractional</button>
       <button class="type-btn" id="typeFull" onclick="setType('full', this)">Full Asset</button>
     </div>
+    <p class="field-note"><strong>Fractional:</strong> You buy a percentage share of a larger property alongside other investors — lower entry cost, lower risk. <strong>Full Asset:</strong> You buy the entire property yourself — full control, but higher capital required (typically RWF 50M+).</p>
 
     <div class="field-group">
       <div class="field-label">Investment Amount (RWF) <span id="investLabel">RWF 5,000,000</span></div>
       <input type="range" id="investSlider" min="75000" max="500000000" step="25000" value="75000" oninput="syncInvest(this.value)" />
       <div class="range-labels"><span>RWF 75K</span><span>RWF 500M</span></div>
+      <p class="field-note">How much you want to invest. For fractional investing, you can start from as little as <strong>RWF 75,000</strong>. Drag the slider or type your amount below.</p>
     </div>
 
     <div class="field-group">
@@ -169,18 +205,21 @@
       <div class="field-label">Total Project Value (RWF) <span id="projLabel">RWF 500,000,000</span></div>
       <input type="range" id="projSlider" min="50000000" max="5000000000" step="10000000" value="500000000" oninput="syncProj(this.value)" />
       <div class="range-labels"><span>RWF 50M</span><span>RWF 5B</span></div>
+      <p class="field-note">The total market value of the entire property or development — <strong>not just your share</strong>. Your ownership percentage = your investment ÷ this number. E.g. RWF 5M in a RWF 500M project = 1% ownership.</p>
     </div>
 
     <div class="field-group">
       <div class="field-label">Hold Period (months) <span id="holdLabel">36 months</span></div>
       <input type="range" id="holdSlider" min="12" max="84" step="6" value="36" oninput="syncHold(this.value)" />
       <div class="range-labels"><span>12 mo</span><span>84 mo</span></div>
+      <p class="field-note">How long until you (and co-investors) plan to sell. <strong>Real estate rewards patience</strong> — longer holds allow for more price appreciation and accumulated rental income. Most projects target a 3–5 year exit.</p>
     </div>
 
     <div class="field-group">
       <div class="field-label">Target IRR (%) <span id="irrLabel">20%</span></div>
       <input type="range" id="irrSlider" min="10" max="35" step="1" value="20" oninput="syncIRR(this.value)" />
       <div class="range-labels"><span>10%</span><span>35%</span></div>
+      <p class="field-note"><strong>IRR (Internal Rate of Return)</strong> is your annualised profit percentage — think of it like the interest rate on your investment. 20% IRR means your money effectively grows at 20% per year. Rwanda savings accounts typically return 8–12% annually — real estate should beat that.</p>
     </div>
 
     <div class="field-separator"></div>
@@ -195,12 +234,14 @@
         <option value="tourism">Tourism / Hospitality</option>
         <option value="industrial">Industrial / Logistics</option>
       </select>
+      <p class="field-note">The type of development affects risk and return profile. Residential is most stable. Commercial and tourism can yield higher returns but with more variability.</p>
     </div>
 
     <div class="field-group">
       <div class="field-label">Annual Rental Yield (%) <span id="yieldLabel">8%</span></div>
       <input type="range" id="yieldSlider" min="0" max="20" step="0.5" value="8" oninput="syncYield(this.value)" />
       <div class="range-labels"><span>0%</span><span>20%</span></div>
+      <p class="field-note">If the property earns rental income while you hold it, enter the expected yearly rent as a % of its value. E.g. a RWF 500M property with <strong>8% yield earns RWF 40M/year</strong> in rent, shared proportionally among investors. Set to 0 for development projects.</p>
     </div>
 
     <button style="width:100%; background:var(--gold); color:var(--ink); border:none; border-radius:0.75rem; padding:0.9rem; font-family:'Syne',sans-serif; font-size:0.88rem; font-weight:700; cursor:none; transition:background 0.2s;" onclick="calculate()">
@@ -215,6 +256,37 @@
       <p class="results-empty-text">Adjust the sliders on the left and click <strong style="color:var(--cream);">Calculate Returns</strong> to see your projected IRR, equity multiple, and year-by-year breakdown.</p>
     </div>
     <div class="results-active" id="resultsActive">
+
+      <!-- Plain English Summary -->
+      <div class="plain-result-box" id="plainResultBox">
+        <div class="prb-eyebrow">💬 In Plain Terms</div>
+        <div class="prb-text" id="plainResultText"></div>
+      </div>
+
+      <!-- IRR Benchmark -->
+      <div class="irr-benchmark" id="irrBenchmark">
+        <div class="irr-bench-title">How does your target IRR compare?</div>
+        <div class="irr-bench-scale">
+          <div class="irr-seg s1"></div>
+          <div class="irr-seg s2"></div>
+          <div class="irr-seg s3"></div>
+          <div class="irr-seg s4"></div>
+        </div>
+        <div class="irr-bench-labels"><span>8–12% (Savings)</span><span>13–18% (Good)</span><span>19–25% (Strong)</span><span>26%+ (High Risk)</span></div>
+        <div class="irr-bench-your" id="irrBenchYour"></div>
+      </div>
+
+      <!-- Growth Comparison Chart -->
+      <div class="growth-chart-wrap" id="growthChartWrap">
+        <div class="growth-chart-eyebrow">💹 Investment vs. Savings Account</div>
+        <div class="growth-chart-note">Gold line = your investment growing at the target IRR. Blue dashed = the same money left in a Rwanda bank at ~10%/year.</div>
+        <canvas id="growthChart" height="190"></canvas>
+        <div class="growth-legend">
+          <span class="gl-invest" id="glInvest">● This investment</span>
+          <span class="gl-savings">⋯ Savings account (~10%/yr)</span>
+        </div>
+      </div>
+
       <div class="result-headline">Your projected <em>returns</em></div>
       <div class="big-metrics">
         <div class="big-metric highlight">
@@ -405,6 +477,110 @@
 
     document.getElementById('resultsEmpty').style.display = 'none';
     document.getElementById('resultsActive').classList.add('visible');
+
+    // Plain English Summary
+    const irrPct = Math.round(irr * 100);
+    const savingsEquiv = fmtRWF(Math.round(invest * Math.pow(1.10, holdYears)));
+    let irrLabel, irrColor;
+    if (irrPct <= 12)      { irrLabel = 'similar to a savings account — consider whether the investment risk is worth it.'; irrColor = '#6496c8'; }
+    else if (irrPct <= 18) { irrLabel = 'a solid return, better than most savings or bonds.'; irrColor = '#d4a832'; }
+    else if (irrPct <= 25) { irrLabel = 'a strong return — significantly above what a bank will give you.'; irrColor = '#4caf7d'; }
+    else                   { irrLabel = 'a high-growth target — ambitious and possible, but make sure you review the project closely.'; irrColor = '#c8521a'; }
+
+    const plainEl = document.getElementById('plainResultBox');
+    const irrEl   = document.getElementById('irrBenchmark');
+    plainEl.classList.add('visible');
+    irrEl.classList.add('visible');
+    document.getElementById('plainResultText').innerHTML =
+      'You put in <strong>' + fmtRWF(invest) + '</strong>. If this project performs as projected over <strong>' + holdMonths + ' months</strong>, you\'d receive back roughly <strong>' + fmtRWF(Math.round(totalReturn)) + '</strong> — a profit of about <strong>' + fmtRWF(Math.round(netProfit)) + '</strong> after platform fees. That\'s the equivalent of earning <strong>' + irrPct + '% per year</strong> on your money. For comparison, the same amount in a Rwanda savings account at 10% would grow to <strong>' + savingsEquiv + '</strong> over the same period.';
+    document.getElementById('irrBenchYour').innerHTML =
+      'Your target <strong style="color:' + irrColor + '">' + irrPct + '% IRR</strong> is ' + irrLabel;
+
+    // Update growth chart legend label
+    const glEl = document.getElementById('glInvest');
+    if (glEl) glEl.textContent = '● This investment (' + irrPct + '% IRR)';
+
+    requestAnimationFrame(() => drawGrowthChart(invest, irr, holdYears, irrPct));
+  }
+
+  /* ─── GROWTH COMPARISON CHART ─── */
+  function drawGrowthChart(invest, irr, holdYears, irrPct) {
+    const canvas = document.getElementById('growthChart');
+    if (!canvas) return;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cssW = canvas.parentElement.clientWidth || 400;
+    const cssH = 190;
+    canvas.width  = cssW * dpr; canvas.height = cssH * dpr;
+    canvas.style.width = '100%'; canvas.style.height = cssH + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const W = cssW, H = cssH;
+    const pad = { top: 16, right: 16, bottom: 32, left: 68 };
+    const cW = W - pad.left - pad.right, cH = H - pad.top - pad.bottom;
+
+    // Build quarterly data points
+    const steps = Math.max(Math.ceil(holdYears * 4), 4);
+    const invPts = [], savPts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i / steps * holdYears;
+      invPts.push({ t, v: invest * Math.pow(1 + irr, t) });
+      savPts.push({ t, v: invest * Math.pow(1.10, t) });
+    }
+    const maxV = invPts[invPts.length - 1].v * 1.04;
+    const toX = t => pad.left + (t / holdYears) * cW;
+    const toY = v => pad.top + (1 - Math.min(v / maxV, 1)) * cH;
+    ctx.clearRect(0, 0, W, H);
+
+    // ── Grid + Y-axis labels ──
+    const gc = isDark ? 'rgba(245,240,232,0.07)' : 'rgba(0,0,0,0.06)';
+    const lc = isDark ? 'rgba(245,240,232,0.30)' : 'rgba(26,24,20,0.35)';
+    ctx.font = '9px "DM Sans",sans-serif';
+    [0.25, 0.5, 0.75, 1.0].forEach(pct => {
+      const v = maxV * pct;
+      const y = toY(v);
+      ctx.strokeStyle = gc; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cW, y); ctx.stroke();
+      const lbl = v >= 1e9 ? (v/1e9).toFixed(1)+'B' : v >= 1e6 ? (v/1e6).toFixed(1)+'M' : (v/1e3).toFixed(0)+'K';
+      ctx.fillStyle = lc; ctx.textAlign = 'right';
+      ctx.fillText('RWF ' + lbl, pad.left - 5, y + 3.5);
+    });
+
+    // ── Filled gap between lines ──
+    ctx.beginPath();
+    invPts.forEach((p, i) => i === 0 ? ctx.moveTo(toX(p.t), toY(p.v)) : ctx.lineTo(toX(p.t), toY(p.v)));
+    for (let i = savPts.length - 1; i >= 0; i--) ctx.lineTo(toX(savPts[i].t), toY(savPts[i].v));
+    ctx.closePath();
+    ctx.fillStyle = isDark ? 'rgba(212,168,50,0.07)' : 'rgba(212,168,50,0.06)';
+    ctx.fill();
+
+    // ── Savings line (blue dashed) ──
+    ctx.beginPath();
+    savPts.forEach((p, i) => i === 0 ? ctx.moveTo(toX(p.t), toY(p.v)) : ctx.lineTo(toX(p.t), toY(p.v)));
+    ctx.setLineDash([4, 4]); ctx.strokeStyle = '#6496c8'; ctx.lineWidth = 2;
+    ctx.lineJoin = 'round'; ctx.stroke(); ctx.setLineDash([]);
+
+    // ── Investment line (gold) ──
+    ctx.beginPath();
+    invPts.forEach((p, i) => i === 0 ? ctx.moveTo(toX(p.t), toY(p.v)) : ctx.lineTo(toX(p.t), toY(p.v)));
+    ctx.strokeStyle = '#d4a832'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round'; ctx.stroke();
+
+    // ── End-point annotations ──
+    const invFinal = invPts[invPts.length - 1];
+    const savFinal = savPts[savPts.length - 1];
+    const fmtV = v => v >= 1e9 ? 'RWF'+(v/1e9).toFixed(1)+'B' : v >= 1e6 ? 'RWF'+(v/1e6).toFixed(1)+'M' : 'RWF'+(v/1e3).toFixed(0)+'K';
+    ctx.font = 'bold 9px "DM Sans",sans-serif'; ctx.textAlign = 'right';
+    ctx.fillStyle = isDark ? 'rgba(212,168,50,0.9)' : 'rgba(180,130,20,0.9)';
+    ctx.fillText(fmtV(invFinal.v), toX(invFinal.t) - 4, toY(invFinal.v) - 5);
+    ctx.fillStyle = isDark ? 'rgba(100,150,200,0.8)' : 'rgba(80,120,170,0.85)';
+    ctx.fillText(fmtV(savFinal.v), toX(savFinal.t) - 4, toY(savFinal.v) + 13);
+
+    // ── X-axis year labels ──
+    ctx.fillStyle = lc; ctx.textAlign = 'center'; ctx.font = '9px "DM Sans",sans-serif';
+    const totalYrs = Math.ceil(holdYears);
+    const step = totalYrs <= 4 ? 1 : totalYrs <= 7 ? 2 : Math.ceil(totalYrs / 4);
+    for (let y = 0; y <= totalYrs; y += step) ctx.fillText('Yr ' + y, toX(Math.min(y, holdYears)), H - 7);
+    if (totalYrs % step !== 0) ctx.fillText('Yr ' + totalYrs, toX(holdYears), H - 7);
   }
 
   function resetCalc() {

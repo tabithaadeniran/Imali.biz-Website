@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Properties — Consumer Portal | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --sapphire: #1a6bc8;
+    --emerald: #1a5c3a;
+    --forest: #1a3a2a;
+  }
+
+  /* ── CURSOR ── */
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--terracotta); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,82,26,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--terracotta); transform: translate(-10px,-10px) !important; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* ── NAV ── */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sapphire); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--terracotta); font-weight: 500; }
+  .nav-cta { background: var(--terracotta); color: #fff !important; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: #e05e20; }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+  @media (max-width: 1024px) { nav { padding: 1rem 1.5rem; } }
+  @media (max-width: 768px) { .nav-right .nav-link { display: none; } }
+
+  /* ── PAGE LAYOUT ── */
+  .page-wrap { padding-top: 72px; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* ── SEARCH BAR ── */
+  .search-bar-section { background: var(--bg-alt); border-bottom: 1px solid var(--border); padding: 1.25rem 3rem; transition: background 0.3s; }
+  .search-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--terracotta); }
+  .result-count { font-size: 0.82rem; color: var(--text-faint); }
+
+  /* Mode tabs */
+  .mode-tabs { display: flex; gap: 0.35rem; margin-bottom: 1rem; }
+  .mode-tab { padding: 0.4rem 1.1rem; border-radius: 2rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: none; border: 1px solid var(--border); background: transparent; color: var(--text-dim); transition: all 0.2s; }
+  .mode-tab.active { background: var(--terracotta); color: #fff; border-color: var(--terracotta); }
+
+  /* Filter bar */
+  .filter-bar { display: flex; gap: 0.65rem; flex-wrap: wrap; align-items: center; }
+  .filter-input { width: 200px; }
+  .filter-select { min-width: 130px; }
+  input[type="text"].filter-input,
+  select.filter-select {
+    background: var(--input-bg); border: 1px solid var(--input-border);
+    border-radius: 0.6rem; padding: 0.55rem 0.9rem;
+    font-size: 0.82rem; font-family: inherit; color: var(--text);
+    outline: none; transition: border-color 0.2s;
+    cursor: none; appearance: none;
+  }
+  input[type="text"].filter-input:focus,
+  select.filter-select:focus { border-color: var(--terracotta); }
+  select.filter-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(26,24,20,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.75rem center;
+    padding-right: 2rem;
+  }
+  [data-theme="dark"] select.filter-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(245,240,232,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  select.filter-select option { background: var(--bg-alt); }
+
+  .filter-toggle { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.55rem 1rem; font-size: 0.78rem; color: var(--text-dim); cursor: none; transition: all 0.2s; white-space: nowrap; }
+  .filter-toggle.on { background: rgba(76,175,125,0.1); border-color: rgba(76,175,125,0.3); color: #4caf7d; }
+  .view-toggle { display: flex; gap: 0.35rem; margin-left: auto; }
+  .view-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.78rem; color: var(--text-faint); cursor: none; transition: all 0.2s; }
+  .view-btn.active { background: rgba(200,82,26,0.12); border-color: rgba(200,82,26,0.3); color: var(--terracotta); }
+
+  /* ── MAIN CONTENT ── */
+  .main-content { display: flex; flex: 1; }
+
+  /* MAP VIEW */
+  .map-view { flex: 1; position: relative; display: none; background: #0e1219; min-height: 75vh; }
+  .map-view.visible { display: block; }
+  .map-instruction { position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); background: rgba(10,10,15,0.85); border: 1px solid rgba(245,240,232,0.08); border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.75rem; color: rgba(245,240,232,0.5); backdrop-filter: blur(8px); white-space: nowrap; z-index: 5; }
+  .map-popup { position: absolute; background: rgba(10,10,15,0.96); border: 1px solid rgba(245,240,232,0.1); border-radius: 14px; padding: 1rem 1.25rem; backdrop-filter: blur(14px); width: 210px; display: none; z-index: 10; }
+  .map-popup.visible { display: block; }
+  .popup-mode { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 0.25rem; }
+  .popup-loc { font-size: 0.65rem; color: var(--gold); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .popup-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--cream); margin-bottom: 0.35rem; }
+  .popup-beds { font-size: 0.72rem; color: rgba(245,240,232,0.5); margin-bottom: 0.6rem; }
+  .popup-price { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--cream); margin-bottom: 0.75rem; }
+  .popup-btn { display: block; text-align: center; background: var(--terracotta); color: white; padding: 0.4rem 0.75rem; border-radius: 1rem; font-size: 0.72rem; text-decoration: none; cursor: none; transition: background 0.2s; }
+  .popup-btn:hover { background: #d65a1e; }
+
+  /* LIST VIEW */
+  .list-view { flex: 1; padding: 2rem 3rem; }
+  .list-view.hidden { display: none; }
+  .listings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+
+  /* ── LISTING CARDS ── */
+  .listing-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; cursor: none; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s, background 0.3s; }
+  .listing-card:hover { transform: translateY(-4px); border-color: var(--border-strong); }
+  [data-theme="light"] .listing-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.10); }
+  [data-theme="dark"]  .listing-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.42); }
+
+  .card-img { width: 100%; height: 196px; background: #0e1219; position: relative; overflow: hidden; }
+  .card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94); }
+  .listing-card:hover .card-img img { transform: scale(1.06); }
+
+  /* Badges */
+  .card-badge { position: absolute; top: 0.65rem; left: 0.65rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.22rem 0.6rem; border-radius: 1rem; z-index: 2; }
+  .badge-buy    { background: var(--terracotta); color: #fff; }
+  .badge-rent   { background: var(--sapphire); color: #fff; }
+  .badge-offplan{ background: var(--gold); color: #0a0a0f; }
+  .badge-new    { background: rgba(76,175,125,0.9); color: #fff; }
+
+  .card-verified { position: absolute; top: 0.65rem; right: 0.65rem; background: rgba(10,10,15,0.82); border: 1px solid rgba(76,175,125,0.4); color: #4caf7d; font-size: 0.6rem; padding: 0.22rem 0.55rem; border-radius: 1rem; backdrop-filter: blur(4px); z-index: 2; }
+  .save-btn { position: absolute; bottom: 0.65rem; right: 0.65rem; color: rgba(245,240,232,0.9); background: rgba(10,10,15,0.72); border: 1px solid rgba(245,240,232,0.15); border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; cursor: none; backdrop-filter: blur(4px); transition: background 0.2s; z-index: 2; }
+  .save-btn:hover { background: rgba(200,82,26,0.3); }
+  .save-btn.saved { background: rgba(200,82,26,0.25); border-color: rgba(200,82,26,0.5); }
+
+  /* Card body */
+  .card-body { padding: 1.15rem 1.25rem; }
+  .card-mode-price { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 0.35rem; }
+  .card-price { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  .card-price small { font-size: 0.65rem; color: var(--text-faint); font-weight: 300; font-family: 'DM Sans', sans-serif; }
+  .card-location { font-size: 0.7rem; color: var(--sapphire); letter-spacing: 0.04em; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.3rem; }
+  .card-title { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.75rem; line-height: 1.3; }
+  .card-specs { display: flex; gap: 0.85rem; padding: 0.65rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 0.75rem; }
+  .spec { font-size: 0.72rem; color: var(--text-dim); display: flex; align-items: center; gap: 0.3rem; }
+  .spec-icon { font-size: 0.8rem; opacity: 0.7; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .agent-row { display: flex; align-items: center; gap: 0.45rem; }
+  .agent-avatar { width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, var(--terracotta), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: white; flex-shrink: 0; }
+  .agent-name { font-size: 0.7rem; color: var(--text-faint); }
+  .agent-name strong { color: var(--text-dim); font-weight: 500; }
+  .card-trust { font-size: 0.68rem; color: var(--gold); background: rgba(212,168,50,0.08); border: 1px solid rgba(212,168,50,0.15); padding: 0.2rem 0.55rem; border-radius: 2rem; }
+  .card-actions { display: flex; gap: 0.5rem; margin-top: 0.85rem; }
+  .btn-card { flex: 1; text-align: center; padding: 0.5rem; border-radius: 0.55rem; font-size: 0.76rem; font-weight: 500; cursor: none; text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s; font-family: 'Syne', sans-serif; font-weight: 600; }
+  .btn-card-primary { background: var(--terracotta); color: #fff; border: 1px solid var(--terracotta); }
+  .btn-card-primary:hover { background: #d65a1e; }
+  .btn-card-outline { background: transparent; color: var(--text-dim); border: 1px solid var(--border-strong); }
+  .btn-card-outline:hover { color: var(--text); border-color: var(--text-faint); }
+
+  /* ── OFF-PLAN SECTION ── */
+  .section-divider { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .section-divider-label { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .offplan-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+  /* Off-plan card variant */
+  .listing-card.offplan { border-color: rgba(212,168,50,0.2); }
+  .listing-card.offplan:hover { border-color: rgba(212,168,50,0.4); }
+  .offplan-progress { margin: 0.65rem 0 0; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-faint); margin-bottom: 0.3rem; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--terracotta)); border-radius: 2px; transition: width 0.6s ease; }
+  .completion-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; color: var(--gold); background: rgba(212,168,50,0.08); border: 1px solid rgba(212,168,50,0.15); padding: 0.2rem 0.55rem; border-radius: 1rem; margin-top: 0.5rem; }
+
+  /* ── NO RESULTS ── */
+  .no-results { text-align: center; padding: 5rem 2rem; color: var(--text-faint); grid-column: 1/-1; }
+  .no-results-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+
+  /* ── MODAL ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(10,10,15,0.88); backdrop-filter: blur(8px); z-index: 500; display: none; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: #12121a; border: 1px solid rgba(245,240,232,0.1); border-radius: 20px; width: 100%; max-width: 820px; max-height: 90vh; overflow-y: auto; position: relative; scrollbar-width: thin; }
+  .modal-close { position: absolute; top: 1.25rem; right: 1.25rem; background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: none; color: rgba(245,240,232,0.6); transition: background 0.2s; z-index: 1; }
+  .modal-close:hover { background: rgba(245,240,232,0.12); }
+  .modal-img { width: 100%; height: 280px; background: #0e1219; position: relative; overflow: hidden; }
+  .modal-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .modal-img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,18,26,0.75) 0%, transparent 55%); }
+  .modal-img-badges { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.5rem; z-index: 2; }
+  .modal-body { padding: 2rem; }
+  .modal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; gap: 1rem; }
+  .modal-location { font-size: 0.7rem; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--cream); line-height: 1.15; }
+  .modal-price { font-family: 'Syne', sans-serif; font-size: 1.55rem; font-weight: 800; color: var(--cream); text-align: right; white-space: nowrap; }
+  .modal-price small { display: block; font-size: 0.68rem; color: rgba(245,240,232,0.35); font-family: 'DM Sans', sans-serif; font-weight: 300; margin-top: 0.15rem; }
+  .modal-specs { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+  .modal-spec { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: rgba(245,240,232,0.6); background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.5rem; padding: 0.4rem 0.8rem; }
+  .modal-desc { font-size: 0.85rem; color: rgba(245,240,232,0.55); line-height: 1.75; margin-bottom: 1.75rem; }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.75rem; }
+  .modal-section-title { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 0.85rem; }
+  .modal-detail-row { display: flex; justify-content: space-between; padding: 0.45rem 0; border-bottom: 1px solid rgba(245,240,232,0.05); font-size: 0.82rem; }
+  .modal-detail-row:last-child { border-bottom: none; }
+  .detail-label { color: rgba(245,240,232,0.4); }
+  .detail-value { color: var(--cream); font-weight: 500; }
+  .amenities-list { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .amenity-chip { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); border-radius: 0.4rem; padding: 0.3rem 0.7rem; font-size: 0.73rem; color: rgba(245,240,232,0.55); }
+  .agent-card { background: rgba(245,240,232,0.03); border: 1px solid rgba(245,240,232,0.07); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+  .agent-card-left { display: flex; align-items: center; gap: 0.75rem; }
+  .agent-card-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--terracotta), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color: white; }
+  .agent-card-name { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--cream); }
+  .agent-card-meta { font-size: 0.72rem; color: rgba(245,240,232,0.4); margin-top: 0.1rem; }
+  .agent-trust { font-size: 0.75rem; color: var(--gold); display: flex; align-items: center; gap: 0.3rem; }
+  .modal-actions { display: flex; gap: 0.75rem; }
+  .btn-modal-primary { flex: 1; background: var(--terracotta); color: #fff; padding: 0.85rem; border-radius: 0.75rem; text-align: center; font-weight: 600; font-size: 0.875rem; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .btn-modal-primary:hover { background: #d65a1e; }
+  .btn-modal-secondary { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); color: rgba(245,240,232,0.6); padding: 0.85rem 1.25rem; border-radius: 0.75rem; font-size: 0.875rem; cursor: none; transition: background 0.2s; }
+  .btn-modal-secondary:hover { background: rgba(245,240,232,0.09); color: var(--cream); }
+  .report-link { font-size: 0.72rem; color: rgba(245,240,232,0.22); text-align: center; margin-top: 0.85rem; cursor: none; transition: color 0.2s; }
+  .report-link:hover { color: rgba(245,240,232,0.45); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1100px) { .listings-grid, .offplan-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 1024px) { .search-bar-section { padding: 1rem 1.5rem; } .list-view { padding: 1.5rem; } .modal-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 640px) { .listings-grid, .offplan-grid { grid-template-columns: 1fr; } .modal-actions { flex-direction: column; } .modal-specs { gap: 0.5rem; } }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Consumer Portal</div>
+  </a>
+  <div class="nav-right">
+    <a href="listings.html" class="nav-link active">Browse Properties</a>
+    <a href="mortgage-calculator.html" class="nav-link">Mortgage Calc</a>
+    <a href="market-reports.html" class="nav-link">Market Reports</a>
+    <a href="agent-finder.html" class="nav-link">Find an Agent</a>
+    <a href="../index.html" class="nav-link" style="color:var(--text-faint)">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+    <a href="dashboard.html" class="nav-cta">My Account</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- SEARCH BAR -->
+  <div class="search-bar-section">
+    <div class="search-top">
+      <h1 class="page-title">Browse <em>Properties</em></h1>
+      <span class="result-count" id="resultCount">Showing all listings</span>
+    </div>
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tabAll"  onclick="setMode('all')">All</button>
+      <button class="mode-tab"        id="tabBuy"  onclick="setMode('buy')">🏠 For Sale</button>
+      <button class="mode-tab"        id="tabRent"    onclick="setMode('rent')">🔑 To Let</button>
+      <button class="mode-tab"        id="tabOffplan" onclick="setMode('offplan')">🏗 Off-Plan</button>
+    </div>
+    <div class="filter-bar">
+      <input type="text" class="filter-input" placeholder="🔍 Neighbourhood, district…" id="filterLocation">
+      <select class="filter-select" id="filterType">
+        <option value="">All Types</option>
+        <option value="apartment">Apartment</option>
+        <option value="house">House</option>
+        <option value="villa">Villa</option>
+        <option value="townhouse">Townhouse</option>
+        <option value="studio">Studio</option>
+        <option value="commercial">Commercial</option>
+      </select>
+      <select class="filter-select" id="filterBeds">
+        <option value="">Any Beds</option>
+        <option value="1">1 Bed</option>
+        <option value="2">2 Beds</option>
+        <option value="3">3 Beds</option>
+        <option value="4">4+ Beds</option>
+      </select>
+      <select class="filter-select" id="filterPrice">
+        <option value="">Any Price</option>
+        <option value="1">Under RWF 50M / 300K/mo</option>
+        <option value="2">RWF 50M–120M / 300–600K/mo</option>
+        <option value="3">RWF 120M–250M / 600K–1.2M/mo</option>
+        <option value="4">RWF 250M+</option>
+      </select>
+      <div class="filter-toggle" id="verifiedToggle" onclick="toggleVerified()">✓ Verified Only</div>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btnList" onclick="setView('list')">☰ List</button>
+        <button class="view-btn"        id="btnMap"  onclick="setView('map')">⊕ Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP VIEW -->
+  <div class="map-view" id="mapView">
+    <div class="map-instruction">Click a hotspot to preview a listing</div>
+    <svg style="width:100%;height:78vh;" viewBox="0 0 1200 680" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <radialGradient id="mg1" cx="53%" cy="38%"><stop offset="0%" stop-color="#1a6bc8" stop-opacity="0.45"/><stop offset="100%" stop-color="#1a6bc8" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mg2" cx="35%" cy="58%"><stop offset="0%" stop-color="#c8521a" stop-opacity="0.35"/><stop offset="100%" stop-color="#c8521a" stop-opacity="0"/></radialGradient>
+        <radialGradient id="mg3" cx="68%" cy="62%"><stop offset="0%" stop-color="#d4a832" stop-opacity="0.3"/><stop offset="100%" stop-color="#d4a832" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="1200" height="680" fill="#0e1219"/>
+      <g stroke="rgba(245,240,232,0.03)" stroke-width="0.5">
+        <line x1="0" y1="170" x2="1200" y2="170"/><line x1="0" y1="340" x2="1200" y2="340"/><line x1="0" y1="510" x2="1200" y2="510"/>
+        <line x1="300" y1="0" x2="300" y2="680"/><line x1="600" y1="0" x2="600" y2="680"/><line x1="900" y1="0" x2="900" y2="680"/>
+      </g>
+      <path d="M390,140 L520,118 L610,138 L700,168 L730,220 L722,295 L698,368 L674,428 L634,490 L580,535 L530,555 L472,550 L418,526 L372,490 L344,450 L330,400 L326,348 L336,290 L354,232 L372,182 Z" fill="rgba(26,58,42,0.5)" stroke="rgba(212,168,50,0.2)" stroke-width="1.5"/>
+      <path d="M528,160 L528,555" stroke="rgba(212,168,50,0.06)" stroke-width="1" stroke-dasharray="4,5"/>
+      <path d="M330,360 L730,360" stroke="rgba(212,168,50,0.06)" stroke-width="1" stroke-dasharray="4,5"/>
+      <ellipse cx="570" cy="268" rx="140" ry="115" fill="url(#mg1)"/>
+      <ellipse cx="415" cy="420" rx="85" ry="75" fill="url(#mg2)"/>
+      <ellipse cx="655" cy="440" rx="75" ry="65" fill="url(#mg3)"/>
+      <!-- Kigali / Kimihurura -->
+      <circle cx="572" cy="268" r="34" fill="rgba(26,107,200,0.07)" stroke="rgba(26,107,200,0.25)" stroke-width="1"><animate attributeName="r" values="30;42;30" dur="3s" repeatCount="indefinite"/></circle>
+      <circle cx="572" cy="268" r="11" fill="rgba(26,107,200,0.22)" stroke="rgba(26,107,200,0.55)" stroke-width="1.5" class="map-hotspot" data-id="0" style="cursor:none"/>
+      <circle cx="572" cy="268" r="5.5" fill="#1a6bc8"/>
+      <text x="590" y="264" fill="rgba(245,240,232,0.85)" font-size="12" font-family="'DM Sans',sans-serif" font-weight="500">Kimihurura · Kigali</text>
+      <!-- Nyarutarama -->
+      <circle cx="610" cy="230" r="10" fill="rgba(200,82,26,0.18)" stroke="rgba(200,82,26,0.5)" stroke-width="1.5" class="map-hotspot" data-id="3" style="cursor:none"><animate attributeName="r" values="8;13;8" dur="3.5s" repeatCount="indefinite"/></circle>
+      <circle cx="610" cy="230" r="5" fill="#c8521a"/>
+      <text x="622" y="226" fill="rgba(245,240,232,0.65)" font-size="10" font-family="'DM Sans',sans-serif">Nyarutarama</text>
+      <!-- Kacyiru -->
+      <circle cx="535" cy="240" r="10" fill="rgba(212,168,50,0.18)" stroke="rgba(212,168,50,0.45)" stroke-width="1.5" class="map-hotspot" data-id="1" style="cursor:none"><animate attributeName="r" values="8;13;8" dur="4s" repeatCount="indefinite"/></circle>
+      <circle cx="535" cy="240" r="4.5" fill="#d4a832"/>
+      <text x="548" y="236" fill="rgba(212,168,50,0.75)" font-size="10" font-family="'DM Sans',sans-serif">Kacyiru</text>
+      <!-- Remera -->
+      <circle cx="625" cy="270" r="9" fill="rgba(26,107,200,0.16)" stroke="rgba(26,107,200,0.4)" stroke-width="1.5" class="map-hotspot" data-id="2" style="cursor:none"><animate attributeName="r" values="7;12;7" dur="4.5s" repeatCount="indefinite"/></circle>
+      <circle cx="625" cy="270" r="4" fill="#1a6bc8"/>
+      <text x="636" y="266" fill="rgba(245,240,232,0.6)" font-size="10" font-family="'DM Sans',sans-serif">Remera</text>
+      <!-- Huye -->
+      <circle cx="490" cy="488" r="9" fill="rgba(200,82,26,0.14)" stroke="rgba(200,82,26,0.35)" stroke-width="1.5" class="map-hotspot" data-id="4" style="cursor:none"><animate attributeName="r" values="7;12;7" dur="5s" repeatCount="indefinite"/></circle>
+      <circle cx="490" cy="488" r="4" fill="#c8521a"/>
+      <text x="503" y="484" fill="rgba(245,240,232,0.5)" font-size="10" font-family="'DM Sans',sans-serif">Huye</text>
+      <!-- Musanze -->
+      <circle cx="432" cy="188" r="9" fill="rgba(212,168,50,0.14)" stroke="rgba(212,168,50,0.35)" stroke-width="1.5" class="map-hotspot" data-id="5" style="cursor:none"><animate attributeName="r" values="7;11;7" dur="4.2s" repeatCount="indefinite"/></circle>
+      <circle cx="432" cy="188" r="4" fill="#d4a832"/>
+      <text x="444" y="184" fill="rgba(212,168,50,0.65)" font-size="10" font-family="'DM Sans',sans-serif">Musanze</text>
+      <!-- Connection lines -->
+      <line x1="572" y1="268" x2="610" y2="230" stroke="rgba(200,82,26,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+      <line x1="572" y1="268" x2="535" y2="240" stroke="rgba(212,168,50,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+      <line x1="572" y1="268" x2="625" y2="270" stroke="rgba(26,107,200,0.12)" stroke-width="0.8" stroke-dasharray="3,4"/>
+      <line x1="572" y1="268" x2="490" y2="488" stroke="rgba(200,82,26,0.1)" stroke-width="0.8" stroke-dasharray="3,4"/>
+      <line x1="572" y1="268" x2="432" y2="188" stroke="rgba(212,168,50,0.1)" stroke-width="0.8" stroke-dasharray="3,4"/>
+    </svg>
+    <div class="map-popup" id="mapPopup">
+      <div class="popup-mode" id="popupMode"></div>
+      <div class="popup-loc"  id="popupLoc"></div>
+      <div class="popup-title" id="popupTitle"></div>
+      <div class="popup-beds"  id="popupBeds"></div>
+      <div class="popup-price" id="popupPrice"></div>
+      <a href="#" class="popup-btn" id="popupBtn">View Listing</a>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div class="list-view" id="listView">
+    <div class="listings-grid" id="listingsGrid"></div>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose">×</button>
+    <div class="modal-img">
+      <img id="modalImg" src="" alt="" loading="lazy">
+      <div class="modal-img-overlay"></div>
+      <div class="modal-img-badges" id="modalImgBadges"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-header">
+        <div>
+          <div class="modal-location" id="modalLocation"></div>
+          <div class="modal-title"    id="modalTitle"></div>
+        </div>
+        <div>
+          <div class="modal-price" id="modalPrice"></div>
+        </div>
+      </div>
+      <div class="modal-specs" id="modalSpecs"></div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-grid">
+        <div>
+          <div class="modal-section-title">Property Details</div>
+          <div id="modalDetails"></div>
+        </div>
+        <div>
+          <div class="modal-section-title">Amenities & Features</div>
+          <div class="amenities-list" id="modalAmenities"></div>
+        </div>
+      </div>
+      <div class="agent-card">
+        <div class="agent-card-left">
+          <div class="agent-card-avatar" id="modalAgentInitial"></div>
+          <div>
+            <div class="agent-card-name" id="modalAgentName"></div>
+            <div class="agent-card-meta" id="modalAgentMeta"></div>
+          </div>
+        </div>
+        <div class="agent-trust" id="modalAgentTrust"></div>
+      </div>
+      <div class="modal-actions">
+        <a href="mortgage-calculator.html" class="btn-modal-primary">🏦 Calculate Mortgage</a>
+        <button class="btn-modal-secondary" onclick="closeModal()">Schedule Viewing</button>
+        <button class="btn-modal-secondary" onclick="closeModal()">💾 Save</button>
+      </div>
+      <div class="report-link" onclick="closeModal()">⚑ Report this listing</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ──────────────────────────────────────────────
+   LISTINGS DATA
+────────────────────────────────────────────── */
+const LISTINGS = [
+  {
+    id: 0, mode: 'buy', type: 'apartment',
+    title: '3-Bed Luxury Apartment',
+    location: 'Kimihurura, Gasabo · Kigali',
+    district: 'kimihurura',
+    price: 85000000, priceFmt: 'RWF 85,000,000',
+    beds: 3, baths: 2, sqm: 148, parking: 2,
+    floor: 'Floor 4 of 8',
+    img: 'https://images.unsplash.com/photo-1700126689261-1f5bdfe5adcc?q=80&w=1032&auto=format&fit=crop',
+    verified: true, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '94', agent: 'Alice Uwera', agentInit: 'AU', agentMeta: 'NLA Registered · 47 sales',
+    desc: 'Exceptional 3-bedroom apartment in the prestigious Kimihurura quarter. Floor-to-ceiling glazing, Italian-tiled finishes, and a wraparound balcony with unobstructed views towards Kigali CBD. Building amenities include rooftop terrace, backup generator, and concierge service.',
+    details: [['Type','Apartment'],['Floor','4 of 8'],['Title','Freehold'],['Year Built','2022'],['Service Charge','RWF 120K/mo'],['NLA Ref','NLA-GAS-2022-4471']],
+    amenities: ['Generator','Security 24/7','Rooftop Terrace','Borehole Water','High-Speed WiFi','Parking ×2','Gym Access','Concierge'],
+    mapId: 0,
+  },
+  {
+    id: 1, mode: 'buy', type: 'house',
+    title: '4-Bed Family House',
+    location: 'Kacyiru, Gasabo · Kigali',
+    district: 'kacyiru',
+    price: 128000000, priceFmt: 'RWF 128,000,000',
+    beds: 4, baths: 3, sqm: 210, parking: 2,
+    floor: 'Standalone',
+    img: 'https://images.unsplash.com/photo-1571992579655-8134e2b8df0b?q=80&w=870&auto=format&fit=crop',
+    verified: true, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '89', agent: 'Bernard Habimana', agentInit: 'BH', agentMeta: 'NLA Registered · 31 sales',
+    desc: 'Spacious 4-bedroom family home in a quiet Kacyiru residential street, minutes from embassy row and the CBD. Large walled compound with mature garden, domestic quarters, double garage, and a self-contained guest room. Recently renovated kitchen and bathrooms.',
+    details: [['Type','Detached House'],['Plot Size','600 sqm'],['Title','Freehold'],['Year Built','2018'],['Renovation','2023'],['NLA Ref','NLA-GAS-2018-2209']],
+    amenities: ['Walled Compound','Electric Gate','Generator','Borehole Water','DSTV','Garden','Domestic Quarters','Double Garage'],
+    mapId: 1,
+  },
+  {
+    id: 2, mode: 'rent', type: 'apartment',
+    title: '2-Bed Modern Apartment',
+    location: 'Remera, Gasabo · Kigali',
+    district: 'remera',
+    price: 380000, priceFmt: 'RWF 380,000 / mo',
+    beds: 2, baths: 1, sqm: 95, parking: 1,
+    floor: 'Floor 2 of 5',
+    img: 'https://images.unsplash.com/photo-1574362848149-11496d93a7c7?q=80&w=784&auto=format&fit=crop',
+    verified: true, badge: 'To Let', badgeClass: 'badge-rent',
+    trust: '91', agent: 'Claudine Mukasa', agentInit: 'CM', agentMeta: 'NLA Registered · 62 lets',
+    desc: 'Contemporary 2-bedroom apartment available immediately in vibrant Remera. Open-plan living and dining, modern kitchen with granite counters, en-suite master bedroom. Walking distance to Remera bus park, Bourbon Coffee, and Amahoro Stadium.',
+    details: [['Type','Apartment'],['Floor','2 of 5'],['Available','Immediately'],['Lease Min','6 months'],['Deposit','2 months'],['Utilities','Tenant'],],
+    amenities: ['Parking','Security Guard','CCTV','Backup Power','Fibre Ready','Gated Complex'],
+    mapId: 2,
+  },
+  {
+    id: 3, mode: 'buy', type: 'villa',
+    title: '5-Bed Executive Villa',
+    location: 'Nyarutarama, Gasabo · Kigali',
+    district: 'nyarutarama',
+    price: 320000000, priceFmt: 'RWF 320,000,000',
+    beds: 5, baths: 4, sqm: 380, parking: 3,
+    floor: 'Standalone',
+    img: 'https://images.unsplash.com/photo-1690847764792-e9512c1f8056?q=80&w=774&auto=format&fit=crop',
+    verified: true, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '97', agent: 'David Nkurunziza', agentInit: 'DN', agentMeta: 'NLA Registered · 18 premium sales',
+    desc: 'One of Nyarutarama\'s most distinctive properties — a 5-bedroom executive villa with panoramic views, infinity pool, and 900 sqm of landscaped grounds. Smart home automation, cinema room, wine cellar, and a fully equipped outdoor entertainment deck. Perfect for a senior executive or diplomatic residence.',
+    details: [['Type','Detached Villa'],['Plot Size','900 sqm'],['Pool','Infinity Pool'],['Title','Freehold'],['Year Built','2021'],['Smart Home','Full Automation']],
+    amenities: ['Infinity Pool','Smart Home','Cinema Room','Wine Cellar','Triple Garage','Backup Generator','Borehole','Landscaped Garden','Staff Quarters','Panic Room'],
+    mapId: 3,
+  },
+  {
+    id: 4, mode: 'rent', type: 'apartment',
+    title: '1-Bed Serviced Apartment',
+    location: 'Nyarugenge, Nyarugenge · Kigali',
+    district: 'nyarugenge',
+    price: 270000, priceFmt: 'RWF 270,000 / mo',
+    beds: 1, baths: 1, sqm: 58, parking: 1,
+    floor: 'Floor 6 of 12',
+    img: 'https://images.unsplash.com/photo-1638973140785-3b918e290682?q=80&w=389&auto=format&fit=crop',
+    verified: true, badge: 'To Let', badgeClass: 'badge-rent',
+    trust: '88', agent: 'Espérance Ingabire', agentInit: 'EI', agentMeta: 'NLA Registered · 84 lets',
+    desc: 'Fully-serviced 1-bedroom apartment in a high-rise near Kigali CBD. Ideal for professionals and short-term residents. Monthly cleaning included, bills negotiable. Skyline views, rooftop communal area, and 24-hour front desk service.',
+    details: [['Type','Serviced Apartment'],['Floor','6 of 12'],['Furnished','Fully Furnished'],['Bills','Negotiable'],['Available','Immediately'],['Lease Min','1 month']],
+    amenities: ['Fully Furnished','Daily Cleaning','Rooftop Lounge','24hr Desk','Parking','Fibre WiFi','Gym','Laundry'],
+    mapId: 0,
+  },
+  {
+    id: 5, mode: 'buy', type: 'house',
+    title: '3-Bed Bungalow with SQ',
+    location: 'Kibagabaga, Gasabo · Kigali',
+    district: 'kibagabaga',
+    price: 74000000, priceFmt: 'RWF 74,000,000',
+    beds: 3, baths: 2, sqm: 165, parking: 2,
+    floor: 'Standalone',
+    img: 'https://images.pexels.com/photos/36611295/pexels-photo-36611295.jpeg?auto=compress&cs=tinysrgb&w=800',
+    verified: false, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '82', agent: 'François Niyonsenga', agentInit: 'FN', agentMeta: 'NLA Registered · 24 sales',
+    desc: 'Well-maintained 3-bedroom bungalow on a generous 480 sqm plot in Kibagabaga, a rapidly developing neighbourhood close to Kigali International Airport. Includes a self-contained servant\'s quarters (SQ), double parking, established garden, and a rain-harvesting tank.',
+    details: [['Type','Bungalow'],['Plot Size','480 sqm'],['Title','Freehold'],['SQ','Yes — self-contained'],['Year Built','2016'],['NLA Ref','NLA-GAS-2016-0997']],
+    amenities: ['Garden','SQ / DSQ','Double Parking','Rainwater Tank','Security Wall','Electric Gate','Satellite TV'],
+    mapId: 0,
+  },
+  {
+    id: 6, mode: 'rent', type: 'house',
+    title: '4-Bed House + Pool',
+    location: 'Gacuriro, Gasabo · Kigali',
+    district: 'gacuriro',
+    price: 1100000, priceFmt: 'RWF 1,100,000 / mo',
+    beds: 4, baths: 3, sqm: 260, parking: 3,
+    floor: 'Standalone',
+    img: 'https://images.pexels.com/photos/27307400/pexels-photo-27307400.jpeg?auto=compress&cs=tinysrgb&w=800',
+    verified: true, badge: 'To Let', badgeClass: 'badge-rent',
+    trust: '93', agent: 'Goretti Uwimana', agentInit: 'GU', agentMeta: 'NLA Registered · 39 lets',
+    desc: 'Outstanding 4-bedroom family home available for long-term let in prestigious Gacuriro. Private swimming pool, outdoor BBQ terrace, full generator, borehole, and a triple garage. Quiet cul-de-sac environment with excellent security. Minutes from the new Gacuriro expressway.',
+    details: [['Type','Detached House'],['Pool','Private'],['Lease Min','12 months'],['Available','1 month notice'],['Deposit','3 months'],['Bills','Negotiable']],
+    amenities: ['Private Pool','BBQ Terrace','Generator','Borehole','Triple Garage','Staff Quarters','CCTV','Smart Lock','Fibre'],
+    mapId: 0,
+  },
+  {
+    id: 7, mode: 'buy', type: 'townhouse',
+    title: '3-Bed Townhouse, End Unit',
+    location: 'Gisozi, Gasabo · Kigali',
+    district: 'gisozi',
+    price: 95000000, priceFmt: 'RWF 95,000,000',
+    beds: 3, baths: 2, sqm: 172, parking: 2,
+    floor: '2-storey',
+    img: 'https://images.unsplash.com/photo-1520608421741-68228b76b6df?q=80&w=387&auto=format&fit=crop',
+    verified: true, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '86', agent: 'Hortense Mutoni', agentInit: 'HM', agentMeta: 'NLA Registered · 28 sales',
+    desc: 'Corner-end 3-bedroom townhouse in a boutique 12-unit gated development. Two storeys with private terrace on the upper level, open-plan ground floor, modern kitchen, and a private rear garden. Low maintenance charges. NLA title clear.',
+    details: [['Type','Townhouse'],['Storey','2-storey'],['Title','Sectional Title'],['Year Built','2023'],['Maintenance','RWF 45K/mo'],['Units in Block','12']],
+    amenities: ['Gated Complex','Parking ×2','Roof Terrace','Private Garden','Generator','CCTV','Fibre Ready'],
+    mapId: 0,
+  },
+  {
+    id: 8, mode: 'rent', type: 'studio',
+    title: 'Studio Apartment — CBD',
+    location: 'Nyarugenge Centre · Kigali',
+    district: 'nyarugenge',
+    price: 185000, priceFmt: 'RWF 185,000 / mo',
+    beds: 0, baths: 1, sqm: 38, parking: 0,
+    floor: 'Floor 3 of 10',
+    img: 'https://images.unsplash.com/photo-1619216083420-6e54b895f730?q=80&w=387&auto=format&fit=crop',
+    verified: false, badge: 'To Let', badgeClass: 'badge-rent',
+    trust: '79', agent: 'Ivan Nsengiyumva', agentInit: 'IN', agentMeta: 'NLA Registered · 110 lets',
+    desc: 'Compact, well-designed studio apartment in the CBD — ideal for young professionals. Kitchenette, en-suite shower room, built-in wardrobe, and a small balcony. Bills included in the rent. No parking, but walking distance to bus stops and the new BRT corridor.',
+    details: [['Type','Studio'],['Floor','3 of 10'],['Furnished','Part-furnished'],['Bills','Included'],['Available','Immediately'],['Lease Min','3 months']],
+    amenities: ['Bills Included','Balcony','Built-in Wardrobe','Security Guard','Lift','Fibre WiFi'],
+    mapId: 0,
+  },
+  {
+    id: 9, mode: 'buy', type: 'apartment',
+    title: '2-Bed Apartment — Lake View',
+    location: 'Muhazi, Eastern Province',
+    district: 'muhazi',
+    price: 52000000, priceFmt: 'RWF 52,000,000',
+    beds: 2, baths: 2, sqm: 110, parking: 1,
+    floor: 'Floor 2 of 4',
+    img: 'https://images.unsplash.com/photo-1605146769289-440113cc3d00?q=80&w=870&auto=format&fit=crop',
+    verified: true, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '85', agent: 'Josiane Nzeyimana', agentInit: 'JN', agentMeta: 'NLA Registered · 19 sales',
+    desc: 'Serene 2-bedroom apartment with direct Lake Muhazi views, perfect as a weekend retreat or permanent residence. Wrap-around balcony, open-plan living with lake-facing windows, boat mooring available. 45 minutes from Kigali CBD via the Eastern Province expressway.',
+    details: [['Type','Apartment'],['View','Lake Muhazi'],['Title','Freehold'],['Year Built','2022'],['Boat Mooring','Available'],['NLA Ref','NLA-EAS-2022-0103']],
+    amenities: ['Lake View','Balcony','Boat Mooring','Generator','Parking','Swimming Pool','BBQ Area','Borehole'],
+    mapId: 4,
+  },
+  {
+    id: 10, mode: 'buy', type: 'villa',
+    title: '4-Bed Villa — Mountain Views',
+    location: 'Musanze, Northern Province',
+    district: 'musanze',
+    price: 195000000, priceFmt: 'RWF 195,000,000',
+    beds: 4, baths: 3, sqm: 290, parking: 2,
+    floor: 'Standalone',
+    img: 'https://images.pexels.com/photos/9308434/pexels-photo-9308434.jpeg?auto=compress&cs=tinysrgb&w=800',
+    verified: true, badge: 'For Sale', badgeClass: 'badge-buy',
+    trust: '90', agent: 'Kevin Bizimana', agentInit: 'KB', agentMeta: 'NLA Registered · 12 sales',
+    desc: 'Exceptional 4-bedroom villa perched on the slopes above Musanze, offering breathtaking views of the Virunga Volcanoes. Eco-construction with solar panels, rainwater harvesting, and a vegetable garden. Popular with eco-tourism operators and high-end retreat developers. Gorilla trekking permit zone nearby.',
+    details: [['Type','Detached Villa'],['Plot Size','1,200 sqm'],['Solar','Full off-grid'],['Title','Freehold'],['Year Built','2020'],['Tourist Potential','High']],
+    amenities: ['Volcano Views','Solar Panels','Rainwater Harvest','Vegetable Garden','Fireplace','Double Garage','Staff Quarters','Borehole','Fibre'],
+    mapId: 5,
+  },
+];
+
+/* ── OFF-PLAN PROJECTS ── */
+const OFFPLAN = [
+  {
+    id: 'op0', mode: 'offplan', type: 'apartment',
+    title: 'The Elms Residences',
+    subtitle: 'Phase 1 — Kacyiru, Kigali',
+    location: 'Kacyiru, Gasabo · Kigali',
+    priceFrom: 65000000, priceFmt: 'From RWF 65M',
+    units: '48 units', types: '1, 2 & 3 Bed Apartments',
+    completion: 'Q3 2026', progress: 42,
+    img: 'https://images.unsplash.com/photo-1605146769289-440113cc3d00?q=80&w=870&auto=format&fit=crop',
+    developer: 'Kigali Developments Ltd',
+    devInit: 'KD', devMeta: 'Imali.biz Verified Developer · 3 projects',
+    desc: 'A boutique mid-rise development in the heart of Kacyiru featuring premium 1–3 bedroom apartments with rooftop amenities. Walking distance to ministries, embassy zone, and the new BRT corridor. First-mover pricing available for early reservation — 10% deposit to secure.',
+    amenities: ['Rooftop Pool','Coworking Lounge','EV Charging','Solar Backup','Underground Parking','Concierge','Gym','Children\'s Play Area'],
+    paymentPlan: '10% reservation · 30% on contract · 60% on keys',
+  },
+  {
+    id: 'op1', mode: 'offplan', type: 'apartment',
+    title: 'Kimihurura Heights',
+    subtitle: 'Tower A — Kimihurura, Kigali',
+    location: 'Kimihurura, Gasabo · Kigali',
+    priceFrom: 118000000, priceFmt: 'From RWF 118M',
+    units: '72 units', types: '2, 3 & 4 Bed Apartments',
+    completion: 'Q1 2027', progress: 22,
+    img: 'https://images.unsplash.com/photo-1520608421741-68228b76b6df?q=80&w=387&auto=format&fit=crop',
+    developer: 'Apex Property Group Rwanda',
+    devInit: 'AP', devMeta: 'Imali.biz Verified Developer · 5 projects',
+    desc: 'Kigali\'s most anticipated luxury tower development. 72 large-format apartments across 18 floors, each with panoramic city views, smart home integration, and bespoke Italian kitchen fit-outs. Pre-launch pricing now open — 20 units already reserved.',
+    amenities: ['Sky Lounge','Infinity Pool','Smart Home','Cinema Room','Spa','Concierge','Triple Basement Parking','Fibre 1 Gbps','Wine Cellar'],
+    paymentPlan: '15% reservation · 25% on foundation · 60% on completion',
+  },
+  {
+    id: 'op2', mode: 'offplan', type: 'house',
+    title: 'Bugesera Gateway Estate',
+    subtitle: 'Phase 1 — Bugesera, Eastern Province',
+    location: 'Bugesera, Eastern Province',
+    priceFrom: 44000000, priceFmt: 'From RWF 44M',
+    units: '120 plots + homes', types: '2 & 3 Bed Villas',
+    completion: 'Q4 2026', progress: 58,
+    img: 'https://images.pexels.com/photos/9308434/pexels-photo-9308434.jpeg?auto=compress&cs=tinysrgb&w=800',
+    developer: 'Bugesera Growth Consortium',
+    devInit: 'BG', devMeta: 'Imali.biz Verified Developer · 2 projects',
+    desc: 'An ambitious master-planned estate capitalising on Bugesera\'s proximity to Kigali International Airport. Phase 1 offers 2 & 3 bedroom villas with private gardens, communal park, a primary school, and a commercial strip. Gateway pricing for buyers investing in Rwanda\'s fastest-growing corridor.',
+    amenities: ['Master-Planned','Primary School','Community Park','Security Gatehouse','Solar Street Lights','Fibre Network','Commercial Strip','Water Reservoir'],
+    paymentPlan: '20% deposit · 80% on completion (mortgage partnerships available)',
+  },
+];
+
+const ALL_LISTINGS = [...LISTINGS, ...OFFPLAN];
+
+/* ──────────────────────────────────────────────
+   STATE & FILTERS
+────────────────────────────────────────────── */
+let activeMode     = 'all';
+let verifiedOnly   = false;
+const savedIds     = new Set();
+
+function applyFilters() {
+  const loc   = document.getElementById('filterLocation').value.toLowerCase();
+  const type  = document.getElementById('filterType').value;
+  const beds  = document.getElementById('filterBeds').value;
+  const price = document.getElementById('filterPrice').value;
+
+  const filtered = ALL_LISTINGS.filter(l => {
+    if (activeMode === 'buy'     && l.mode !== 'buy')     return false;
+    if (activeMode === 'rent'    && l.mode !== 'rent')    return false;
+    if (activeMode === 'offplan' && l.mode !== 'offplan') return false;
+    /* verified toggle — off-plan are developer-verified so always pass */
+    if (verifiedOnly && l.mode !== 'offplan' && !l.verified) return false;
+    if (loc && !l.location.toLowerCase().includes(loc) && !(l.district||'').toLowerCase().includes(loc)) return false;
+    if (type && l.type !== type) return false;
+    /* beds filter: off-plan projects don't have a fixed bed count, skip them */
+    if (beds && l.mode === 'offplan') return false;
+    if (beds) {
+      if (beds === '4' && l.beds < 4) return false;
+      if (beds !== '4' && l.beds !== parseInt(beds)) return false;
+    }
+    if (price) {
+      const p = l.mode === 'offplan' ? l.priceFrom : l.price;
+      if (l.mode !== 'rent') {
+        if (price === '1' && p >= 50000000)  return false;
+        if (price === '2' && (p < 50000000  || p >= 120000000)) return false;
+        if (price === '3' && (p < 120000000 || p >= 250000000)) return false;
+        if (price === '4' && p < 250000000)  return false;
+      } else {
+        if (price === '1' && p >= 300000)  return false;
+        if (price === '2' && (p < 300000  || p >= 600000)) return false;
+        if (price === '3' && (p < 600000  || p >= 1200000)) return false;
+        if (price === '4' && p < 1200000)  return false;
+      }
+    }
+    return true;
+  });
+
+  renderCards(filtered);
+  document.getElementById('resultCount').textContent = `Showing ${filtered.length} listing${filtered.length !== 1 ? 's' : ''}`;
+}
+
+function setMode(m) {
+  activeMode = m;
+  ['tabAll','tabBuy','tabRent','tabOffplan'].forEach(id => document.getElementById(id).classList.remove('active'));
+  const tabMap = { all: 'tabAll', buy: 'tabBuy', rent: 'tabRent', offplan: 'tabOffplan' };
+  document.getElementById(tabMap[m]).classList.add('active');
+  applyFilters();
+}
+
+function toggleVerified() {
+  verifiedOnly = !verifiedOnly;
+  document.getElementById('verifiedToggle').classList.toggle('on', verifiedOnly);
+  applyFilters();
+}
+
+function setView(v) {
+  const isMap = v === 'map';
+  document.getElementById('mapView').classList.toggle('visible', isMap);
+  document.getElementById('listView').classList.toggle('hidden', isMap);
+  document.getElementById('btnList').classList.toggle('active', !isMap);
+  document.getElementById('btnMap').classList.toggle('active', isMap);
+}
+
+/* ──────────────────────────────────────────────
+   CARD RENDERING
+────────────────────────────────────────────── */
+function bedsLabel(n) {
+  if (n === 0) return 'Studio';
+  return n + ' Bed' + (n !== 1 ? 's' : '');
+}
+
+function renderCards(list) {
+  const grid = document.getElementById('listingsGrid');
+  grid.innerHTML = '';
+
+  if (list.length === 0) {
+    grid.innerHTML = '<div class="no-results"><span class="no-results-icon">🏠</span><p>No listings match your filters.<br>Try broadening your search.</p></div>';
+    return;
+  }
+
+  list.forEach(l => {
+    const card = document.createElement('div');
+
+    if (l.mode === 'offplan') {
+      const saved = savedIds.has(l.id);
+      card.className = 'listing-card offplan';
+      card.innerHTML = `
+        <div class="card-img">
+          <img src="${l.img}" alt="${l.title}" loading="lazy" onerror="this.style.display='none'">
+          <span class="card-badge badge-offplan">Off-Plan</span>
+          <span class="card-verified">✓ Developer Verified</span>
+          <button class="save-btn ${saved ? 'saved' : ''}" onclick="toggleSave(event, '${l.id}')">${saved ? '♥' : '♡'}</button>
+        </div>
+        <div class="card-body">
+          <div class="card-location">📍 ${l.location}</div>
+          <div class="card-title">${l.title} <span style="font-weight:400;font-size:0.78rem;color:var(--text-faint)">· ${l.subtitle}</span></div>
+          <div class="card-price">${l.priceFmt} <small style="font-size:0.72rem;color:var(--text-faint);font-weight:300">${l.types}</small></div>
+          <div class="offplan-progress">
+            <div class="progress-label"><span>Construction progress</span><span>${l.progress}%</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:${l.progress}%"></div></div>
+          </div>
+          <div class="completion-badge">🏗 Est. completion: ${l.completion}</div>
+          <div class="card-footer" style="margin-top:0.75rem">
+            <div class="agent-row">
+              <div class="agent-avatar">${l.devInit}</div>
+              <div class="agent-name"><strong>${l.developer}</strong></div>
+            </div>
+            <div class="card-trust">★ Verified</div>
+          </div>
+          <div class="card-actions">
+            <a href="#" class="btn-card btn-card-primary" onclick="openOffplanModal(event, '${l.id}')">Enquire Now</a>
+          </div>
+        </div>`;
+    } else {
+      const saved = savedIds.has(l.id);
+      card.className = 'listing-card';
+      card.innerHTML = `
+        <div class="card-img">
+          <img src="${l.img}" alt="${l.title}" loading="lazy" onerror="this.style.display='none'">
+          <span class="card-badge ${l.badgeClass}">${l.badge}</span>
+          ${l.verified ? '<span class="card-verified">✓ NLA Verified</span>' : ''}
+          <button class="save-btn ${saved ? 'saved' : ''}" onclick="toggleSave(event, ${l.id})">${saved ? '♥' : '♡'}</button>
+        </div>
+        <div class="card-body">
+          <div class="card-mode-price">
+            <div class="card-price">${l.priceFmt}</div>
+          </div>
+          <div class="card-location">📍 ${l.location}</div>
+          <div class="card-title">${l.title}</div>
+          <div class="card-specs">
+            <span class="spec"><span class="spec-icon">🛏</span>${bedsLabel(l.beds)}</span>
+            <span class="spec"><span class="spec-icon">🚿</span>${l.baths} Bath</span>
+            <span class="spec"><span class="spec-icon">📐</span>${l.sqm} sqm</span>
+            ${l.parking ? `<span class="spec"><span class="spec-icon">🚗</span>${l.parking} Park</span>` : ''}
+          </div>
+          <div class="card-footer">
+            <div class="agent-row">
+              <div class="agent-avatar">${l.agentInit}</div>
+              <div class="agent-name"><strong>${l.agent}</strong></div>
+            </div>
+            <div class="card-trust">★ ${l.trust}</div>
+          </div>
+          <div class="card-actions">
+            <a href="#" class="btn-card btn-card-primary" onclick="openModal(event, ${l.id})">View Details</a>
+          </div>
+        </div>`;
+    }
+
+    grid.appendChild(card);
+  });
+}
+
+/* ──────────────────────────────────────────────
+   SAVE
+────────────────────────────────────────────── */
+function toggleSave(e, id) {
+  e.stopPropagation();
+  const btn = e.currentTarget;
+  if (savedIds.has(id)) { savedIds.delete(id); btn.classList.remove('saved'); btn.textContent = '♡'; }
+  else { savedIds.add(id); btn.classList.add('saved'); btn.textContent = '♥'; }
+}
+
+/* ──────────────────────────────────────────────
+   MODAL
+────────────────────────────────────────────── */
+function openModal(e, id) {
+  e.preventDefault();
+  const l = LISTINGS.find(x => x.id === id);
+  if (!l) return;
+
+  document.getElementById('modalImg').src = l.img;
+  document.getElementById('modalImg').alt = l.title;
+  document.getElementById('modalImgBadges').innerHTML = `<span class="card-badge ${l.badgeClass}">${l.badge}</span>${l.verified ? '<span class="card-verified">✓ NLA Verified</span>' : ''}`;
+  document.getElementById('modalLocation').textContent = l.location;
+  document.getElementById('modalTitle').textContent = l.title;
+  document.getElementById('modalPrice').innerHTML = l.priceFmt + `<small>${l.mode === 'rent' ? 'Per month · excl. bills unless stated' : 'Negotiable · Imali.biz escrow available'}</small>`;
+  document.getElementById('modalSpecs').innerHTML = [
+    `🛏 ${bedsLabel(l.beds)}`, `🚿 ${l.baths} Bathroom${l.baths !== 1?'s':''}`,
+    `📐 ${l.sqm} sqm`, l.parking ? `🚗 ${l.parking} Parking` : '', `🏠 ${l.floor}`
+  ].filter(Boolean).map(s => `<div class="modal-spec">${s}</div>`).join('');
+  document.getElementById('modalDesc').textContent = l.desc;
+  document.getElementById('modalDetails').innerHTML = l.details.map(([k,v]) => `<div class="modal-detail-row"><span class="detail-label">${k}</span><span class="detail-value">${v}</span></div>`).join('');
+  document.getElementById('modalAmenities').innerHTML = l.amenities.map(a => `<div class="amenity-chip">${a}</div>`).join('');
+  document.getElementById('modalAgentInitial').textContent = l.agentInit;
+  document.getElementById('modalAgentName').textContent = l.agent;
+  document.getElementById('modalAgentMeta').textContent = l.agentMeta;
+  document.getElementById('modalAgentTrust').innerHTML = `★ ${l.trust} Trust Score`;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function openOffplanModal(e, id) {
+  e.preventDefault();
+  const p = OFFPLAN.find(x => x.id === id);
+  if (!p) return;
+
+  document.getElementById('modalImg').src = p.img;
+  document.getElementById('modalImg').alt = p.title;
+  document.getElementById('modalImgBadges').innerHTML = '<span class="card-badge badge-offplan">Off-Plan</span><span class="card-verified">✓ Developer Verified</span>';
+  document.getElementById('modalLocation').textContent = p.location;
+  document.getElementById('modalTitle').textContent = p.title + ' — ' + p.subtitle;
+  document.getElementById('modalPrice').innerHTML = p.priceFmt + `<small>${p.types} · ${p.units}</small>`;
+  document.getElementById('modalSpecs').innerHTML = [
+    `🏗 ${p.progress}% complete`, `📅 Est. ${p.completion}`, `🏘 ${p.units}`, `🛏 ${p.types}`
+  ].map(s => `<div class="modal-spec">${s}</div>`).join('');
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalDetails').innerHTML = [
+    ['Developer', p.developer], ['Units', p.units], ['Types', p.types],
+    ['Completion', p.completion], ['Progress', p.progress + '%'], ['Payment Plan', p.paymentPlan]
+  ].map(([k,v]) => `<div class="modal-detail-row"><span class="detail-label">${k}</span><span class="detail-value">${v}</span></div>`).join('');
+  document.getElementById('modalAmenities').innerHTML = p.amenities.map(a => `<div class="amenity-chip">${a}</div>`).join('');
+  document.getElementById('modalAgentInitial').textContent = p.devInit;
+  document.getElementById('modalAgentName').textContent = p.developer;
+  document.getElementById('modalAgentMeta').textContent = p.devMeta;
+  document.getElementById('modalAgentTrust').innerHTML = `✓ Verified Developer`;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').onclick = closeModal;
+document.getElementById('modalOverlay').onclick = e => { if (e.target === document.getElementById('modalOverlay')) closeModal(); };
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ──────────────────────────────────────────────
+   MAP HOTSPOTS
+────────────────────────────────────────────── */
+document.querySelectorAll('.map-hotspot').forEach(dot => {
+  dot.addEventListener('click', function(e) {
+    const id  = parseInt(this.dataset.id);
+    const l   = LISTINGS.find(x => x.id === id) || LISTINGS[0];
+    const pop = document.getElementById('mapPopup');
+    document.getElementById('popupMode').textContent  = l.mode === 'rent' ? 'To Let' : 'For Sale';
+    document.getElementById('popupLoc').textContent   = l.location;
+    document.getElementById('popupTitle').textContent = l.title;
+    document.getElementById('popupBeds').textContent  = `${bedsLabel(l.beds)} · ${l.sqm} sqm`;
+    document.getElementById('popupPrice').textContent = l.priceFmt;
+    document.getElementById('popupBtn').onclick = ev => { ev.preventDefault(); openModal(ev, l.id); closePopup(); };
+    const svgRect = this.closest('svg').getBoundingClientRect();
+    const dotRect = this.getBoundingClientRect();
+    pop.style.left = (dotRect.left - svgRect.left + 16) + 'px';
+    pop.style.top  = (dotRect.top  - svgRect.top  - 20) + 'px';
+    pop.classList.add('visible');
+    e.stopPropagation();
+  });
+});
+function closePopup() { document.getElementById('mapPopup').classList.remove('visible'); }
+document.querySelector('.map-view')?.addEventListener('click', closePopup);
+
+/* ──────────────────────────────────────────────
+   CURSOR
+────────────────────────────────────────────── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0, my=0, rx=0, ry=0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx-5}px,${my-5}px)`;
+});
+(function animRing(){
+  rx += (mx-rx-18)*.12; ry += (my-ry-18)*.12;
+  ring.style.transform = `translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(animRing);
+})();
+
+/* ──────────────────────────────────────────────
+   THEME
+────────────────────────────────────────────── */
+function toggleTheme() {
+  var html = document.documentElement;
+  var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('imali-theme', next);
+  document.getElementById('themeIcon').textContent  = next === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var t = document.documentElement.getAttribute('data-theme') || 'light';
+  document.getElementById('themeIcon').textContent  = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+});
+
+/* ──────────────────────────────────────────────
+   FILTER LISTENERS & INIT
+────────────────────────────────────────────── */
+['filterLocation','filterType','filterBeds','filterPrice'].forEach(id =>
+  document.getElementById(id).addEventListener('input', applyFilters)
+);
+
+/* Initial render */
+renderCards(ALL_LISTINGS);
+document.getElementById('resultCount').textContent = `Showing ${ALL_LISTINGS.length} listings`;
+</script>
+</body>
+</html>

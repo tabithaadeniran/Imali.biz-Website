@@ -231,16 +231,25 @@
     .bank-rate-item strong { color: var(--cream); font-weight: 600; }
 
     .calc-btn {
-      width: 100%; padding: .9rem;
+      width: 100%; padding: .75rem;
       background: var(--terracotta); color: #fff;
       border: none; border-radius: 8px;
-      font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700;
+      letter-spacing: 0.07em; text-transform: uppercase;
       cursor: pointer; transition: background .2s, transform .15s;
       margin-top: .5rem;
     }
     .calc-btn:hover { background: var(--terra-dim); transform: translateY(-1px); }
     .calc-btn:active { transform: translateY(0); }
+
+    /* ─── EQUITY GROWTH CHART ─── */
+    .equity-section { border-top: 1px solid var(--border); padding-top: 1.25rem; margin-top: 1.25rem; }
+    .equity-title { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.2rem; }
+    .equity-sub { font-size: 0.72rem; color: var(--text-faint); line-height: 1.5; margin-bottom: 0.7rem; }
+    .equity-sub strong { color: var(--text-mid); }
+    #equityChart { width: 100%; display: block; }
+    .equity-x-labels { display: flex; justify-content: space-between; font-size: 0.62rem; color: var(--text-faint); margin-top: 0.2rem; }
+    .equity-note { font-size: 0.7rem; color: var(--text-faint); text-align: center; margin-top: 0.45rem; }
 
     /* ─── RESULTS PANEL ─── */
     .results-panel {
@@ -421,6 +430,40 @@
     /* ─── ANIMATIONS ─── */
     .reveal { opacity: 0; transform: translateY(22px); transition: opacity .55s ease, transform .55s ease; }
     .reveal.in { opacity: 1; transform: none; }
+
+    /* ─── HOW-TO GUIDE STRIP ─── */
+    .how-to-strip { display: grid; grid-template-columns: repeat(3,1fr); background: var(--ink-3); border-bottom: 1px solid var(--border); }
+    .how-to-step { padding: 1rem 1.5rem; border-right: 1px solid var(--border); display: flex; align-items: flex-start; gap: 0.75rem; }
+    .how-to-step:last-child { border-right: none; }
+    .hts-num { width: 26px; height: 26px; border-radius: 50%; background: rgba(200,82,26,0.1); border: 1px solid rgba(200,82,26,0.2); color: var(--terracotta); font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem; }
+    .hts-body strong { display: block; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--cream); margin-bottom: 0.15rem; }
+    .hts-body span { font-size: 0.72rem; color: var(--text-faint); line-height: 1.4; }
+    @media (max-width: 768px) { .how-to-strip { grid-template-columns: 1fr; } .how-to-step { border-right: none; border-bottom: 1px solid var(--border); } }
+
+    /* ─── FIELD NOTES ─── */
+    .field-note { font-size: 0.73rem; color: var(--text-faint); line-height: 1.5; margin-top: 0.45rem; padding: 0.35rem 0.65rem 0.35rem 0.8rem; border-left: 2px solid rgba(200,82,26,0.22); }
+    .field-note strong { color: var(--text-mid); font-weight: 500; }
+
+    /* ─── PLAIN ENGLISH BOX ─── */
+    .plain-english-box { background: rgba(26,107,200,0.06); border: 1px solid rgba(26,107,200,0.18); border-radius: var(--radius); padding: 1.1rem 1.25rem; margin-bottom: 1.5rem; display: none; }
+    .plain-english-box.visible { display: block; }
+    .peb-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sapphire); margin-bottom: 0.4rem; }
+    .peb-text { font-size: 0.88rem; color: var(--text); line-height: 1.65; }
+    .peb-text strong { color: var(--cream); font-weight: 600; }
+
+    /* ─── AFFORDABILITY WIDGET ─── */
+    .afford-widget { background: var(--ink-3); border: 1px solid var(--border-mid); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: none; }
+    .afford-widget.visible { display: block; }
+    .afford-title { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-mid); margin-bottom: 0.65rem; }
+    .afford-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+    .afford-row label { font-size: 0.78rem; color: var(--text-mid); white-space: nowrap; }
+    .afford-income { flex: 1; min-width: 140px; background: var(--ink-2); border: 1px solid var(--border-mid); border-radius: 6px; padding: 0.4rem 0.65rem; color: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.2s; }
+    .afford-income:focus { border-color: rgba(200,82,26,0.4); }
+    .afford-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 0.35rem; }
+    .afford-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s; background: #4caf7d; }
+    .afford-bar-fill.warn { background: #c49a28; }
+    .afford-bar-fill.danger { background: #ef5350; }
+    .afford-result { font-size: 0.78rem; color: var(--text-mid); line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -458,6 +501,22 @@
     <p>Enter your loan details below to see your estimated monthly payment, total cost, and full amortization breakdown — tailored for Rwanda's home finance market.</p>
   </header>
 
+  <!-- How to use -->
+  <div class="how-to-strip">
+    <div class="how-to-step">
+      <div class="hts-num">1</div>
+      <div class="hts-body"><strong>Enter the Property Price</strong><span>Type the agreed purchase price. Don't know it yet? Use a typical figure to estimate — you can adjust it anytime.</span></div>
+    </div>
+    <div class="how-to-step">
+      <div class="hts-num">2</div>
+      <div class="hts-body"><strong>Set Your Loan Terms</strong><span>Drag the sliders to adjust your down payment, loan length, and interest rate. Match the rate your bank has quoted.</span></div>
+    </div>
+    <div class="how-to-step">
+      <div class="hts-num">3</div>
+      <div class="hts-body"><strong>Read Your Breakdown</strong><span>Hit Calculate to see your monthly payment, total interest cost, and a plain-English summary of what it all means.</span></div>
+    </div>
+  </div>
+
   <!-- Calculator -->
   <main>
     <div class="calc-layout">
@@ -487,6 +546,7 @@
             <span class="range-val" id="downPaymentVal">20%</span>
           </div>
           <div class="range-tracks"><span>10%</span><span>60%</span></div>
+          <p class="field-note">This is the upfront cash you pay — the rest is the loan. <strong>Rwanda banks usually require 20–30% minimum.</strong> A bigger deposit means smaller monthly payments and less interest paid over time.</p>
         </div>
 
         <div class="form-row">
@@ -508,6 +568,7 @@
             </select>
           </div>
         </div>
+        <p class="field-note"><strong>Loan Term:</strong> Longer = smaller monthly payments, but more interest paid in total. Most buyers choose 15–20 years. &nbsp;|&nbsp; <strong>Payment Type:</strong> <em>Reducing Balance</em> (recommended) means interest shrinks as you pay down the loan — costs less overall. <em>Flat Rate</em> keeps interest on the full original loan amount throughout — significantly more expensive.</p>
 
         <div class="form-group">
           <label class="form-label" for="interestRate">
@@ -531,6 +592,7 @@
               <div class="bank-rate-item">GT Bank <strong>16–19%</strong></div>
             </div>
           </div>
+          <p class="field-note">Drag to match the rate your bank has quoted. <strong>Not sure? 15–17% is typical</strong> for first-time home buyers in Rwanda. Rates vary — compare quotes from at least two banks before deciding.</p>
         </div>
 
         <div class="form-group">
@@ -543,6 +605,8 @@
             <input type="text" id="extraPayment" class="form-input" placeholder="0" inputmode="numeric" />
           </div>
         </div>
+
+          <p class="field-note">Paying a little extra each month reduces your loan much faster and <strong>can save you millions in interest</strong>. Try entering RWF 20,000–50,000 to see the difference — the result may surprise you.</p>
 
         <button class="calc-btn" id="calcBtn" onclick="calculate()">Calculate Mortgage</button>
       </div>
@@ -557,6 +621,23 @@
         </div>
 
         <div class="results-content" id="resultsContent">
+
+          <!-- Plain English Summary -->
+          <div class="plain-english-box" id="plainEnglishBox">
+            <div class="peb-eyebrow">💬 In Plain Terms</div>
+            <div class="peb-text" id="pebText"></div>
+          </div>
+
+          <!-- Affordability Check -->
+          <div class="afford-widget" id="affordWidget">
+            <div class="afford-title">🧮 Affordability Check</div>
+            <div class="afford-row">
+              <label>Your monthly income (RWF)</label>
+              <input type="text" class="afford-income" id="affordIncome" placeholder="e.g. 800,000" inputmode="numeric" oninput="updateAfford()">
+            </div>
+            <div class="afford-bar-track"><div class="afford-bar-fill" id="affordBar" style="width:0%"></div></div>
+            <div class="afford-result" id="affordResult">Enter your monthly take-home income above to check if this loan fits your budget.</div>
+          </div>
 
           <div class="monthly-hero">
             <div class="monthly-label">Estimated Monthly Payment</div>
@@ -641,6 +722,17 @@
               <span class="breakdown-key rate">Effective Monthly Rate</span>
               <span class="breakdown-val" id="brkRate">—</span>
             </div>
+          <!-- Equity Growth Chart -->
+          <div class="equity-section">
+            <div class="equity-title">📈 How Your Home Equity Grows Over Time</div>
+            <div class="equity-sub"><strong>Gold area = the share of the home you own.</strong> It grows every month as you pay down the loan.</div>
+            <canvas id="equityChart" height="150"></canvas>
+            <div class="equity-x-labels">
+              <span>Today</span>
+              <span id="equityMidYr">—</span>
+              <span id="equityEndYr">—</span>
+            </div>
+            <div class="equity-note" id="equityNote"></div>
           </div>
 
         </div>
@@ -860,7 +952,7 @@
       }
 
       const amortRows = buildAmort(principal, months, monthlyRate, baseMonthly, extra, type, rate);
-      showResults({ monthly: baseMonthly, totalPaid, totalInterest, principal, term, interestSaved, monthsEarly, extraPayment: extra, amortRows, rate });
+      showResults({ monthly: baseMonthly, totalPaid, totalInterest, principal, term, interestSaved, monthsEarly, extraPayment: extra, amortRows, rate, price, dpPct });
     }
 
     function buildAmort(principal, months, monthlyRate, baseMonthly, extra, type, rate) {
@@ -914,6 +1006,39 @@
 
       drawDonut(pctPrincipal, 100 - pctPrincipal);
       renderAmort(d.amortRows);
+
+      // Plain English Summary
+      const pctInt = Math.round(d.totalInterest / d.totalPaid * 100);
+      const pebEl = document.getElementById('plainEnglishBox');
+      pebEl.classList.add('visible');
+      document.getElementById('affordWidget').classList.add('visible');
+      let pebHtml = `Every month for <strong>${d.term} years</strong>, you'll pay <strong>${fmtRwf(d.monthly)}</strong>. Of every payment, roughly <strong>${100 - pctInt}%</strong> goes toward owning more of your home and <strong>${pctInt}%</strong> goes to the bank as interest. Over the full ${d.term} years, you'll pay a total of <strong>${fmtRwf(d.totalPaid)}</strong> — that's <strong>${fmtRwf(d.totalInterest)}</strong> in interest on top of the <strong>${fmtRwf(d.principal)}</strong> you borrowed.`;
+      if (d.extraPayment > 0) pebHtml += ` Your extra <strong>${fmtRwf(d.extraPayment)}/month</strong> will save you <strong>${fmtRwf(d.interestSaved)}</strong> in interest.`;
+      document.getElementById('pebText').innerHTML = pebHtml;
+      // Reset affordability
+      document.getElementById('affordIncome').value = '';
+      document.getElementById('affordBar').style.width = '0%';
+      document.getElementById('affordBar').className = 'afford-bar-fill';
+      document.getElementById('affordResult').textContent = 'Enter your monthly take-home income above to check if this loan fits your budget.';
+      requestAnimationFrame(() => drawEquityChart(d.amortRows, d.price, d.dpPct, d.principal));
+    }
+
+    function updateAfford() {
+      const income  = parseRwf(document.getElementById('affordIncome').value);
+      const monthly = parseRwf(document.getElementById('resMonthly').textContent.replace(/[^0-9]/g,''));
+      if (!income || !monthly) return;
+      const pct = monthly / income * 100;
+      const bar = document.getElementById('affordBar');
+      const res = document.getElementById('affordResult');
+      bar.style.width = Math.min(pct, 100).toFixed(1) + '%';
+      bar.className = 'afford-bar-fill' + (pct > 40 ? ' danger' : pct > 30 ? ' warn' : '');
+      if (pct <= 30) {
+        res.innerHTML = `<strong style="color:#4caf7d">✓ Comfortable — ${pct.toFixed(0)}% of income</strong>. Below the 30% guideline. This loan looks manageable on your income.`;
+      } else if (pct <= 40) {
+        res.innerHTML = `<strong style="color:#c49a28">⚠ Stretched — ${pct.toFixed(0)}% of income</strong>. Above the recommended 30%. You can probably still qualify, but consider a larger deposit or longer term to bring the monthly cost down.`;
+      } else {
+        res.innerHTML = `<strong style="color:#ef5350">✗ Too high — ${pct.toFixed(0)}% of income</strong>. Most lenders cap at 40%. Consider a lower loan amount, longer term, or saving a larger down payment first.`;
+      }
     }
 
     /* ─── DONUT CHART ─── */
@@ -965,6 +1090,89 @@
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+
+    /* ─── EQUITY GROWTH CHART ─── */
+    function drawEquityChart(amortRows, price, dpPct, loanAmount) {
+      const canvas = document.getElementById('equityChart');
+      if (!canvas || !amortRows || !amortRows.length || !price) return;
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const cssW = canvas.parentElement.clientWidth || 340;
+      const cssH = 150;
+      canvas.width  = cssW * dpr; canvas.height = cssH * dpr;
+      canvas.style.width = '100%'; canvas.style.height = cssH + 'px';
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      const W = cssW, H = cssH;
+      const pad = { top: 14, right: 10, bottom: 26, left: 38 };
+      const cW = W - pad.left - pad.right, cH = H - pad.top - pad.bottom;
+      const n = amortRows.length;
+
+      // Build equity points: year → % of property owned
+      const pts = [{ yr: 0, eq: dpPct }];
+      amortRows.forEach(r => pts.push({ yr: r.year, eq: Math.min((price - r.balance) / price * 100, 100) }));
+
+      const toX = yr => pad.left + (yr / n) * cW;
+      const toY = pct => pad.top + (1 - pct / 100) * cH;
+      ctx.clearRect(0, 0, W, H);
+
+      // ── Equity area (gold gradient) ──
+      const g = ctx.createLinearGradient(0, pad.top, 0, pad.top + cH);
+      g.addColorStop(0, isDark ? 'rgba(212,168,50,0.28)' : 'rgba(212,168,50,0.20)');
+      g.addColorStop(1, isDark ? 'rgba(212,168,50,0.04)' : 'rgba(212,168,50,0.02)');
+      ctx.beginPath();
+      ctx.moveTo(pad.left, pad.top + cH);
+      pts.forEach(p => ctx.lineTo(toX(p.yr), toY(p.eq)));
+      ctx.lineTo(toX(n), pad.top + cH);
+      ctx.closePath(); ctx.fillStyle = g; ctx.fill();
+
+      // ── Debt area (subtle red tint above the line) ──
+      ctx.beginPath();
+      ctx.moveTo(pad.left, pad.top);
+      pts.forEach(p => ctx.lineTo(toX(p.yr), toY(p.eq)));
+      ctx.lineTo(toX(n), pad.top);
+      ctx.closePath();
+      ctx.fillStyle = isDark ? 'rgba(200,82,26,0.07)' : 'rgba(200,82,26,0.04)';
+      ctx.fill();
+
+      // ── Grid lines + Y labels ──
+      const gc = isDark ? 'rgba(245,240,232,0.07)' : 'rgba(0,0,0,0.07)';
+      const lc = isDark ? 'rgba(245,240,232,0.30)' : 'rgba(26,24,20,0.36)';
+      ctx.font = '9px "DM Sans",sans-serif'; ctx.textAlign = 'right';
+      [25, 50, 75, 100].forEach(pct => {
+        const y = toY(pct);
+        ctx.strokeStyle = gc; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cW, y); ctx.stroke();
+        ctx.fillStyle = lc; ctx.fillText(pct + '%', pad.left - 4, y + 3.5);
+      });
+
+      // ── Equity line (gold) ──
+      ctx.beginPath();
+      pts.forEach((p, i) => i === 0 ? ctx.moveTo(toX(p.yr), toY(p.eq)) : ctx.lineTo(toX(p.yr), toY(p.eq)));
+      ctx.strokeStyle = '#d4a832'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+
+      // ── End-point dot ──
+      const finalEq = pts[pts.length - 1].eq;
+      ctx.beginPath();
+      ctx.arc(toX(0), toY(dpPct), 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#d4a832'; ctx.fill();
+      ctx.beginPath();
+      ctx.arc(toX(n), toY(finalEq), 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = finalEq >= 99.9 ? '#4caf7d' : '#d4a832'; ctx.fill();
+
+      // ── X-axis labels ──
+      ctx.fillStyle = lc; ctx.textAlign = 'center'; ctx.font = '9px "DM Sans",sans-serif';
+      const midYr = Math.round(n / 2);
+      [0, midYr, n].forEach(yr => ctx.fillText('Yr ' + yr, toX(yr), H - 5));
+      document.getElementById('equityMidYr').textContent = 'Year ' + midYr;
+      document.getElementById('equityEndYr').textContent = 'Year ' + n;
+
+      // ── Note below chart ──
+      const noteEl = document.getElementById('equityNote');
+      if (noteEl) noteEl.textContent = finalEq >= 99.9
+        ? `You start with ${dpPct.toFixed(0)}% equity (your deposit) and fully own the property by Year ${n}.`
+        : `Equity grows from ${dpPct.toFixed(0)}% today to ${finalEq.toFixed(0)}% by Year ${n}.`;
+    }
   </script>
 </body>
 </html>

@@ -270,6 +270,55 @@
     color: var(--text);
   }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
+
+  /* ─── HOTSPOT GAUGE ─── */
+  .hotspot-gauge-wrap { display: flex; align-items: center; gap: 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1rem 1.4rem; margin: 1rem 0 1.75rem; }
+  .gauge-svg-wrap { flex-shrink: 0; text-align: center; }
+  .gauge-label-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--text-faint); width: 120px; margin: 0 auto; margin-top: 0.1rem; }
+  .gauge-info-title { font-size: 0.63rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.3rem; }
+  .gauge-info-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+
+  /* ─── FACTOR VISUAL BARS ─── */
+  .factor-vis-section { margin-bottom: 2rem; }
+  .factor-vis-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.9rem; }
+  .fv-row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; }
+  .fv-label { width: 75px; font-size: 0.67rem; color: var(--text-dim); text-align: right; flex-shrink: 0; line-height: 1.25; }
+  .fv-track-wrap { flex: 1; position: relative; height: 20px; display: flex; align-items: center; }
+  .fv-center-line { position: absolute; left: 50%; top: 2px; bottom: 2px; width: 1px; background: var(--border-strong); }
+  .fv-pos { position: absolute; left: 50%; height: 11px; border-radius: 0 3px 3px 0; }
+  .fv-neg { position: absolute; right: 50%; height: 11px; border-radius: 3px 0 0 3px; }
+  .fv-neutral { position: absolute; left: calc(50% - 3px); width: 6px; height: 6px; border-radius: 50%; top: 7px; background: var(--border-strong); }
+  .fv-pct { width: 42px; font-size: 0.67rem; font-family: 'Syne', sans-serif; font-weight: 700; }
+  .fv-legend { display: flex; gap: 1rem; margin-top: 0.5rem; font-size: 0.65rem; color: var(--text-faint); }
+  .fvl-pos::before { content: '■ '; color: #4caf7d; }
+  .fvl-neg::before { content: '■ '; color: #ef5350; }
+  .fvl-neu::before { content: '● '; color: var(--text-faint); }
+
+  /* ─── HOW IT WORKS BAR ─── */
+  .hiw-bar { display: grid; grid-template-columns: repeat(3,1fr); background: var(--bg-alt); border-bottom: 1px solid var(--border); }
+  .hiw-step { padding: 1.1rem 2rem; border-right: 1px solid var(--border); display: flex; align-items: flex-start; gap: 0.75rem; }
+  .hiw-step:last-child { border-right: none; }
+  .hiw-num { width: 28px; height: 28px; border-radius: 50%; background: rgba(212,168,50,0.1); border: 1px solid rgba(212,168,50,0.2); color: var(--gold); font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 0.1rem; }
+  .hiw-body strong { display: block; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--text); margin-bottom: 0.1rem; }
+  .hiw-body span { font-size: 0.72rem; color: var(--text-faint); line-height: 1.4; }
+  @media (max-width: 1024px) { .hiw-bar { grid-template-columns: 1fr; } .hiw-step { border-right: none; border-bottom: 1px solid var(--border); } }
+
+  /* ─── FIELD NOTES ─── */
+  .field-note { font-size: 0.72rem; color: var(--text-faint); line-height: 1.5; margin-top: 0.4rem; padding: 0.35rem 0.65rem 0.35rem 0.75rem; border-left: 2px solid rgba(212,168,50,0.2); }
+  .field-note strong { color: var(--text-dim); font-weight: 500; }
+
+  /* ─── TENURE LEGEND ─── */
+  .tenure-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-top: 0.65rem; }
+  .tl-item { font-size: 0.7rem; background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.45rem 0.65rem; line-height: 1.45; }
+  .tl-item strong { display: block; color: var(--text-dim); font-size: 0.68rem; font-family: 'Syne', sans-serif; letter-spacing: 0.05em; margin-bottom: 0.1rem; }
+  .tl-item span { color: var(--text-faint); }
+
+  /* ─── PLAIN RESULT BOX ─── */
+  .plain-result-box { background: rgba(212,168,50,0.05); border: 1px solid rgba(212,168,50,0.15); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; display: none; }
+  .plain-result-box.visible { display: block; }
+  .prb-eyebrow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem; }
+  .prb-text { font-size: 0.92rem; color: var(--text); line-height: 1.7; }
+  .prb-text strong { font-weight: 600; }
 </style>
 </head>
 <body>
@@ -301,6 +350,22 @@
     <h1 class="hero-hed">What is your land <em>actually worth?</em></h1>
     <p class="hero-sub">Enter your land's details and get an instant AI-powered market valuation — based on location, title type, slope, comparable sales, and Rwanda's live investment hotspot data.</p>
     <div class="disclaimer-pill">ⓘ Estimates are indicative, not formal appraisals. No account required.</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="hiw-bar">
+  <div class="hiw-step">
+    <div class="hiw-num">1</div>
+    <div class="hiw-body"><strong>Locate Your Land</strong><span>Select Province, then District, then Sector from the dropdowns. The more specific you go, the more accurate your result.</span></div>
+  </div>
+  <div class="hiw-step">
+    <div class="hiw-num">2</div>
+    <div class="hiw-body"><strong>Describe the Plot</strong><span>Enter the size, land type, tenure (ownership type), slope, and what services are nearby. Don't worry if you don't know everything — fill in what you can.</span></div>
+  </div>
+  <div class="hiw-step">
+    <div class="hiw-num">3</div>
+    <div class="hiw-body"><strong>Get Your Estimate</strong><span>Click Calculate to get an instant AI-powered valuation based on real Rwanda NLA land transaction data — no account needed.</span></div>
   </div>
 </div>
 
@@ -365,6 +430,10 @@
       </div>
     </div>
 
+    <p class="field-note">Start with Province, then select District and Sector. <strong>The more specific you are, the more accurate your valuation.</strong> If your exact sector isn't listed, stop at District level — you'll still get a good estimate.</p>
+
+    <p class="field-note"><strong>Size conversions:</strong> 1 Hectare = 10,000 sqm (about 1.5 football fields). 1 Acre ≈ 4,047 sqm. Your land size is printed on your title document — check there if you're unsure.</p>
+
     <div class="field-separator"></div>
     <div class="form-section-title">Land Characteristics</div>
 
@@ -377,6 +446,8 @@
         <div class="radio-btn" data-v="mixed">🏗️ Mixed Use</div>
       </div>
     </div>
+
+    <p class="field-note"><strong>🏘 Residential</strong> — land for homes. <strong>🏢 Commercial</strong> — shops, offices, businesses. <strong>🌾 Agricultural</strong> — farming (valued differently). <strong>🏗 Mixed Use</strong> — both residential and commercial allowed.</p>
 
     <div class="field-group">
       <label>Zoning Classification</label>
@@ -398,6 +469,8 @@
       </select>
     </div>
 
+    <p class="field-note"><strong>Optional.</strong> Zoning is the official land-use code from your district's master plan — you can find it on your title document or ask at your district office. <strong>Leave blank if you're not sure</strong>; your Land Type selection will be used instead.</p>
+
     <div class="field-group">
       <label>Land Tenure Type</label>
       <div class="radio-group" id="vTenureGroup">
@@ -410,6 +483,13 @@
       </div>
     </div>
 
+    <div class="tenure-legend">
+      <div class="tl-item"><strong>📋 Emphyteutic Lease</strong><span>Rwanda's most common type. A long-term government lease (25–99 years), fully transferable. Most plots have this.</span></div>
+      <div class="tl-item"><strong>🏛️ Freehold</strong><span>Full, permanent ownership of the land. Highest value — gives you the most rights with no expiry.</span></div>
+      <div class="tl-item"><strong>🔄 Sub-lease</strong><span>A secondary lease from another leaseholder. Lower value because it depends on the primary lease holder.</span></div>
+      <div class="tl-item"><strong>🤝 Land Concession</strong><span>A limited right granted by government for a specific use. Lowest market value of all tenure types.</span></div>
+    </div>
+
     <div class="field-group">
       <label>Title Document Format</label>
       <div class="radio-group" id="vTitleFormatGroup">
@@ -417,6 +497,8 @@
         <div class="radio-btn" data-v="physical">📄 Physical Title (paper)</div>
       </div>
     </div>
+
+    <p class="field-note"><strong>💻 e-Title (digital):</strong> Stored in Rwanda's national LIMS system. Faster to transfer, harder to dispute — buyers prefer it and pay a small premium. <strong>📄 Physical Title:</strong> Traditional paper certificate. Fully valid and legal, but carries a slight market discount compared to e-Title.</p>
 
     <div class="field-group">
       <label>Slope / Gradient</label>
@@ -429,6 +511,8 @@
         <option value="extreme">Extreme (50°+)</option>
       </select>
     </div>
+
+    <p class="field-note">Flat land is easiest to build on and attracts the most buyers — highest value. Steep slopes require expensive terracing and retaining walls, which reduces land value significantly. Walk the plot or look at a topographic map if you're unsure.</p>
 
     <div class="field-separator"></div>
     <div class="form-section-title">Access & Amenities</div>
@@ -455,6 +539,8 @@
       </div>
     </div>
 
+    <p class="field-note">Tick everything that applies to your plot. Each connected utility and nearby amenity adds to the land's value — even a tarmac road access can make a significant difference.</p>
+
     <button class="btn-calculate" id="calcBtn">
       ⚡ Calculate My Land Value
     </button>
@@ -479,6 +565,12 @@
     <!-- Results -->
     <div class="results-content" id="resultsContent">
 
+      <!-- Plain Language Summary -->
+      <div class="plain-result-box" id="plainResultBox">
+        <div class="prb-eyebrow">💬 What This Means</div>
+        <div class="prb-text" id="plainResultText"></div>
+      </div>
+
       <div class="result-headline">
         <div class="result-eyebrow">AI Valuation Result</div>
         <div class="result-amount" id="rAmount">—</div>
@@ -498,6 +590,22 @@
           </div>
         </div>
         <div id="rHotspotBadge"></div>
+
+        <!-- Hotspot Score Gauge -->
+        <div class="hotspot-gauge-wrap" id="hotspotGaugeWrap" style="display:none">
+          <div class="gauge-svg-wrap">
+            <svg width="120" height="70" viewBox="0 0 120 70">
+              <path d="M10 62 A50 50 0 0 1 110 62" stroke="var(--border-strong)" fill="none" stroke-width="10" stroke-linecap="round"/>
+              <path id="gaugeArc" d="M10 62 A50 50 0 0 1 10.01 62" fill="none" stroke-width="10" stroke-linecap="round" stroke="#d4a832"/>
+              <text id="gaugeScoreTxt" x="60" y="57" text-anchor="middle" font-size="21" font-family="Syne,sans-serif" font-weight="800" fill="currentColor">—</text>
+            </svg>
+            <div class="gauge-label-row"><span>0</span><span>50</span><span>100</span></div>
+          </div>
+          <div>
+            <div class="gauge-info-title">District Investment Score</div>
+            <div class="gauge-info-desc" id="gaugeInfoDesc">—</div>
+          </div>
+        </div>
       </div>
 
       <div class="per-sqm-strip">
@@ -517,6 +625,17 @@
 
       <div class="factors-title">Valuation Factor Breakdown</div>
       <div class="factor-list" id="factorList"></div>
+
+      <!-- Factor Visual Impact Bars -->
+      <div class="factor-vis-section" id="factorVisSection" style="display:none">
+        <div class="factor-vis-title">What's adjusting your land value</div>
+        <div id="factorVisBars"></div>
+        <div class="fv-legend">
+          <span class="fvl-pos">Adding value</span>
+          <span class="fvl-neg">Reducing value</span>
+          <span class="fvl-neu">No adjustment</span>
+        </div>
+      </div>
 
       <div class="comp-title">Market Comparison — Price / sqm</div>
       <div class="comparison-section" id="compSection"></div>
@@ -877,6 +996,19 @@
       document.getElementById('calcLoading').classList.remove('active');
       document.getElementById('resultsContent').classList.add('visible');
 
+      // Plain language summary
+      const distLabel2 = district ? district.charAt(0).toUpperCase() + district.slice(1) + ' District' : province.charAt(0).toUpperCase() + province.slice(1).replace('_',' ') + ' Province';
+      const vsNum = parseFloat(vsAvg);
+      const vsDir = vsNum >= 0 ? 'above' : 'below';
+      const vsAbs = Math.abs(vsNum).toFixed(0);
+      let zoneMsg = '';
+      if (hotspot >= 80) zoneMsg = ' 🔥 <strong>' + distLabel2 + ' is a high-demand investment zone</strong> — prices are rising fast, making this a good time to list.';
+      else if (hotspot >= 65) zoneMsg = ' 📈 <strong>' + distLabel2 + ' is a growing market</strong> — steady price appreciation expected.';
+      else zoneMsg = ' 📊 <strong>' + distLabel2 + ' is a stable, moderate-growth market.</strong>';
+      const plainBox = document.getElementById('plainResultBox');
+      plainBox.classList.add('visible');
+      document.getElementById('plainResultText').innerHTML = 'Your <strong>' + sizeSqm.toLocaleString() + ' sqm</strong> plot in <strong>' + distLabel2 + '</strong> is estimated to be worth approximately <strong>' + fmtRWF(Math.round(total / 1e6) * 1e6) + '</strong>. This is about <strong>' + vsAbs + '% ' + vsDir + '</strong> the typical price for land in that area.' + zoneMsg;
+
       document.getElementById('rAmount').textContent = fmtRWF(Math.round(total / 1e6) * 1e6);
       document.getElementById('rRange').textContent = `Range: ${fmtRWF(Math.round(low / 1e6) * 1e6)} – ${fmtRWF(Math.round(high / 1e6) * 1e6)}`;
       document.getElementById('rConfidence').textContent = confidence + '%';
@@ -888,6 +1020,27 @@
       if (hotspot >= 80) hsBadge.innerHTML = '<div class="hotspot-badge">🔥 Investment Hotspot Zone</div>';
       else if (hotspot >= 65) hsBadge.innerHTML = '<div class="hotspot-badge gold-badge">📈 Growing Investment Area</div>';
       else hsBadge.innerHTML = '<div class="hotspot-badge" style="background:var(--surface);border-color:var(--border);color:var(--text-faint);">📊 Stable Market Zone</div>';
+
+      // ── Hotspot gauge ──
+      const gaugeWrap = document.getElementById('hotspotGaugeWrap');
+      if (gaugeWrap) {
+        gaugeWrap.style.display = 'flex';
+        const arcEl = document.getElementById('gaugeArc');
+        const scoreTxt = document.getElementById('gaugeScoreTxt');
+        const gaugeDesc = document.getElementById('gaugeInfoDesc');
+        const endAngle = Math.PI * (1 - hotspot / 100);
+        const ex = (60 + 50 * Math.cos(endAngle)).toFixed(2);
+        const ey = (62 - 50 * Math.sin(endAngle)).toFixed(2);
+        const gColor = hotspot >= 75 ? '#4caf7d' : hotspot >= 50 ? '#d4a832' : '#c8521a';
+        arcEl.setAttribute('d', hotspot > 2 ? `M10 62 A50 50 0 ${hotspot > 50 ? 0 : 0} 1 ${ex} ${ey}` : 'M10 62 A50 50 0 0 1 10.01 62');
+        arcEl.setAttribute('stroke', gColor);
+        scoreTxt.textContent = hotspot;
+        scoreTxt.setAttribute('fill', gColor);
+        if (hotspot >= 80) gaugeDesc.textContent = 'High demand — prices rising fast. Excellent time to list.';
+        else if (hotspot >= 65) gaugeDesc.textContent = 'Growing market — steady appreciation expected here.';
+        else if (hotspot >= 45) gaugeDesc.textContent = 'Moderate activity — stable market with reasonable interest.';
+        else gaugeDesc.textContent = 'Lower-activity area — affordable and stable, slower appreciation.';
+      }
 
       // Per sqm
       document.getElementById('rPerSqm').textContent = `RWF ${Math.round(rate).toLocaleString()}`;
@@ -922,6 +1075,43 @@
         <div class="factor-card"><div class="fc-label">Utilities Access</div><div class="fc-value">${checkedUtils} of 6 connected</div><div class="fc-impact ${checkedUtils >= 3 ? 'impact-pos' : 'impact-neu'}">+${(checkedUtils*2).toFixed(0)}% infrastructure premium</div></div>
         <div class="factor-card"><div class="fc-label">Nearby Amenities</div><div class="fc-value">${checkedAmen} amenities</div><div class="fc-impact ${checkedAmen >= 2 ? 'impact-pos' : 'impact-neu'}">+${(checkedAmen*1.5).toFixed(1)}% convenience premium</div></div>
       `;
+
+      // ── Factor visual impact bars ──
+      const tenurePctMap = { emphyteutic:0, freehold:8, condominium:4, sublease:-10, investment:3, concession:-18 };
+      const slopePctMap  = { flat:0, gentle:-3, moderate:-10, steep:-22, verysteep:-38, extreme:-55 };
+      const titlePctMap  = { etitle:5, physical:0 };
+      const ltPctMap     = { residential:0, commercial:35, agricultural:-55, mixed:-15, industrial:10 };
+      const maxMag = 60; // normalise bars to ±60% range
+      const factorBars = [
+        { label: 'Location',   pct: Math.round(hotspot * 0.25),         color: hotspot >= 65 ? '#4caf7d' : '#d4a832' },
+        { label: 'Land Type',  pct: ltPctMap[vLandType] || 0,           color: null },
+        { label: 'Tenure',     pct: tenurePctMap[vTenureType] || 0,      color: null },
+        { label: 'Title',      pct: titlePctMap[vTitleFormat] || 0,      color: null },
+        { label: 'Slope',      pct: slopePctMap[slope] || 0,             color: null },
+        { label: 'Utilities',  pct: Math.round(checkedUtils * 2),        color: null },
+        { label: 'Amenities',  pct: Math.round(checkedAmen * 1.5),       color: null },
+      ];
+      const visEl = document.getElementById('factorVisSection');
+      const barsEl = document.getElementById('factorVisBars');
+      if (visEl && barsEl) {
+        visEl.style.display = 'block';
+        barsEl.innerHTML = factorBars.map(f => {
+          const w = Math.min(Math.abs(f.pct) / maxMag * 50, 50).toFixed(1);
+          const posColor = f.color || '#4caf7d';
+          const negColor = '#ef5350';
+          const sign = f.pct > 0 ? '+' : '';
+          const valColor = f.pct > 0 ? '#4caf7d' : f.pct < 0 ? '#ef5350' : 'var(--text-faint)';
+          let barHtml = '';
+          if (f.pct > 0) barHtml = `<div class="fv-pos" style="width:${w}%;background:${posColor};opacity:0.75;"></div>`;
+          else if (f.pct < 0) barHtml = `<div class="fv-neg" style="width:${w}%;background:${negColor};opacity:0.70;"></div>`;
+          else barHtml = `<div class="fv-neutral"></div>`;
+          return `<div class="fv-row">
+            <div class="fv-label">${f.label}</div>
+            <div class="fv-track-wrap"><div class="fv-center-line"></div>${barHtml}</div>
+            <div class="fv-pct" style="color:${valColor}">${sign}${f.pct}%</div>
+          </div>`;
+        }).join('');
+      }
 
       // Dynamic peer comparisons — other districts in same province
       const peerDistricts = (provinceMap[getProvinceOf(district)] || []).filter(d => d !== district);
