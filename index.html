@@ -122,7 +122,7 @@
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 1.5rem 4rem;
+    padding: 1.25rem 3rem;
     background: linear-gradient(to bottom, var(--nav-bg) 0%, transparent 100%);
     backdrop-filter: blur(2px);
   }
@@ -161,7 +161,7 @@
     font-family: 'Instrument Serif', serif;
   }
   .nav-links {
-    display: flex; align-items: center; gap: 2.5rem;
+    display: flex; align-items: center; gap: 1.75rem;
     list-style: none;
   }
   .nav-links a {
@@ -791,6 +791,44 @@
   .step-desc { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); }
 
   /* TRUST / ECOSYSTEM */
+  /* ─── COMMUNITY DATA COLLECTION ─── */
+  .data-collect-section {
+    background: var(--bg-alt);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 6rem 4rem;
+  }
+  .dc-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .dc-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin: 0.75rem 0 1.1rem; }
+  .dc-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--emerald); }
+  .dc-desc { font-size: 0.95rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1.75rem; }
+  .dc-rewards { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.75rem; }
+  .dc-reward-item { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .dc-reward-icon { font-size: 1.1rem; margin-top: 0.05rem; flex-shrink: 0; }
+  .dc-reward-item div { display: flex; flex-direction: column; gap: 0.1rem; }
+  .dc-reward-item strong { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .dc-reward-item span { font-size: 0.78rem; color: var(--text-faint); }
+  .dc-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; }
+  .dc-map-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
+  .dc-map-header { display: flex; align-items: center; gap: 0.45rem; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .dc-map-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--terracotta); }
+  .dc-map-label { font-size: 0.72rem; font-weight: 600; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase; margin-left: 0.3rem; }
+  .dc-asset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .dc-asset { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 1rem 0.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: center; transition: background 0.2s; cursor: default; }
+  .dc-asset:hover { background: var(--surface-hover); }
+  .dc-asset:nth-child(3n) { border-right: none; }
+  .dc-asset:nth-last-child(-n+3) { border-bottom: none; }
+  .dc-asset span { font-size: 0.65rem; color: var(--text-dim); line-height: 1.3; }
+  .dc-asset-more { opacity: 0.5; font-size: 1.1rem; font-weight: 700; color: var(--text-faint); }
+  .dc-map-footer-row { display: flex; align-items: center; gap: 1.25rem; padding: 0.85rem 1.25rem; border-top: 1px solid var(--border); background: var(--surface); }
+  .dc-stat { font-size: 0.72rem; color: var(--text-faint); }
+  .dc-stat strong { font-family: 'Syne', sans-serif; font-size: 0.85rem; color: var(--text-dim); font-weight: 700; }
+  .dc-online-badge { margin-left: auto; font-size: 0.7rem; color: #4caf7d; font-weight: 600; }
+  @media (max-width: 1024px) {
+    .data-collect-section { padding: 4rem 2rem; }
+    .dc-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
   .ecosystem {
     background: var(--forest);
     overflow: hidden;
@@ -1168,6 +1206,7 @@
     <li><a href="#stakeholders">Who We Serve</a></li>
     <li><a href="#ecosystem">Ecosystem</a></li>
     <li><a href="#how">How It Works</a></li>
+    <li><a href="./data-collection.html">Map Rwanda</a></li>
     <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
     <li><a href="#" class="nav-cta">Join the Waitlist</a></li>
   </ul>
@@ -1553,6 +1592,66 @@
   </div>
 </section>
 
+<!-- COMMUNITY DATA COLLECTION -->
+<section class="data-collect-section" id="data-collection">
+  <div class="dc-inner">
+    <div class="dc-left">
+      <div class="section-eyebrow" style="color:var(--emerald); --eyebrow-color:var(--emerald);">Community Intelligence</div>
+      <h2 class="dc-title">Help us map Rwanda.<br><em>Get rewarded for it.</em></h2>
+      <p class="dc-desc">We're building the most detailed real estate intelligence dataset Rwanda has ever had — and we need people on the ground to make it happen. Record assets, development activity, and local conditions near you. Every entry feeds our GIS map, improves our valuations, and earns you rewards.</p>
+      <div class="dc-rewards">
+        <div class="dc-reward-item">
+          <span class="dc-reward-icon">⭐</span>
+          <div><strong>Trust Score</strong><span>Verified contributions build your reputation</span></div>
+        </div>
+        <div class="dc-reward-item">
+          <span class="dc-reward-icon">🪙</span>
+          <div><strong>Data Tokens</strong><span>Earn IMALI tokens for quality data</span></div>
+        </div>
+        <div class="dc-reward-item">
+          <span class="dc-reward-icon">🏅</span>
+          <div><strong>Contributor Badges</strong><span>Bronze → Silver → Gold → Platinum</span></div>
+        </div>
+      </div>
+      <div class="dc-actions">
+        <a href="./data-collection.html" class="btn-primary" style="background:var(--emerald);">
+          Start Contributing
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="https://ee.kobotoolbox.org/x/tW8p8dHi" target="_blank" class="btn-outline" style="border-color:rgba(26,92,58,0.35); color:var(--text-dim);">Open the Form →</a>
+      </div>
+    </div>
+    <div class="dc-right">
+      <div class="dc-map-card">
+        <div class="dc-map-header">
+          <span class="dc-map-dot"></span>
+          <span class="dc-map-dot" style="background:#d4a832"></span>
+          <span class="dc-map-dot" style="background:#4caf7d"></span>
+          <span class="dc-map-label">Asset Types Being Mapped</span>
+        </div>
+        <div class="dc-asset-grid">
+          <div class="dc-asset">🏭<span>Factory / Supplier</span></div>
+          <div class="dc-asset">🌍<span>Land</span></div>
+          <div class="dc-asset">🏗<span>Construction</span></div>
+          <div class="dc-asset">🚌<span>Transit Node</span></div>
+          <div class="dc-asset">🏫<span>Education</span></div>
+          <div class="dc-asset">🏨<span>Hotel / Lodging</span></div>
+          <div class="dc-asset">🛒<span>Market</span></div>
+          <div class="dc-asset">🍽<span>Restaurant</span></div>
+          <div class="dc-asset">🔨<span>Artisan / Trade</span></div>
+          <div class="dc-asset">👔<span>Professional Talent</span></div>
+          <div class="dc-asset dc-asset-more">+<span>More coming</span></div>
+        </div>
+        <div class="dc-map-footer-row">
+          <span class="dc-stat"><strong id="dcContribCount">—</strong> contributors</span>
+          <span class="dc-stat"><strong id="dcRecordCount">—</strong> records so far</span>
+          <span class="dc-online-badge">🟢 Form live</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ECOSYSTEM / TRUST -->
 <section class="ecosystem">
   <div class="ecosystem-inner">
@@ -1630,6 +1729,7 @@
         <li><a href="./land-bank/index.html">The Land Bank</a></li>
         <li><a href="./wealth-hub/index.html">The Wealth Hub</a></li>
         <li><a href="#">GIS Intelligence</a></li>
+        <li><a href="./data-collection.html">Community Data Collection</a></li>
         <li><a href="./consumer-portal/index.html">Property Search</a></li>
         <li><a href="#">Tokenisation</a></li>
         <li><a href="#">Investor Dashboard</a></li>
