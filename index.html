@@ -791,44 +791,6 @@
   .step-desc { font-size: 0.8rem; line-height: 1.6; color: var(--text-dim); }
 
   /* TRUST / ECOSYSTEM */
-  /* ─── COMMUNITY DATA COLLECTION ─── */
-  .data-collect-section {
-    background: var(--bg-alt);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 6rem 4rem;
-  }
-  .dc-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; }
-  .dc-title { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; margin: 0.75rem 0 1.1rem; }
-  .dc-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--emerald); }
-  .dc-desc { font-size: 0.95rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1.75rem; }
-  .dc-rewards { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.75rem; }
-  .dc-reward-item { display: flex; align-items: flex-start; gap: 0.75rem; }
-  .dc-reward-icon { font-size: 1.1rem; margin-top: 0.05rem; flex-shrink: 0; }
-  .dc-reward-item div { display: flex; flex-direction: column; gap: 0.1rem; }
-  .dc-reward-item strong { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-  .dc-reward-item span { font-size: 0.78rem; color: var(--text-faint); }
-  .dc-actions { display: flex; gap: 0.85rem; flex-wrap: wrap; }
-  .dc-map-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; }
-  .dc-map-header { display: flex; align-items: center; gap: 0.45rem; padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border); background: var(--surface); }
-  .dc-map-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--terracotta); }
-  .dc-map-label { font-size: 0.72rem; font-weight: 600; color: var(--text-faint); letter-spacing: 0.06em; text-transform: uppercase; margin-left: 0.3rem; }
-  .dc-asset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-  .dc-asset { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; padding: 1rem 0.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); text-align: center; transition: background 0.2s; cursor: default; }
-  .dc-asset:hover { background: var(--surface-hover); }
-  .dc-asset:nth-child(3n) { border-right: none; }
-  .dc-asset:nth-last-child(-n+3) { border-bottom: none; }
-  .dc-asset span { font-size: 0.65rem; color: var(--text-dim); line-height: 1.3; }
-  .dc-asset-more { opacity: 0.5; font-size: 1.1rem; font-weight: 700; color: var(--text-faint); }
-  .dc-map-footer-row { display: flex; align-items: center; gap: 1.25rem; padding: 0.85rem 1.25rem; border-top: 1px solid var(--border); background: var(--surface); }
-  .dc-stat { font-size: 0.72rem; color: var(--text-faint); }
-  .dc-stat strong { font-family: 'Syne', sans-serif; font-size: 0.85rem; color: var(--text-dim); font-weight: 700; }
-  .dc-online-badge { margin-left: auto; font-size: 0.7rem; color: #4caf7d; font-weight: 600; }
-  @media (max-width: 1024px) {
-    .data-collect-section { padding: 4rem 2rem; }
-    .dc-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-  }
-
   .ecosystem {
     background: var(--forest);
     overflow: hidden;
@@ -1206,7 +1168,6 @@
     <li><a href="#stakeholders">Who We Serve</a></li>
     <li><a href="#ecosystem">Ecosystem</a></li>
     <li><a href="#how">How It Works</a></li>
-    <li><a href="./data-collection.html">Map Rwanda</a></li>
     <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
     <li><a href="#" class="nav-cta">Join the Waitlist</a></li>
   </ul>
@@ -1499,61 +1460,33 @@
 
 <!-- TOOLS -->
 <section class="tools-section" id="tools">
-  <div class="section-eyebrow">Standalone Tools</div>
-  <h2 class="section-title">Intelligence tools.<br><em>Free to use.</em></h2>
+  <div class="section-eyebrow">Free Tools</div>
+  <h2 class="section-title">See for yourself.<br><em>No expert needed.</em></h2>
   <p style="font-size:1rem; color:var(--text-muted); max-width:560px; line-height:1.75; margin-top:1.5rem;">
-    No account needed. Use these tools to evaluate land, model investment returns, and understand Rwanda's market — before you commit to anything.
+    No account, no fee, no jargon. Three tools that let you work out the numbers on your own terms — before you talk to anyone.
   </p>
 
-  <div class="tools-grid">
+  <div class="tools-grid" style="grid-template-columns: repeat(3, 1fr);">
     <a href="./land-bank/valuation.html" class="tool-card reveal">
-      <span class="tool-tag">Land Intelligence</span>
-      <span class="tool-icon">⚡</span>
-      <div class="tool-name">AI Land Valuation Tool <span class="tool-status-pill live">Live</span></div>
-      <p class="tool-desc">Get an instant AI-powered estimate for any plot in Rwanda. Input location, size, title type, and key factors — get a value range, confidence score, and market comparison in seconds.</p>
-      <span class="tool-arrow">Try it free →</span>
+      <span class="tool-tag">Landowners & Sellers</span>
+      <span class="tool-icon">🌍</span>
+      <div class="tool-name">Land Valuation Tool <span class="tool-status-pill live">Live</span></div>
+      <p class="tool-desc">Wondering what your land is worth — or what you can reasonably ask for it? Enter your location, plot size, title type, and a few other details and get an estimate. Then play with the inputs yourself: change the location, the slope, the zoning — and watch the price shift. It's the clearest way to understand what actually drives land value in Rwanda, without needing to ask an agent.</p>
+      <span class="tool-arrow">Find out now →</span>
     </a>
-    <div class="tool-card reveal reveal-delay-1">
-      <span class="tool-tag">Development</span>
-      <span class="tool-icon">📋</span>
-      <div class="tool-name">Development Readiness Checker <span class="tool-status-pill soon">Soon</span></div>
-      <p class="tool-desc">See how "project-ready" any plot is. Our checklist scores land across legal integrity, physical viability, infrastructure access, and strategic urban alignment — the same way we do internally.</p>
-      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
-    </div>
-    <div class="tool-card reveal reveal-delay-2">
-      <span class="tool-tag">Investment</span>
-      <span class="tool-icon">📊</span>
-      <div class="tool-name">ROI Calculator <span class="tool-status-pill soon">Soon</span></div>
-      <p class="tool-desc">Model your projected returns on any property or project. Input your stake, GFA, unit mix, and rental assumptions — get IRR, equity multiple, and token appreciation estimates.</p>
-      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
-    </div>
-    <div class="tool-card reveal">
-      <span class="tool-tag">Market Data</span>
-      <span class="tool-icon">🗺️</span>
-      <div class="tool-name">Market Intelligence Explorer <span class="tool-status-pill soon">Soon</span></div>
-      <p class="tool-desc">Interactive GIS map overlaid with hotspot scores, price trends, absorption rates, flood zones, and infrastructure data — covering every district in Rwanda.</p>
-      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
-    </div>
-    <div class="tool-card reveal reveal-delay-1">
-      <span class="tool-tag">Construction</span>
-      <span class="tool-icon">🏗️</span>
-      <div class="tool-name">Project Cost Estimator <span class="tool-status-pill soon">Soon</span></div>
-      <p class="tool-desc">Estimate full construction costs for any project type. Input GFA, floor count, finish grade, and location — get a cost-per-sqm breakdown by trade and a total project budget range.</p>
-      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
-    </div>
-    <div class="tool-card reveal reveal-delay-2">
-      <span class="tool-tag">Neighbourhood</span>
-      <span class="tool-icon">🏘️</span>
-      <div class="tool-name">Neighbourhood Intelligence Report <span class="tool-status-pill soon">Soon</span></div>
-      <p class="tool-desc">Deep-dive on any district or sector — schools, hospitals, retail centres, public transport proximity, safety index, and community absorption data. Know a neighbourhood before you invest.</p>
-      <span class="tool-arrow" style="color:var(--text-muted);">Coming soon</span>
-    </div>
-    <a href="./consumer-portal/mortgage-calculator.html" class="tool-card reveal">
-      <span class="tool-tag">Home Finance</span>
-      <span class="tool-icon">🏦</span>
+    <a href="./wealth-hub/calculator.html" class="tool-card reveal reveal-delay-1">
+      <span class="tool-tag">Investors</span>
+      <span class="tool-icon">📈</span>
+      <div class="tool-name">Returns Calculator <span class="tool-status-pill live">Live</span></div>
+      <p class="tool-desc">Thinking about putting money into a property project? This calculator lets you model exactly what you'd get back. Enter how much you want to invest, the project value, how long you'd hold, and your expected return — and see your projected profit, annual return rate, and how it compares to just leaving the money in a savings account. Adjust the numbers freely until they make sense for you.</p>
+      <span class="tool-arrow">Model your returns →</span>
+    </a>
+    <a href="./consumer-portal/mortgage-calculator.html" class="tool-card reveal reveal-delay-2">
+      <span class="tool-tag">Buyers & Borrowers</span>
+      <span class="tool-icon">🏠</span>
       <div class="tool-name">Mortgage Calculator <span class="tool-status-pill live">Live</span></div>
-      <p class="tool-desc">Estimate your monthly repayments, total interest, and full amortization schedule. Built for Rwanda's market — with reference rates from BK, Equity Bank, I&M, and Cogebanque pre-loaded.</p>
-      <span class="tool-arrow">Calculate now →</span>
+      <p class="tool-desc">Before you walk into a bank, know your numbers. Enter the property price, your down payment, the loan term, and the interest rate your bank quoted — and see exactly what you'd pay each month, how much of that is interest versus actually paying off your home, and your full repayment over the life of the loan. Rwanda's actual bank rates are pre-loaded so you're always comparing against real figures.</p>
+      <span class="tool-arrow">Calculate your mortgage →</span>
     </a>
   </div>
 </section>
@@ -1588,66 +1521,6 @@
       <span class="step-icon">💰</span>
       <div class="step-title">Earn Your Share</div>
       <p class="step-desc">Everyone earns — from fractional ownership dividends and agent referral commissions to supplier payments and investor returns.</p>
-    </div>
-  </div>
-</section>
-
-<!-- COMMUNITY DATA COLLECTION -->
-<section class="data-collect-section" id="data-collection">
-  <div class="dc-inner">
-    <div class="dc-left">
-      <div class="section-eyebrow" style="color:var(--emerald); --eyebrow-color:var(--emerald);">Community Intelligence</div>
-      <h2 class="dc-title">Help us map Rwanda.<br><em>Get rewarded for it.</em></h2>
-      <p class="dc-desc">We're building the most detailed real estate intelligence dataset Rwanda has ever had — and we need people on the ground to make it happen. Record assets, development activity, and local conditions near you. Every entry feeds our GIS map, improves our valuations, and earns you rewards.</p>
-      <div class="dc-rewards">
-        <div class="dc-reward-item">
-          <span class="dc-reward-icon">⭐</span>
-          <div><strong>Trust Score</strong><span>Verified contributions build your reputation</span></div>
-        </div>
-        <div class="dc-reward-item">
-          <span class="dc-reward-icon">🪙</span>
-          <div><strong>Data Tokens</strong><span>Earn IMALI tokens for quality data</span></div>
-        </div>
-        <div class="dc-reward-item">
-          <span class="dc-reward-icon">🏅</span>
-          <div><strong>Contributor Badges</strong><span>Bronze → Silver → Gold → Platinum</span></div>
-        </div>
-      </div>
-      <div class="dc-actions">
-        <a href="./data-collection.html" class="btn-primary" style="background:var(--emerald);">
-          Start Contributing
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="https://ee.kobotoolbox.org/x/tW8p8dHi" target="_blank" class="btn-outline" style="border-color:rgba(26,92,58,0.35); color:var(--text-dim);">Open the Form →</a>
-      </div>
-    </div>
-    <div class="dc-right">
-      <div class="dc-map-card">
-        <div class="dc-map-header">
-          <span class="dc-map-dot"></span>
-          <span class="dc-map-dot" style="background:#d4a832"></span>
-          <span class="dc-map-dot" style="background:#4caf7d"></span>
-          <span class="dc-map-label">Asset Types Being Mapped</span>
-        </div>
-        <div class="dc-asset-grid">
-          <div class="dc-asset">🏭<span>Factory / Supplier</span></div>
-          <div class="dc-asset">🌍<span>Land</span></div>
-          <div class="dc-asset">🏗<span>Construction</span></div>
-          <div class="dc-asset">🚌<span>Transit Node</span></div>
-          <div class="dc-asset">🏫<span>Education</span></div>
-          <div class="dc-asset">🏨<span>Hotel / Lodging</span></div>
-          <div class="dc-asset">🛒<span>Market</span></div>
-          <div class="dc-asset">🍽<span>Restaurant</span></div>
-          <div class="dc-asset">🔨<span>Artisan / Trade</span></div>
-          <div class="dc-asset">👔<span>Professional Talent</span></div>
-          <div class="dc-asset dc-asset-more">+<span>More coming</span></div>
-        </div>
-        <div class="dc-map-footer-row">
-          <span class="dc-stat"><strong id="dcContribCount">—</strong> contributors</span>
-          <span class="dc-stat"><strong id="dcRecordCount">—</strong> records so far</span>
-          <span class="dc-online-badge">🟢 Form live</span>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -1729,7 +1602,6 @@
         <li><a href="./land-bank/index.html">The Land Bank</a></li>
         <li><a href="./wealth-hub/index.html">The Wealth Hub</a></li>
         <li><a href="#">GIS Intelligence</a></li>
-        <li><a href="./data-collection.html">Community Data Collection</a></li>
         <li><a href="./consumer-portal/index.html">Property Search</a></li>
         <li><a href="#">Tokenisation</a></li>
         <li><a href="#">Investor Dashboard</a></li>

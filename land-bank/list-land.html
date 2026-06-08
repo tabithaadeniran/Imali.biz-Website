@@ -298,6 +298,40 @@
     color: var(--text);
   }
   ::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); }
+
+  /* ─── SURROUNDINGS STEP ─── */
+  .surr-benefit-widget { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.18); border-radius: 14px; padding: 1.25rem 1.4rem; margin-bottom: 1.75rem; }
+  .sbw-top { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 0.9rem; }
+  .sbw-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .sbw-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+  .sbw-sub { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .sbw-sub strong { color: var(--gold); font-weight: 600; }
+  .sbw-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 0.4rem; }
+  .sbw-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--terracotta)); border-radius: 3px; transition: width 0.5s ease; }
+  .sbw-bar-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--text-faint); }
+  .sbw-milestone { color: var(--gold); font-weight: 500; }
+
+  .surr-add-form { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem 1.4rem; margin-bottom: 1.25rem; }
+  .surr-form-title { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 1rem; }
+  .surr-types-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+  @media (max-width: 640px) { .surr-types-grid { grid-template-columns: repeat(2, 1fr); } }
+  .surr-type-chip { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 0.75rem 0.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; text-align: center; font-size: 1.1rem; transition: border-color 0.2s; }
+  .surr-type-chip span { font-size: 0.68rem; color: var(--text-dim); line-height: 1.3; }
+  .surr-type-more { opacity: 0.55; border-style: dashed; }
+
+  .kobo-card { background: rgba(212,168,50,0.04); border: 1px solid rgba(212,168,50,0.18); border-radius: 14px; padding: 1.4rem 1.5rem; margin-bottom: 1.75rem; }
+  .kobo-card-top { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+  .kobo-card-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .kobo-card-title { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+  .kobo-card-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.65; }
+  .kobo-card-desc strong { color: var(--text); font-weight: 600; }
+  .kobo-features-row { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; margin-bottom: 1.1rem; }
+  .kobo-feature { font-size: 0.75rem; color: #4caf7d; font-weight: 500; }
+  .kobo-open-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--terracotta); color: #fff; text-decoration: none; border-radius: 8px; padding: 0.7rem 1.4rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; letter-spacing: 0.02em; }
+  .kobo-open-btn:hover { background: #a04215; }
+
+  .btn-skip { background: none; border: 1px solid var(--border); color: var(--text-faint); border-radius: 8px; padding: 0.6rem 1.1rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: none; transition: all 0.2s; }
+  .btn-skip:hover { border-color: var(--border-strong); color: var(--text-dim); }
 </style>
 </head>
 <body>
@@ -339,15 +373,20 @@
           <div class="prog-node pending" id="node3">03</div>
           <div class="prog-line" id="line3"></div>
         </div>
-        <div class="prog-step" style="flex:0">
+        <div class="prog-step">
           <div class="prog-node pending" id="node4">04</div>
+          <div class="prog-line" id="line4"></div>
+        </div>
+        <div class="prog-step" style="flex:0">
+          <div class="prog-node pending" id="node5">05</div>
         </div>
       </div>
       <div class="prog-labels">
         <div class="prog-label done" id="label1">Land Details</div>
-        <div class="prog-label pending" id="label2">Documentation</div>
-        <div class="prog-label pending" id="label3">Valuation</div>
-        <div class="prog-label pending" id="label4">Review & Publish</div>
+        <div class="prog-label pending" id="label2">Surroundings</div>
+        <div class="prog-label pending" id="label3">Documentation</div>
+        <div class="prog-label pending" id="label4">Valuation</div>
+        <div class="prog-label pending" id="label5">Review & Publish</div>
       </div>
     </div>
 
@@ -450,8 +489,79 @@
       </div>
     </div>
 
-    <!-- STEP 2: DOCUMENTATION -->
+    <!-- STEP 2: SURROUNDINGS (NEW) -->
     <div class="step-panel" id="step2">
+      <h1 class="step-title">What's near <em>your land?</em></h1>
+      <p class="step-subtitle">Buyers and investors always want to know what's around a plot. Use our data collection form to map nearby schools, markets, transit stops, and more. Every verified record you submit earns you platform benefits — and makes your listing more attractive to serious buyers.</p>
+
+      <!-- Benefit progress widget -->
+      <div class="surr-benefit-widget">
+        <div class="sbw-top">
+          <div class="sbw-icon">⭐</div>
+          <div>
+            <div class="sbw-title">Your records earn you platform benefits</div>
+            <div class="sbw-sub">You've contributed <strong id="surrCount">0</strong> verified records so far. Reach <strong>30</strong> to unlock <em>Enhanced Listing Visibility</em> — your listings automatically rank higher in search results.</div>
+          </div>
+        </div>
+        <div class="sbw-bar-track"><div class="sbw-bar-fill" id="sbwBar" style="width:0%"></div></div>
+        <div class="sbw-bar-labels">
+          <span id="sbwProgress">0 / 30 records</span>
+          <span class="sbw-milestone">🏅 Enhanced Visibility at 30</span>
+        </div>
+      </div>
+
+      <!-- Asset type categories -->
+      <div class="surr-add-form">
+        <div class="surr-form-title">What you can record near your land</div>
+        <div class="surr-types-grid">
+          <div class="surr-type-chip">🏫<span>School / Education</span></div>
+          <div class="surr-type-chip">🚌<span>Transit Stop</span></div>
+          <div class="surr-type-chip">🛒<span>Market / Shopping</span></div>
+          <div class="surr-type-chip">🍽<span>Restaurant / Food</span></div>
+          <div class="surr-type-chip">🏨<span>Hotel / Lodging</span></div>
+          <div class="surr-type-chip">🏭<span>Factory / Supplier</span></div>
+          <div class="surr-type-chip">🏥<span>Health Facility</span></div>
+          <div class="surr-type-chip">🛣<span>Road / Highway</span></div>
+          <div class="surr-type-chip">🏗<span>Construction</span></div>
+          <div class="surr-type-chip">⚡<span>Utility</span></div>
+          <div class="surr-type-chip">🏢<span>Professional / Office</span></div>
+          <div class="surr-type-chip surr-type-more">📍<span>+ More categories</span></div>
+        </div>
+      </div>
+
+      <!-- KoboToolbox card -->
+      <div class="kobo-card">
+        <div class="kobo-card-top">
+          <div class="kobo-card-icon">📋</div>
+          <div class="kobo-card-text">
+            <div class="kobo-card-title">Record with KoboToolbox</div>
+            <div class="kobo-card-desc">KoboToolbox is the free data collection tool we use to map surroundings near your land. Walk around your plot, open the form, and record what you see — each entry is GPS-tagged automatically. You can also download the <strong>KoboCollect</strong> app and record on the go, even without a signal.</div>
+          </div>
+        </div>
+        <div class="kobo-features-row">
+          <span class="kobo-feature">✓ Completely free</span>
+          <span class="kobo-feature">✓ Works offline</span>
+          <span class="kobo-feature">✓ Auto GPS capture</span>
+          <span class="kobo-feature">✓ Android &amp; iPhone app</span>
+        </div>
+        <a href="https://ee.kobotoolbox.org/x/tW8p8dHi" target="_blank" class="kobo-open-btn">
+          Open the Data Collection Form
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div class="form-nav">
+        <button class="btn-back" id="back2">← Back</button>
+        <button class="btn-skip" onclick="goToStep(3)">Skip for now</button>
+        <button class="btn-next" id="next2">
+          Continue to Documents
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- STEP 3: DOCUMENTATION -->
+    <div class="step-panel" id="step3">
       <h1 class="step-title">Upload your <em>documents</em></h1>
       <p class="step-subtitle">Documentation builds trust. Verified listings receive significantly more enquiries from serious buyers and investors.</p>
 
@@ -509,8 +619,8 @@
       </div>
 
       <div class="form-nav">
-        <button class="btn-back" id="back2">← Back</button>
-        <button class="btn-next" id="next2">
+        <button class="btn-back" id="back3">← Back</button>
+        <button class="btn-next" id="next3">
           View Your Valuation
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -518,7 +628,7 @@
     </div>
 
     <!-- STEP 3: VALUATION PREVIEW -->
-    <div class="step-panel" id="step3">
+    <div class="step-panel" id="step4">
       <h1 class="step-title">Your AI <em>valuation</em></h1>
       <p class="step-subtitle">Based on the details you provided, here is your land's estimated market value and equity score. These are updated as market data changes.</p>
 
@@ -636,8 +746,8 @@
       </div>
 
       <div class="form-nav">
-        <button class="btn-back" id="back3">← Back</button>
-        <button class="btn-next" id="next3">
+        <button class="btn-back" id="back4">← Back</button>
+        <button class="btn-next" id="next4">
           Review & Publish
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
@@ -645,7 +755,7 @@
     </div>
 
     <!-- STEP 4: REVIEW & PUBLISH -->
-    <div class="step-panel" id="step4">
+    <div class="step-panel" id="step5">
       <h1 class="step-title">Review & <em>Publish</em></h1>
       <p class="step-subtitle">Almost there. Review your listing details before publishing to the Land Bank.</p>
 
@@ -688,7 +798,7 @@
       </div>
 
       <div class="form-nav">
-        <button class="btn-back" id="back4">← Back</button>
+        <button class="btn-back" id="back5">← Back</button>
         <button class="btn-publish" id="publishBtn">🚀 Publish to Land Bank</button>
       </div>
     </div>
@@ -770,7 +880,7 @@
 
   // State
   let currentStep = 1;
-  const totalSteps = 4;
+  const totalSteps = 5;
   let landType = 'residential';
   let titleType = 'freehold';
   let paymentModel = 'cash';
@@ -790,21 +900,35 @@
       const node = document.getElementById('node'+i);
       const label = document.getElementById('label'+i);
       const line = i < totalSteps ? document.getElementById('line'+i) : null;
+      if (!node) continue;
       if (i < currentStep) {
         node.className = 'prog-node done'; node.textContent = '✓';
-        label.className = 'prog-label done';
+        if (label) label.className = 'prog-label done';
         if (line) line.className = 'prog-line done';
       } else if (i === currentStep) {
-        node.className = 'prog-node active'; node.textContent = '0'+i;
-        label.className = 'prog-label active';
+        node.className = 'prog-node active'; node.textContent = (i < 10 ? '0' : '') + i;
+        if (label) label.className = 'prog-label active';
         if (line) line.className = 'prog-line';
       } else {
-        node.className = 'prog-node pending'; node.textContent = '0'+i;
-        label.className = 'prog-label pending';
+        node.className = 'prog-node pending'; node.textContent = (i < 10 ? '0' : '') + i;
+        if (label) label.className = 'prog-label pending';
         if (line) line.className = 'prog-line';
       }
     }
   }
+
+  /* ─── SURROUNDINGS BENEFIT WIDGET ─── */
+  (function initSurrWidget() {
+    const total = parseInt(localStorage.getItem('surrTotal') || '0');
+    const MILESTONE = 30;
+    const pct = Math.min(total / MILESTONE * 100, 100).toFixed(0);
+    const el = document.getElementById('surrCount');
+    const prog = document.getElementById('sbwProgress');
+    const bar = document.getElementById('sbwBar');
+    if (el) el.textContent = total;
+    if (prog) prog.textContent = Math.min(total, MILESTONE) + ' / ' + MILESTONE + ' records';
+    if (bar) bar.style.width = pct + '%';
+  })();
 
   function updateReview() {
     const titleVal = document.getElementById('fieldTitle')?.value || '—';
@@ -885,6 +1009,8 @@
   document.getElementById('back3').addEventListener('click', () => goToStep(2));
   document.getElementById('next3').addEventListener('click', () => goToStep(4));
   document.getElementById('back4').addEventListener('click', () => goToStep(3));
+  document.getElementById('next4').addEventListener('click', () => goToStep(5));
+  document.getElementById('back5').addEventListener('click', () => goToStep(4));
   document.getElementById('publishBtn').addEventListener('click', () => {
     const agreed = document.getElementById('termsAgree').checked;
     if (!agreed) { alert('Please agree to the platform terms before publishing.'); return; }

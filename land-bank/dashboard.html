@@ -263,6 +263,63 @@
   .earn-pos { color: #4caf7d; font-weight: 500; }
   .earn-pending { color: var(--gold); font-size: 0.72rem; }
 
+  /* ─── ACTIVITY BENEFIT TIERS ─── */
+  .activity-progress-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .apc-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.1rem; flex-wrap: wrap; gap: 0.75rem; }
+  .apc-count-big { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--gold); line-height: 1; }
+  .apc-count-lbl { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .apc-next-badge { background: rgba(212,168,50,0.1); border: 1px solid rgba(212,168,50,0.2); border-radius: 8px; padding: 0.5rem 0.85rem; font-size: 0.75rem; color: var(--gold); font-weight: 600; text-align: right; }
+  .apc-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 0.35rem; }
+  .apc-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--terracotta)); border-radius: 4px; transition: width 0.6s ease; }
+  .apc-bar-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-faint); margin-bottom: 1.25rem; }
+  .benefit-tiers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+  @media (max-width: 900px) { .benefit-tiers { grid-template-columns: repeat(2, 1fr); } }
+  .tier-card { border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; text-align: center; position: relative; }
+  .tier-card.unlocked { background: rgba(76,175,125,0.06); border-color: rgba(76,175,125,0.25); }
+  .tier-card.current-tier { background: rgba(212,168,50,0.06); border-color: rgba(212,168,50,0.3); }
+  .tier-card.locked { opacity: 0.55; }
+  .tier-icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+  .tier-name { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+  .tier-req { font-size: 0.65rem; color: var(--text-faint); margin-bottom: 0.4rem; }
+  .tier-benefit { font-size: 0.68rem; color: var(--text-dim); line-height: 1.45; }
+  .tier-status { display: inline-block; margin-top: 0.4rem; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 4px; }
+  .tier-status.unlocked { background: rgba(76,175,125,0.12); color: #4caf7d; }
+  .tier-status.current { background: rgba(212,168,50,0.12); color: var(--gold); }
+  .tier-status.locked { background: var(--surface); color: var(--text-faint); }
+
+  /* ─── PARTNER REVIEWS & MILESTONES ─── */
+  .referral-person-row { display: flex; align-items: center; gap: 0.85rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: 0.6rem; }
+  .rpr-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #1a3a2a, #2a5a3a); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #f5f0e8; flex-shrink: 0; }
+  .rpr-info { flex: 1; }
+  .rpr-name { font-size: 0.88rem; font-weight: 500; color: var(--text); }
+  .rpr-meta { font-size: 0.7rem; color: var(--text-faint); margin-top: 0.1rem; }
+  .rpr-actions { display: flex; gap: 0.5rem; align-items: center; }
+  .btn-review { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 0.35rem 0.75rem; font-size: 0.72rem; color: var(--text-dim); cursor: none; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
+  .btn-review:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-review.reviewed { background: rgba(76,175,125,0.08); border-color: rgba(76,175,125,0.25); color: #4caf7d; cursor: default; }
+  .review-star-rating { display: flex; gap: 0.25rem; }
+  .star-btn { background: none; border: none; font-size: 1.1rem; cursor: none; color: var(--border-strong); transition: color 0.15s; }
+  .star-btn.lit { color: var(--gold); }
+  .inline-review-form { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; margin: -0.15rem 0 0.6rem; display: none; }
+  .inline-review-form.open { display: block; }
+  .irf-label { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.45rem; font-weight: 600; }
+  .irf-textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--input-border); border-radius: 8px; padding: 0.65rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; resize: vertical; min-height: 70px; margin-bottom: 0.65rem; transition: border-color 0.2s; }
+  .irf-textarea:focus { border-color: rgba(212,168,50,0.4); }
+  .irf-submit { background: var(--gold); color: var(--ink); border: none; border-radius: 6px; padding: 0.5rem 1.1rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .irf-submit:hover { background: #c49a28; }
+
+  .milestone-track { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-top: 1rem; }
+  @media (max-width: 900px) { .milestone-track { grid-template-columns: repeat(2, 1fr); } }
+  .milestone-card { border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+  .milestone-card.reached { background: rgba(76,175,125,0.06); border-color: rgba(76,175,125,0.25); }
+  .milestone-card.next-up { background: rgba(212,168,50,0.06); border-color: rgba(212,168,50,0.3); }
+  .ms-icon { font-size: 1.3rem; margin-bottom: 0.35rem; }
+  .ms-count { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--text); }
+  .ms-label { font-size: 0.65rem; color: var(--text-faint); margin-bottom: 0.3rem; }
+  .ms-reward { font-size: 0.72rem; color: var(--text-dim); line-height: 1.4; }
+  .ms-reward.reached-reward { color: #4caf7d; }
+  .ms-reward.next-reward { color: var(--gold); }
+
   /* VALUATION HISTORY */
   .val-history-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 0.85rem; display: flex; align-items: center; justify-content: space-between; }
   .vh-left { }
@@ -734,6 +791,52 @@
         </div>
       </div>
 
+      <!-- ACTIVITY BENEFIT TIERS -->
+      <div class="one-col" style="margin-top:1.75rem;">
+        <div class="section-heading">Platform Activity &amp; Benefits</div>
+        <div class="activity-progress-card">
+          <div class="apc-header">
+            <div>
+              <div class="apc-count-big" id="actCount">18</div>
+              <div class="apc-count-lbl">Verified data entries contributed</div>
+            </div>
+            <div class="apc-next-badge">⭐ Next benefit at 30 entries<br><span style="font-size:0.68rem;font-weight:400;color:var(--text-faint)">Enhanced Listing Visibility</span></div>
+          </div>
+          <div class="apc-bar-track"><div class="apc-bar-fill" id="actBar" style="width:60%"></div></div>
+          <div class="apc-bar-labels"><span id="actBarLabel">18 / 30</span><span>Add surroundings when listing land to earn entries</span></div>
+          <div class="benefit-tiers">
+            <div class="tier-card unlocked">
+              <div class="tier-icon">🏅</div>
+              <div class="tier-name">Starter</div>
+              <div class="tier-req">0 entries</div>
+              <div class="tier-benefit">Access to the Land Bank platform and all free tools</div>
+              <span class="tier-status unlocked">✓ Unlocked</span>
+            </div>
+            <div class="tier-card current-tier">
+              <div class="tier-icon">⭐</div>
+              <div class="tier-name">Contributor</div>
+              <div class="tier-req">30 entries</div>
+              <div class="tier-benefit">Enhanced Listing Visibility — your listings rank higher in search results</div>
+              <span class="tier-status current">12 away →</span>
+            </div>
+            <div class="tier-card locked">
+              <div class="tier-icon">🥈</div>
+              <div class="tier-name">Trusted</div>
+              <div class="tier-req">100 entries</div>
+              <div class="tier-benefit">Priority AI Valuations — instant results, no queue, higher confidence score</div>
+              <span class="tier-status locked">Locked</span>
+            </div>
+            <div class="tier-card locked">
+              <div class="tier-icon">💎</div>
+              <div class="tier-name">Elite</div>
+              <div class="tier-req">500 entries</div>
+              <div class="tier-benefit">Reduced platform fee (1.5% instead of 3%) on all completed transactions</div>
+              <span class="tier-status locked">Locked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="one-col">
         <div class="section-heading">Client Reviews</div>
         <div class="review-card">
@@ -864,6 +967,82 @@
         </div>
       </div>
 
+      <!-- REFERRAL MILESTONE REWARDS -->
+      <div class="one-col" style="margin-top:1.75rem;">
+        <div class="section-heading">Referral Milestone Rewards</div>
+        <p style="font-size:0.82rem; color:var(--text-faint); margin-bottom:1rem;">The more stakeholders you bring in, the bigger your rewards get. You've referred <strong style="color:var(--text)">12</strong> — keep going.</p>
+        <div class="milestone-track">
+          <div class="milestone-card reached">
+            <div class="ms-icon">🎉</div>
+            <div class="ms-count">5</div>
+            <div class="ms-label">Referrals</div>
+            <div class="ms-reward reached-reward">✓ +RWF 10,000 bonus paid</div>
+          </div>
+          <div class="milestone-card reached">
+            <div class="ms-icon">🏅</div>
+            <div class="ms-count">10</div>
+            <div class="ms-label">Referrals</div>
+            <div class="ms-reward reached-reward">✓ Commission rate bumped to 1.2×</div>
+          </div>
+          <div class="milestone-card next-up">
+            <div class="ms-icon">⭐</div>
+            <div class="ms-count">25</div>
+            <div class="ms-label">Referrals</div>
+            <div class="ms-reward next-reward">→ Partner badge on profile + RWF 50,000 bonus</div>
+          </div>
+          <div class="milestone-card">
+            <div class="ms-icon">💎</div>
+            <div class="ms-count">50</div>
+            <div class="ms-label">Referrals</div>
+            <div class="ms-reward">Commission rate 1.5× + priority support + early access to new products</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REFERRED STAKEHOLDERS — leave a review -->
+      <div class="one-col" style="margin-top:1.75rem;">
+        <div class="section-heading">Your Referred Stakeholders</div>
+        <p style="font-size:0.82rem; color:var(--text-faint); margin-bottom:1rem;">Leave a brief note for each person you referred. Your review helps other users on the platform know what to expect when working with them.</p>
+
+        <div id="referralReviewList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- RECEIVED REVIEWS (post-transaction) -->
+      <div class="one-col" style="margin-top:1.75rem;">
+        <div class="section-heading">Reviews You've Received</div>
+        <p style="font-size:0.82rem; color:var(--text-faint); margin-bottom:1rem;">People you've completed transactions with can leave a review on your profile. These appear on your Trust Score and are visible to buyers, investors, and agents.</p>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer">
+              <div class="rev-avatar">AK</div>
+              <div><div class="rev-name">Amina K. <span style="font-size:0.65rem; background:rgba(76,175,125,0.1); color:#4caf7d; border-radius:4px; padding:0.1rem 0.4rem; margin-left:0.3rem;">✓ Verified Transaction</span></div><div class="rev-date">April 2025</div></div>
+            </div>
+            <div class="rev-stars">★★★★★</div>
+          </div>
+          <div class="rev-listing">Rubavu Lakeview Plot — Completed Sale</div>
+          <div class="rev-text">"Jean-Pierre was professional throughout. All documentation was ready, and NLA verification was complete before we even started negotiating. Would recommend."</div>
+        </div>
+
+        <div class="review-card">
+          <div class="review-header">
+            <div class="reviewer">
+              <div class="rev-avatar" style="background:linear-gradient(135deg,#1a2a4a,#2a4a7a)">DR</div>
+              <div><div class="rev-name">Dieudonne R. <span style="font-size:0.65rem; background:rgba(76,175,125,0.1); color:#4caf7d; border-radius:4px; padding:0.1rem 0.4rem; margin-left:0.3rem;">✓ Verified Transaction</span></div><div class="rev-date">February 2025</div></div>
+            </div>
+            <div class="rev-stars">★★★★★</div>
+          </div>
+          <div class="rev-listing">Gikondo Commercial Land — Active Inquiry</div>
+          <div class="rev-text">"Very knowledgeable about the Kigali market. Transparent about all the land details and responded to questions quickly."</div>
+        </div>
+
+        <div style="background:var(--surface); border:1px dashed var(--border); border-radius:12px; padding:1.25rem; text-align:center; font-size:0.82rem; color:var(--text-faint);">
+          Reviews appear automatically after completed transactions. You cannot request or remove them — this keeps the system honest.
+        </div>
+      </div>
+
       <!-- Earnings table -->
       <div class="one-col">
         <div class="section-heading">Referral Earnings History</div>
@@ -946,6 +1125,85 @@
 
   // Deep link to partner tab from URL hash
   if (window.location.hash === '#partner') switchTab('partner');
+
+  /* ─── ACTIVITY PROGRESS — sync from localStorage ─── */
+  const storedTotal = parseInt(localStorage.getItem('surrTotal') || '0');
+  const displayTotal = 18 + storedTotal; // 18 = existing demo entries
+  const BENEFIT_1 = 30;
+  document.getElementById('actCount').textContent = displayTotal;
+  document.getElementById('actBar').style.width = Math.min(displayTotal / BENEFIT_1 * 100, 100).toFixed(0) + '%';
+  document.getElementById('actBarLabel').textContent = Math.min(displayTotal, BENEFIT_1) + ' / ' + BENEFIT_1;
+  // Update current-tier card label
+  const away = Math.max(BENEFIT_1 - displayTotal, 0);
+  const currentTierStatus = document.querySelector('.tier-card.current-tier .tier-status');
+  if (currentTierStatus) currentTierStatus.textContent = away > 0 ? away + ' away →' : '✓ Unlocked';
+  if (away === 0 && currentTierStatus) {
+    currentTierStatus.className = 'tier-status unlocked';
+    document.querySelector('.tier-card.current-tier').classList.replace('current-tier', 'unlocked');
+  }
+
+  /* ─── REFERRAL REVIEW LIST ─── */
+  const referrals = [
+    { initials:'CN', name:'Claudine N.', type:'Agent', date:'1 May 2025', id:'cn' },
+    { initials:'ER', name:'Emmanuel R.', type:'Landowner', date:'22 Apr 2025', id:'er' },
+    { initials:'PK', name:'Patrick K.', type:'Buyer', date:'15 Apr 2025', id:'pk' },
+    { initials:'MB', name:'Marie-Claire B.', type:'Legal Pro', date:'2 Apr 2025', id:'mb' },
+    { initials:'DT', name:'Damascene T.', type:'Landowner', date:'18 Mar 2025', id:'dt' },
+    { initials:'AU', name:'Agathe U.', type:'Supplier', date:'5 Mar 2025', id:'au' },
+  ];
+  const reviewed = JSON.parse(localStorage.getItem('reviewed') || '{}');
+
+  function renderReferralReviews() {
+    const list = document.getElementById('referralReviewList');
+    if (!list) return;
+    list.innerHTML = referrals.map(r => {
+      const isReviewed = !!reviewed[r.id];
+      return `
+        <div class="referral-person-row">
+          <div class="rpr-avatar">${r.initials}</div>
+          <div class="rpr-info">
+            <div class="rpr-name">${r.name}</div>
+            <div class="rpr-meta">${r.type} · Referred ${r.date}</div>
+          </div>
+          <div class="rpr-actions">
+            ${isReviewed
+              ? `<button class="btn-review reviewed">✓ Review left</button>`
+              : `<button class="btn-review" onclick="openReview('${r.id}')">Leave a review</button>`
+            }
+          </div>
+        </div>
+        <div class="inline-review-form${isReviewed ? '' : ''}" id="irf-${r.id}">
+          <div class="irf-label">Your rating</div>
+          <div class="review-star-rating" id="stars-${r.id}">
+            ${[1,2,3,4,5].map(n => `<button class="star-btn" data-n="${n}" onclick="rateStar('${r.id}',${n})">☆</button>`).join('')}
+          </div>
+          <div class="irf-label" style="margin-top:0.65rem;">Your review <span style="font-weight:300">(optional)</span></div>
+          <textarea class="irf-textarea" id="text-${r.id}" placeholder="Brief note about working with ${r.name.split(' ')[0]}…"></textarea>
+          <button class="irf-submit" onclick="submitReview('${r.id}')">Submit Review</button>
+        </div>`;
+    }).join('');
+  }
+
+  let starRatings = {};
+  function openReview(id) {
+    document.querySelectorAll('.inline-review-form').forEach(f => f.classList.remove('open'));
+    const form = document.getElementById('irf-' + id);
+    if (form) form.classList.toggle('open');
+  }
+  function rateStar(id, n) {
+    starRatings[id] = n;
+    const stars = document.querySelectorAll('#stars-' + id + ' .star-btn');
+    stars.forEach((s, i) => { s.textContent = i < n ? '★' : '☆'; s.classList.toggle('lit', i < n); });
+  }
+  function submitReview(id) {
+    const text = document.getElementById('text-' + id)?.value || '';
+    const rating = starRatings[id] || 5;
+    reviewed[id] = { rating, text, ts: Date.now() };
+    localStorage.setItem('reviewed', JSON.stringify(reviewed));
+    renderReferralReviews();
+  }
+
+  renderReferralReviews();
 
   // Copy referral link
   ['copyBtn', 'copyBtn2'].forEach(id => {
