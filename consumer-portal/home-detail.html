@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Details — Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+:root {
+  --sapphire: #1a6bc8;
+  --emerald: #1a5c3a;
+  --forest: #1a3a2a;
+}
+
+/* ── CURSOR ── */
+.cursor { position: fixed; width: 10px; height: 10px; background: var(--terracotta); border-radius: 50%; pointer-events: none; z-index: 9999; }
+.cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(200,82,26,0.4); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.4s ease, width 0.3s, height 0.3s; }
+body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; border-color: var(--terracotta); transform: translate(-10px,-10px) !important; }
+body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+/* ── NAV ── */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+.nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+.nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+.nav-logo span { color: var(--terracotta); font-style: italic; font-family: 'Instrument Serif', serif; }
+.nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sapphire); font-weight: 500; }
+.nav-right { display: flex; align-items: center; gap: 1.5rem; }
+.nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+.nav-link:hover { color: var(--text); }
+.nav-link.active { color: var(--terracotta); font-weight: 500; }
+.nav-cta { background: var(--terracotta); color: #fff !important; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+.nav-cta:hover { background: #e05e20; }
+.theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+.theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+@media (max-width: 1024px) { nav { padding: 1rem 1.5rem; } }
+@media (max-width: 768px) { .nav-right .nav-link { display: none; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   HOME DETAIL PAGE
+═══════════════════════════════════════════════════════════════ */
+
+.hd-page { padding-top: 88px; min-height: 100vh; }
+
+/* ── Header ───────────────────────────────────────────────────── */
+.hd-header { background: var(--bg-alt); border-bottom: 1px solid var(--border); padding: 2.25rem 2.5rem 2rem; }
+.hd-header-inner { max-width: 1300px; margin: 0 auto; }
+
+.hd-back {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.78rem; color: var(--text-dim); text-decoration: none;
+  margin-bottom: 1.25rem; transition: color 0.2s; cursor: none;
+}
+.hd-back:hover { color: var(--terracotta); }
+
+.hd-tag {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  font-weight: 500; padding: 0.22rem 0.65rem; border-radius: 2rem;
+  margin-bottom: 0.7rem;
+  background: rgba(200,82,26,0.1); border: 1px solid rgba(200,82,26,0.22); color: var(--terracotta);
+}
+.hd-name {
+  font-family: 'Syne', sans-serif; font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800;
+  color: var(--text); line-height: 1.1; margin-bottom: 0.3rem;
+}
+.hd-tagline {
+  font-family: 'Instrument Serif', serif; font-style: italic;
+  font-size: 1.0rem; color: var(--text-dim); margin-bottom: 0.9rem; max-width: 640px;
+}
+.hd-price-row { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.hd-usd { font-family: 'Syne', sans-serif; font-size: 2.1rem; font-weight: 700; color: var(--gold); }
+.hd-rwf { font-size: 0.85rem; color: var(--text-faint); }
+.hd-sqm { font-size: 0.85rem; color: var(--text-faint); }
+
+/* ── Content area ─────────────────────────────────────────────── */
+.hd-content {
+  padding: 2.5rem; max-width: 1300px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+}
+@media (max-width: 900px) {
+  .hd-content { grid-template-columns: 1fr; }
+}
+
+/* ── Left column: visuals ─────────────────────────────────────── */
+.hd-visuals { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.hd-vis-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+}
+[data-theme="light"] .hd-vis-card { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+
+.hd-vis-label {
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-faint); padding: 0.65rem 1rem 0.45rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.hd-iso-wrap {
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(27,30,42,0.8) 0%, rgba(10,10,15,0.6) 100%);
+  display: flex; justify-content: center; align-items: center; min-height: 220px;
+}
+[data-theme="light"] .hd-iso-wrap {
+  background: linear-gradient(135deg, #e8f0f5 0%, #f2f6f8 100%);
+}
+
+.hd-plan-wrap {
+  padding: 0.75rem;
+  background: #ffffff;
+  display: flex; justify-content: center; align-items: flex-start; min-height: 140px; max-height: 320px; overflow-y: auto;
+}
+.hd-floor-tabs {
+  display: flex; gap: 0.4rem; margin-bottom: 0.6rem; padding: 0 0.75rem;
+  border-bottom: 1px solid var(--border); flex-wrap: nowrap;
+}
+.hd-floor-tab {
+  padding: 0.4rem 0.7rem; background: none; border: none; cursor: pointer;
+  font-size: 0.7rem; font-weight: 500; font-family: 'DM Sans', sans-serif;
+  color: var(--text-faint); border-bottom: 2px solid transparent;
+  transition: all 0.25s; white-space: nowrap; flex-shrink: 0;
+}
+.hd-floor-tab:hover { color: var(--text-dim); }
+.hd-floor-tab.active {
+  color: var(--terracotta); border-bottom-color: var(--terracotta);
+}
+
+/* Fullscreen floor plan modal */
+.hd-fp-modal { display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.95); padding: 1.5rem; overflow: auto; }
+.hd-fp-modal.open { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+.hd-fp-container { background: white; border-radius: 12px; padding: 2rem; max-width: 95vw; width: fit-content; position: relative; margin: 0 auto; }
+.hd-fp-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; padding: 0.5rem; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; }
+.hd-fp-close:hover { color: #000; }
+.hd-fp-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(0,0,0,0.5); margin-bottom: 0.6rem; font-weight: 500; }
+.hd-fp-btn {
+  background: none; border: none; cursor: pointer; font-size: 0.8rem; padding: 0.3rem 0.6rem;
+  color: var(--text-dim); transition: all 0.2s; margin-left: 0.8rem; opacity: 0.8;
+}
+.hd-fp-btn:hover { opacity: 1; color: var(--gold); }
+
+/* ── Right column: info ───────────────────────────────────────── */
+.hd-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.hd-about {
+  font-size: 0.85rem; color: var(--text-dim); line-height: 1.7;
+  border-left: 2px solid rgba(212,168,50,0.3); padding-left: 0.9rem;
+}
+
+/* ── Section cards ────────────────────────────────────────────── */
+.hd-section {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+}
+[data-theme="light"] .hd-section { box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+.hd-sec-head {
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  font-weight: 500; color: var(--gold); padding: 0.7rem 1rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0.4rem;
+}
+.hd-sec-body { padding: 0.85rem 1rem; }
+
+/* Rooms list */
+.hd-rooms { display: flex; flex-direction: column; gap: 0.35rem; }
+.hd-room-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.32rem 0; border-bottom: 1px solid var(--border);
+}
+.hd-room-item:last-child { border-bottom: none; }
+.hd-room-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-right: 0.5rem; }
+.hd-room-name { flex: 1; font-size: 0.8rem; color: var(--text-dim); }
+.hd-room-sqm { font-size: 0.7rem; color: var(--text-faint); font-family: 'Syne', sans-serif; }
+
+/* What's Included checklist */
+.hd-incl-list { display: flex; flex-direction: column; gap: 0.55rem; }
+.hd-incl-item { display: flex; align-items: center; gap: 0.6rem; }
+.hd-incl-check {
+  flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%;
+  background: rgba(102,187,106,0.18); color: #81c784; font-size: 0.66rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+[data-theme="light"] .hd-incl-check { background: rgba(46,125,50,0.12); color: #2e7d32; }
+.hd-incl-text { font-size: 0.82rem; color: var(--text); }
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.hd-footer { padding: 2rem 2.5rem; border-top: 1px solid var(--border); margin-top: 1rem; text-align: center; }
+.hd-footer-note { font-size: 0.7rem; color: var(--text-faint); line-height: 1.6; max-width: 700px; margin: 0 auto; }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Consumer Portal</div>
+  </a>
+  <div class="nav-right">
+    <a href="listings.html" class="nav-link">Browse Properties</a>
+    <a href="homes.html" class="nav-link active">Affordable Homes</a>
+    <a href="mortgage-calculator.html" class="nav-link">Mortgage Calc</a>
+    <a href="market-reports.html" class="nav-link">Market Reports</a>
+    <a href="agent-finder.html" class="nav-link">Find an Agent</a>
+    <a href="../index.html" class="nav-link" style="color:var(--text-faint)">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+    <a href="dashboard.html" class="nav-cta">My Account</a>
+  </div>
+</nav>
+
+<div class="hd-page" id="hdPage">
+  <!-- Populated by JS -->
+</div>
+
+<!-- Footer -->
+<footer class="hd-footer">
+  <p class="hd-footer-note">All prices are all-in build costs, excluding land. Costs include materials, labour, and basic finishes. Exchange rate: 1 USD ≈ 1,300 RWF. Floor areas are gross internal area (GIA). Actual costs may vary by site and specification. All floor plans are schematic and indicative only.</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   HOME TYPE TIERS — ported from internal catalogue (units.html)
+══════════════════════════════════════════════════════════════ */
+const TIERS = [
+  /* ── T1: $5,000 ────────────────────────────────────────────── */
+  {
+    id:'t1', price_usd:5000, price_rwf:6_500_000,
+    label:'$5,000', rwf_label:'6.5M RWF',
+    name:'Micro Studio', tag:'Essential',
+    tagline:'A compact one-room home for one person',
+    sqm:14, floors:1,
+    dims:{ W:3.5, D:4.0, H:2.8, roofH:0.3 },
+    about:'A small one-room apartment with a combined living and sleeping area, a kitchenette and a bathroom. Concrete block walls and a flat concrete roof keep it simple and affordable. Ideal as a starter home or rental unit.',
+    included:[
+      'Studio (bed / living area)',
+      'Kitchenette',
+      'Wet room with shower &amp; WC',
+      'Single storey',
+      'Cold water supply',
+      'Electric lighting &amp; sockets',
+    ],
+    rooms:[
+      { label:'Living / Sleeping', sqm:9.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchenette',       sqm:2.5, fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom',          sqm:2.5, fill:'#e0f7fa', dot:'#26a69a' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Cement screed',
+      'Foundation':'Strip footing, 450mm',
+      'Ceiling':'Painted concrete soffit',
+      'Build time':'4 – 6 weeks',
+      'Doors':'1 external + 1 bathroom',
+      'Windows':'2 × aluminium sliding',
+      'Plumbing':'Cold water, WC, shower',
+      'Electrical':'4 sockets, 3 light points',
+    },
+    floorPlans:[
+      {
+        name:'Floor Plan',
+        W:3.5, D:4.0,
+        rooms:[
+          { x:0.2, y:0.2, w:1.1, h:1.7, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+          { x:0.2, y:2.1, w:1.1, h:1.7, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+          { x:1.5, y:0.2, w:1.8, h:3.6, label:'Living / Sleeping', sub:'', fill:'#fdf3e3' },
+        ],
+        partitions:[
+          { x1:1.5, y1:0.2, x2:1.5, y2:3.8 },
+          { x1:0.2, y1:2.0, x2:1.5, y2:2.0 },
+        ],
+        doors:[{ wall:'bottom', x:2.0, w:0.8, hinge:'r' }],
+        windows:[
+          { wall:'top', x:2.0, w:1.2 },
+          { wall:'right', y:1.0, w:1.2 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T2: $8,000 ────────────────────────────────────────────── */
+  {
+    id:'t2', price_usd:8000, price_rwf:10_400_000,
+    label:'$8,000', rwf_label:'10.4M RWF',
+    name:'Studio', tag:'Essential',
+    tagline:'A larger studio with a proper kitchen and bathroom',
+    sqm:16, floors:1,
+    dims:{ W:4.0, D:4.0, H:2.8, roofH:0.3 },
+    about:'A bigger one-room apartment with a combined living and sleeping space, a proper kitchen and a bathroom. Good natural light from windows on two sides. Concrete block walls and a flat concrete roof.',
+    included:[
+      'Studio (bed / living area)',
+      'Separate kitchen',
+      'Bathroom with shower, WC &amp; basin',
+      'Single storey',
+      'Hot &amp; cold water supply',
+      'Electric lighting &amp; sockets',
+    ],
+    rooms:[
+      { label:'Living / Sleeping', sqm:8.5, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',           sqm:4.0, fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom',          sqm:3.5, fill:'#e0f7fa', dot:'#26a69a' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Ceramic tiles',
+      'Foundation':'Strip footing, 500mm',
+      'Ceiling':'Painted concrete soffit',
+      'Build time':'5 – 7 weeks',
+      'Doors':'2 (external + bathroom)',
+      'Windows':'3 × aluminium sliding',
+      'Plumbing':'Hot + cold water, WC, shower, basin',
+      'Electrical':'6 sockets, 4 light points',
+    },
+    floorPlans:[
+      {
+        name:'Floor Plan',
+        W:4.0, D:4.0,
+        rooms:[
+          { x:0.2, y:0.2, w:2.4, h:1.9, label:'Living / Sleeping', sub:'', fill:'#fdf3e3' },
+          { x:0.2, y:2.1, w:2.4, h:1.7, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+          { x:2.8, y:0.2, w:1.0, h:3.6, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+        ],
+        partitions:[
+          { x1:2.6, y1:0.2, x2:2.6, y2:3.8 },
+          { x1:0.2, y1:2.0, x2:2.6, y2:2.0 },
+        ],
+        doors:[{ wall:'bottom', x:1.0, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'top', x:0.8, w:1.4 },
+          { wall:'right', y:1.0, w:1.2 },
+          { wall:'left', y:1.0, w:1.0 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T3: $20,000 ───────────────────────────────────────────── */
+  {
+    id:'t3', price_usd:20000, price_rwf:26_000_000,
+    label:'$20,000', rwf_label:'26M RWF',
+    name:'2-Bed Starter', tag:'Family Entry',
+    tagline:'A master bedroom and second bedroom over a shared living level',
+    sqm:31, floors:2,
+    dims:{ W:3.88, D:4.0, H:5.3, roofH:0.3 },
+    about:'A two-storey, two-bedroom apartment. The ground floor has an open living and dining area, a kitchen and a bathroom, with stairs leading up. Upstairs are a master bedroom and a second bedroom, sharing a landing. Concrete block walls, flat concrete roof, tiled floors.',
+    included:[
+      '2 bedrooms (master + second)',
+      'Open-plan living &amp; dining area',
+      'Separate kitchen',
+      'Bathroom with shower, WC &amp; basin',
+      'Two storeys',
+      'Hot &amp; cold water supply',
+      'Full electrical wiring',
+    ],
+    rooms:[
+      { label:'Master Bedroom', sqm:8.0, fill:'#dce8f5', dot:'#3a7bd5' },
+      { label:'Bedroom',        sqm:5.0, fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Living / Dining', sqm:9.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',        sqm:3.0, fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom',       sqm:2.0, fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Landing',        sqm:4.0, fill:'#f5f5f5', dot:'#90a4ae' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Ceramic tiles throughout',
+      'Foundation':'RC strip, 550mm',
+      'Ceiling':'Painted concrete soffit',
+      'Build time':'8 – 10 weeks',
+      'Doors':'3 (external + internal)',
+      'Windows':'5 × aluminium sliding',
+      'Plumbing':'Hot + cold water, WC, shower, basin',
+      'Electrical':'Full wiring, consumer unit',
+    },
+    floorPlans:[
+      {
+        name:'Ground Floor',
+        W:3.88, D:4.0,
+        rooms:[
+          { x:0.2, y:0.2, w:3.48, h:2.4, label:'Living / Dining', sub:'', fill:'#fdf3e3' },
+          { x:0.2, y:2.6, w:1.0, h:1.2, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+          { x:1.4, y:2.6, w:2.28, h:1.2, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+        ],
+        partitions:[
+          { x1:0.2, y1:2.6, x2:3.68, y2:2.6 },
+          { x1:1.2, y1:2.6, x2:1.2, y2:3.8 },
+        ],
+        doors:[{ wall:'bottom', x:1.2, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'top', x:1.8, w:1.4 },
+          { wall:'right', y:1.0, w:1.4 },
+        ],
+      },
+      {
+        name:'First Floor',
+        W:3.88, D:4.0,
+        rooms:[
+          { x:0.2, y:0.2, w:1.0, h:3.6, label:'Bedroom', sub:'', fill:'#dce8f5' },
+          { x:1.2, y:0.2, w:2.28, h:2.0, label:'Landing', sub:'', fill:'#f5f5f5' },
+          { x:1.2, y:2.4, w:2.28, h:1.4, label:'Master Bedroom', sub:'', fill:'#dce8f5' },
+        ],
+        partitions:[
+          { x1:1.0, y1:0.2, x2:1.0, y2:3.8 },
+          { x1:1.2, y1:2.2, x2:3.68, y2:2.2 },
+        ],
+        doors:[{ wall:'top', x:1.6, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.0, w:1.4 },
+          { wall:'right', y:1.0, w:1.4 },
+          { wall:'right', y:3.0, w:1.0 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T4: $30,000 ───────────────────────────────────────────── */
+  {
+    id:'t4', price_usd:30000, price_rwf:39_000_000,
+    label:'$30,000', rwf_label:'39M RWF',
+    name:'2-Bed Plus', tag:'Family',
+    tagline:'Two bedrooms, two bathrooms and an open living level',
+    sqm:43, floors:2,
+    dims:{ W:5.0, D:4.3, H:5.3, roofH:0.3 },
+    about:'A two-storey, two-bedroom apartment with more space than the Starter. The ground floor has an open living and dining area with a kitchen and bathroom. Upstairs are the master bedroom, a second bedroom, a second bathroom and a landing. Concrete block walls, flat concrete roof, tiled floors throughout.',
+    included:[
+      '2 bedrooms (master + second)',
+      'Open-plan living &amp; dining area',
+      'Separate kitchen',
+      '2 bathrooms',
+      'Two storeys',
+      'Hot &amp; cold water supply',
+      'Full electrical wiring',
+    ],
+    rooms:[
+      { label:'Master Bedroom', sqm:9.0, fill:'#dce8f5', dot:'#3a7bd5' },
+      { label:'Bedroom',        sqm:7.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Living / Dining', sqm:14.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',        sqm:4.0,  fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom (Ground)', sqm:3.0,  fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Bathroom (Upper)',  sqm:2.5,  fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Landing',        sqm:3.5,  fill:'#f5f5f5', dot:'#90a4ae' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Ceramic tiles throughout',
+      'Foundation':'RC strip, 600mm',
+      'Ceiling':'Painted concrete soffit',
+      'Build time':'10 – 12 weeks',
+      'Doors':'4 (external + internal)',
+      'Windows':'6 × aluminium sliding',
+      'Plumbing':'Hot + cold water, WC, shower, basin',
+      'Electrical':'Full wiring, consumer unit',
+    },
+    floorPlans:[
+      {
+        name:'Ground Floor',
+        W:5.0, D:4.3,
+        rooms:[
+          { x:0.2, y:0.2, w:4.6, h:2.6, label:'Living / Dining', sub:'', fill:'#fdf3e3' },
+          { x:0.2, y:3.0, w:1.5, h:1.1, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+          { x:3.3, y:3.0, w:1.5, h:1.1, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+        ],
+        partitions:[
+          { x1:0.2, y1:2.8, x2:4.8, y2:2.8 },
+          { x1:1.7, y1:2.8, x2:1.7, y2:4.1 },
+          { x1:3.3, y1:2.8, x2:3.3, y2:4.1 },
+        ],
+        doors:[{ wall:'bottom', x:2.3, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'top', x:1.0, w:1.6 },
+          { wall:'top', x:3.0, w:1.2 },
+          { wall:'left', y:1.0, w:1.4 },
+          { wall:'right', y:1.0, w:1.4 },
+        ],
+      },
+      {
+        name:'First Floor',
+        W:5.0, D:4.3,
+        rooms:[
+          { x:0.2, y:0.2, w:1.5, h:1.6, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+          { x:1.9, y:0.2, w:2.9, h:1.6, label:'Landing', sub:'', fill:'#f5f5f5' },
+          { x:0.2, y:2.0, w:2.3, h:2.1, label:'Master Bedroom', sub:'', fill:'#dce8f5' },
+          { x:2.7, y:2.0, w:2.1, h:2.1, label:'Bedroom', sub:'', fill:'#dce8f5' },
+        ],
+        partitions:[
+          { x1:1.7, y1:0.2, x2:1.7, y2:1.8 },
+          { x1:0.2, y1:1.8, x2:4.8, y2:1.8 },
+          { x1:2.5, y1:2.0, x2:2.5, y2:4.1 },
+        ],
+        doors:[{ wall:'top', x:3.0, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'left', y:0.8, w:1.2 },
+          { wall:'left', y:2.8, w:1.4 },
+          { wall:'right', y:0.8, w:1.2 },
+          { wall:'right', y:2.8, w:1.2 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T5: $50,000 ───────────────────────────────────────────── */
+  {
+    id:'t5', price_usd:50000, price_rwf:65_000_000,
+    label:'$50,000', rwf_label:'65M RWF',
+    name:'3-Bed Duplex', tag:'Family Plus',
+    tagline:'Split-level living with three bedrooms',
+    sqm:54, floors:2,
+    dims:{ W:4.0, D:4.5, H:5.3, roofH:0.3 },
+    about:'A split-level apartment with three bedrooms. The ground floor has an open living and dining area, a kitchen and a bathroom, with stairs leading up. The level above has the master bedroom, two further bedrooms, a second bathroom and a landing. Concrete block walls, flat concrete roof, tiled floors.',
+    included:[
+      '3 bedrooms (master + two more)',
+      'Open-plan living &amp; dining area',
+      'Separate kitchen',
+      '2 bathrooms',
+      'Split-level over two storeys',
+      'Hot &amp; cold water supply',
+      'Full electrical wiring',
+    ],
+    rooms:[
+      { label:'Master Bedroom', sqm:9.0,  fill:'#dce8f5', dot:'#3a7bd5' },
+      { label:'Bedroom',        sqm:7.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Bedroom 2',      sqm:6.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Living / Dining', sqm:16.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',        sqm:4.0,  fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom (Ground)', sqm:3.5, fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Bathroom (Upper)',  sqm:4.0, fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Landing',        sqm:4.5,  fill:'#f5f5f5', dot:'#90a4ae' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Ceramic tiles throughout',
+      'Foundation':'RC strip, 650mm',
+      'Ceiling':'Painted concrete soffit + PVC in wet areas',
+      'Build time':'12 – 16 weeks',
+      'Doors':'6 (external + internal)',
+      'Windows':'8 × aluminium sliding',
+      'Plumbing':'Hot + cold water, WC, shower, basin',
+      'Electrical':'Full wiring, consumer unit',
+    },
+    floorPlans:[
+      {
+        name:'Ground Floor',
+        W:4.0, D:4.5,
+        rooms:[
+          { x:0.2, y:0.2, w:2.5, h:4.1, label:'Living / Dining', sub:'', fill:'#fdf3e3' },
+          { x:2.9, y:0.2, w:0.9, h:1.9, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+          { x:2.9, y:2.3, w:0.9, h:1.8, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+        ],
+        partitions:[
+          { x1:2.7, y1:0.2, x2:2.7, y2:4.3 },
+          { x1:2.9, y1:2.1, x2:3.8, y2:2.1 },
+        ],
+        doors:[{ wall:'bottom', x:1.2, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.5, w:1.6 },
+          { wall:'top', x:3.1, w:0.8 },
+          { wall:'right', y:3.0, w:1.0 },
+        ],
+      },
+      {
+        name:'Upper Floor',
+        W:4.0, D:4.5,
+        rooms:[
+          { x:0.2, y:0.2, w:1.9, h:1.8, label:'Bedroom', sub:'', fill:'#dce8f5' },
+          { x:2.1, y:0.2, w:1.7, h:1.8, label:'Bedroom 2', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:2.0, w:1.9, h:2.3, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+          { x:2.1, y:2.0, w:1.7, h:0.9, label:'Landing', sub:'', fill:'#f5f5f5' },
+          { x:2.1, y:2.9, w:1.7, h:1.4, label:'Master Bedroom', sub:'', fill:'#dce8f5' },
+        ],
+        partitions:[
+          { x1:2.1, y1:0.2, x2:2.1, y2:4.3 },
+          { x1:0.2, y1:2.0, x2:3.8, y2:2.0 },
+          { x1:2.1, y1:2.9, x2:3.8, y2:2.9 },
+        ],
+        doors:[{ wall:'top', x:2.9, w:0.9, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.0, w:1.2 },
+          { wall:'left', y:3.0, w:1.2 },
+          { wall:'right', y:1.0, w:1.2 },
+          { wall:'right', y:3.5, w:1.0 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T6: $65,000 ───────────────────────────────────────────── */
+  {
+    id:'t6', price_usd:65000, price_rwf:84_500_000,
+    label:'$65,000', rwf_label:'84.5M RWF',
+    name:'3-Bed Quality', tag:'Premium Mid',
+    tagline:'Three bedrooms with quality finishes throughout',
+    sqm:63, floors:2,
+    dims:{ W:4.0, D:7.9, H:5.3, roofH:0.3 },
+    about:'A spacious two-storey, three-bedroom apartment finished to a higher standard. The ground floor has an open living and dining room, kitchen and bathroom. Upstairs are the master bedroom, two further bedrooms and a landing. Quality tiling, painted walls and aluminium windows throughout.',
+    included:[
+      '3 bedrooms (master + two more)',
+      'Open-plan living &amp; dining area',
+      'Separate kitchen',
+      'Bathroom with quality fittings',
+      'Two storeys',
+      'Full hot &amp; cold water supply',
+      'Full electrical wiring &amp; outdoor lighting',
+    ],
+    rooms:[
+      { label:'Master Bedroom', sqm:11.0, fill:'#dce8f5', dot:'#3a7bd5' },
+      { label:'Bedroom 2',      sqm:9.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Bedroom 3',      sqm:8.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Living / Dining', sqm:18.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',        sqm:5.0,  fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom',       sqm:5.0,  fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Hall / Landing', sqm:7.0,  fill:'#f5f5f5', dot:'#90a4ae' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted, quality finish',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Porcelain tiles throughout',
+      'Foundation':'RC strip, 650mm',
+      'Ceiling':'Suspended ceiling boards',
+      'Build time':'14 – 18 weeks',
+      'Doors':'7 (external + internal)',
+      'Windows':'9 × aluminium sliding',
+      'Plumbing':'Full hot & cold, WC, shower, basin',
+      'Electrical':'Full wiring, consumer unit, outdoor lighting',
+    },
+    floorPlans:[
+      {
+        name:'Ground Floor',
+        W:4.0, D:7.9,
+        rooms:[
+          { x:0.2, y:0.2, w:3.6, h:5.1, label:'Living / Dining', sub:'', fill:'#fdf3e3' },
+          { x:0.2, y:5.5, w:1.8, h:2.0, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+          { x:2.2, y:5.5, w:1.6, h:2.0, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+        ],
+        partitions:[
+          { x1:0.2, y1:5.3, x2:3.8, y2:5.3 },
+          { x1:2.0, y1:5.3, x2:2.0, y2:7.5 },
+        ],
+        doors:[{ wall:'bottom', x:1.4, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'top', x:1.0, w:1.6 },
+          { wall:'left', y:1.5, w:1.6 },
+          { wall:'right', y:1.5, w:1.6 },
+          { wall:'left', y:4.0, w:1.4 },
+          { wall:'right', y:4.0, w:1.4 },
+        ],
+      },
+      {
+        name:'First Floor',
+        W:4.0, D:7.9,
+        rooms:[
+          { x:0.2, y:0.2, w:3.6, h:2.8, label:'Master Bedroom', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:3.2, w:3.6, h:2.0, label:'Bedroom 2', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:5.4, w:2.2, h:2.1, label:'Bedroom 3', sub:'', fill:'#dce8f5' },
+          { x:2.6, y:5.4, w:1.2, h:2.1, label:'Hall / Landing', sub:'', fill:'#f5f5f5' },
+        ],
+        partitions:[
+          { x1:0.2, y1:3.0, x2:3.8, y2:3.0 },
+          { x1:0.2, y1:5.2, x2:3.8, y2:5.2 },
+          { x1:2.4, y1:5.2, x2:2.4, y2:7.5 },
+        ],
+        doors:[{ wall:'top', x:1.4, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.5, w:1.6 },
+          { wall:'right', y:1.5, w:1.6 },
+          { wall:'left', y:4.0, w:1.6 },
+          { wall:'right', y:4.0, w:1.6 },
+          { wall:'left', y:6.5, w:1.2 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T7: $85,000 ───────────────────────────────────────────── */
+  {
+    id:'t7', price_usd:85000, price_rwf:110_500_000,
+    label:'$85,000', rwf_label:'110.5M RWF',
+    name:'4-Bed Duplex', tag:'Premium',
+    tagline:'Four bedrooms across two floors for larger families',
+    sqm:81, floors:2,
+    dims:{ W:4.5, D:9.0, H:5.3, roofH:0.3 },
+    about:'A large two-storey apartment with four bedrooms. The ground floor has an open living and dining area, a full kitchen, a bathroom and a storage room. Upstairs is the master bedroom with its own ensuite, plus three further bedrooms sharing a landing. Quality finishes throughout, with extra storage space.',
+    included:[
+      '4 bedrooms, incl. master with ensuite',
+      'Open-plan living &amp; dining area',
+      'Full kitchen',
+      'Family bathroom',
+      'Storage room',
+      'Two storeys',
+      'Full hot &amp; cold water supply',
+      'Full electrical wiring &amp; outdoor lighting',
+    ],
+    rooms:[
+      { label:'Master Bedroom', sqm:10.0, fill:'#dce8f5', dot:'#3a7bd5' },
+      { label:'Master Ensuite', sqm:3.5,  fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Bedroom 2',      sqm:8.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Bedroom 3',      sqm:8.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Bedroom 4',      sqm:8.0,  fill:'#dce8f5', dot:'#7986cb' },
+      { label:'Living / Dining', sqm:21.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',        sqm:6.0,  fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Bathroom',       sqm:5.0,  fill:'#e0f7fa', dot:'#80cbc4' },
+      { label:'Storage',        sqm:2.5,  fill:'#f9f7f0', dot:'#bcaaa4' },
+      { label:'Hall / Landing', sqm:9.0,  fill:'#f5f5f5', dot:'#90a4ae' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted, quality finish',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Porcelain tiles throughout',
+      'Foundation':'RC strip, 700mm',
+      'Ceiling':'Suspended ceiling boards',
+      'Build time':'18 – 22 weeks',
+      'Doors':'9 (external + internal)',
+      'Windows':'12 × aluminium sliding',
+      'Plumbing':'Full hot & cold, 2 bathrooms',
+      'Electrical':'Full wiring, consumer unit, outdoor lighting',
+    },
+    floorPlans:[
+      {
+        name:'Ground Floor',
+        W:4.5, D:9.0,
+        rooms:[
+          { x:0.2, y:0.2, w:4.1, h:5.1, label:'Living / Dining', sub:'', fill:'#fdf3e3' },
+          { x:0.2, y:5.5, w:2.0, h:2.0, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+          { x:2.4, y:5.5, w:1.9, h:2.0, label:'Bathroom', sub:'', fill:'#e0f7fa' },
+          { x:0.2, y:7.7, w:4.1, h:1.1, label:'Storage', sub:'', fill:'#f9f7f0' },
+        ],
+        partitions:[
+          { x1:0.2, y1:5.3, x2:4.3, y2:5.3 },
+          { x1:2.2, y1:5.3, x2:2.2, y2:7.5 },
+          { x1:0.2, y1:7.5, x2:4.3, y2:7.5 },
+        ],
+        doors:[{ wall:'bottom', x:1.5, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'top', x:1.0, w:1.8 },
+          { wall:'left', y:1.5, w:1.6 },
+          { wall:'right', y:1.5, w:1.6 },
+          { wall:'left', y:6.0, w:1.0 },
+          { wall:'right', y:6.0, w:1.0 },
+        ],
+      },
+      {
+        name:'First Floor',
+        W:4.5, D:9.0,
+        rooms:[
+          { x:0.2, y:0.2, w:4.1, h:2.4, label:'Master Bedroom', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:2.6, w:1.7, h:1.2, label:'Master Ensuite', sub:'', fill:'#e0f7fa' },
+          { x:1.9, y:2.6, w:2.4, h:1.2, label:'Hall / Landing', sub:'', fill:'#f5f5f5' },
+          { x:0.2, y:3.8, w:2.05, h:2.4, label:'Bedroom 2', sub:'', fill:'#dce8f5' },
+          { x:2.25, y:3.8, w:2.05, h:2.4, label:'Bedroom 3', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:6.2, w:4.1, h:2.6, label:'Bedroom 4', sub:'', fill:'#dce8f5' },
+        ],
+        partitions:[
+          { x1:0.2, y1:2.6, x2:4.3, y2:2.6 },
+          { x1:1.9, y1:2.6, x2:1.9, y2:3.8 },
+          { x1:0.2, y1:3.8, x2:4.3, y2:3.8 },
+          { x1:2.25, y1:3.8, x2:2.25, y2:6.2 },
+          { x1:0.2, y1:6.2, x2:4.3, y2:6.2 },
+        ],
+        doors:[{ wall:'top', x:1.5, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.4, w:1.6 },
+          { wall:'right', y:1.4, w:1.6 },
+          { wall:'left', y:5.0, w:1.4 },
+          { wall:'right', y:5.0, w:1.4 },
+          { wall:'left', y:7.5, w:1.6 },
+          { wall:'right', y:7.5, w:1.6 },
+        ],
+      },
+    ],
+  },
+
+  /* ── T8: $100,000 ──────────────────────────────────────────── */
+  {
+    id:'t8', price_usd:100000, price_rwf:130_000_000,
+    label:'$100,000', rwf_label:'130M RWF',
+    name:'4-Bed Premium', tag:'Premium Triplex',
+    tagline:'A spacious three-level apartment with premium finishes',
+    sqm:107, floors:3,
+    dims:{ W:4.5, D:7.9, H:7.9, roofH:0.3 },
+    about:'A premium three-level apartment with four bedrooms across the lower two floors and a large open living and dining space with a tall ceiling on the top floor. The ground level has two bedrooms and bathrooms, the middle level has the master bedroom and a fourth bedroom, and the top level is a bright open living, dining and kitchen area. High-quality finishes, large windows, and generous ceiling heights throughout.',
+    included:[
+      '4 bedrooms, incl. master with ensuite',
+      '3 bathrooms',
+      'Bright open-plan living, dining &amp; kitchen',
+      'Three storeys',
+      'Full hot &amp; cold water supply',
+      'Full electrical wiring, smart-ready',
+    ],
+    rooms:[
+      { label:'Master Bedroom', sqm:10.0, fill:'#dce8f5', dot:'#3a7bd5' },
+      { label:'Master Ensuite', sqm:3.5,  fill:'#e0f7fa', dot:'#26a69a' },
+      { label:'Bedroom 2',      sqm:8.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Bedroom 3',      sqm:8.0,  fill:'#dce8f5', dot:'#5c9bd6' },
+      { label:'Bedroom 4',      sqm:8.0,  fill:'#dce8f5', dot:'#7986cb' },
+      { label:'Bathroom 2',     sqm:4.0,  fill:'#e0f7fa', dot:'#80cbc4' },
+      { label:'Bathroom 3',     sqm:4.0,  fill:'#e0f7fa', dot:'#80cbc4' },
+      { label:'Living / Dining', sqm:36.0, fill:'#fdf3e3', dot:'#d4a832' },
+      { label:'Kitchen',        sqm:8.0,  fill:'#e8f5e9', dot:'#66bb6a' },
+      { label:'Hall / Landing', sqm:17.5, fill:'#f5f5f5', dot:'#90a4ae' },
+    ],
+    spec:{
+      'Wall type':'Concrete blocks, plastered + painted, premium finish',
+      'Roof type':'Flat concrete slab',
+      'Floor finish':'Porcelain tiles throughout',
+      'Foundation':'RC raft slab',
+      'Ceiling':'Suspended ceiling, tall ceiling on top floor',
+      'Build time':'22 – 28 weeks',
+      'Doors':'11 (external + internal)',
+      'Windows':'14 × aluminium double-glazed',
+      'Plumbing':'Full hot & cold, 3 bathrooms',
+      'Electrical':'Full wiring, consumer unit, smart-ready',
+    },
+    floorPlans:[
+      {
+        name:'Ground Floor',
+        W:4.5, D:7.9,
+        rooms:[
+          { x:0.2, y:0.2, w:4.1, h:1.95, label:'Bedroom 2', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:2.35, w:4.1, h:1.95, label:'Bedroom 3', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:4.5, w:2.0, h:1.4, label:'Bathroom 2', sub:'', fill:'#e0f7fa' },
+          { x:2.4, y:4.5, w:1.9, h:1.4, label:'Bathroom 3', sub:'', fill:'#e0f7fa' },
+          { x:0.2, y:6.1, w:4.1, h:1.6, label:'Hall / Landing', sub:'', fill:'#f5f5f5' },
+        ],
+        partitions:[
+          { x1:0.2, y1:2.15, x2:4.3, y2:2.15 },
+          { x1:0.2, y1:4.3, x2:4.3, y2:4.3 },
+          { x1:2.2, y1:4.5, x2:2.2, y2:5.9 },
+          { x1:0.2, y1:5.9, x2:4.3, y2:5.9 },
+        ],
+        doors:[{ wall:'bottom', x:1.5, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.0, w:1.6 },
+          { wall:'right', y:1.0, w:1.6 },
+          { wall:'left', y:3.3, w:1.6 },
+          { wall:'right', y:3.3, w:1.6 },
+          { wall:'left', y:6.9, w:1.4 },
+        ],
+      },
+      {
+        name:'First Floor',
+        W:4.5, D:7.9,
+        rooms:[
+          { x:0.2, y:0.2, w:4.1, h:2.45, label:'Master Bedroom', sub:'', fill:'#dce8f5' },
+          { x:0.2, y:2.85, w:2.0, h:2.7, label:'Master Ensuite', sub:'', fill:'#e0f7fa' },
+          { x:2.4, y:2.85, w:1.9, h:2.7, label:'Hall / Landing', sub:'', fill:'#f5f5f5' },
+          { x:0.2, y:5.75, w:4.1, h:1.95, label:'Bedroom 4', sub:'', fill:'#dce8f5' },
+        ],
+        partitions:[
+          { x1:0.2, y1:2.65, x2:4.3, y2:2.65 },
+          { x1:2.2, y1:2.85, x2:2.2, y2:5.55 },
+          { x1:0.2, y1:5.55, x2:4.3, y2:5.55 },
+        ],
+        doors:[{ wall:'top', x:1.5, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'left', y:1.4, w:1.6 },
+          { wall:'right', y:1.4, w:1.6 },
+          { wall:'left', y:6.7, w:1.6 },
+          { wall:'right', y:6.7, w:1.6 },
+        ],
+      },
+      {
+        name:'Second Floor',
+        W:4.5, D:7.9,
+        rooms:[
+          { x:0.2, y:0.2, w:4.1, h:5.6, label:'Living / Dining', sub:'', fill:'#fdf3e3' },
+          { x:0.2, y:6.0, w:4.1, h:1.5, label:'Kitchen', sub:'', fill:'#e8f5e9' },
+        ],
+        partitions:[
+          { x1:0.2, y1:5.8, x2:4.3, y2:5.8 },
+        ],
+        doors:[{ wall:'bottom', x:1.5, w:1.0, hinge:'r' }],
+        windows:[
+          { wall:'top', x:1.0, w:2.0 },
+          { wall:'left', y:1.5, w:1.8 },
+          { wall:'right', y:1.5, w:1.8 },
+          { wall:'left', y:4.0, w:1.6 },
+          { wall:'right', y:4.0, w:1.6 },
+        ],
+      },
+    ],
+  },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════════════════════════ */
+const params = new URLSearchParams(window.location.search);
+const tier = TIERS.find(t => t.id === params.get('id')) || TIERS[0];
+
+function render() {
+  document.title = `${tier.name} (${tier.label}) — Imali.biz`;
+  const page = document.getElementById('hdPage');
+  const floorPlans = tier.floorPlans;
+
+  const roomsHTML = tier.rooms.map(r =>
+    `<div class="hd-room-item">
+       <span class="hd-room-dot" style="background:${r.dot}"></span>
+       <span class="hd-room-name">${r.label}</span>
+       <span class="hd-room-sqm">${r.sqm}m²</span>
+     </div>`).join('');
+
+  const includedHTML = tier.included.map(item =>
+    `<div class="hd-incl-item">
+       <span class="hd-incl-check">✓</span>
+       <span class="hd-incl-text">${item}</span>
+     </div>`
+  ).join('');
+
+  const floorTabsHTML = floorPlans.length > 1 ? `
+    <div class="hd-floor-tabs">
+      ${floorPlans.map((f, i) => `
+        <button class="hd-floor-tab ${i === 0 ? 'active' : ''}" data-floor="${i}" onclick="switchFloor(${i})">
+          ${f.name}
+        </button>
+      `).join('')}
+    </div>
+  ` : '';
+
+  page.innerHTML = `
+    <div class="hd-header">
+      <div class="hd-header-inner">
+        <a href="homes.html" class="hd-back">← Back to Affordable Homes</a>
+        <div class="hd-tag">${tier.tag}</div>
+        <div class="hd-name">${tier.name}</div>
+        <div class="hd-tagline">${tier.tagline}</div>
+        <div class="hd-price-row">
+          <span class="hd-usd">${tier.label}</span>
+          <span class="hd-rwf">≈ ${tier.rwf_label}</span>
+          <span class="hd-sqm">·&nbsp; ${tier.sqm} m² · ${tier.floors} floor${tier.floors > 1 ? 's' : ''} · Est. build time: ${tier.spec['Build time']}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hd-content">
+      <!-- LEFT: Visuals -->
+      <div class="hd-visuals">
+        <div class="hd-vis-card">
+          <div class="hd-vis-label">3D Isometric View</div>
+          <div class="hd-floor-tabs hd-iso-tabs">
+            <button class="hd-floor-tab active" data-iso="0" onclick="switchIsoView(0)">Single Unit</button>
+            <button class="hd-floor-tab" data-iso="1" onclick="switchIsoView(1)">Condominium View</button>
+          </div>
+          <div class="hd-iso-wrap">
+            <svg id="iso-svg-0" viewBox="0 0 440 320" style="width:100%;max-width:440px;height:auto"></svg>
+            <svg id="iso-svg-1" viewBox="0 0 440 320" style="width:100%;max-width:440px;height:auto;display:none"></svg>
+          </div>
+        </div>
+        <div class="hd-vis-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="hd-vis-label">Floor Plans</div>
+            <button class="hd-fp-btn" onclick="openFloorPlanFullscreen()" title="View fullscreen">⛶</button>
+          </div>
+          ${floorTabsHTML}
+          <div class="hd-plan-wrap">
+            ${floorPlans.map((f, i) => `
+              <svg id="plan-svg-${i}" style="width:100%;height:auto;max-width:420px; display:${i === 0 ? 'block' : 'none'};"></svg>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Info -->
+      <div class="hd-info">
+        <p class="hd-about">${tier.about}</p>
+
+        <div class="hd-section">
+          <div class="hd-sec-head">🏠 Rooms &amp; Spaces</div>
+          <div class="hd-sec-body">
+            <div class="hd-rooms">${roomsHTML}</div>
+            <div style="margin-top:0.6rem;font-size:0.65rem;color:var(--text-faint);font-style:italic;">
+              Total gross internal area: <strong style="color:var(--text-dim)">${tier.sqm} m²</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="hd-section">
+          <div class="hd-sec-head">✓ What's Included</div>
+          <div class="hd-sec-body">
+            <div class="hd-incl-list">${includedHTML}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <div class="hd-fp-modal" id="fpModal">
+      <div class="hd-fp-container">
+        <button class="hd-fp-close" onclick="closeFloorPlanFullscreen()">✕</button>
+        <div class="hd-fp-label">${tier.name} — Floor Plans</div>
+        ${floorPlans.length > 1 ? `
+          <div class="hd-floor-tabs" style="margin-bottom:1.5rem;">
+            ${floorPlans.map((f, i) => `
+              <button class="hd-floor-tab ${i === 0 ? 'active' : ''}" data-floor="${i}" onclick="switchFloorFullscreen(${i})">
+                ${f.name}
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
+        <div style="display:flex; justify-content:center; width:100%;">
+          ${floorPlans.map((f, i) => `
+            <svg id="fp-svg-${i}" style="max-width:800px; width:100%; display:${i === 0 ? 'block' : 'none'};"></svg>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Render the visuals
+  drawIso(document.getElementById('iso-svg-0'), tier);
+  drawCondo(document.getElementById('iso-svg-1'), tier);
+
+  // Render all floor plans
+  floorPlans.forEach((floorPlan, idx) => {
+    drawFloorPlan(document.getElementById(`plan-svg-${idx}`), floorPlan);
+  });
+}
+
+// Switch between floors (regular view)
+function switchFloor(floorIdx) {
+  document.querySelectorAll('.hd-plan-wrap svg').forEach(svg => svg.style.display = 'none');
+  const targetSvg = document.getElementById(`plan-svg-${floorIdx}`);
+  if (targetSvg) targetSvg.style.display = 'block';
+
+  document.querySelectorAll('.hd-content .hd-floor-tab').forEach(btn => {
+    const isActive = parseInt(btn.dataset.floor) === floorIdx;
+    btn.classList.toggle('active', isActive);
+  });
+}
+
+// Switch between iso views (single unit / condominium)
+function switchIsoView(viewIdx) {
+  document.querySelectorAll('.hd-iso-wrap svg').forEach((svg, i) => {
+    svg.style.display = i === viewIdx ? 'block' : 'none';
+  });
+
+  document.querySelectorAll('.hd-iso-tabs .hd-floor-tab').forEach(btn => {
+    const isActive = parseInt(btn.dataset.iso) === viewIdx;
+    btn.classList.toggle('active', isActive);
+  });
+}
+
+// Fullscreen floor plans
+function openFloorPlanFullscreen() {
+  const modal = document.getElementById('fpModal');
+  if (!modal) return;
+  modal.classList.add('open');
+
+  const planSvgs = document.querySelectorAll('.hd-plan-wrap svg');
+  planSvgs.forEach((svg, idx) => {
+    const fpSvg = document.getElementById(`fp-svg-${idx}`);
+    if (fpSvg && fpSvg.innerHTML === '') {
+      fpSvg.innerHTML = svg.innerHTML;
+      fpSvg.setAttribute('viewBox', svg.getAttribute('viewBox'));
+      fpSvg.style.width = '100%';
+      fpSvg.style.height = 'auto';
+    }
+  });
+}
+
+function closeFloorPlanFullscreen() {
+  const modal = document.getElementById('fpModal');
+  if (modal) modal.classList.remove('open');
+}
+
+// Switch between floors (fullscreen view)
+function switchFloorFullscreen(floorIdx) {
+  const modal = document.getElementById('fpModal');
+  if (!modal) return;
+
+  modal.querySelectorAll('svg[id^="fp-svg"]').forEach(svg => svg.style.display = 'none');
+  const targetSvg = document.getElementById(`fp-svg-${floorIdx}`);
+  if (targetSvg) targetSvg.style.display = 'block';
+
+  modal.querySelectorAll('.hd-floor-tab').forEach(btn => {
+    const isActive = parseInt(btn.dataset.floor) === floorIdx;
+    btn.classList.toggle('active', isActive);
+  });
+}
+
+/* ── 3D Building View (Cavalier Oblique projection) ──────────────
+   sx = ox + x·s + d·Dx·s   sy = oy − z·s − d·Dy·s
+   Dx = cos30°·0.5 = 0.433,  Dy = sin30°·0.5 = 0.25
+   ─────────────────────────────────────────────────────────────── */
+function drawIso(svgEl, tier) {
+  const { W, D, H } = tier.dims;
+  const rH = Math.max(tier.dims.roofH, 0.28);
+
+  const SVG_W = 440, SVG_H = 320, PAD = 34;
+  const Dx = 0.433, Dy = 0.25;
+
+  const totW = W + D * Dx;
+  const totH = H + rH + D * Dy;
+
+  const s = Math.min(
+    (SVG_W - PAD * 2) / totW,
+    (SVG_H - PAD * 2) / totH,
+    42
+  );
+
+  const ox = PAD;
+  const oy = SVG_H - PAD;
+
+  function P(x, d, z) {
+    return `${(ox + x*s + d*Dx*s).toFixed(1)},${(oy - z*s - d*Dy*s).toFixed(1)}`;
+  }
+  function poly(pts, fill, stroke = 'rgba(0,0,0,0.22)', sw = 1) {
+    return `<polygon points="${pts}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  }
+  function seg(a, b, stroke = 'rgba(0,0,0,0.28)', sw = 0.9) {
+    const [ax,ay] = a.split(','), [bx,by] = b.split(',');
+    return `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
+  }
+
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  const WF  = dark ? '#8ab4cc' : '#a8c8de';
+  const WR  = dark ? '#5a8298' : '#7aa2b8';
+  const RT  = dark ? '#cfd6da' : '#eceae4';
+  const RF  = dark ? '#9aa3a8' : '#cac9c2';
+  const RR  = dark ? '#6e767a' : '#aaa9a1';
+  const DC  = '#3e2a10';
+  const WG  = '#b8def2';
+  const WFr = '#4a7a94';
+
+  let svg = '';
+
+  const shX = (ox + W*s/2 + D*Dx*s/2).toFixed(0);
+  const shY = (oy + 6).toFixed(0);
+  svg += `<ellipse cx="${shX}" cy="${shY}" rx="${(W*s*0.52).toFixed(0)}" ry="${(8+D*Dy*s*0.4).toFixed(0)}" fill="rgba(0,0,0,0.10)" filter="url(#oblBlur)"/>`;
+
+  // ── Right / depth face ──────────────────────────────────────────
+  svg += poly([P(W,0,0), P(W,D,0), P(W,D,H), P(W,0,H)].join(' '), WR);
+
+  const nFloors = Math.max(1, tier.floors || 2);
+  const floorH = H / nFloors;
+  const nRW  = Math.max(1, Math.round(D / 3));
+  const rWStep = (D - 0.6) / nRW;
+
+  for (let f = 0; f < nFloors; f++) {
+    const floorBase = f * floorH;
+    const winZ1 = floorBase + floorH * 0.35;
+    const winZ2 = floorBase + floorH * 0.85;
+
+    for (let i = 0; i < nRW; i++) {
+      const wd = 0.35 + i * rWStep;
+      const ww = Math.min(rWStep * 0.6, 1.0);
+      if (wd + ww < D - 0.2 && ww > 0.3) {
+        svg += poly([P(W,wd,winZ1), P(W,wd+ww,winZ1), P(W,wd+ww,winZ2), P(W,wd,winZ2)].join(' '), WG, WFr, 0.9);
+        svg += seg(P(W,wd+ww/2,winZ1), P(W,wd+ww/2,winZ2), WFr, 0.5);
+        svg += seg(P(W,wd,winZ1+floorH*0.25), P(W,wd+ww,winZ1+floorH*0.25), WFr, 0.5);
+      }
+    }
+  }
+
+  // ── Front face ─────────────────────────────────────────────────
+  svg += poly([P(0,0,0), P(W,0,0), P(W,0,H), P(0,0,H)].join(' '), WF);
+
+  const dw = Math.min(0.9, W * 0.13), dh = Math.min(2.1, H * 0.84), dxL = W * 0.10;
+  svg += poly([P(dxL,0,0), P(dxL+dw,0,0), P(dxL+dw,0,dh), P(dxL,0,dh)].join(' '), DC, 'rgba(0,0,0,0.4)', 1);
+  svg += `<circle cx="${(ox+(dxL+dw*0.75)*s).toFixed(1)}" cy="${(oy-dh*s*0.45).toFixed(1)}" r="2.5" fill="rgba(255,230,160,0.85)"/>`;
+
+  const fwS  = dxL + dw + 0.35;
+  const fwR  = W - fwS - 0.25;
+  const nFW  = Math.max(1, Math.round(fwR / 2.5));
+  const fwSt = fwR / nFW;
+
+  for (let f = 0; f < nFloors; f++) {
+    const floorBase = f * floorH;
+    const winZ1 = floorBase + floorH * 0.35;
+    const winZ2 = floorBase + floorH * 0.85;
+
+    for (let i = 0; i < nFW; i++) {
+      const wx = fwS + i * fwSt;
+      const ww = Math.min(fwSt * 0.65, 1.1);
+      if (wx + ww < W - 0.15) {
+        svg += poly([P(wx,0,winZ1), P(wx+ww,0,winZ1), P(wx+ww,0,winZ2), P(wx,0,winZ2)].join(' '), WG, WFr, 0.9);
+        svg += seg(P(wx+ww/2,0,winZ1), P(wx+ww/2,0,winZ2), WFr, 0.5);
+        svg += seg(P(wx,0,winZ1+floorH*0.25), P(wx+ww,0,winZ1+floorH*0.25), WFr, 0.5);
+      }
+    }
+  }
+
+  svg += seg(P(0,0,0), P(0,0,H), 'rgba(0,0,0,0.32)', 1.2);
+  svg += seg(P(W,0,0), P(W,0,H), 'rgba(0,0,0,0.32)', 1.2);
+
+  // ── Flat roof slab (Swiss Cube) ──────────────────────────────────
+  svg += poly([P(W,0,H), P(W,D,H), P(W,D,H+rH), P(W,0,H+rH)].join(' '), RR);
+  svg += poly([P(0,0,H), P(W,0,H), P(W,0,H+rH), P(0,0,H+rH)].join(' '), RF);
+  svg += poly([P(0,0,H+rH), P(W,0,H+rH), P(W,D,H+rH), P(0,D,H+rH)].join(' '), RT);
+
+  svg += seg(P(0,0,H+rH),  P(W,0,H+rH),  'rgba(0,0,0,0.25)', 1);
+  svg += seg(P(W,0,H+rH),  P(W,D,H+rH),  'rgba(0,0,0,0.22)', 0.8);
+  svg += seg(P(0,D,H+rH),  P(W,D,H+rH),  'rgba(0,0,0,0.16)', 0.7);
+  svg += seg(P(0,0,H+rH),  P(0,D,H+rH),  'rgba(0,0,0,0.16)', 0.7);
+  svg += seg(P(0,0,H),     P(W,0,H),     'rgba(0,0,0,0.28)', 1);
+  svg += seg(P(W,0,H),     P(W,D,H),     'rgba(0,0,0,0.25)', 0.9);
+
+  // ── Veranda for larger homes ────────────────────────────────────
+  if (W >= 10) {
+    const vd = 1.5;
+    svg += poly([P(0,-vd,0.06), P(W,-vd,0.06), P(W,0,0.06), P(0,0,0.06)].join(' '),
+      'rgba(190,175,155,0.4)', 'rgba(140,120,90,0.4)', 0.7);
+    const nP = Math.ceil(W / 3.5);
+    for (let i = 0; i <= nP; i++) {
+      const px = (W / nP) * i;
+      svg += seg(P(px,-vd,0.06), P(px,-vd,H*0.85), 'rgba(120,95,60,0.75)', 1.3);
+    }
+    svg += seg(P(0,-vd,H*0.85), P(W,-vd,H*0.85), 'rgba(120,95,60,0.55)', 1);
+  }
+
+  svg += seg(P(0,0,0), P(W,0,0), 'rgba(0,0,0,0.28)', 1.2);
+
+  // ── Sky + ground backgrounds ────────────────────────────────────
+  const skyA = dark ? '#1a2d3d' : '#cce4f5';
+  const skyB = dark ? '#0d1822' : '#e8f5fc';
+  const gnd  = dark ? '#192418' : '#c8ddc0';
+
+  svgEl.innerHTML = `
+  <defs>
+    <filter id="oblBlur"><feGaussianBlur stdDeviation="5"/></filter>
+    <linearGradient id="oblSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${skyA}"/>
+      <stop offset="100%" stop-color="${skyB}"/>
+    </linearGradient>
+  </defs>
+  <rect width="${SVG_W}" height="${SVG_H}" fill="url(#oblSky)"/>
+  <rect x="0" y="${oy}" width="${SVG_W}" height="${SVG_H - oy}" fill="${gnd}" opacity="0.35"/>
+  ${svg}`;
+}
+
+/* ── 3D Condominium View ──────────────────────────────────────────
+   Repeated copies of this unit side-by-side, with the buyer's
+   apartment highlighted in gold.
+   ─────────────────────────────────────────────────────────────── */
+function drawCondo(svgEl, tier) {
+  const { W, D, H } = tier.dims;
+  const rH = Math.max(tier.dims.roofH, 0.28);
+
+  const nCols = 3;
+  const hlCol = 1;
+  const nFloors = Math.max(1, tier.floors || 1);
+  const floorH = H / nFloors;
+
+  const SVG_W = 440, SVG_H = 320, PAD = 34;
+  const Dx = 0.433, Dy = 0.25;
+
+  const totalW = nCols * W;
+  const totalH = H;
+
+  const totW = totalW + D * Dx;
+  const totH = totalH + rH + D * Dy;
+
+  const s = Math.min(
+    (SVG_W - PAD * 2) / totW,
+    (SVG_H - PAD * 2) / totH,
+    42
+  );
+
+  const ox = PAD;
+  const oy = SVG_H - PAD;
+
+  function P(x, d, z) {
+    return `${(ox + x*s + d*Dx*s).toFixed(1)},${(oy - z*s - d*Dy*s).toFixed(1)}`;
+  }
+  function poly(pts, fill, stroke = 'rgba(0,0,0,0.22)', sw = 1) {
+    return `<polygon points="${pts}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" stroke-linejoin="round"/>`;
+  }
+  function seg(a, b, stroke = 'rgba(0,0,0,0.28)', sw = 0.9) {
+    const [ax,ay] = a.split(','), [bx,by] = b.split(',');
+    return `<line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="${stroke}" stroke-width="${sw}" stroke-linecap="round"/>`;
+  }
+
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  const WF  = dark ? '#8ab4cc' : '#a8c8de';
+  const WR  = dark ? '#5a8298' : '#7aa2b8';
+  const RT  = dark ? '#cfd6da' : '#eceae4';
+  const RF  = dark ? '#9aa3a8' : '#cac9c2';
+  const RR  = dark ? '#6e767a' : '#aaa9a1';
+  const DC  = '#3e2a10';
+  const WG  = '#b8def2';
+  const WFr = '#4a7a94';
+  const HL  = '#d4a832';
+  const gridStroke = 'rgba(0,0,0,0.32)';
+
+  let svg = '';
+
+  const shX = (ox + totalW*s/2 + D*Dx*s/2).toFixed(0);
+  const shY = (oy + 6).toFixed(0);
+  svg += `<ellipse cx="${shX}" cy="${shY}" rx="${(totalW*s*0.52).toFixed(0)}" ry="${(8+D*Dy*s*0.4).toFixed(0)}" fill="rgba(0,0,0,0.10)" filter="url(#oblBlur2)"/>`;
+
+  svg += poly([P(totalW,0,0), P(totalW,D,0), P(totalW,D,totalH), P(totalW,0,totalH)].join(' '), WR);
+  svg += poly([P(0,0,0), P(totalW,0,0), P(totalW,0,totalH), P(0,0,totalH)].join(' '), WF);
+
+  for (let c = 0; c < nCols; c++) {
+    const cx0 = c * W;
+
+    for (let f = 0; f < nFloors; f++) {
+      const floorBase = f * floorH;
+      const winZ1 = floorBase + floorH * 0.35;
+      const winZ2 = floorBase + floorH * 0.85;
+
+      let fwS, fwR;
+      if (f === 0) {
+        const dw = Math.min(0.9, W * 0.13), dh = Math.min(2.1, floorH * 0.84), dxL = cx0 + W * 0.10;
+        svg += poly([P(dxL,0,0), P(dxL+dw,0,0), P(dxL+dw,0,dh), P(dxL,0,dh)].join(' '), DC, 'rgba(0,0,0,0.4)', 1);
+        fwS = dxL + dw + 0.35;
+        fwR = (cx0 + W) - fwS - 0.25;
+      } else {
+        fwS = cx0 + 0.25;
+        fwR = W - 0.5;
+      }
+
+      const nFW = Math.max(1, Math.round(fwR / 2.5));
+      const fwSt = fwR / nFW;
+      for (let i = 0; i < nFW; i++) {
+        const wx = fwS + i * fwSt;
+        const ww = Math.min(fwSt * 0.65, 1.1);
+        if (wx + ww < cx0 + W - 0.15) {
+          svg += poly([P(wx,0,winZ1), P(wx+ww,0,winZ1), P(wx+ww,0,winZ2), P(wx,0,winZ2)].join(' '), WG, WFr, 0.7);
+          svg += seg(P(wx+ww/2,0,winZ1), P(wx+ww/2,0,winZ2), WFr, 0.5);
+          svg += seg(P(wx,0,winZ1+floorH*0.25), P(wx+ww,0,winZ1+floorH*0.25), WFr, 0.5);
+        }
+      }
+    }
+  }
+
+  for (let c = 1; c < nCols; c++) {
+    svg += seg(P(c*W,0,0), P(c*W,0,totalH), gridStroke, 1);
+  }
+  for (let f = 1; f < nFloors; f++) {
+    svg += seg(P(0,0,f*floorH), P(totalW,0,f*floorH), gridStroke, 1);
+  }
+
+  svg += seg(P(0,0,0), P(0,0,totalH), 'rgba(0,0,0,0.32)', 1.2);
+  svg += seg(P(totalW,0,0), P(totalW,0,totalH), 'rgba(0,0,0,0.32)', 1.2);
+
+  svg += poly([P(totalW,0,totalH), P(totalW,D,totalH), P(totalW,D,totalH+rH), P(totalW,0,totalH+rH)].join(' '), RR);
+  svg += poly([P(0,0,totalH), P(totalW,0,totalH), P(totalW,0,totalH+rH), P(0,0,totalH+rH)].join(' '), RF);
+  svg += poly([P(0,0,totalH+rH), P(totalW,0,totalH+rH), P(totalW,D,totalH+rH), P(0,D,totalH+rH)].join(' '), RT);
+
+  svg += seg(P(0,0,totalH+rH), P(totalW,0,totalH+rH), 'rgba(0,0,0,0.25)', 1);
+  svg += seg(P(totalW,0,totalH+rH), P(totalW,D,totalH+rH), 'rgba(0,0,0,0.22)', 0.8);
+  svg += seg(P(0,0,totalH), P(totalW,0,totalH), 'rgba(0,0,0,0.28)', 1);
+  svg += seg(P(totalW,0,totalH), P(totalW,D,totalH), 'rgba(0,0,0,0.25)', 0.9);
+
+  svg += seg(P(0,0,0), P(totalW,0,0), 'rgba(0,0,0,0.28)', 1.2);
+
+  // ── Highlight the buyer's unit ──────────────────────────────────
+  const hx0 = hlCol * W;
+  svg += poly([P(hx0,0,0), P(hx0+W,0,0), P(hx0+W,0,H), P(hx0,0,H)].join(' '), 'rgba(212,168,50,0.32)', HL, 2.5);
+
+  const labelX = (ox + (hx0 + W/2)*s).toFixed(1);
+  const roofTopY = (oy - (H + rH)*s);
+  svg += seg(`${labelX},${roofTopY.toFixed(1)}`, `${labelX},${(roofTopY - 14).toFixed(1)}`, HL, 1.5);
+  svg += `<text x="${labelX}" y="${(roofTopY - 18).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="700" fill="${HL}" font-family="'DM Sans', sans-serif">Your Apartment</text>`;
+
+  const skyA = dark ? '#1a2d3d' : '#cce4f5';
+  const skyB = dark ? '#0d1822' : '#e8f5fc';
+  const gnd  = dark ? '#192418' : '#c8ddc0';
+
+  svgEl.innerHTML = `
+  <defs>
+    <filter id="oblBlur2"><feGaussianBlur stdDeviation="5"/></filter>
+    <linearGradient id="oblSky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${skyA}"/>
+      <stop offset="100%" stop-color="${skyB}"/>
+    </linearGradient>
+  </defs>
+  <rect width="${SVG_W}" height="${SVG_H}" fill="url(#oblSky2)"/>
+  <rect x="0" y="${oy}" width="${SVG_W}" height="${SVG_H - oy}" fill="${gnd}" opacity="0.35"/>
+  ${svg}`;
+}
+
+/* ── Floor Plan ──────────────────────────────────────────────── */
+function drawFloorPlan(svgEl, plan) {
+  const maxW_px = 400, maxH_px = 280;
+  const pad = 28;
+  const scaleX = (maxW_px - pad*2) / plan.W;
+  const scaleY = (maxH_px - pad*2) / plan.D;
+  const s = Math.min(scaleX, scaleY, 42);
+  const totalW = plan.W * s + pad*2;
+  const totalH = plan.D * s + pad*2;
+  const wtFactor = plan.W < 5 && plan.D < 5 ? 0.12 : 0.22;
+  const wt = Math.max(3, s * wtFactor);
+  const halfWt = wt / 2;
+
+  svgEl.setAttribute('viewBox', `0 0 ${totalW.toFixed(0)} ${totalH.toFixed(0)}`);
+
+  function sx(x) { return pad + x * s; }
+  function sy(y) { return pad + y * s; }
+
+  let out = '';
+
+  out += `<rect x="0" y="0" width="${totalW.toFixed(0)}" height="${totalH.toFixed(0)}" fill="white"/>`;
+
+  out += `<defs>
+    <pattern id="hatch" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+    </pattern>
+    <pattern id="hatch2" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(38,166,154,0.15)" stroke-width="2"/>
+    </pattern>
+  </defs>`;
+
+  out += `<rect x="${(pad-halfWt/2).toFixed(1)}" y="${(pad-halfWt/2).toFixed(1)}" width="${(plan.W*s+halfWt).toFixed(1)}" height="${(plan.D*s+halfWt).toFixed(1)}" fill="url(#hatch)" rx="1"/>`;
+
+  for (const r of plan.rooms) {
+    if (!r.w || !r.h) continue;
+    out += `<rect x="${sx(r.x).toFixed(1)}" y="${sy(r.y).toFixed(1)}" width="${(r.w*s).toFixed(1)}" height="${(r.h*s).toFixed(1)}" fill="${r.fill}" stroke="none"/>`;
+  }
+
+  for (const p of (plan.partitions || [])) {
+    out += `<line x1="${sx(p.x1).toFixed(1)}" y1="${sy(p.y1).toFixed(1)}" x2="${sx(p.x2).toFixed(1)}" y2="${sy(p.y2).toFixed(1)}" stroke="#1a1a2e" stroke-width="${(wt*0.55).toFixed(1)}" stroke-linecap="square"/>`;
+  }
+
+  out += `<rect x="${pad.toFixed(1)}" y="${pad.toFixed(1)}" width="${(plan.W*s).toFixed(1)}" height="${(plan.D*s).toFixed(1)}" fill="none" stroke="#1a1a2e" stroke-width="${wt.toFixed(1)}"/>`;
+
+  for (const w of (plan.windows || [])) {
+    const ww = (w.w || 0.8) * s;
+    if (w.wall === 'top') {
+      const wx = sx(w.x||0);
+      out += `<line x1="${wx.toFixed(1)}" y1="${pad.toFixed(1)}" x2="${(wx+ww).toFixed(1)}" y2="${pad.toFixed(1)}" stroke="white" stroke-width="${wt.toFixed(1)}"/>`;
+      out += `<line x1="${wx.toFixed(1)}" y1="${(pad-1).toFixed(1)}" x2="${(wx+ww).toFixed(1)}" y2="${(pad-1).toFixed(1)}" stroke="#3a8fc0" stroke-width="2"/>`;
+      out += `<line x1="${(wx+ww/2).toFixed(1)}" y1="${(pad-4).toFixed(1)}" x2="${(wx+ww/2).toFixed(1)}" y2="${(pad+3).toFixed(1)}" stroke="#3a8fc0" stroke-width="0.7"/>`;
+    } else if (w.wall === 'bottom') {
+      const wy = sy(plan.D), wx = sx(w.x||0);
+      out += `<line x1="${wx.toFixed(1)}" y1="${wy.toFixed(1)}" x2="${(wx+ww).toFixed(1)}" y2="${wy.toFixed(1)}" stroke="white" stroke-width="${wt.toFixed(1)}"/>`;
+      out += `<line x1="${wx.toFixed(1)}" y1="${(wy+1).toFixed(1)}" x2="${(wx+ww).toFixed(1)}" y2="${(wy+1).toFixed(1)}" stroke="#3a8fc0" stroke-width="2"/>`;
+      out += `<line x1="${(wx+ww/2).toFixed(1)}" y1="${(wy-3).toFixed(1)}" x2="${(wx+ww/2).toFixed(1)}" y2="${(wy+4).toFixed(1)}" stroke="#3a8fc0" stroke-width="0.7"/>`;
+    } else if (w.wall === 'left') {
+      const wy = sy(w.y||0), wh = (w.w||0.8)*s;
+      out += `<line x1="${pad.toFixed(1)}" y1="${wy.toFixed(1)}" x2="${pad.toFixed(1)}" y2="${(wy+wh).toFixed(1)}" stroke="white" stroke-width="${wt.toFixed(1)}"/>`;
+      out += `<line x1="${(pad-1).toFixed(1)}" y1="${wy.toFixed(1)}" x2="${(pad-1).toFixed(1)}" y2="${(wy+wh).toFixed(1)}" stroke="#3a8fc0" stroke-width="2"/>`;
+    } else if (w.wall === 'right') {
+      const wx = sx(plan.W), wy = sy(w.y||0), wh = (w.w||0.8)*s;
+      out += `<line x1="${wx.toFixed(1)}" y1="${wy.toFixed(1)}" x2="${wx.toFixed(1)}" y2="${(wy+wh).toFixed(1)}" stroke="white" stroke-width="${wt.toFixed(1)}"/>`;
+      out += `<line x1="${(wx+1).toFixed(1)}" y1="${wy.toFixed(1)}" x2="${(wx+1).toFixed(1)}" y2="${(wy+wh).toFixed(1)}" stroke="#3a8fc0" stroke-width="2"/>`;
+    }
+  }
+
+  for (const d of (plan.doors || [])) {
+    const dw = (d.w||0.9) * s;
+    const r = dw;
+    if (d.wall === 'bottom') {
+      const dx = sx(d.x||0), dy = sy(plan.D);
+      out += `<line x1="${dx.toFixed(1)}" y1="${dy.toFixed(1)}" x2="${(dx+dw).toFixed(1)}" y2="${dy.toFixed(1)}" stroke="white" stroke-width="${(wt+2).toFixed(1)}"/>`;
+      if (d.hinge === 'r') {
+        out += `<path d="M${dx.toFixed(1)},${(dy-1).toFixed(1)} L${dx.toFixed(1)},${(dy-r).toFixed(1)}" stroke="#555" stroke-width="1" fill="none"/>`;
+        out += `<path d="M${dx.toFixed(1)},${(dy-r).toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0,1 ${(dx+dw).toFixed(1)},${(dy-1).toFixed(1)}" stroke="#555" stroke-width="0.8" fill="rgba(200,200,200,0.15)" stroke-dasharray="2,1"/>`;
+      } else {
+        out += `<path d="M${(dx+dw).toFixed(1)},${(dy-1).toFixed(1)} L${(dx+dw).toFixed(1)},${(dy-r).toFixed(1)}" stroke="#555" stroke-width="1" fill="none"/>`;
+        out += `<path d="M${(dx+dw).toFixed(1)},${(dy-r).toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0,0 ${dx.toFixed(1)},${(dy-1).toFixed(1)}" stroke="#555" stroke-width="0.8" fill="rgba(200,200,200,0.15)" stroke-dasharray="2,1"/>`;
+      }
+    } else if (d.wall === 'top') {
+      const dx = sx(d.x||0), dy = sy(0);
+      out += `<line x1="${dx.toFixed(1)}" y1="${dy.toFixed(1)}" x2="${(dx+dw).toFixed(1)}" y2="${dy.toFixed(1)}" stroke="white" stroke-width="${(wt+2).toFixed(1)}"/>`;
+      if (d.hinge === 'r') {
+        out += `<path d="M${dx.toFixed(1)},${(dy+1).toFixed(1)} L${dx.toFixed(1)},${(dy+r).toFixed(1)}" stroke="#555" stroke-width="1" fill="none"/>`;
+        out += `<path d="M${dx.toFixed(1)},${(dy+r).toFixed(1)} A${r.toFixed(1)},${r.toFixed(1)} 0 0,0 ${(dx+dw).toFixed(1)},${(dy+1).toFixed(1)}" stroke="#555" stroke-width="0.8" fill="rgba(200,200,200,0.15)" stroke-dasharray="2,1"/>`;
+      }
+    }
+  }
+
+  for (const r of plan.rooms) {
+    if (!r.w || !r.h || r.w < 0.5 || r.h < 0.5) continue;
+    const roomArea = r.w * r.h;
+    const minFs = roomArea < 20 ? 5 : 6;
+    const maxFs = plan.W < 5 && plan.D < 5 ? 8 : 11;
+    const fs = Math.min(maxFs, Math.max(minFs, r.w*s/6, r.h*s/5));
+
+    let textYOffset = 0;
+    const roomCenterY = r.y + r.h/2;
+
+    let partitionY = null;
+    for (const p of (plan.partitions || [])) {
+      if (p.y1 === p.y2) {
+        if (p.y1 > r.y && p.y1 < r.y + r.h) {
+          partitionY = p.y1;
+          break;
+        }
+      }
+    }
+
+    if (partitionY) {
+      if (Math.abs(partitionY - roomCenterY) < 0.5) {
+        textYOffset = roomCenterY - 0.8;
+      }
+    } else {
+      if (r.h < 2.0) {
+        textYOffset = -0.3;
+      } else if (r.h > 3.5) {
+        textYOffset = -0.5;
+      }
+    }
+
+    const cx = sx(r.x + r.w/2);
+    const cy = sy(partitionY !== null ? r.y + r.h/4 : r.y + r.h/2 + textYOffset);
+    out += `<text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" dominant-baseline="middle" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="${fs}px" fill="rgba(0,0,0,0.55)" font-weight="500">${r.label}</text>`;
+    if (r.sub && r.h*s > 25) {
+      out += `<text x="${cx.toFixed(1)}" y="${(cy+fs+1.5).toFixed(1)}" dominant-baseline="middle" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="${Math.max(4,(fs-1.5)).toFixed(0)}px" fill="rgba(0,0,0,0.3)">${r.sub}</text>`;
+    }
+  }
+
+  const dOffset = 14;
+  out += `<line x1="${pad}" y1="${(pad-dOffset).toFixed(1)}" x2="${(pad+plan.W*s).toFixed(1)}" y2="${(pad-dOffset).toFixed(1)}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>`;
+  out += `<text x="${(pad + plan.W*s/2).toFixed(1)}" y="${(pad-dOffset-4).toFixed(1)}" text-anchor="middle" font-family="DM Sans" font-size="9px" fill="rgba(0,0,0,0.45)">${plan.W}m</text>`;
+
+  out += `<line x1="${(pad-dOffset).toFixed(1)}" y1="${pad}" x2="${(pad-dOffset).toFixed(1)}" y2="${(pad+plan.D*s).toFixed(1)}" stroke="rgba(0,0,0,0.3)" stroke-width="1"/>`;
+  out += `<text x="${(pad-dOffset-3).toFixed(1)}" y="${(pad + plan.D*s/2).toFixed(1)}" text-anchor="middle" font-family="DM Sans" font-size="9px" fill="rgba(0,0,0,0.45)" writing-mode="tb-rl" transform="rotate(-90, ${(pad-dOffset-3).toFixed(1)}, ${(pad+plan.D*s/2).toFixed(1)})">${plan.D}m</text>`;
+
+  const cx0 = totalW - 22, cy0 = totalH - 22;
+  out += `<circle cx="${cx0}" cy="${cy0}" r="12" fill="rgba(0,0,0,0.08)" stroke="rgba(0,0,0,0.2)" stroke-width="0.8"/>`;
+  out += `<path d="M${cx0},${cy0-9} L${cx0+4},${cy0+2} L${cx0},${cy0+1} L${cx0-4},${cy0+2}Z" fill="rgba(200,82,26,0.7)"/>`;
+  out += `<text x="${cx0}" y="${cy0-11}" text-anchor="middle" font-size="7px" fill="rgba(0,0,0,0.5)" font-family="DM Sans" font-weight="500">N</text>`;
+
+  svgEl.innerHTML = out;
+}
+
+render();
+
+/* ── CURSOR ── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx - 5}px,${my - 5}px)`;
+});
+(function animRing() {
+  rx += (mx - rx - 18) * .12; ry += (my - ry - 18) * .12;
+  ring.style.transform = `translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(animRing);
+})();
+
+/* ── THEME ── */
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('imali-theme', next);
+  document.getElementById('themeIcon').textContent  = next === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
+  // Re-render to refresh ISO sky gradients for the new theme
+  render();
+}
+document.addEventListener('DOMContentLoaded', function () {
+  const t = document.documentElement.getAttribute('data-theme') || 'light';
+  document.getElementById('themeIcon').textContent  = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+});
+</script>
+</body>
+</html>
