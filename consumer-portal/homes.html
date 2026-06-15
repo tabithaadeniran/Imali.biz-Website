@@ -49,13 +49,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
   position: relative; overflow: hidden;
   padding: 5rem 2.5rem 3.5rem;
   background:
-    linear-gradient(110deg, rgba(28,26,22,0.88) 0%, rgba(28,26,22,0.72) 38%, rgba(28,26,22,0.40) 75%),
+    linear-gradient(110deg, rgba(20,18,15,0.94) 0%, rgba(20,18,15,0.86) 40%, rgba(20,18,15,0.62) 78%),
     url('https://images.pexels.com/photos/7587880/pexels-photo-7587880.jpeg?auto=compress&cs=tinysrgb&w=1920') center / cover no-repeat;
   border-bottom: 1px solid var(--border);
 }
 [data-theme="light"] .home-hero {
   background:
-    linear-gradient(110deg, rgba(245,240,232,0.92) 0%, rgba(245,240,232,0.78) 38%, rgba(245,240,232,0.32) 78%),
+    linear-gradient(110deg, rgba(245,240,232,0.96) 0%, rgba(245,240,232,0.90) 40%, rgba(245,240,232,0.66) 78%),
     url('https://images.pexels.com/photos/7587880/pexels-photo-7587880.jpeg?auto=compress&cs=tinysrgb&w=1920') center / cover no-repeat;
 }
 
@@ -92,12 +92,19 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 
 /* Hero text sits over a photo now — keep it legible against the dark overlay (dark theme),
    and tone it back down to the normal palette over the lighter overlay (light theme) */
-.home-hero-eyebrow, .home-hero-title, .home-stat-lbl { color: #f5f0e8; }
-.home-hero-sub { color: rgba(245,240,232,0.84); }
+.home-hero-eyebrow, .home-hero-title, .home-stat-lbl, .home-stat-val {
+  color: #f5f0e8; text-shadow: 0 2px 14px rgba(0,0,0,0.45);
+}
+.home-hero-sub { color: rgba(245,240,232,0.92); text-shadow: 0 1px 10px rgba(0,0,0,0.4); }
 [data-theme="light"] .home-hero-eyebrow,
 [data-theme="light"] .home-hero-title,
-[data-theme="light"] .home-stat-lbl { color: var(--text); }
-[data-theme="light"] .home-hero-sub { color: var(--text-dim); }
+[data-theme="light"] .home-stat-lbl,
+[data-theme="light"] .home-stat-val {
+  color: var(--text); text-shadow: 0 2px 14px rgba(255,255,255,0.55);
+}
+[data-theme="light"] .home-hero-sub {
+  color: rgba(26,24,20,0.78); text-shadow: 0 1px 10px rgba(255,255,255,0.5);
+}
 
 /* ── Content area ─────────────────────────────────────────────── */
 .home-content { padding: 3rem 2.5rem; max-width: 1300px; margin: 0 auto; }
@@ -138,6 +145,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
   margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border);
 }
 .home-card-usd { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--gold); }
+.home-card-from { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.15rem; }
 .home-card-rwf { font-size: 0.66rem; color: var(--text-faint); }
 
 /* ── CTA Footer ──────────────────────────────────────────────── */
@@ -224,21 +232,21 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 ══════════════════════════════════════════════════════════════ */
 const HOME_TYPES = [
   { id:'t1', name:'Micro Studio',  tag:'Essential',        sqm:14,  label:'$5,000',   rwf_label:'6.5M RWF',
-    img:'https://images.pexels.com/photos/33460628/pexels-photo-33460628.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.pexels.com/photos/1656169/pexels-photo-1656169.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id:'t2', name:'Studio',        tag:'Essential',        sqm:16,  label:'$8,000',   rwf_label:'10.4M RWF',
-    img:'https://images.pexels.com/photos/87223/pexels-photo-87223.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.pexels.com/photos/5375672/pexels-photo-5375672.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id:'t3', name:'2-Bed Starter', tag:'Family Entry',     sqm:31,  label:'$20,000',  rwf_label:'26M RWF',
-    img:'https://images.pexels.com/photos/280222/pexels-photo-280222.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.pexels.com/photos/30707660/pexels-photo-30707660.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id:'t4', name:'2-Bed Plus',    tag:'Family',           sqm:43,  label:'$30,000',  rwf_label:'39M RWF',
-    img:'https://images.pexels.com/photos/1115804/pexels-photo-1115804.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.pexels.com/photos/27307400/pexels-photo-27307400.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id:'t5', name:'3-Bed Duplex',  tag:'Family Plus',      sqm:54,  label:'$50,000',  rwf_label:'65M RWF',
-    img:'https://images.pexels.com/photos/280229/pexels-photo-280229.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.pexels.com/photos/29247927/pexels-photo-29247927.jpeg?auto=compress&cs=tinysrgb&w=800' },
   { id:'t6', name:'3-Bed Quality', tag:'Premium Mid',      sqm:63,  label:'$65,000',  rwf_label:'84.5M RWF',
-    img:'https://images.pexels.com/photos/206172/pexels-photo-206172.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.unsplash.com/photo-1640877268187-2fa6b2ed7a5f?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
   { id:'t7', name:'4-Bed Duplex',  tag:'Premium',          sqm:81,  label:'$85,000',  rwf_label:'110.5M RWF',
-    img:'https://images.pexels.com/photos/30484316/pexels-photo-30484316.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.unsplash.com/photo-1743819458014-f5cf74f175e3?q=80&w=387&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
   { id:'t8', name:'4-Bed Premium', tag:'Premium Triplex',  sqm:107, label:'$100,000', rwf_label:'130M RWF',
-    img:'https://images.pexels.com/photos/7031594/pexels-photo-7031594.jpeg?auto=compress&cs=tinysrgb&w=800' },
+    img:'https://images.pexels.com/photos/36611285/pexels-photo-36611285.jpeg?auto=compress&cs=tinysrgb&w=800' },
 ];
 
 function renderGrid() {
@@ -253,7 +261,7 @@ function renderGrid() {
         <div class="home-card-name">${h.name}</div>
         <div class="home-card-meta">${h.sqm} m² · Gross internal area</div>
         <div class="home-card-price-row">
-          <span class="home-card-usd">${h.label}</span>
+          <span class="home-card-usd"><span class="home-card-from">Starting from</span>${h.label}</span>
           <span class="home-card-rwf">≈ ${h.rwf_label}</span>
         </div>
       </div>

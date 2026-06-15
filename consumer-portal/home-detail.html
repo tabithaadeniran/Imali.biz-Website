@@ -45,8 +45,19 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 .hd-page { padding-top: 88px; min-height: 100vh; }
 
 /* ── Header ───────────────────────────────────────────────────── */
-.hd-header { background: var(--bg-alt); border-bottom: 1px solid var(--border); padding: 2.25rem 2.5rem 2rem; }
-.hd-header-inner { max-width: 1300px; margin: 0 auto; }
+.hd-header {
+  position: relative; overflow: hidden;
+  background:
+    linear-gradient(110deg, rgba(20,18,15,0.94) 0%, rgba(20,18,15,0.86) 40%, rgba(20,18,15,0.62) 78%),
+    var(--hd-photo) center / cover no-repeat;
+  border-bottom: 1px solid var(--border); padding: 2.25rem 2.5rem 2rem;
+}
+[data-theme="light"] .hd-header {
+  background:
+    linear-gradient(110deg, rgba(245,240,232,0.96) 0%, rgba(245,240,232,0.90) 40%, rgba(245,240,232,0.66) 78%),
+    var(--hd-photo) center / cover no-repeat;
+}
+.hd-header-inner { position: relative; z-index: 1; max-width: 1300px; margin: 0 auto; }
 
 .hd-back {
   display: inline-flex; align-items: center; gap: 0.4rem;
@@ -72,8 +83,31 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 }
 .hd-price-row { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
 .hd-usd { font-family: 'Syne', sans-serif; font-size: 2.1rem; font-weight: 700; color: var(--gold); }
+.hd-from { display: block; font-family: 'DM Sans', sans-serif; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.15rem; }
 .hd-rwf { font-size: 0.85rem; color: var(--text-faint); }
 .hd-sqm { font-size: 0.85rem; color: var(--text-faint); }
+
+/* Header text sits over a photo now — keep it legible against the dark overlay (dark theme),
+   and tone it back down to the normal palette over the lighter overlay (light theme) */
+.hd-name, .hd-usd, .hd-tag { text-shadow: 0 2px 14px rgba(0,0,0,0.45); }
+.hd-tagline, .hd-rwf, .hd-sqm, .hd-from, .hd-back { text-shadow: 0 1px 10px rgba(0,0,0,0.4); }
+.hd-name { color: #f5f0e8; }
+.hd-tagline { color: rgba(245,240,232,0.92); }
+.hd-rwf, .hd-sqm, .hd-from, .hd-back { color: rgba(245,240,232,0.85); }
+[data-theme="light"] .hd-name,
+[data-theme="light"] .hd-usd,
+[data-theme="light"] .hd-tag { text-shadow: 0 2px 14px rgba(255,255,255,0.55); }
+[data-theme="light"] .hd-tagline,
+[data-theme="light"] .hd-rwf,
+[data-theme="light"] .hd-sqm,
+[data-theme="light"] .hd-from,
+[data-theme="light"] .hd-back { text-shadow: 0 1px 10px rgba(255,255,255,0.5); }
+[data-theme="light"] .hd-name { color: var(--text); }
+[data-theme="light"] .hd-tagline { color: rgba(26,24,20,0.78); }
+[data-theme="light"] .hd-rwf,
+[data-theme="light"] .hd-sqm,
+[data-theme="light"] .hd-from,
+[data-theme="light"] .hd-back { color: rgba(26,24,20,0.68); }
 
 /* ── Content area ─────────────────────────────────────────────── */
 .hd-content {
@@ -141,6 +175,61 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
   color: var(--text-dim); transition: all 0.2s; margin-left: 0.8rem; opacity: 0.8;
 }
 .hd-fp-btn:hover { opacity: 1; color: var(--gold); }
+
+/* ── About blurb (sits above the gallery) ────────────────────── */
+.hd-about-wrap { padding: 1.75rem 2.5rem 0; max-width: 1300px; margin: 0 auto; }
+
+/* ── Photo gallery ────────────────────────────────────────────── */
+.hd-gallery {
+  padding: 1.5rem 2.5rem 0; max-width: 1300px; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.hd-gallery-label {
+  font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-faint); font-weight: 500; margin-bottom: 0.6rem;
+}
+.hd-gallery-strip {
+  display: flex; gap: 1rem; overflow-x: auto; padding-bottom: 0.6rem;
+}
+.hd-gallery-thumb {
+  flex: 0 0 auto; width: 340px; height: 230px; padding: 0;
+  border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
+  background: var(--bg-card); cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+@media (max-width: 700px) {
+  .hd-gallery-thumb { width: 260px; height: 180px; }
+}
+.hd-gallery-thumb:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.14); }
+.hd-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ── Photo lightbox ───────────────────────────────────────────── */
+.hd-lightbox {
+  display: none; position: fixed; inset: 0; z-index: 10001;
+  background: rgba(0,0,0,0.92); align-items: center; justify-content: center; padding: 2rem;
+}
+.hd-lightbox.open { display: flex; }
+.hd-lightbox img { max-width: 88vw; max-height: 82vh; border-radius: 8px; object-fit: contain; }
+.hd-lightbox-close {
+  position: absolute; top: 1.5rem; right: 1.5rem;
+  background: none; border: none; font-size: 1.6rem; color: #fff; cursor: pointer;
+  width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center;
+  opacity: 0.8; transition: opacity 0.2s;
+}
+.hd-lightbox-close:hover { opacity: 1; }
+.hd-lightbox-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
+  color: #fff; font-size: 1.8rem; line-height: 1; padding: 0.4rem 1rem; cursor: pointer;
+  border-radius: 8px; transition: background 0.2s;
+}
+.hd-lightbox-nav:hover { background: rgba(255,255,255,0.2); }
+.hd-lightbox-prev { left: 1.5rem; }
+.hd-lightbox-next { right: 1.5rem; }
+.hd-lightbox-caption {
+  position: absolute; bottom: 1.5rem; left: 0; right: 0; text-align: center;
+  color: rgba(255,255,255,0.65); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+}
 
 /* ── Right column: info ───────────────────────────────────────── */
 .hd-info { display: flex; flex-direction: column; gap: 1.5rem; }
@@ -224,12 +313,44 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; a
 
 <script>
 /* ══════════════════════════════════════════════════════════════
+   PHOTO GALLERY — shared exterior set + per-tier interior sets
+══════════════════════════════════════════════════════════════ */
+const EXT = {
+  smallComplex:    'assets/img/exterior/27442c8c6c11230527c7f9fda6e90d2a.webp',
+  modernBlock:     'assets/img/exterior/6f0d91072ba04bea86a05070ba46fa44.jpg',
+  poolComplexA:    'assets/img/exterior/735c50c589ff4f50be6c5d0f5cac3388.png',
+  poolComplexB:    'assets/img/exterior/8210307d28cb475e827332526fa2fe49.png',
+  duskTownhouse:   'assets/img/exterior/a090816606c002f84cea15e778ed5c4f.jpg',
+  megaTower:       'assets/img/exterior/aff37ff78e5c817b64e6c4b26d5df046.jpg',
+  highriseGarden:  'assets/img/exterior/b1ff13c207604f1fbd621efe9e82816a.png',
+  towerTrio:       'assets/img/exterior/b583619f7f514c8c9a55940e9aa8c0bd.png',
+  glassTowerDusk:  'assets/img/exterior/c6091a8e150526bd34aef358326b9147.jpg',
+  poolAerial:      'assets/img/exterior/e3ce65b4b5c44559addf14677763cc87.png',
+  towerEntryDusk:  'assets/img/exterior/f94317e76b794b6b95cc241a551317eb.jpg',
+  midriseLawn:     'assets/img/exterior/fd74751a9334462f84ac27613d8a2d58.png',
+};
+
+/* Each tier gets its own exterior set so it reads as a distinct property */
+const EXTERIOR_BY_TIER = {
+  t1: [EXT.smallComplex],
+  t2: [EXT.modernBlock],
+  t3: [EXT.duskTownhouse],
+  t4: [EXT.poolComplexA, EXT.poolComplexB],
+  t5: [EXT.poolAerial],
+  t6: [EXT.midriseLawn],
+  t7: [EXT.glassTowerDusk, EXT.towerEntryDusk],
+  t8: [EXT.megaTower, EXT.highriseGarden, EXT.towerTrio],
+};
+
+/* ══════════════════════════════════════════════════════════════
    HOME TYPE TIERS — ported from internal catalogue (units.html)
 ══════════════════════════════════════════════════════════════ */
 const TIERS = [
   /* ── T1: $5,000 ────────────────────────────────────────────── */
   {
     id:'t1', price_usd:5000, price_rwf:6_500_000,
+    img:'https://images.pexels.com/photos/1656169/pexels-photo-1656169.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    gallery:['assets/img/interior/t1/1.jpg','assets/img/interior/t1/2.webp','assets/img/interior/t1/3.webp'],
     label:'$5,000', rwf_label:'6.5M RWF',
     name:'Micro Studio', tag:'Essential',
     tagline:'A compact one-room home for one person',
@@ -286,6 +407,8 @@ const TIERS = [
   /* ── T2: $8,000 ────────────────────────────────────────────── */
   {
     id:'t2', price_usd:8000, price_rwf:10_400_000,
+    img:'https://images.pexels.com/photos/5375672/pexels-photo-5375672.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    gallery:['assets/img/interior/t2/1.webp','assets/img/interior/t2/2.webp','assets/img/interior/t2/3.jpg'],
     label:'$8,000', rwf_label:'10.4M RWF',
     name:'Studio', tag:'Essential',
     tagline:'A larger studio with a proper kitchen and bathroom',
@@ -343,6 +466,8 @@ const TIERS = [
   /* ── T3: $20,000 ───────────────────────────────────────────── */
   {
     id:'t3', price_usd:20000, price_rwf:26_000_000,
+    img:'https://images.pexels.com/photos/30707660/pexels-photo-30707660.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    gallery:['assets/img/interior/t3/1.webp','assets/img/interior/t3/2.webp','assets/img/interior/t3/3.webp','assets/img/interior/t3/4.jpg'],
     label:'$20,000', rwf_label:'26M RWF',
     name:'2-Bed Starter', tag:'Family Entry',
     tagline:'A master bedroom and second bedroom over a shared living level',
@@ -422,6 +547,8 @@ const TIERS = [
   /* ── T4: $30,000 ───────────────────────────────────────────── */
   {
     id:'t4', price_usd:30000, price_rwf:39_000_000,
+    img:'https://images.pexels.com/photos/27307400/pexels-photo-27307400.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    gallery:['assets/img/interior/t4/1.jpg','assets/img/interior/t4/2.jpg','assets/img/interior/t4/3.webp','assets/img/interior/t4/4.jpg','assets/img/interior/t4/5.jpg'],
     label:'$30,000', rwf_label:'39M RWF',
     name:'2-Bed Plus', tag:'Family',
     tagline:'Two bedrooms, two bathrooms and an open living level',
@@ -508,6 +635,8 @@ const TIERS = [
   /* ── T5: $50,000 ───────────────────────────────────────────── */
   {
     id:'t5', price_usd:50000, price_rwf:65_000_000,
+    img:'https://images.pexels.com/photos/29247927/pexels-photo-29247927.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    gallery:['assets/img/interior/t5/1.jpg','assets/img/interior/t5/2.jpg','assets/img/interior/t5/3.jpg','assets/img/interior/t5/4.jpg','assets/img/interior/t5/5.jpg','assets/img/interior/t5/6.webp','assets/img/interior/t5/7.jpg','assets/img/interior/t5/8.jpg'],
     label:'$50,000', rwf_label:'65M RWF',
     name:'3-Bed Duplex', tag:'Family Plus',
     tagline:'Split-level living with three bedrooms',
@@ -594,6 +723,8 @@ const TIERS = [
   /* ── T6: $65,000 ───────────────────────────────────────────── */
   {
     id:'t6', price_usd:65000, price_rwf:84_500_000,
+    img:'https://images.unsplash.com/photo-1640877268187-2fa6b2ed7a5f?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    gallery:['assets/img/interior/t6/1.jpg','assets/img/interior/t6/2.jpg','assets/img/interior/t6/3.jpg','assets/img/interior/t6/4.jpg','assets/img/interior/t6/5.jpg'],
     label:'$65,000', rwf_label:'84.5M RWF',
     name:'3-Bed Quality', tag:'Premium Mid',
     tagline:'Three bedrooms with quality finishes throughout',
@@ -681,6 +812,8 @@ const TIERS = [
   /* ── T7: $85,000 ───────────────────────────────────────────── */
   {
     id:'t7', price_usd:85000, price_rwf:110_500_000,
+    img:'https://images.unsplash.com/photo-1743819458014-f5cf74f175e3?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    gallery:['assets/img/interior/t7/1.jpg','assets/img/interior/t7/2.jpg','assets/img/interior/t7/3.jpg','assets/img/interior/t7/4.jpg','assets/img/interior/t7/5.jpg'],
     label:'$85,000', rwf_label:'110.5M RWF',
     name:'4-Bed Duplex', tag:'Premium',
     tagline:'Four bedrooms across two floors for larger families',
@@ -779,6 +912,8 @@ const TIERS = [
   /* ── T8: $100,000 ──────────────────────────────────────────── */
   {
     id:'t8', price_usd:100000, price_rwf:130_000_000,
+    img:'https://images.pexels.com/photos/36611285/pexels-photo-36611285.jpeg?auto=compress&cs=tinysrgb&w=1600',
+    gallery:['assets/img/interior/t8/1.jpg','assets/img/interior/t8/2.webp','assets/img/interior/t8/3.jpg','assets/img/interior/t8/4.jpg','assets/img/interior/t8/5.jpg','assets/img/interior/t8/6.jpg'],
     label:'$100,000', rwf_label:'130M RWF',
     name:'4-Bed Premium', tag:'Premium Triplex',
     tagline:'A spacious three-level apartment with premium finishes',
@@ -897,6 +1032,7 @@ const tier = TIERS.find(t => t.id === params.get('id')) || TIERS[0];
 function render() {
   document.title = `${tier.name} (${tier.label}) — Imali.biz`;
   const page = document.getElementById('hdPage');
+  page.style.setProperty('--hd-photo', `url('${tier.img}')`);
   const floorPlans = tier.floorPlans;
 
   const roomsHTML = tier.rooms.map(r =>
@@ -931,9 +1067,36 @@ function render() {
         <div class="hd-name">${tier.name}</div>
         <div class="hd-tagline">${tier.tagline}</div>
         <div class="hd-price-row">
-          <span class="hd-usd">${tier.label}</span>
+          <span class="hd-usd"><span class="hd-from">Starting from</span>${tier.label}</span>
           <span class="hd-rwf">≈ ${tier.rwf_label}</span>
           <span class="hd-sqm">·&nbsp; ${tier.sqm} m² · ${tier.floors} floor${tier.floors > 1 ? 's' : ''} · Est. build time: ${tier.spec['Build time']}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hd-about-wrap">
+      <p class="hd-about">${tier.about}</p>
+    </div>
+
+    <div class="hd-gallery">
+      <div class="hd-gallery-section">
+        <div class="hd-gallery-label">Exterior</div>
+        <div class="hd-gallery-strip">
+          ${EXTERIOR_BY_TIER[tier.id].map((src, i) => `
+            <button class="hd-gallery-thumb" onclick="openLightbox('exterior', ${i})">
+              <img src="${src}" loading="lazy" alt="${tier.name} — exterior view ${i + 1}">
+            </button>
+          `).join('')}
+        </div>
+      </div>
+      <div class="hd-gallery-section">
+        <div class="hd-gallery-label">Interior</div>
+        <div class="hd-gallery-strip">
+          ${tier.gallery.map((src, i) => `
+            <button class="hd-gallery-thumb" onclick="openLightbox('interior', ${i})">
+              <img src="${src}" loading="lazy" alt="${tier.name} — interior view ${i + 1}">
+            </button>
+          `).join('')}
         </div>
       </div>
     </div>
@@ -968,8 +1131,6 @@ function render() {
 
       <!-- RIGHT: Info -->
       <div class="hd-info">
-        <p class="hd-about">${tier.about}</p>
-
         <div class="hd-section">
           <div class="hd-sec-head">🏠 Rooms &amp; Spaces</div>
           <div class="hd-sec-body">
@@ -1009,6 +1170,15 @@ function render() {
           `).join('')}
         </div>
       </div>
+    </div>
+
+    <!-- Photo Lightbox -->
+    <div class="hd-lightbox" id="lightboxModal">
+      <button class="hd-lightbox-close" onclick="closeLightbox()">✕</button>
+      <button class="hd-lightbox-nav hd-lightbox-prev" onclick="navLightbox(-1)">‹</button>
+      <img id="lightboxImg" src="" alt="">
+      <button class="hd-lightbox-nav hd-lightbox-next" onclick="navLightbox(1)">›</button>
+      <div class="hd-lightbox-caption" id="lightboxCaption"></div>
     </div>
   `;
 
@@ -1082,6 +1252,33 @@ function switchFloorFullscreen(floorIdx) {
     const isActive = parseInt(btn.dataset.floor) === floorIdx;
     btn.classList.toggle('active', isActive);
   });
+}
+
+// Photo gallery lightbox
+let lightboxSet = [];
+let lightboxIdx = 0;
+let lightboxCaptionPrefix = '';
+
+function openLightbox(which, idx) {
+  lightboxSet = which === 'exterior' ? EXTERIOR_BY_TIER[tier.id] : tier.gallery;
+  lightboxIdx = idx;
+  lightboxCaptionPrefix = which === 'exterior' ? `${tier.name} — Exterior` : `${tier.name} — Interior`;
+  updateLightbox();
+  document.getElementById('lightboxModal').classList.add('open');
+}
+
+function updateLightbox() {
+  document.getElementById('lightboxImg').src = lightboxSet[lightboxIdx];
+  document.getElementById('lightboxCaption').textContent = `${lightboxCaptionPrefix} · ${lightboxIdx + 1} / ${lightboxSet.length}`;
+}
+
+function closeLightbox() {
+  document.getElementById('lightboxModal').classList.remove('open');
+}
+
+function navLightbox(delta) {
+  lightboxIdx = (lightboxIdx + delta + lightboxSet.length) % lightboxSet.length;
+  updateLightbox();
 }
 
 /* ── 3D Building View (Cavalier Oblique projection) ──────────────
