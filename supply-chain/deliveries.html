@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Delivery Tracker — Supply Chain | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --steel: #2f6fb0;
+    --steel-hover: #25588f;
+    --steel-soft: rgba(47,111,176,0.10);
+    --steel-border: rgba(47,111,176,0.22);
+    --cursor-color: var(--steel);
+    --cursor-ring: rgba(47,111,176,0.35);
+  }
+  .nav-logo span { color: var(--steel); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { color: var(--steel); }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--steel); color: #fff; border-radius: 2rem; padding: 0.55rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--steel-hover); color: #fff; }
+  .nav-link.active { color: var(--steel); }
+
+  .page-wrap { padding-top: 72px; min-height: 100vh; }
+  .page-header { padding: 3rem 4rem 2rem; }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--steel); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--steel); }
+  .page-sub { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; max-width: 560px; margin-top: 0.6rem; }
+
+  .content-wrap { padding: 0 4rem 5rem; }
+
+  /* ORDER CARD */
+  .order-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; margin-bottom: 1.5rem; }
+  .order-head { display: grid; grid-template-columns: 90px 1fr auto; gap: 1.25rem; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+  .order-photo { width: 90px; height: 90px; border-radius: 0.85rem; overflow: hidden; }
+  .order-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .order-name { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .order-meta { font-size: 0.78rem; color: var(--text-faint); display: flex; gap: 1rem; flex-wrap: wrap; }
+  .order-status-block { text-align: right; }
+  .order-status-block .status-badge { margin-bottom: 0.4rem; }
+  .order-token { font-size: 0.74rem; color: var(--text-faint); }
+  .order-token strong { color: var(--steel); font-family: 'Syne', sans-serif; }
+
+  .status-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; border-radius: 2rem; padding: 0.3rem 0.75rem; white-space: nowrap; display: inline-block; }
+  .status-pending { background: rgba(212,168,50,0.15); color: var(--gold); border: 1px solid rgba(212,168,50,0.3); }
+  .status-progress { background: var(--steel-soft); color: var(--steel); border: 1px solid var(--steel-border); }
+  .status-complete { background: rgba(26,92,58,0.12); color: var(--emerald); border: 1px solid rgba(26,92,58,0.25); }
+
+  /* MILESTONE LIST */
+  .milestone-list { padding: 0.5rem 1.5rem 1.25rem; }
+  .milestone-row { display: grid; grid-template-columns: 28px 1fr auto auto; gap: 1rem; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+  .milestone-row:last-child { border-bottom: none; }
+  .ms-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; font-family: 'Syne', sans-serif; flex-shrink: 0; }
+  .ms-num.done { background: var(--emerald); color: white; }
+  .ms-num.active { background: var(--steel); color: white; }
+  .ms-num.todo { background: var(--surface); color: var(--text-faint); border: 1px solid var(--border-strong); }
+  .ms-body .ms-name { font-weight: 600; font-size: 0.86rem; margin-bottom: 0.2rem; }
+  .ms-body .ms-meta { font-size: 0.72rem; color: var(--text-faint); }
+  .ms-proof { display: flex; align-items: center; gap: 0.5rem; }
+  .ms-proof-thumb { width: 44px; height: 44px; border-radius: 0.5rem; overflow: hidden; border: 1px solid var(--border); }
+  .ms-proof-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .ms-proof-empty { width: 44px; height: 44px; border-radius: 0.5rem; border: 1px dashed var(--border-strong); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--text-faint); }
+  .ms-action { white-space: nowrap; }
+
+  .btn-mark { background: var(--steel); color: white; border: none; border-radius: 0.6rem; padding: 0.55rem 1rem; font-family: 'Syne', sans-serif; font-size: 0.76rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-mark:hover { background: var(--steel-hover); }
+  .btn-mark:disabled { background: var(--surface); color: var(--text-faint); cursor: default; }
+  .btn-upload { background: var(--surface); border: 1px solid var(--border-strong); color: var(--text-dim); border-radius: 0.6rem; padding: 0.55rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.76rem; cursor: none; transition: border-color 0.2s; }
+  .btn-upload:hover { border-color: var(--steel); color: var(--steel); }
+
+  .order-progress-wrap { padding: 0 1.5rem 1.25rem; }
+  .progress-track { height: 6px; border-radius: 1rem; background: var(--surface); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 1rem; background: var(--steel); }
+  .progress-label { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.5rem; }
+
+  /* SECTION TITLE */
+  .section-divider { display: flex; align-items: center; gap: 0.85rem; margin: 2.5rem 0 1.5rem; }
+  .section-divider:first-child { margin-top: 0; }
+  .section-divider-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+  .section-divider-line { flex: 1; height: 1px; background: var(--border); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 100; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; width: 90%; max-width: 420px; padding: 2rem; transform: translateY(20px) scale(0.97); transition: transform 0.25s; }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .modal-desc { font-size: 0.84rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 1.5rem; }
+  .modal-upload-zone { border: 2px dashed var(--border-strong); border-radius: 1rem; padding: 2rem 1rem; text-align: center; margin-bottom: 1.5rem; transition: border-color 0.2s; cursor: none; }
+  .modal-upload-zone:hover { border-color: var(--steel); }
+  .modal-upload-zone .icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .modal-upload-zone .label { font-size: 0.82rem; color: var(--text-dim); }
+  .modal-upload-zone .sub { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.25rem; }
+  .modal-actions { display: flex; gap: 0.75rem; }
+  .modal-actions button { flex: 1; border-radius: 0.75rem; padding: 0.8rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; border: none; transition: background 0.2s, border-color 0.2s; }
+  .modal-btn-primary { background: var(--steel); color: white; }
+  .modal-btn-primary:hover { background: var(--steel-hover); }
+  .modal-btn-secondary { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border-strong) !important; }
+  .modal-btn-secondary:hover { color: var(--text); }
+
+  @media (max-width: 1024px) {
+    .page-header, .content-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+  }
+  @media (max-width: 700px) {
+    .order-head { grid-template-columns: 60px 1fr; }
+    .order-status-block { grid-column: 1 / -1; text-align: left; margin-top: 0.5rem; }
+    .order-photo { width: 60px; height: 60px; }
+    .milestone-row { grid-template-columns: 24px 1fr; row-gap: 0.6rem; }
+    .ms-proof, .ms-action { grid-column: 2; justify-self: start; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Supply Chain</div>
+  </a>
+  <ul style="display:flex; list-style:none; align-items:center; gap:1.5rem;">
+    <li><a href="projects.html" class="nav-link">Browse Projects</a></li>
+    <li><a href="quote.html" class="nav-link">Submit Quote</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="deliveries.html" class="nav-link active">Deliveries</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+  </ul>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+  <a href="signup.html" class="nav-cta">Register as Supplier</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">Delivery Tracker</div>
+    <h1 class="page-title">Your <em>active deliveries</em></h1>
+    <p class="page-sub">Track delivery milestones for your accepted quotes, mark items as delivered, and upload proof-of-supply photos to release payment from escrow.</p>
+  </div>
+
+  <div class="content-wrap">
+
+    <div class="section-divider">
+      <div class="section-divider-title">In Progress</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <!-- ORDER 1: Huye -->
+    <div class="order-card reveal">
+      <div class="order-head">
+        <div class="order-photo"><img src="https://images.pexels.com/photos/10902660/pexels-photo-10902660.jpeg?auto=compress&cs=tinysrgb&w=180&h=180" alt="Huye Student Housing Campus"></div>
+        <div>
+          <div class="order-name">Huye Student Housing Campus</div>
+          <div class="order-meta">
+            <span>📍 Huye, Southern Province</span>
+            <span>🧱 Cement (32.5N) · 2,500 bags</span>
+            <span>💰 5,500,000 RWF</span>
+          </div>
+        </div>
+        <div class="order-status-block">
+          <span class="status-badge status-progress">In Progress</span>
+          <div class="order-token">Escrow funded · <strong>550 IMT</strong> on completion</div>
+        </div>
+      </div>
+      <div class="order-progress-wrap">
+        <div class="progress-track"><div class="progress-fill" style="width:33%;"></div></div>
+        <div class="progress-label">Milestone 1 of 3 complete · 833 of 2,500 bags delivered</div>
+      </div>
+      <div class="milestone-list">
+        <div class="milestone-row">
+          <div class="ms-num done">✓</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 1 — Initial Delivery (833 bags)</div>
+            <div class="ms-meta">Delivered 5 days ago · Verified</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-thumb"><img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=120&h=120&fit=crop&q=80&auto=format" alt="Proof of supply"></div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" disabled>Verified ✓</button></div>
+        </div>
+        <div class="milestone-row">
+          <div class="ms-num active">2</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 2 — Second Delivery (833 bags)</div>
+            <div class="ms-meta">Due in 4 days · Awaiting delivery</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-empty">📷</div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" onclick="openModal('huye-2')">Mark Delivered</button></div>
+        </div>
+        <div class="milestone-row">
+          <div class="ms-num todo">3</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 3 — Final Delivery (834 bags)</div>
+            <div class="ms-meta">Scheduled in 10 days</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-empty">📷</div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" disabled>Mark Delivered</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER 2: Kicukiro -->
+    <div class="order-card reveal reveal-delay-1">
+      <div class="order-head">
+        <div class="order-photo"><img src="https://images.unsplash.com/photo-1668875438994-4388304392ef?q=80&w=180&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kicukiro Affordable Housing"></div>
+        <div>
+          <div class="order-name">Kicukiro Affordable Housing</div>
+          <div class="order-meta">
+            <span>📍 Kicukiro, Kigali City</span>
+            <span>🔩 Steel Rebar (10mm/12mm) · 10 tons</span>
+            <span>💰 9,800,000 RWF</span>
+          </div>
+        </div>
+        <div class="order-status-block">
+          <span class="status-badge status-progress">In Progress</span>
+          <div class="order-token">Escrow funded · <strong>980 IMT</strong> on completion</div>
+        </div>
+      </div>
+      <div class="order-progress-wrap">
+        <div class="progress-track"><div class="progress-fill" style="width:50%;"></div></div>
+        <div class="progress-label">Milestone 2 of 4 complete · 5 of 10 tons delivered</div>
+      </div>
+      <div class="milestone-list">
+        <div class="milestone-row">
+          <div class="ms-num done">✓</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 1 — Initial Delivery (2.5 tons)</div>
+            <div class="ms-meta">Delivered 9 days ago · Verified</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-thumb"><img src="https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=120&h=120&fit=crop&q=80&auto=format" alt="Proof of supply"></div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" disabled>Verified ✓</button></div>
+        </div>
+        <div class="milestone-row">
+          <div class="ms-num done">✓</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 2 — Second Delivery (2.5 tons)</div>
+            <div class="ms-meta">Delivered 2 days ago · Verified</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-thumb"><img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=120&h=120&fit=crop&q=80&auto=format" alt="Proof of supply"></div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" disabled>Verified ✓</button></div>
+        </div>
+        <div class="milestone-row">
+          <div class="ms-num active">3</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 3 — Third Delivery (2.5 tons)</div>
+            <div class="ms-meta">Due in 6 days · Awaiting delivery</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-empty">📷</div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" onclick="openModal('kicukiro-3')">Mark Delivered</button></div>
+        </div>
+        <div class="milestone-row">
+          <div class="ms-num todo">4</div>
+          <div class="ms-body">
+            <div class="ms-name">Milestone 4 — Final Delivery (2.5 tons)</div>
+            <div class="ms-meta">Scheduled in 14 days</div>
+          </div>
+          <div class="ms-proof">
+            <div class="ms-proof-empty">📷</div>
+          </div>
+          <div class="ms-action"><button class="btn-mark" disabled>Mark Delivered</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider">
+      <div class="section-divider-title">Completed</div>
+      <div class="section-divider-line"></div>
+    </div>
+
+    <!-- ORDER 3: Completed -->
+    <div class="order-card reveal">
+      <div class="order-head">
+        <div class="order-photo"><img src="https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=180&h=180&fit=crop&q=80&auto=format" alt="Rubavu Lakefront Villa Plots"></div>
+        <div>
+          <div class="order-name">Rubavu Lakefront Villa Plots</div>
+          <div class="order-meta">
+            <span>📍 Rubavu, Western Province</span>
+            <span>🚪 Aluminium Doors &amp; Windows · 40 units</span>
+            <span>💰 6,200,000 RWF</span>
+          </div>
+        </div>
+        <div class="order-status-block">
+          <span class="status-badge status-complete">Completed</span>
+          <div class="order-token">Paid out · <strong>620 IMT</strong> earned</div>
+        </div>
+      </div>
+      <div class="order-progress-wrap">
+        <div class="progress-track"><div class="progress-fill" style="width:100%;"></div></div>
+        <div class="progress-label">All 2 milestones delivered &amp; verified · Payment released</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PROOF UPLOAD MODAL -->
+<div class="modal-overlay" id="proofModal">
+  <div class="modal">
+    <div class="modal-title">Mark Milestone Delivered</div>
+    <p class="modal-desc">Upload a photo as proof-of-supply for this milestone. Once submitted, the project owner will verify the delivery and release the escrow payment for this stage.</p>
+    <div class="modal-upload-zone" onclick="document.getElementById('proofFile').click()">
+      <span class="icon">📷</span>
+      <div class="label" id="proofFileLabel">Click to upload a photo</div>
+      <div class="sub">JPG or PNG, up to 10MB</div>
+      <input type="file" id="proofFile" accept="image/*" style="display:none;" onchange="handleFileSelect(this)">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn-primary" onclick="confirmDelivery()">Confirm Delivery</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let activeMilestone = null;
+
+  function openModal(id) {
+    activeMilestone = id;
+    document.getElementById('proofFileLabel').textContent = 'Click to upload a photo';
+    document.getElementById('proofFile').value = '';
+    document.getElementById('proofModal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('proofModal').classList.remove('open');
+  }
+  function handleFileSelect(input) {
+    if (input.files && input.files[0]) {
+      document.getElementById('proofFileLabel').textContent = input.files[0].name;
+    }
+  }
+  function confirmDelivery() {
+    closeModal();
+    alert('Delivery marked and submitted for verification. The project owner will be notified to confirm receipt.');
+  }
+  document.getElementById('proofModal').addEventListener('click', (e) => {
+    if (e.target.id === 'proofModal') closeModal();
+  });
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px';
+    cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Theme toggle
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register as a Supplier — Supply Chain | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --steel: #2f6fb0;
+    --steel-hover: #25588f;
+    --steel-soft: rgba(47,111,176,0.10);
+    --steel-border: rgba(47,111,176,0.22);
+    --cursor-color: var(--steel);
+    --cursor-ring: rgba(47,111,176,0.35);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { min-height: 100vh; }
+  .nav-logo span { color: var(--steel); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { color: var(--steel); }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-login { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.45rem 1.1rem; font-size: 0.8rem; color: var(--text-dim); text-decoration: none; transition: background 0.2s; cursor: none; }
+  .nav-login:hover { background: var(--surface-hover); }
+
+  /* LAYOUT */
+  .page-wrap { display: grid; grid-template-columns: 1fr 460px; min-height: 100vh; padding-top: 70px; }
+
+  /* LEFT PANEL */
+  .left-panel { background: linear-gradient(160deg, rgba(47,111,176,0.08) 0%, transparent 60%); border-right: 1px solid var(--border); padding: 6rem 4rem 3rem; display: flex; flex-direction: column; justify-content: flex-start; position: sticky; top: 70px; min-height: calc(100vh - 70px); max-height: calc(100vh - 70px); overflow-y: auto; }
+  .left-panel::before { content: ''; position: absolute; top: -80px; left: -80px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(47,111,176,0.08) 0%, transparent 70%); pointer-events: none; }
+  .left-eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--steel); font-weight: 500; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .left-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--steel); }
+  .left-headline { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 1.25rem; }
+  .left-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--steel); }
+  .left-sub { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; max-width: 380px; margin-bottom: 3rem; }
+  .left-perks { display: flex; flex-direction: column; gap: 1rem; }
+  .perk { display: flex; gap: 0.85rem; align-items: flex-start; }
+  .perk-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .perk-text { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+  .perk-text strong { color: var(--text); }
+  .left-bottom { margin-top: auto; padding-top: 3rem; font-size: 0.75rem; color: var(--text-faint); line-height: 1.6; }
+
+  /* RIGHT PANEL */
+  .right-panel { padding: 4rem 3rem 5rem; overflow-y: auto; }
+  .form-header { margin-bottom: 2.5rem; }
+  .form-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+  .form-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--steel); }
+  .form-subtitle { font-size: 0.875rem; color: var(--text-dim); line-height: 1.6; }
+
+  .form-section-label { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); font-weight: 500; margin: 1.75rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+  .field-group { margin-bottom: 1.25rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+  label { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.5rem; font-weight: 500; }
+  label .required { color: var(--steel); margin-left: 0.2rem; }
+  label .optional { color: var(--text-faint); font-size: 0.62rem; margin-left: 0.4rem; text-transform: none; letter-spacing: 0; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="number"], select {
+    width: 100%; background: var(--input-bg); border: 1px solid var(--input-border);
+    border-radius: 0.75rem; padding: 0.8rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem; color: var(--text); outline: none; cursor: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  input:focus, select:focus { border-color: rgba(47,111,176,0.5); background: var(--input-bg); }
+  input::placeholder { color: var(--text-faint); }
+  select option { background: var(--bg-alt); }
+  .input-icon-wrap { position: relative; }
+  .input-icon { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 0.9rem; pointer-events: none; color: var(--text-faint); }
+  .pw-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-size: 0.8rem; cursor: none; color: var(--text-faint); transition: color 0.2s; }
+  .pw-toggle:hover { color: var(--text-dim); }
+
+  /* MATERIAL CATEGORY GRID */
+  .cat-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1.25rem; }
+  .cat-select { display: flex; align-items: center; gap: 0.5rem; border: 1.5px solid var(--border); border-radius: 0.6rem; padding: 0.5rem 0.7rem; cursor: none; transition: background 0.2s, border-color 0.2s; font-size: 0.72rem; line-height: 1.3; text-transform: none; letter-spacing: normal; font-weight: 400; color: var(--text); }
+  .cat-select:hover { background: var(--surface); }
+  .cat-select.selected { background: var(--steel-soft); border-color: var(--steel-border); color: var(--steel); }
+  .cat-select input[type="checkbox"] { accent-color: var(--steel); cursor: none; flex-shrink: 0; }
+  .cat-select-icon { font-size: 0.85rem; flex-shrink: 0; }
+
+  /* KYC NOTICE */
+  .kyc-notice { background: rgba(212,168,50,0.06); border: 1px solid rgba(212,168,50,0.18); border-radius: 0.85rem; padding: 1.1rem 1.25rem; display: flex; gap: 0.85rem; align-items: flex-start; margin-bottom: 1.5rem; }
+  .kyc-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .kyc-text { font-size: 0.76rem; color: var(--text-dim); line-height: 1.55; }
+  .kyc-text strong { color: var(--gold); }
+
+  /* TERMS */
+  .terms-box { background: var(--surface); border: 1px solid var(--border); border-radius: 0.85rem; padding: 1.1rem 1.25rem; font-size: 0.75rem; color: var(--text-faint); line-height: 1.7; margin-bottom: 1.5rem; }
+  .terms-check { display: flex; align-items: flex-start; gap: 0.65rem; margin-top: 0.85rem; }
+  .terms-check input[type="checkbox"] { width: auto; margin-top: 0.15rem; accent-color: var(--steel); cursor: none; }
+  .terms-check label { font-size: 0.76rem; color: var(--text-dim); text-transform: none; letter-spacing: 0; font-weight: 300; cursor: none; }
+  .terms-check label a { color: var(--steel); text-decoration: none; }
+
+  /* SUBMIT */
+  .btn-submit { width: 100%; background: var(--steel); color: white; border: none; border-radius: 0.85rem; padding: 1rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.02em; cursor: none; transition: background 0.2s, transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.6rem; }
+  .btn-submit:hover { background: var(--steel-hover); transform: translateY(-1px); }
+  .btn-submit:active { transform: translateY(0); }
+
+  .login-prompt { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--text-faint); }
+  .login-prompt a { color: var(--steel); text-decoration: none; font-weight: 500; }
+  .login-prompt a:hover { text-decoration: underline; }
+
+  /* SUCCESS */
+  .success-panel { display: none; text-align: center; padding: 3rem 0; }
+  .success-panel.visible { display: block; }
+  .success-icon { font-size: 3.5rem; display: block; margin-bottom: 1.25rem; }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.75rem; }
+  .success-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--steel); }
+  .success-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 2rem; max-width: 380px; margin-left: auto; margin-right: auto; }
+  .success-btn { display: inline-block; background: var(--steel); color: white; text-decoration: none; border-radius: 0.85rem; padding: 0.9rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.02em; cursor: none; transition: background 0.2s; }
+  .success-btn:hover { background: var(--steel-hover); }
+  .success-btn-outline { display: inline-block; border: 1px solid var(--border-strong); color: var(--text-dim); text-decoration: none; border-radius: 0.85rem; padding: 0.9rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; margin-left: 0.75rem; transition: border-color 0.2s; }
+  .success-btn-outline:hover { border-color: var(--border-strong); color: var(--text); }
+
+  @media (max-width: 1024px) {
+    .page-wrap { grid-template-columns: 1fr; }
+    .left-panel { display: none; }
+    .right-panel { padding: 2.5rem 1.5rem 4rem; }
+    .field-row, .cat-select-grid { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Supply Chain</div>
+  </a>
+  <div class="nav-right">
+    <a href="./projects.html" class="nav-link">Browse Projects</a>
+    <a href="./dashboard.html" class="nav-link">Dashboard</a>
+    <a href="../index.html" class="nav-link nav-back">← Imali.biz</a>
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+    <a href="#" class="nav-login">Already a supplier? Log in</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div class="left-eyebrow">Supply Chain · Supplier Registration</div>
+    <h1 class="left-headline">Register your business.<br><em>Start</em> supplying.</h1>
+    <p class="left-sub">Create your supplier profile, list the materials you provide, and get matched to active construction projects across Rwanda — with escrow-backed payments on every delivery.</p>
+    <div class="left-perks">
+      <div class="perk">
+        <span class="perk-icon">🎯</span>
+        <span class="perk-text"><strong>Matched to relevant projects.</strong> Only see material requirements that fit your categories and delivery area.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">🧾</span>
+        <span class="perk-text"><strong>Itemised quoting.</strong> Submit line-item quotes against a project's bill of quantities — no back-and-forth.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">📸</span>
+        <span class="perk-text"><strong>Proof-of-supply on every delivery.</strong> Upload photos at each milestone for transparency and accountability.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">🔐</span>
+        <span class="perk-text"><strong>Escrow-backed, token-based payments.</strong> Funds release automatically once a delivery milestone is verified.</span>
+      </div>
+      <div class="perk">
+        <span class="perk-icon">💸</span>
+        <span class="perk-text"><strong>Zero upfront cost.</strong> Registration is free — a small platform fee applies only on completed orders.</span>
+      </div>
+    </div>
+    <div class="left-bottom">
+      Your business data is encrypted and never shared without your consent. KYC details are used for identity verification only and are not stored in plaintext.
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+
+    <!-- FORM -->
+    <div id="signupForm">
+      <div class="form-header">
+        <h2 class="form-title">Register as a <em>supplier</em></h2>
+        <p class="form-subtitle">Takes about 3 minutes. Once verified, you'll start receiving matched project material requests.</p>
+      </div>
+
+      <!-- BUSINESS DETAILS -->
+      <div class="form-section-label">Business details</div>
+
+      <div class="field-group">
+        <label>Business Name <span class="required">*</span></label>
+        <input type="text" id="businessName" placeholder="e.g. Kigali Cement & Hardware Ltd" />
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Business Type <span class="required">*</span></label>
+          <select id="businessType">
+            <option value="">Select type</option>
+            <option>Sole Proprietor</option>
+            <option>Limited Company</option>
+            <option>Cooperative</option>
+            <option>Manufacturer / Producer</option>
+            <option>Distributor / Wholesaler</option>
+          </select>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label>TIN Number <span class="optional">(if registered)</span></label>
+          <input type="text" id="tin" placeholder="e.g. 1023456789" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Contact Person <span class="required">*</span></label>
+        <input type="text" id="contactPerson" placeholder="e.g. Jean-Pierre Mutabazi" />
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Phone Number <span class="required">*</span></label>
+          <div class="input-icon-wrap">
+            <input type="tel" id="phone" placeholder="+250 7XX XXX XXX" />
+            <span class="input-icon">📱</span>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Email Address <span class="required">*</span></label>
+          <div class="input-icon-wrap">
+            <input type="email" id="email" placeholder="you@example.com" />
+            <span class="input-icon">✉️</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Province <span class="required">*</span></label>
+          <select id="province">
+            <option value="">Select province</option>
+            <option>Kigali City</option>
+            <option>Northern Province</option>
+            <option>Southern Province</option>
+            <option>Eastern Province</option>
+            <option>Western Province</option>
+          </select>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label>District / Area <span class="required">*</span></label>
+          <input type="text" id="district" placeholder="e.g. Gasabo / Kicukiro" />
+        </div>
+      </div>
+
+      <!-- MATERIAL CATEGORIES -->
+      <div class="form-section-label">Material categories you supply</div>
+      <p style="font-size:0.8rem; color:var(--text-dim); margin-bottom:1rem; line-height:1.6;">Select all categories that apply. This determines which project material requirements you'll be matched to.</p>
+
+      <div class="cat-select-grid" id="catGrid">
+        <label class="cat-select" data-cat="Aggregates"><input type="checkbox"> <span class="cat-select-icon">🪨</span> Aggregates</label>
+        <label class="cat-select" data-cat="Aluminium Frames"><input type="checkbox"> <span class="cat-select-icon">🔲</span> Aluminium Frames</label>
+        <label class="cat-select" data-cat="Bricks"><input type="checkbox"> <span class="cat-select-icon">🧱</span> Bricks</label>
+        <label class="cat-select" data-cat="Cement"><input type="checkbox"> <span class="cat-select-icon">🏗️</span> Cement</label>
+        <label class="cat-select" data-cat="Ceramic/Porcelain Tiles"><input type="checkbox"> <span class="cat-select-icon">🀄</span> Ceramic/Porcelain Tiles</label>
+        <label class="cat-select" data-cat="Concrete Blocks (Hollow/Solid)"><input type="checkbox"> <span class="cat-select-icon">⬜</span> Concrete Blocks (Hollow/Solid)</label>
+        <label class="cat-select" data-cat="Doors"><input type="checkbox"> <span class="cat-select-icon">🚪</span> Doors</label>
+        <label class="cat-select" data-cat="Electrical Wiring & Conduits"><input type="checkbox"> <span class="cat-select-icon">⚡</span> Electrical Wiring & Conduits</label>
+        <label class="cat-select" data-cat="Flooring Materials (Laminate, Vinyl, Wood)"><input type="checkbox"> <span class="cat-select-icon">🪵</span> Flooring Materials (Laminate, Vinyl, Wood)</label>
+        <label class="cat-select" data-cat="Glass (Panes/Facades)"><input type="checkbox"> <span class="cat-select-icon">🪟</span> Glass (Panes/Facades)</label>
+        <label class="cat-select" data-cat="Gypsum Board (Drywall)"><input type="checkbox"> <span class="cat-select-icon">📄</span> Gypsum Board (Drywall)</label>
+        <label class="cat-select" data-cat="Light Fixtures & Switches"><input type="checkbox"> <span class="cat-select-icon">💡</span> Light Fixtures & Switches</label>
+        <label class="cat-select" data-cat="Paints & Primers"><input type="checkbox"> <span class="cat-select-icon">🎨</span> Paints & Primers</label>
+        <label class="cat-select" data-cat="Plaster"><input type="checkbox"> <span class="cat-select-icon">🪣</span> Plaster</label>
+        <label class="cat-select" data-cat="Plumbing Fixtures (Sinks, Toilets, Faucets)"><input type="checkbox"> <span class="cat-select-icon">🚿</span> Plumbing Fixtures (Sinks, Toilets, Faucets)</label>
+        <label class="cat-select" data-cat="PVC Piping (Water/Drainage)"><input type="checkbox"> <span class="cat-select-icon">🚰</span> PVC Piping (Water/Drainage)</label>
+        <label class="cat-select" data-cat="Roofing Sheets (Corrugated/Tiles)"><input type="checkbox"> <span class="cat-select-icon">🏠</span> Roofing Sheets (Corrugated/Tiles)</label>
+        <label class="cat-select" data-cat="Steel (Reinforcement Bars/Beams)"><input type="checkbox"> <span class="cat-select-icon">🔩</span> Steel (Reinforcement Bars/Beams)</label>
+        <label class="cat-select" data-cat="Timber/Lumber"><input type="checkbox"> <span class="cat-select-icon">🌲</span> Timber/Lumber</label>
+        <label class="cat-select" data-cat="Waterproofing Membranes"><input type="checkbox"> <span class="cat-select-icon">💧</span> Waterproofing Membranes</label>
+        <label class="cat-select" data-cat="Window Frames (uPVC)"><input type="checkbox"> <span class="cat-select-icon">🖼️</span> Window Frames (uPVC)</label>
+        <label class="cat-select" data-cat="Other" id="catOther"><input type="checkbox" id="otherCheckbox"> <span class="cat-select-icon">➕</span> Other</label>
+      </div>
+
+      <div class="field-group" id="otherSpecifyGroup" style="display:none;">
+        <label>Please specify other material(s)</label>
+        <input type="text" id="otherSpecify" placeholder="e.g. Insulation panels, scaffolding, geotextiles...">
+      </div>
+
+      <!-- COVERAGE & PRICING -->
+      <div class="form-section-label">Coverage & pricing</div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Delivery Coverage Area <span class="required">*</span></label>
+          <select id="coverage">
+            <option value="">Select coverage</option>
+            <option>Within district only</option>
+            <option>Province-wide</option>
+            <option>Nationwide</option>
+          </select>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label>Typical Lead Time</label>
+          <select id="leadTime">
+            <option value="">Select lead time</option>
+            <option>1–3 days</option>
+            <option>4–7 days</option>
+            <option>1–2 weeks</option>
+            <option>2+ weeks</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Estimated Monthly Supply Capacity <span class="optional">(optional)</span></label>
+        <input type="text" id="capacity" placeholder="e.g. 5,000 bags cement / month" />
+      </div>
+
+      <!-- ACCOUNT SECURITY -->
+      <div class="form-section-label">Account security</div>
+
+      <div class="field-group">
+        <label>Password <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="password" id="password" placeholder="At least 8 characters" />
+          <span class="pw-toggle" onclick="togglePw('password', this)">Show</span>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Confirm Password <span class="required">*</span></label>
+        <div class="input-icon-wrap">
+          <input type="password" id="confirmPassword" placeholder="Repeat your password" />
+          <span class="pw-toggle" onclick="togglePw('confirmPassword', this)">Show</span>
+        </div>
+      </div>
+
+      <!-- KYC NOTICE -->
+      <div class="kyc-notice">
+        <span class="kyc-icon">🔍</span>
+        <div class="kyc-text">
+          Basic KYC verification is required before you can submit quotes. We'll verify your business registration (or National ID, for sole proprietors) and contact details. Once verified, your profile displays a <strong>Verified Supplier</strong> badge — increasing trust with project owners.
+        </div>
+      </div>
+
+      <!-- TERMS -->
+      <div class="terms-box">
+        By registering you agree to Imali.biz's <a href="#" style="color:var(--steel);">Terms of Service</a> and <a href="#" style="color:var(--steel);">Privacy Policy</a>. Registration is free — a small platform fee applies only on completed and verified deliveries.
+        <div class="terms-check">
+          <input type="checkbox" id="termsAgree">
+          <label for="termsAgree">I have read and agree to the terms above</label>
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="handleSubmit()">
+        Create My Supplier Account
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="login-prompt">Already registered? <a href="#">Log in here</a></div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-panel" id="successPanel">
+      <span class="success-icon">🎉</span>
+      <h2 class="success-title">Welcome to the<br><em>Supply Chain</em></h2>
+      <p class="success-desc">Your supplier account has been created. We've sent a verification link to your email. Once verified, you'll start receiving matched material requirements from active projects.</p>
+      <div style="display:flex; justify-content:center; flex-wrap:wrap; gap:0.75rem; margin-top:0.5rem;">
+        <a href="projects.html" class="success-btn">Browse Material Requests →</a>
+        <a href="dashboard.html" class="success-btn-outline">Go to Dashboard</a>
+      </div>
+    </div>
+
+  </div><!-- end right-panel -->
+</div>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px';
+    cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Category selection toggles
+  const otherSpecifyGroup = document.getElementById('otherSpecifyGroup');
+  document.querySelectorAll('.cat-select').forEach(label => {
+    const checkbox = label.querySelector('input[type="checkbox"]');
+    label.addEventListener('click', (e) => {
+      if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
+      label.classList.toggle('selected', checkbox.checked);
+      if (label.id === 'catOther') {
+        otherSpecifyGroup.style.display = checkbox.checked ? 'block' : 'none';
+        if (!checkbox.checked) document.getElementById('otherSpecify').value = '';
+      }
+    });
+  });
+
+  // Password toggle
+  function togglePw(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type === 'password') {
+      input.type = 'text';
+      btn.textContent = 'Hide';
+    } else {
+      input.type = 'password';
+      btn.textContent = 'Show';
+    }
+  }
+
+  // Submit handler (prototype — no real auth)
+  function handleSubmit() {
+    const businessName = document.getElementById('businessName').value.trim();
+    const contactPerson = document.getElementById('contactPerson').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const agreed = document.getElementById('termsAgree').checked;
+    const anyCat = Array.from(document.querySelectorAll('.cat-select input[type="checkbox"]')).some(c => c.checked);
+
+    if (!businessName) { alert('Please enter your business name.'); return; }
+    if (!contactPerson) { alert('Please enter a contact person.'); return; }
+    if (!phone) { alert('Please enter your phone number.'); return; }
+    if (!email || !email.includes('@')) { alert('Please enter a valid email address.'); return; }
+    if (!anyCat) { alert('Please select at least one material category you supply.'); return; }
+    if (document.getElementById('otherCheckbox').checked && !document.getElementById('otherSpecify').value.trim()) { alert('Please specify the other material(s) you supply.'); return; }
+    if (password.length < 8) { alert('Password must be at least 8 characters.'); return; }
+    if (password !== confirm) { alert('Passwords do not match.'); return; }
+    if (!agreed) { alert('Please agree to the terms to continue.'); return; }
+
+    // Show success
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('successPanel').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if(icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
+  });
+</script>
+</body>
+</html>

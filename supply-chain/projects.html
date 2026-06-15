@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Projects — Supply Chain | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --steel: #2f6fb0;
+    --steel-hover: #25588f;
+    --steel-soft: rgba(47,111,176,0.10);
+    --steel-border: rgba(47,111,176,0.22);
+    --cursor-color: var(--steel);
+    --cursor-ring: rgba(47,111,176,0.35);
+  }
+  .nav-logo span { color: var(--steel); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { color: var(--steel); }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--steel); color: #fff; border-radius: 2rem; padding: 0.55rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--steel-hover); color: #fff; }
+  .nav-link.active { color: var(--steel); }
+
+  /* PAGE LAYOUT */
+  .page-wrap { padding-top: 72px; }
+  .page-header { padding: 3rem 4rem 2rem; }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--steel); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--steel); }
+  .page-sub { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; max-width: 520px; margin-top: 0.6rem; }
+
+  /* FILTER BAR */
+  .filter-bar { padding: 1.25rem 4rem; background: var(--bg-alt); border-bottom: 1px solid var(--border); border-top: 1px solid var(--border); display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .filter-bar input.filter-input { width: 240px; }
+  .filter-bar select.filter-select { min-width: 170px; }
+  .result-count { margin-left: auto; font-size: 0.78rem; color: var(--text-faint); }
+
+  /* GRID */
+  .grid-wrap { padding: 2.5rem 4rem 5rem; }
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+  /* PROJECT CARD */
+  .proj-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; cursor: none; transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+  .proj-card:hover { border-color: var(--steel-border); transform: translateY(-4px); }
+  [data-theme="light"] .proj-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.09); }
+  [data-theme="dark"]  .proj-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.40); }
+
+  .proj-thumb { height: 190px; overflow: hidden; position: relative; background: #0e1219; }
+  .proj-thumb .card-photo-wrap { height: 100%; }
+  .proj-stage-badge { position: absolute; bottom: 0.75rem; left: 0.75rem; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; border-radius: 2rem; padding: 0.25rem 0.7rem; background: rgba(10,10,15,0.78); color: #fff; backdrop-filter: blur(4px); z-index: 2; }
+  .proj-deadline-badge { position: absolute; bottom: 0.75rem; right: 0.75rem; font-size: 0.62rem; font-family: 'Syne', sans-serif; font-weight: 700; border-radius: 2rem; padding: 0.25rem 0.7rem; z-index: 2; }
+  .deadline-urgent { background: rgba(200,82,26,0.92); color: #fff; }
+  .deadline-normal { background: rgba(47,111,176,0.92); color: #fff; }
+
+  .proj-body { padding: 1.25rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .proj-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; color: var(--text); }
+  .proj-loc { font-size: 0.75rem; color: var(--text-faint); margin-bottom: 1rem; }
+
+  .boq-list { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.1rem; }
+  .boq-row { display: flex; justify-content: space-between; align-items: center; background: var(--surface); border-radius: 0.5rem; padding: 0.5rem 0.75rem; font-size: 0.78rem; }
+  .boq-item { color: var(--text-dim); }
+  .boq-qty { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); white-space: nowrap; margin-left: 0.75rem; }
+  .boq-more { font-size: 0.72rem; color: var(--text-faint); }
+
+  .proj-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid var(--border); margin-top: auto; }
+  .proj-quotes { font-size: 0.75rem; color: var(--text-faint); }
+  .proj-quotes strong { color: var(--steel); font-family: 'Syne', sans-serif; }
+  .btn-card { text-align: center; padding: 0.55rem 1.1rem; border-radius: 0.6rem; font-size: 0.78rem; font-weight: 600; cursor: none; text-decoration: none; transition: background 0.2s, border-color 0.2s, color 0.2s; font-family: 'Syne', sans-serif; }
+  .btn-card-primary { background: var(--steel); color: white; border: 1px solid var(--steel); }
+  .btn-card-primary:hover { background: var(--steel-hover); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.7); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.5rem; max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; transition: background 0.3s, border-color 0.3s; }
+  .modal-photo { width: 100%; height: 220px; position: relative; overflow: hidden; border-radius: 1.5rem 1.5rem 0 0; background: #0e1219; }
+  .modal-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .modal-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.6) 0%, transparent 55%); }
+  .modal-header { padding: 1.5rem 2rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-close { background: var(--surface); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: none; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+  .modal-close:hover { background: var(--surface-hover); }
+  .modal-body { padding: 1.5rem 2rem 2rem; }
+  .modal-location { font-size: 0.72rem; color: var(--steel); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+  .modal-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin: 1.25rem 0 0.75rem; }
+  .modal-boq-table { width: 100%; border-collapse: collapse; }
+  .modal-boq-table th { text-align: left; font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+  .modal-boq-table td { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .modal-boq-table td:last-child, .modal-boq-table th:last-child { text-align: right; }
+  .modal-boq-table tr:last-child td { border-bottom: none; }
+  .boq-cat-tag { font-size: 0.65rem; background: var(--steel-soft); border: 1px solid var(--steel-border); color: var(--steel); border-radius: 2rem; padding: 0.15rem 0.55rem; }
+  .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+  .btn-modal-primary { flex: 1; background: var(--steel); color: white; border: none; border-radius: 0.75rem; padding: 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; transition: background 0.2s; text-decoration: none; text-align: center; }
+  .btn-modal-primary:hover { background: var(--steel-hover); }
+  .btn-modal-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); border-radius: 0.75rem; padding: 0.85rem 1.5rem; font-size: 0.85rem; cursor: none; transition: background 0.2s, color 0.2s; }
+  .btn-modal-secondary:hover { background: var(--surface-hover); color: var(--text); }
+
+  .no-results { text-align: center; padding: 5rem 2rem; color: var(--text-faint); grid-column: 1 / -1; }
+  .no-results-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+
+  @media (max-width: 1024px) {
+    .page-header, .filter-bar, .grid-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .filter-bar input.filter-input { width: 100%; }
+    .result-count { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Supply Chain</div>
+  </a>
+  <ul style="display:flex; list-style:none; align-items:center; gap:1.5rem;">
+    <li><a href="projects.html" class="nav-link active">Browse Projects</a></li>
+    <li><a href="quote.html" class="nav-link">Submit Quote</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="deliveries.html" class="nav-link">Deliveries</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+  </ul>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+  <a href="signup.html" class="nav-cta">Register as Supplier</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">Material Requirements</div>
+    <h1 class="page-title">Active <em>construction</em> projects</h1>
+    <p class="page-sub">Browse open material requirements across Rwanda's active construction projects. Each project lists its current bill-of-quantities — filter by category and location to find a match for what you supply.</p>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" class="filter-input" id="searchInput" placeholder="Search project or location...">
+    <select class="filter-select" id="categoryFilter">
+      <option value="">All Material Categories</option>
+      <option>Cement & Blocks</option>
+      <option>Steel & Rebar</option>
+      <option>Timber & Lumber</option>
+      <option>Roofing Materials</option>
+      <option>Plumbing & Fittings</option>
+      <option>Electrical Supplies</option>
+      <option>Paint & Finishes</option>
+      <option>Doors & Windows</option>
+      <option>Sand, Aggregates & Stone</option>
+      <option>Sanitary Ware</option>
+      <option>Tools & Hardware</option>
+      <option>Tiles & Flooring</option>
+    </select>
+    <select class="filter-select" id="provinceFilter">
+      <option value="">All Provinces</option>
+      <option>Kigali City</option>
+      <option>Northern Province</option>
+      <option>Southern Province</option>
+      <option>Eastern Province</option>
+      <option>Western Province</option>
+    </select>
+    <div class="result-count" id="resultCount">6 projects</div>
+  </div>
+
+  <div class="grid-wrap">
+    <div class="projects-grid" id="projectsGrid"></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script>
+  const projects = [
+    {
+      id: 1, name: 'Kimironko Mixed-Use Block', loc: 'Gasabo, Kigali City', province: 'Kigali City',
+      img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=720&h=400&fit=crop&q=80&auto=format',
+      stage: 'Phase 1 — Foundation & Structure', deadline: 12, quotes: 4,
+      desc: 'A prime mixed-use development in Kimironko — ground-floor retail with four floors of residential units above. Phase 1 construction is underway and the project requires the materials below to proceed on schedule.',
+      materials: [
+        { item: 'Cement (32.5N)', qty: '1,200 bags', category: 'Cement & Blocks' },
+        { item: 'Steel Rebar (12mm)', qty: '8 tons', category: 'Steel & Rebar' },
+        { item: 'Concrete Blocks (15x20x40cm)', qty: '15,000 units', category: 'Cement & Blocks' },
+        { item: 'Roofing Sheets (IT4 Gauge)', qty: '450 sheets', category: 'Roofing Materials' }
+      ]
+    },
+    {
+      id: 2, name: 'Huye Student Housing Campus', loc: 'Huye, Southern Province', province: 'Southern Province',
+      img: 'https://images.pexels.com/photos/10902660/pexels-photo-10902660.jpeg?auto=compress&cs=tinysrgb&w=720&h=400&fit=crop',
+      stage: 'Phase 2 — Roofing & Finishes', deadline: 19, quotes: 2,
+      desc: 'Purpose-built student accommodation adjacent to the University of Rwanda main campus. The project has moved into roofing and finishing — suppliers of timber, roofing, and plumbing materials are needed.',
+      materials: [
+        { item: 'Treated Timber (50x100mm)', qty: '300 m³', category: 'Timber & Lumber' },
+        { item: 'Roofing Sheets (IT5 Gauge)', qty: '1,200 sheets', category: 'Roofing Materials' },
+        { item: 'Plumbing Pipes & Fittings (full set)', qty: '1 lot', category: 'Plumbing & Fittings' },
+        { item: 'Cement (32.5N)', qty: '2,500 bags', category: 'Cement & Blocks' }
+      ]
+    },
+    {
+      id: 3, name: 'Rubavu Lakefront Villa Plots', loc: 'Rubavu, Western Province', province: 'Western Province',
+      img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=720&h=400&fit=crop&q=80&auto=format',
+      stage: 'Phase 3 — Interior Finishing', deadline: 3, quotes: 7,
+      desc: 'Premium lakefront villa development on Lake Kivu, Rubavu. Interior finishing is in progress — quotes are closing soon for tiles, sanitary ware, paint, and doors & windows.',
+      materials: [
+        { item: 'Ceramic Floor Tiles (60x60cm)', qty: '2,000 sqm', category: 'Tiles & Flooring' },
+        { item: 'Sanitary Ware (toilets, basins)', qty: '40 sets', category: 'Sanitary Ware' },
+        { item: 'Exterior Paint (weatherproof)', qty: '800 L', category: 'Paint & Finishes' },
+        { item: 'Aluminium Doors & Windows', qty: '40 units', category: 'Doors & Windows' }
+      ]
+    },
+    {
+      id: 4, name: 'Nyagatare Agri-Commercial Hub', loc: 'Nyagatare, Eastern Province', province: 'Eastern Province',
+      img: 'https://images.unsplash.com/photo-1720608594472-bc29045eef28?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      stage: 'Phase 1 — Structural Steelwork', deadline: 25, quotes: 1,
+      desc: 'Commercial warehousing and cold-chain facility in Nyagatare, East Rwanda’s agricultural heartland. Structural steelwork is underway — early-stage suppliers of steel, blocks, roofing, and electrical materials are needed.',
+      materials: [
+        { item: 'Structural Steel Beams (I-Beam)', qty: '12 tons', category: 'Steel & Rebar' },
+        { item: 'Concrete Blocks (15x20x40cm)', qty: '25,000 units', category: 'Cement & Blocks' },
+        { item: 'Insulated Roofing Sheets (IBR)', qty: '2,000 sheets', category: 'Roofing Materials' },
+        { item: 'Electrical Cabling & Fittings', qty: '1 lot', category: 'Electrical Supplies' }
+      ]
+    },
+    {
+      id: 5, name: 'Musanze Eco-Resort Land', loc: 'Musanze, Northern Province', province: 'Northern Province',
+      img: 'https://images.unsplash.com/photo-1720608596579-27fa1ef828e8?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      stage: 'Phase 1 — Site Development', deadline: 30, quotes: 3,
+      desc: 'Prime eco-tourism land near Volcanoes National Park, zoned for eco-lodge and resort development. Site development requires eco-certified timber, natural stone, roofing, and finishing materials.',
+      materials: [
+        { item: 'Eco-Certified Timber', qty: '500 m³', category: 'Timber & Lumber' },
+        { item: 'Natural Stone Cladding', qty: '1,800 sqm', category: 'Sand, Aggregates & Stone' },
+        { item: 'Clay Roof Tiles', qty: '1,500 sqm', category: 'Roofing Materials' },
+        { item: 'Exterior Paint & Finishes', qty: '600 L', category: 'Paint & Finishes' }
+      ]
+    },
+    {
+      id: 6, name: 'Kicukiro Affordable Housing', loc: 'Kicukiro, Kigali City', province: 'Kigali City',
+      img: 'https://images.unsplash.com/photo-1668875438994-4388304392ef?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      stage: 'Phase 1 — Foundation & Structure', deadline: 8, quotes: 5,
+      desc: 'Affordable housing development in Kicukiro, Kigali. Foundation and structural work is ramping up — bulk cement, blocks, aggregates, and steel rebar are needed for the next milestone.',
+      materials: [
+        { item: 'Cement (32.5N)', qty: '3,000 bags', category: 'Cement & Blocks' },
+        { item: 'Concrete Blocks (15x20x40cm)', qty: '40,000 units', category: 'Cement & Blocks' },
+        { item: 'River Sand & Aggregates', qty: '600 m³', category: 'Sand, Aggregates & Stone' },
+        { item: 'Steel Rebar (10mm/12mm)', qty: '10 tons', category: 'Steel & Rebar' }
+      ]
+    }
+  ];
+
+  const grid = document.getElementById('projectsGrid');
+  const resultCount = document.getElementById('resultCount');
+  const searchInput = document.getElementById('searchInput');
+  const categoryFilter = document.getElementById('categoryFilter');
+  const provinceFilter = document.getElementById('provinceFilter');
+
+  function deadlineClass(days) { return days <= 7 ? 'deadline-urgent' : 'deadline-normal'; }
+
+  function render() {
+    const search = searchInput.value.trim().toLowerCase();
+    const cat = categoryFilter.value;
+    const prov = provinceFilter.value;
+
+    const filtered = projects.filter(p => {
+      const matchesSearch = !search || p.name.toLowerCase().includes(search) || p.loc.toLowerCase().includes(search);
+      const matchesCat = !cat || p.materials.some(m => m.category === cat);
+      const matchesProv = !prov || p.province === prov;
+      return matchesSearch && matchesCat && matchesProv;
+    });
+
+    resultCount.textContent = filtered.length + (filtered.length === 1 ? ' project' : ' projects');
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div class="no-results"><span class="no-results-icon">🔍</span>No projects match your filters. Try adjusting your search.</div>';
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+      const shownMaterials = p.materials.slice(0, 3);
+      const extra = p.materials.length - shownMaterials.length;
+      return `
+        <div class="proj-card" onclick="openModal(${p.id})">
+          <div class="proj-thumb">
+            <div class="card-photo-wrap"><img src="${p.img}" alt="${p.name}" class="card-photo-img"></div>
+            <span class="proj-stage-badge">${p.stage}</span>
+            <span class="proj-deadline-badge ${deadlineClass(p.deadline)}">${p.deadline}d left</span>
+          </div>
+          <div class="proj-body">
+            <div class="proj-name">${p.name}</div>
+            <div class="proj-loc">📍 ${p.loc}</div>
+            <div class="boq-list">
+              ${shownMaterials.map(m => `
+                <div class="boq-row">
+                  <span class="boq-item">${m.item}</span>
+                  <span class="boq-qty">${m.qty}</span>
+                </div>
+              `).join('')}
+              ${extra > 0 ? `<div class="boq-more">+ ${extra} more item${extra > 1 ? 's' : ''} in bill of quantities</div>` : ''}
+            </div>
+            <div class="proj-footer">
+              <div class="proj-quotes"><strong>${p.quotes}</strong> quote${p.quotes === 1 ? '' : 's'} received</div>
+              <a class="btn-card btn-card-primary" href="quote.html?project=${p.id}" onclick="event.stopPropagation()">View & Quote</a>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function openModal(id) {
+    const p = projects.find(x => x.id === id);
+    const modal = document.getElementById('modal');
+    modal.innerHTML = `
+      <div class="modal-photo">
+        <img src="${p.img}" alt="${p.name}">
+        <div class="modal-photo-overlay"></div>
+        <button class="modal-close" style="position:absolute; top:1.25rem; right:1.25rem; background:rgba(10,10,15,0.5); color:#fff;" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-header" style="border-bottom:none;">
+        <div>
+          <div class="modal-location">📍 ${p.loc} · ${p.stage}</div>
+          <div class="modal-title">${p.name}</div>
+        </div>
+      </div>
+      <div class="modal-body" style="padding-top:0;">
+        <p style="font-size:0.85rem; color:var(--text-dim); line-height:1.7;">${p.desc}</p>
+        <div class="modal-section-title">Bill of Quantities — Open Material Requirements</div>
+        <table class="modal-boq-table">
+          <thead><tr><th>Material</th><th>Category</th><th>Quantity Needed</th></tr></thead>
+          <tbody>
+            ${p.materials.map(m => `
+              <tr>
+                <td>${m.item}</td>
+                <td><span class="boq-cat-tag">${m.category}</span></td>
+                <td>${m.qty}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div class="modal-actions">
+          <a href="quote.html?project=${p.id}" class="btn-modal-primary">Submit a Quote for This Project</a>
+          <button class="btn-modal-secondary" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+  document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'modalOverlay') closeModal();
+  });
+
+  searchInput.addEventListener('input', render);
+  categoryFilter.addEventListener('change', render);
+  provinceFilter.addEventListener('change', render);
+  render();
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px';
+    cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Theme toggle
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
+  });
+</script>
+</body>
+</html>

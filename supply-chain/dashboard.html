@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supplier Dashboard — Supply Chain | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --steel: #2f6fb0;
+    --steel-hover: #25588f;
+    --steel-soft: rgba(47,111,176,0.10);
+    --steel-border: rgba(47,111,176,0.22);
+    --cursor-color: var(--steel);
+    --cursor-ring: rgba(47,111,176,0.35);
+  }
+  .nav-logo span { color: var(--steel); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { color: var(--steel); }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--steel); color: #fff; border-radius: 2rem; padding: 0.55rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--steel-hover); color: #fff; }
+  .nav-link.active { color: var(--steel); }
+
+  .page-wrap { padding-top: 72px; min-height: 100vh; }
+  .page-header { padding: 3rem 4rem 2rem; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--steel); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--steel); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--steel); }
+  .page-sub { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; max-width: 520px; margin-top: 0.6rem; }
+  .header-actions { display: flex; gap: 0.75rem; }
+  .btn-pill { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--steel); color: white; text-decoration: none; border-radius: 2rem; padding: 0.7rem 1.4rem; font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-pill:hover { background: var(--steel-hover); }
+  .btn-pill-outline { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid var(--border-strong); color: var(--text-dim); text-decoration: none; border-radius: 2rem; padding: 0.7rem 1.4rem; font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: none; transition: border-color 0.2s; }
+  .btn-pill-outline:hover { border-color: var(--steel); color: var(--steel); }
+
+  .content-wrap { padding: 0 4rem 5rem; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 2.5rem; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.5rem; }
+  .stat-icon { font-size: 1.4rem; margin-bottom: 0.75rem; display: block; }
+  .stat-val { font-family: 'Syne', sans-serif; font-size: 1.7rem; font-weight: 800; letter-spacing: -0.02em; }
+  .stat-val .unit { font-size: 0.85rem; font-weight: 600; color: var(--text-faint); }
+  .stat-label { font-size: 0.72rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.35rem; }
+  .stat-delta { font-size: 0.74rem; margin-top: 0.6rem; display: flex; align-items: center; gap: 0.3rem; }
+  .stat-delta.up { color: var(--emerald); }
+  .stat-delta.neutral { color: var(--text-faint); }
+
+  /* SECTIONS */
+  .dash-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 1.5rem; align-items: flex-start; }
+  .section-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.5rem; margin-bottom: 1.5rem; }
+  .section-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+  .section-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
+  .section-link { font-size: 0.76rem; color: var(--steel); text-decoration: none; }
+  .section-link:hover { text-decoration: underline; }
+
+  /* QUOTE LIST */
+  .quote-row { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+  .quote-row:last-child { border-bottom: none; }
+  .quote-row-photo { width: 52px; height: 52px; border-radius: 0.7rem; overflow: hidden; flex-shrink: 0; }
+  .quote-row-photo img { width: 100%; height: 100%; object-fit: cover; }
+  .quote-row-body { flex: 1; min-width: 0; }
+  .quote-row-name { font-weight: 600; font-size: 0.88rem; margin-bottom: 0.2rem; }
+  .quote-row-meta { font-size: 0.74rem; color: var(--text-faint); }
+  .quote-row-amount { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; text-align: right; white-space: nowrap; }
+  .quote-row-amount .sub { display:block; font-family: 'DM Sans', sans-serif; font-weight: 400; font-size: 0.68rem; color: var(--text-faint); margin-top:0.15rem; }
+
+  .status-badge { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; border-radius: 2rem; padding: 0.25rem 0.65rem; white-space: nowrap; }
+  .status-pending { background: rgba(212,168,50,0.15); color: var(--gold); border: 1px solid rgba(212,168,50,0.3); }
+  .status-accepted { background: rgba(26,92,58,0.12); color: var(--emerald); border: 1px solid rgba(26,92,58,0.25); }
+  .status-rejected { background: rgba(200,82,26,0.1); color: var(--terracotta); border: 1px solid rgba(200,82,26,0.22); }
+  .status-delivery { background: var(--steel-soft); color: var(--steel); border: 1px solid var(--steel-border); }
+
+  /* MILESTONES */
+  .milestone-item { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .milestone-item:last-child { border-bottom: none; }
+  .milestone-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; gap: 0.75rem; }
+  .milestone-name { font-weight: 600; font-size: 0.86rem; }
+  .milestone-meta { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .progress-track { height: 6px; border-radius: 1rem; background: var(--surface); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 1rem; background: var(--steel); }
+
+  /* TOKEN/EARNINGS CARD */
+  .token-card { background: linear-gradient(135deg, var(--steel) 0%, var(--steel-hover) 100%); border-radius: 1.25rem; padding: 1.75rem; color: white; margin-bottom: 1.5rem; }
+  .token-label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.85; margin-bottom: 0.5rem; }
+  .token-val { font-family: 'Syne', sans-serif; font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; }
+  .token-sub { font-size: 0.78rem; opacity: 0.85; margin-top: 0.5rem; line-height: 1.5; }
+  .token-divider { height: 1px; background: rgba(255,255,255,0.2); margin: 1.25rem 0; }
+  .token-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.6rem; }
+  .token-row span:last-child { font-weight: 700; }
+
+  /* ACTIVITY */
+  .activity-item { display: flex; gap: 0.85rem; padding: 0.85rem 0; border-bottom: 1px solid var(--border); }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--steel-soft); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .activity-body { font-size: 0.82rem; line-height: 1.5; }
+  .activity-time { font-size: 0.7rem; color: var(--text-faint); margin-top: 0.2rem; }
+
+  /* EMPTY STATE */
+  .empty-note { text-align: center; padding: 2rem 1rem; color: var(--text-faint); font-size: 0.84rem; }
+
+  @media (max-width: 1024px) {
+    .page-header, .content-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .dash-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .stats-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">Supply Chain</div>
+  </a>
+  <ul style="display:flex; list-style:none; align-items:center; gap:1.5rem;">
+    <li><a href="projects.html" class="nav-link">Browse Projects</a></li>
+    <li><a href="quote.html" class="nav-link">Submit Quote</a></li>
+    <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+    <li><a href="deliveries.html" class="nav-link">Deliveries</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+  </ul>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+  <a href="signup.html" class="nav-cta">Register as Supplier</a>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div>
+      <div class="page-eyebrow">Supplier Dashboard</div>
+      <h1 class="page-title">Welcome back, <em>Kigali Building Supplies</em></h1>
+      <p class="page-sub">Here's an overview of your matched material requests, quote statuses, active deliveries, and earnings.</p>
+    </div>
+    <div class="header-actions">
+      <a href="projects.html" class="btn-pill-outline">Browse Projects</a>
+      <a href="deliveries.html" class="btn-pill">View Deliveries →</a>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card reveal">
+        <span class="stat-icon">📨</span>
+        <div class="stat-val">7</div>
+        <div class="stat-label">Matched Requests</div>
+        <div class="stat-delta up">↑ 2 new this week</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-1">
+        <span class="stat-icon">📝</span>
+        <div class="stat-val">4</div>
+        <div class="stat-label">Active Quotes</div>
+        <div class="stat-delta neutral">1 pending response</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-2">
+        <span class="stat-icon">🚚</span>
+        <div class="stat-val">2</div>
+        <div class="stat-label">Deliveries In Progress</div>
+        <div class="stat-delta neutral">Next milestone in 4 days</div>
+      </div>
+      <div class="stat-card reveal reveal-delay-3">
+        <span class="stat-icon">🪙</span>
+        <div class="stat-val">3,420,000 <span class="unit">RWF</span></div>
+        <div class="stat-label">Earnings to Date</div>
+        <div class="stat-delta up">↑ 850,000 RWF in escrow</div>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- MATCHED REQUESTS / QUOTES -->
+        <div class="section-card reveal">
+          <div class="section-title-row">
+            <div class="section-title">Matched Material Requests &amp; Quote Status</div>
+            <a href="projects.html" class="section-link">Browse all projects →</a>
+          </div>
+
+          <div class="quote-row">
+            <div class="quote-row-photo"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=120&h=120&fit=crop&q=80&auto=format" alt="Kimironko Mixed-Use Block"></div>
+            <div class="quote-row-body">
+              <div class="quote-row-name">Kimironko Mixed-Use Block</div>
+              <div class="quote-row-meta">Cement (32.5N) · 1,200 bags · Gasabo, Kigali City</div>
+            </div>
+            <div class="quote-row-amount">2,640,000 RWF<span class="sub">Submitted 3 days ago</span></div>
+            <span class="status-badge status-pending">Pending</span>
+          </div>
+
+          <div class="quote-row">
+            <div class="quote-row-photo"><img src="https://images.pexels.com/photos/10902660/pexels-photo-10902660.jpeg?auto=compress&cs=tinysrgb&w=120&h=120" alt="Huye Student Housing Campus"></div>
+            <div class="quote-row-body">
+              <div class="quote-row-name">Huye Student Housing Campus</div>
+              <div class="quote-row-meta">Cement (32.5N) · 2,500 bags · Huye, Southern Province</div>
+            </div>
+            <div class="quote-row-amount">5,500,000 RWF<span class="sub">Accepted · escrow funded</span></div>
+            <span class="status-badge status-accepted">Accepted</span>
+          </div>
+
+          <div class="quote-row">
+            <div class="quote-row-photo"><img src="https://images.unsplash.com/photo-1668875438994-4388304392ef?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kicukiro Affordable Housing"></div>
+            <div class="quote-row-body">
+              <div class="quote-row-name">Kicukiro Affordable Housing</div>
+              <div class="quote-row-meta">Steel Rebar (10mm/12mm) · 10 tons · Kicukiro, Kigali City</div>
+            </div>
+            <div class="quote-row-amount">9,800,000 RWF<span class="sub">Delivery in progress</span></div>
+            <span class="status-badge status-delivery">Delivering</span>
+          </div>
+
+          <div class="quote-row">
+            <div class="quote-row-photo"><img src="https://images.unsplash.com/photo-1720608594472-bc29045eef28?q=80&w=200&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Nyagatare Agri-Commercial Hub"></div>
+            <div class="quote-row-body">
+              <div class="quote-row-name">Nyagatare Agri-Commercial Hub</div>
+              <div class="quote-row-meta">Electrical Cabling &amp; Fittings · 1 lot · Nyagatare, Eastern Province</div>
+            </div>
+            <div class="quote-row-amount">1,150,000 RWF<span class="sub">Not selected</span></div>
+            <span class="status-badge status-rejected">Rejected</span>
+          </div>
+        </div>
+
+        <!-- DELIVERY MILESTONES -->
+        <div class="section-card reveal">
+          <div class="section-title-row">
+            <div class="section-title">Active Delivery Milestones</div>
+            <a href="deliveries.html" class="section-link">Manage deliveries →</a>
+          </div>
+
+          <div class="milestone-item">
+            <div class="milestone-head">
+              <div>
+                <div class="milestone-name">Huye Student Housing Campus — Cement (32.5N)</div>
+                <div class="milestone-meta">Milestone 1 of 3 · 833 of 2,500 bags delivered</div>
+              </div>
+              <span class="status-badge status-delivery">33% Complete</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:33%;"></div></div>
+          </div>
+
+          <div class="milestone-item">
+            <div class="milestone-head">
+              <div>
+                <div class="milestone-name">Kicukiro Affordable Housing — Steel Rebar (10mm/12mm)</div>
+                <div class="milestone-meta">Milestone 2 of 4 · 5 of 10 tons delivered</div>
+              </div>
+              <span class="status-badge status-delivery">50% Complete</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" style="width:50%;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div>
+        <!-- TOKEN / EARNINGS -->
+        <div class="token-card reveal">
+          <div class="token-label">Imali Token Balance</div>
+          <div class="token-val">1,840 IMT</div>
+          <div class="token-sub">Earned from verified deliveries — redeemable for platform fee discounts or RWF payout.</div>
+          <div class="token-divider"></div>
+          <div class="token-row"><span>Total Earnings (Lifetime)</span><span>3,420,000 RWF</span></div>
+          <div class="token-row"><span>In Escrow (Active Orders)</span><span>850,000 RWF</span></div>
+          <div class="token-row" style="margin-bottom:0;"><span>Available for Withdrawal</span><span>2,570,000 RWF</span></div>
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div class="section-card reveal">
+          <div class="section-title-row">
+            <div class="section-title">Recent Activity</div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">✅</div>
+            <div class="activity-body">
+              Quote for <strong>Huye Student Housing Campus</strong> was accepted — escrow funded.
+              <div class="activity-time">2 days ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">🚚</div>
+            <div class="activity-body">
+              Delivery milestone 1 confirmed for <strong>Kicukiro Affordable Housing</strong>.
+              <div class="activity-time">4 days ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">📝</div>
+            <div class="activity-body">
+              New quote submitted for <strong>Kimironko Mixed-Use Block</strong>.
+              <div class="activity-time">3 days ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">🪙</div>
+            <div class="activity-body">
+              Earned <strong>420 IMT</strong> for verified delivery on Kicukiro project.
+              <div class="activity-time">5 days ago</div>
+            </div>
+          </div>
+          <div class="activity-item">
+            <div class="activity-icon">📨</div>
+            <div class="activity-body">
+              New material match: <strong>Musanze Eco-Resort Land</strong> needs Eco-Certified Timber.
+              <div class="activity-time">6 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div class="section-card reveal">
+          <div class="section-title-row">
+            <div class="section-title">Quick Actions</div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:0.75rem;">
+            <a href="projects.html" class="btn-pill-outline" style="justify-content:center;">Browse New Projects</a>
+            <a href="quote.html" class="btn-pill-outline" style="justify-content:center;">Submit a New Quote</a>
+            <a href="deliveries.html" class="btn-pill-outline" style="justify-content:center;">Update Delivery Status</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px';
+    cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12;
+    ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // Theme toggle
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if(icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
+  });
+</script>
+</body>
+</html>
