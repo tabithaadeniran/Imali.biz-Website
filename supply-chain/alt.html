@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme-alt')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supply Chain Market — Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ── ALT SITE: Stock-market / terminal aesthetic ── */
+  :root {
+    --steel: #2f6fb0;
+    --steel-hover: #25588f;
+    --steel-soft: rgba(47,111,176,0.12);
+    --steel-border: rgba(47,111,176,0.28);
+    --cursor-color: var(--steel);
+    --cursor-ring: rgba(47,111,176,0.35);
+    --mono: 'JetBrains Mono', monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #0c0e12;
+    --bg-alt: #111318;
+    --bg-card: #161920;
+    --surface: #1c1f27;
+    --surface-hover: #222633;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --text-dim: #9aa0b4;
+    --text-faint: #5a6070;
+    --nav-bg: rgba(12,14,18,0.92);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── NAV ── */
+  .alt-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 48px; background: var(--nav-bg); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0; backdrop-filter: blur(8px); }
+  .alt-nav-logo { display: flex; align-items: center; gap: 0.5rem; padding: 0 1.25rem; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; }
+  .alt-nav-logo-text { font-family: 'Syne', sans-serif; font-size: 0.92rem; font-weight: 800; letter-spacing: -0.02em; }
+  .alt-nav-logo-text span { color: var(--steel); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .alt-nav-logo-sub { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--steel); font-weight: 500; }
+  .alt-nav-links { display: flex; align-items: center; height: 100%; }
+  .alt-nav-link { height: 100%; display: flex; align-items: center; padding: 0 1rem; font-size: 0.78rem; color: var(--text-dim); border-right: 1px solid var(--border); transition: background 0.15s, color 0.15s; cursor: none; white-space: nowrap; }
+  .alt-nav-link:hover { background: var(--surface); color: var(--text); }
+  .alt-nav-link.active { color: #fff; background: var(--steel); font-weight: 700; height: auto; align-self: center; padding: 0.3rem 0.85rem; border-radius: 0.3rem; margin: 0 0.25rem; }
+  .alt-nav-right { margin-left: auto; display: flex; align-items: center; height: 100%; }
+  .alt-nav-stat { padding: 0 0.7rem; border-left: 1px solid var(--border); height: 100%; display: flex; align-items: center; gap: 0.4rem; }
+  .alt-nav-stat-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-faint); }
+  .alt-nav-stat-val { font-family: var(--mono); font-size: 0.78rem; font-weight: 700; color: var(--steel); }
+  .alt-nav-status { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.2rem 0.55rem; border-radius: 0.25rem; background: rgba(26,92,58,0.3); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+  .alt-theme-btn { height: 100%; padding: 0 1rem; border-left: 1px solid var(--border); background: none; border-top: none; border-right: none; border-bottom: none; color: var(--text-faint); font-size: 0.75rem; cursor: none; transition: color 0.15s, background 0.15s; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+  .alt-theme-btn:hover { color: var(--text); background: var(--surface); }
+  .alt-cta { margin: 0 0.85rem; padding: 0.4rem 1rem; border-left: none; background: var(--steel); color: #fff; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; cursor: none; transition: background 0.15s; display: flex; align-items: center; white-space: nowrap; flex-shrink: 0; border-radius: 0.4rem; }
+  .alt-cta:hover { background: var(--steel-hover); }
+  .alt-switch-btn { height: 100%; padding: 0 1rem; border-left: 1px solid var(--border); background: none; border-top: none; border-right: none; border-bottom: none; color: var(--text-dim); font-size: 0.75rem; cursor: none; transition: color 0.15s, background 0.15s; display: flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+  .alt-switch-btn:hover { color: var(--text); background: var(--surface); }
+
+  /* ── TICKER BAR ── */
+  .ticker-bar { position: fixed; top: 48px; left: 0; right: 0; z-index: 99; height: 32px; background: var(--bg-alt); border-bottom: 1px solid var(--border); display: flex; align-items: center; overflow: hidden; }
+  .ticker-inner { display: flex; align-items: center; gap: 0; animation: ticker-scroll 30s linear infinite; }
+  .ticker-inner:hover { animation-play-state: paused; }
+  @keyframes ticker-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .ticker-item { display: flex; align-items: center; gap: 0.5rem; padding: 0 1.5rem; border-right: 1px solid var(--border); white-space: nowrap; height: 32px; }
+  .ticker-name { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+  .ticker-val { font-family: var(--mono); font-size: 0.7rem; color: var(--text); }
+  .ticker-delta { font-family: var(--mono); font-size: 0.65rem; }
+  .ticker-delta.up { color: #4ade80; }
+  .ticker-delta.down { color: var(--terracotta); }
+  .ticker-label { font-size: 0.55rem; padding: 0.12rem 0.45rem; border-radius: 0.2rem; background: var(--steel-soft); color: var(--steel); border: 1px solid var(--steel-border); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* ── MAIN LAYOUT ── */
+  .main-wrap { padding-top: 80px; display: grid; grid-template-columns: 220px 1fr 260px; min-height: 100vh; }
+
+  /* ── LEFT SIDEBAR ── */
+  .left-sidebar { border-right: 1px solid var(--border); padding: 0; position: sticky; top: 80px; height: calc(100vh - 80px); overflow-y: auto; }
+  .sidebar-section { border-bottom: 1px solid var(--border); padding: 1rem; }
+  .sidebar-section-label { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+  .sidebar-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .sidebar-input { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.5rem 0.7rem; font-family: 'DM Sans', sans-serif; font-size: 0.76rem; color: var(--text); outline: none; cursor: none; transition: border-color 0.2s; }
+  .sidebar-input:focus { border-color: var(--steel-border); }
+  .sidebar-input::placeholder { color: var(--text-faint); }
+  .sidebar-select { width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: 0.4rem; padding: 0.5rem 0.7rem; font-family: 'DM Sans', sans-serif; font-size: 0.76rem; color: var(--text); outline: none; cursor: none; margin-top: 0.5rem; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5l3 3 3-3' stroke='%235a6070' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.6rem center; padding-right: 2rem; }
+  .sidebar-select:focus { border-color: var(--steel-border); }
+  .sidebar-select option { background: var(--bg-alt); }
+
+  .cat-row { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border); cursor: none; transition: background 0.1s; border-radius: 0.25rem; margin: 0 -0.25rem; padding-left: 0.25rem; padding-right: 0.25rem; }
+  .cat-row:last-child { border-bottom: none; }
+  .cat-row:hover { background: var(--surface); }
+  .cat-row-name { font-size: 0.72rem; color: var(--text-dim); }
+  .cat-row-count { font-family: var(--mono); font-size: 0.7rem; color: var(--steel); font-weight: 700; }
+  .cat-bar { height: 3px; background: var(--border); border-radius: 1rem; margin-top: 0.35rem; overflow: hidden; }
+  .cat-bar-fill { height: 100%; background: var(--steel); border-radius: 1rem; }
+
+  /* ── MAIN CONTENT ── */
+  .feed-wrap { padding: 0; }
+  .feed-header { display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--border); background: var(--bg-alt); position: sticky; top: 80px; z-index: 10; }
+  .feed-title { font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+  .feed-count { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); }
+  .feed-sort { font-size: 0.68rem; color: var(--text-faint); display: flex; align-items: center; gap: 0.6rem; }
+  .sort-btn { background: none; border: 1px solid var(--border); border-radius: 0.25rem; color: var(--text-faint); font-size: 0.65rem; padding: 0.2rem 0.5rem; cursor: none; transition: border-color 0.15s, color 0.15s; font-family: 'DM Sans', sans-serif; }
+  .sort-btn.active, .sort-btn:hover { border-color: var(--steel-border); color: var(--steel); }
+
+  /* ── PROJECT TABLE ── */
+  .project-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .project-table thead { position: sticky; top: calc(80px + 41px); z-index: 9; background: var(--bg); }
+  .project-table th { text-align: left; padding: 0.6rem 1rem; font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; border-bottom: 2px solid var(--border-strong); white-space: nowrap; cursor: none; }
+  .project-table th:hover { color: var(--text-dim); }
+  .project-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .project-table tbody tr { transition: background 0.1s; cursor: none; }
+  .project-table tbody tr:hover { background: var(--surface); }
+  .project-table tbody tr:hover .row-action { opacity: 1; }
+
+  .row-id { font-family: var(--mono); font-size: 0.65rem; color: var(--text-faint); }
+  .row-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.84rem; color: var(--text); }
+  .row-loc { font-size: 0.7rem; color: var(--text-faint); margin-top: 0.15rem; font-family: var(--mono); }
+  .row-phase { font-size: 0.7rem; color: var(--text-dim); max-width: 150px; line-height: 1.4; }
+  .row-cats { display: flex; flex-wrap: wrap; gap: 0.25rem; max-width: 180px; }
+  .row-cat-tag { font-size: 0.58rem; padding: 0.12rem 0.45rem; border-radius: 0.2rem; background: var(--steel-soft); border: 1px solid var(--steel-border); color: var(--steel); white-space: nowrap; font-weight: 500; }
+  .row-items { font-family: var(--mono); font-weight: 700; font-size: 0.84rem; color: var(--text); text-align: center; }
+  .row-deadline { font-family: var(--mono); font-weight: 700; font-size: 0.84rem; white-space: nowrap; }
+  .row-deadline.urgent { color: #f87171; }
+  .row-deadline.warn { color: #fbbf24; }
+  .row-deadline.ok { color: var(--steel); }
+  .row-quotes { font-family: var(--mono); font-weight: 700; font-size: 0.84rem; color: var(--text); text-align: center; }
+  .row-action { opacity: 0; transition: opacity 0.15s; }
+  .btn-row { background: var(--steel); color: #fff; border: none; border-radius: 0.3rem; padding: 0.35rem 0.8rem; font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; cursor: none; transition: background 0.15s; white-space: nowrap; text-decoration: none; display: inline-block; }
+  .btn-row:hover { background: var(--steel-hover); }
+  .row-status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 0.4rem; }
+  .dot-open { background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,0.6); }
+  .dot-closing { background: #fbbf24; box-shadow: 0 0 6px rgba(251,191,36,0.5); }
+  .dot-urgent { background: #f87171; box-shadow: 0 0 6px rgba(248,113,113,0.5); }
+
+  /* ── RIGHT SIDEBAR ── */
+  .right-sidebar { border-left: 1px solid var(--border); position: sticky; top: 80px; height: calc(100vh - 80px); overflow-y: auto; }
+  .rs-section { border-bottom: 1px solid var(--border); padding: 1rem; }
+  .rs-label { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem; }
+  .rs-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .stat-block { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .stat-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.7rem 0.85rem; }
+  .stat-tile-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 700; color: var(--text); line-height: 1; }
+  .stat-tile-label { font-size: 0.58rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.3rem; }
+
+  .activity-item { display: flex; gap: 0.65rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--steel); margin-top: 0.35rem; flex-shrink: 0; }
+  .activity-text { font-size: 0.72rem; color: var(--text-dim); line-height: 1.5; }
+  .activity-time { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); margin-top: 0.15rem; }
+
+  .demand-row { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0; }
+  .demand-rank { font-family: var(--mono); font-size: 0.65rem; color: var(--text-faint); width: 16px; flex-shrink: 0; }
+  .demand-name { font-size: 0.72rem; color: var(--text-dim); flex: 1; }
+  .demand-val { font-family: var(--mono); font-size: 0.7rem; color: var(--steel); font-weight: 700; }
+  .demand-bar { height: 2px; background: var(--border); border-radius: 1rem; margin-top: 0.2rem; overflow: hidden; grid-column: 2; }
+  .demand-bar-fill { height: 100%; background: var(--steel); border-radius: 1rem; }
+
+  .register-block { background: linear-gradient(135deg, rgba(47,111,176,0.15) 0%, rgba(47,111,176,0.05) 100%); border: 1px solid var(--steel-border); border-radius: 0.5rem; padding: 1rem; }
+  .register-block h3 { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; margin: 0 0 0.4rem; }
+  .register-block p { font-size: 0.72rem; color: var(--text-dim); line-height: 1.55; margin: 0 0 0.85rem; }
+  .btn-register { display: block; text-align: center; background: var(--steel); color: #fff; border-radius: 0.35rem; padding: 0.6rem; font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: none; transition: background 0.15s; text-decoration: none; }
+  .btn-register:hover { background: var(--steel-hover); }
+
+  /* ── MODAL ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 0.75rem; max-width: 680px; width: 100%; max-height: 88vh; overflow-y: auto; }
+  .modal-top { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .modal-top-id { font-family: var(--mono); font-size: 0.65rem; color: var(--text-faint); }
+  .modal-top-name { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; }
+  .modal-close-btn { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); width: 28px; height: 28px; border-radius: 0.3rem; cursor: none; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+  .modal-close-btn:hover { background: var(--surface-hover); }
+  .modal-meta-bar { display: flex; gap: 1.5rem; padding: 0.75rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+  .modal-meta-item { display: flex; flex-direction: column; gap: 0.15rem; }
+  .modal-meta-label { font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+  .modal-meta-val { font-family: var(--mono); font-size: 0.8rem; font-weight: 700; color: var(--text); }
+  .modal-body { padding: 1.25rem; }
+  .modal-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.65; margin-bottom: 1.25rem; }
+  .modal-boq-label { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.6rem; }
+  .boq-table { width: 100%; border-collapse: collapse; }
+  .boq-table th { text-align: left; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border-strong); }
+  .boq-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.82rem; }
+  .boq-table tr:last-child td { border-bottom: none; }
+  .boq-table td:last-child { font-family: var(--mono); font-weight: 700; text-align: right; }
+  .cat-chip { font-size: 0.6rem; background: var(--steel-soft); border: 1px solid var(--steel-border); color: var(--steel); border-radius: 0.2rem; padding: 0.12rem 0.45rem; }
+  .modal-footer { padding: 1rem 1.25rem; border-top: 1px solid var(--border); display: flex; gap: 0.6rem; }
+  .modal-btn-primary { flex: 1; background: var(--steel); color: #fff; border: none; border-radius: 0.4rem; padding: 0.7rem; font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; cursor: none; transition: background 0.15s; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+  .modal-btn-primary:hover { background: var(--steel-hover); }
+  .modal-btn-secondary { background: var(--surface); border: 1px solid var(--border); color: var(--text-dim); border-radius: 0.4rem; padding: 0.7rem 1.25rem; font-size: 0.82rem; cursor: none; transition: background 0.15s; }
+  .modal-btn-secondary:hover { background: var(--surface-hover); }
+
+  @media (max-width: 1100px) {
+    .main-wrap { grid-template-columns: 200px 1fr; }
+    .right-sidebar { display: none; }
+  }
+  @media (max-width: 768px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .left-sidebar { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav class="alt-nav">
+  <a href="./index.html" class="alt-nav-logo">
+    <div>
+      <div class="alt-nav-logo-text">Imali<span>.</span>biz</div>
+      <div class="alt-nav-logo-sub">Supply Chain</div>
+    </div>
+  </a>
+  <div class="alt-nav-links">
+    <a href="alt.html" class="alt-nav-link active">Market Feed</a>
+    <a href="quote.html" class="alt-nav-link">Submit Quote</a>
+    <a href="dashboard.html" class="alt-nav-link">Dashboard</a>
+    <a href="deliveries.html" class="alt-nav-link">Deliveries</a>
+    <a href="../index.html" class="alt-nav-link">← Imali.biz</a>
+  </div>
+  <div class="alt-nav-right">
+    <div class="alt-nav-stat">
+      <span class="alt-nav-status">● Market Open</span>
+    </div>
+    <button class="alt-theme-btn" onclick="toggleTheme()"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
+    <button class="alt-switch-btn" onclick="location.href='projects.html'" title="Switch to visual layout">⊞ Visual View</button>
+    <a href="signup.html" class="alt-cta">Register →</a>
+  </div>
+</nav>
+
+<!-- TICKER BAR -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-wrap">
+
+  <!-- LEFT SIDEBAR: Filters + Category Demand -->
+  <aside class="left-sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Filters</div>
+      <input type="text" class="sidebar-input" id="searchInput" placeholder="Search project or location…">
+      <select class="sidebar-select" id="categoryFilter">
+        <option value="">All Categories</option>
+        <option>Cement & Blocks</option>
+        <option>Steel & Rebar</option>
+        <option>Timber & Lumber</option>
+        <option>Roofing Materials</option>
+        <option>Plumbing & Fittings</option>
+        <option>Electrical Supplies</option>
+        <option>Paint & Finishes</option>
+        <option>Doors & Windows</option>
+        <option>Sand, Aggregates & Stone</option>
+        <option>Sanitary Ware</option>
+        <option>Tiles & Flooring</option>
+      </select>
+      <select class="sidebar-select" id="provinceFilter">
+        <option value="">All Provinces</option>
+        <option>Kigali City</option>
+        <option>Northern Province</option>
+        <option>Southern Province</option>
+        <option>Eastern Province</option>
+        <option>Western Province</option>
+      </select>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Category Demand</div>
+      <div id="categoryDemand"></div>
+    </div>
+  </aside>
+
+  <!-- MAIN FEED -->
+  <main class="feed-wrap">
+    <div class="feed-header">
+      <div class="feed-title">
+        <span class="row-status-dot dot-open"></span>
+        Active Material Requirements
+        <span class="feed-count" id="resultCount">6 projects</span>
+      </div>
+      <div class="feed-sort">
+        Sort:
+        <button class="sort-btn active" onclick="setSort('deadline', this)">Deadline ↑</button>
+        <button class="sort-btn" onclick="setSort('quotes', this)">Quotes</button>
+        <button class="sort-btn" onclick="setSort('name', this)">Name</button>
+      </div>
+    </div>
+    <table class="project-table" id="projectTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Project</th>
+          <th>Phase</th>
+          <th>Material Categories</th>
+          <th style="text-align:center;">Items</th>
+          <th>Deadline</th>
+          <th style="text-align:center;">Quotes</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="projectBody"></tbody>
+    </table>
+  </main>
+
+  <!-- RIGHT SIDEBAR -->
+  <aside class="right-sidebar">
+    <div class="rs-section">
+      <div class="rs-label">Market Overview</div>
+      <div class="stat-block">
+        <div class="stat-tile"><div class="stat-tile-val">6</div><div class="stat-tile-label">Open Projects</div></div>
+        <div class="stat-tile"><div class="stat-tile-val">24</div><div class="stat-tile-label">BOQ Lines</div></div>
+        <div class="stat-tile"><div class="stat-tile-val">22</div><div class="stat-tile-label">Quotes In</div></div>
+        <div class="stat-tile"><div class="stat-tile-val">3</div><div class="stat-tile-label">Closing Soon</div></div>
+      </div>
+    </div>
+    <div class="rs-section">
+      <div class="rs-label">Top Material Demand</div>
+      <div id="topDemand"></div>
+    </div>
+    <div class="rs-section">
+      <div class="rs-label">Recent Activity</div>
+      <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">New quote submitted on <strong>Kicukiro Affordable Housing</strong> — Steel Rebar</div><div class="activity-time">2 min ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text"><strong>Rubavu Lakefront Villa</strong> deadline updated — now closing in 3 days</div><div class="activity-time">18 min ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">New project listed: <strong>Musanze Eco-Resort</strong> — 4 material categories</div><div class="activity-time">1h ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">Quote accepted on <strong>Huye Student Housing</strong> — Cement delivery in progress</div><div class="activity-time">3h ago</div></div></div>
+      <div class="activity-item"><div class="activity-dot"></div><div><div class="activity-text">New supplier verified: <strong>Kigali Steel Solutions Ltd</strong></div><div class="activity-time">5h ago</div></div></div>
+    </div>
+    <div class="rs-section">
+      <div class="register-block">
+        <h3>Start supplying</h3>
+        <p>Register as a verified supplier to submit quotes on any open requirement.</p>
+        <a href="signup.html" class="btn-register">Create Supplier Account →</a>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox"></div>
+</div>
+
+<script>
+  const projects = [
+    { id: 1, name: 'Kimironko Mixed-Use Block', loc: 'Gasabo, Kigali City', province: 'Kigali City',
+      img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=720&h=400&fit=crop&q=80&auto=format',
+      stage: 'Phase 1 — Foundation & Structure', deadline: 12, quotes: 4,
+      desc: 'A prime mixed-use development in Kimironko — ground-floor retail with four floors of residential units above. Phase 1 construction is underway and the project requires the materials below to proceed on schedule.',
+      materials: [
+        { item: 'Cement (32.5N)', qty: '1,200 bags', category: 'Cement & Blocks' },
+        { item: 'Steel Rebar (12mm)', qty: '8 tons', category: 'Steel & Rebar' },
+        { item: 'Concrete Blocks (15x20x40cm)', qty: '15,000 units', category: 'Cement & Blocks' },
+        { item: 'Roofing Sheets (IT4 Gauge)', qty: '450 sheets', category: 'Roofing Materials' }
+      ]
+    },
+    { id: 2, name: 'Huye Student Housing Campus', loc: 'Huye, Southern Province', province: 'Southern Province',
+      img: 'https://images.pexels.com/photos/10902660/pexels-photo-10902660.jpeg?auto=compress&cs=tinysrgb&w=720&h=400&fit=crop',
+      stage: 'Phase 2 — Roofing & Finishes', deadline: 19, quotes: 2,
+      desc: 'Purpose-built student accommodation adjacent to the University of Rwanda main campus. The project has moved into roofing and finishing — suppliers of timber, roofing, and plumbing materials are needed.',
+      materials: [
+        { item: 'Treated Timber (50x100mm)', qty: '300 m³', category: 'Timber & Lumber' },
+        { item: 'Roofing Sheets (IT5 Gauge)', qty: '1,200 sheets', category: 'Roofing Materials' },
+        { item: 'Plumbing Pipes & Fittings (full set)', qty: '1 lot', category: 'Plumbing & Fittings' },
+        { item: 'Cement (32.5N)', qty: '2,500 bags', category: 'Cement & Blocks' }
+      ]
+    },
+    { id: 3, name: 'Rubavu Lakefront Villa Plots', loc: 'Rubavu, Western Province', province: 'Western Province',
+      img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=720&h=400&fit=crop&q=80&auto=format',
+      stage: 'Phase 3 — Interior Finishing', deadline: 3, quotes: 7,
+      desc: 'Premium lakefront villa development on Lake Kivu, Rubavu. Interior finishing is in progress — quotes are closing soon for tiles, sanitary ware, paint, and doors & windows.',
+      materials: [
+        { item: 'Ceramic Floor Tiles (60x60cm)', qty: '2,000 sqm', category: 'Tiles & Flooring' },
+        { item: 'Sanitary Ware (toilets, basins)', qty: '40 sets', category: 'Sanitary Ware' },
+        { item: 'Exterior Paint (weatherproof)', qty: '800 L', category: 'Paint & Finishes' },
+        { item: 'Aluminium Doors & Windows', qty: '40 units', category: 'Doors & Windows' }
+      ]
+    },
+    { id: 4, name: 'Nyagatare Agri-Commercial Hub', loc: 'Nyagatare, Eastern Province', province: 'Eastern Province',
+      img: 'https://images.unsplash.com/photo-1720608594472-bc29045eef28?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0',
+      stage: 'Phase 1 — Structural Steelwork', deadline: 25, quotes: 1,
+      desc: 'Commercial warehousing and cold-chain facility in Nyagatare. Structural steelwork is underway — early-stage suppliers of steel, blocks, roofing, and electrical materials are needed.',
+      materials: [
+        { item: 'Structural Steel Beams (I-Beam)', qty: '12 tons', category: 'Steel & Rebar' },
+        { item: 'Concrete Blocks (15x20x40cm)', qty: '25,000 units', category: 'Cement & Blocks' },
+        { item: 'Insulated Roofing Sheets (IBR)', qty: '2,000 sheets', category: 'Roofing Materials' },
+        { item: 'Electrical Cabling & Fittings', qty: '1 lot', category: 'Electrical Supplies' }
+      ]
+    },
+    { id: 5, name: 'Musanze Eco-Resort Land', loc: 'Musanze, Northern Province', province: 'Northern Province',
+      img: 'https://images.unsplash.com/photo-1720608596579-27fa1ef828e8?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0',
+      stage: 'Phase 1 — Site Development', deadline: 30, quotes: 3,
+      desc: 'Prime eco-tourism land near Volcanoes National Park. Site development requires eco-certified timber, natural stone, roofing, and finishing materials.',
+      materials: [
+        { item: 'Eco-Certified Timber', qty: '500 m³', category: 'Timber & Lumber' },
+        { item: 'Natural Stone Cladding', qty: '1,800 sqm', category: 'Sand, Aggregates & Stone' },
+        { item: 'Clay Roof Tiles', qty: '1,500 sqm', category: 'Roofing Materials' },
+        { item: 'Exterior Paint & Finishes', qty: '600 L', category: 'Paint & Finishes' }
+      ]
+    },
+    { id: 6, name: 'Kicukiro Affordable Housing', loc: 'Kicukiro, Kigali City', province: 'Kigali City',
+      img: 'https://images.unsplash.com/photo-1668875438994-4388304392ef?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0',
+      stage: 'Phase 1 — Foundation & Structure', deadline: 8, quotes: 5,
+      desc: 'Affordable housing development in Kicukiro, Kigali. Foundation and structural work is ramping up — bulk cement, blocks, aggregates, and steel rebar are needed.',
+      materials: [
+        { item: 'Cement (32.5N)', qty: '3,000 bags', category: 'Cement & Blocks' },
+        { item: 'Concrete Blocks (15x20x40cm)', qty: '40,000 units', category: 'Cement & Blocks' },
+        { item: 'River Sand & Aggregates', qty: '600 m³', category: 'Sand, Aggregates & Stone' },
+        { item: 'Steel Rebar (10mm/12mm)', qty: '10 tons', category: 'Steel & Rebar' }
+      ]
+    }
+  ];
+
+  let sortKey = 'deadline';
+
+  function deadlineMeta(d) {
+    if (d <= 5)  return { cls: 'urgent', dot: 'dot-urgent', label: d + 'd left' };
+    if (d <= 14) return { cls: 'warn',   dot: 'dot-closing', label: d + 'd left' };
+    return         { cls: 'ok',     dot: 'dot-open',   label: d + 'd left' };
+  }
+
+  function render() {
+    const search = document.getElementById('searchInput').value.trim().toLowerCase();
+    const cat    = document.getElementById('categoryFilter').value;
+    const prov   = document.getElementById('provinceFilter').value;
+
+    let filtered = projects.filter(p => {
+      const ms = !search || p.name.toLowerCase().includes(search) || p.loc.toLowerCase().includes(search);
+      const mc = !cat  || p.materials.some(m => m.category === cat);
+      const mp = !prov || p.province === prov;
+      return ms && mc && mp;
+    });
+
+    filtered = [...filtered].sort((a, b) => {
+      if (sortKey === 'deadline') return a.deadline - b.deadline;
+      if (sortKey === 'quotes')   return b.quotes - a.quotes;
+      return a.name.localeCompare(b.name);
+    });
+
+    document.getElementById('resultCount').textContent = filtered.length + (filtered.length === 1 ? ' project' : ' projects');
+
+    document.getElementById('projectBody').innerHTML = filtered.length === 0
+      ? `<tr><td colspan="8" style="text-align:center; padding:3rem; color:var(--text-faint); font-size:0.82rem;">No projects match your filters.</td></tr>`
+      : filtered.map((p, i) => {
+          const dm = deadlineMeta(p.deadline);
+          const cats = [...new Set(p.materials.map(m => m.category))];
+          return `
+            <tr onclick="openModal(${p.id})">
+              <td><span class="row-id">SC-00${p.id}</span></td>
+              <td>
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span class="row-status-dot ${dm.dot}"></span>
+                  <div>
+                    <div class="row-name">${p.name}</div>
+                    <div class="row-loc">${p.loc}</div>
+                  </div>
+                </div>
+              </td>
+              <td><div class="row-phase">${p.stage}</div></td>
+              <td><div class="row-cats">${cats.map(c => `<span class="row-cat-tag">${c}</span>`).join('')}</div></td>
+              <td class="row-items">${p.materials.length}</td>
+              <td><div class="row-deadline ${dm.cls}">${dm.label}</div></td>
+              <td class="row-quotes">${p.quotes}</td>
+              <td class="row-action"><a href="quote.html?project=${p.id}" class="btn-row" onclick="event.stopPropagation()">Quote →</a></td>
+            </tr>
+          `;
+        }).join('');
+  }
+
+  function setSort(key, btn) {
+    sortKey = key;
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  }
+
+  // Category demand sidebar
+  function renderCategoryDemand() {
+    const counts = {};
+    projects.forEach(p => p.materials.forEach(m => { counts[m.category] = (counts[m.category] || 0) + 1; }));
+    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const max = sorted[0][1];
+    document.getElementById('categoryDemand').innerHTML = sorted.map(([name, count]) => `
+      <div class="cat-row" onclick="document.getElementById('categoryFilter').value='${name}'; render();">
+        <div>
+          <div class="cat-row-name">${name}</div>
+          <div class="cat-bar"><div class="cat-bar-fill" style="width:${(count/max)*100}%"></div></div>
+        </div>
+        <div class="cat-row-count">${count}</div>
+      </div>
+    `).join('');
+
+    // Top demand right sidebar
+    document.getElementById('topDemand').innerHTML = sorted.slice(0, 6).map(([name, count], i) => `
+      <div class="demand-row">
+        <div class="demand-rank">${i + 1}</div>
+        <div><div class="demand-name">${name}</div><div class="demand-bar"><div class="demand-bar-fill" style="width:${(count/max)*100}%"></div></div></div>
+        <div class="demand-val">${count}</div>
+      </div>
+    `).join('');
+  }
+
+  // Ticker
+  function buildTicker() {
+    const items = [
+      ...projects.map(p => `<div class="ticker-item"><span class="ticker-name">${p.name.split(' ').slice(0,2).join(' ')}</span><span class="ticker-val">${p.materials.length} items</span><span class="ticker-delta ${p.deadline <= 7 ? 'down' : 'up'}">${p.deadline <= 7 ? '▼' : '▲'} ${p.deadline}d</span></div>`),
+      `<div class="ticker-item"><span class="ticker-label">MARKET OPEN</span></div>`,
+      `<div class="ticker-item"><span class="ticker-name">Total BOQ Lines</span><span class="ticker-val">24</span></div>`,
+      `<div class="ticker-item"><span class="ticker-name">Quotes This Week</span><span class="ticker-val">22</span></div>`,
+      `<div class="ticker-item"><span class="ticker-name">Closing Soon</span><span class="ticker-val ticker-delta down">3 projects</span></div>`,
+    ];
+    const html = [...items, ...items].join('');
+    document.getElementById('ticker').innerHTML = html;
+  }
+
+  // Modal
+  function openModal(id) {
+    const p = projects.find(x => x.id === id);
+    const dm = deadlineMeta(p.deadline);
+    document.getElementById('modalBox').innerHTML = `
+      <div class="modal-top">
+        <div>
+          <div class="modal-top-id">SC-00${p.id} · ${p.stage}</div>
+          <div class="modal-top-name">${p.name}</div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-meta-bar">
+        <div class="modal-meta-item"><div class="modal-meta-label">Location</div><div class="modal-meta-val">📍 ${p.loc}</div></div>
+        <div class="modal-meta-item"><div class="modal-meta-label">Deadline</div><div class="modal-meta-val row-deadline ${dm.cls}">${dm.label}</div></div>
+        <div class="modal-meta-item"><div class="modal-meta-label">BOQ Items</div><div class="modal-meta-val">${p.materials.length}</div></div>
+        <div class="modal-meta-item"><div class="modal-meta-label">Quotes In</div><div class="modal-meta-val">${p.quotes}</div></div>
+      </div>
+      <div class="modal-body">
+        <p class="modal-desc">${p.desc}</p>
+        <div class="modal-boq-label">Bill of Quantities — Open Material Requirements</div>
+        <table class="boq-table">
+          <thead><tr><th>Material</th><th>Category</th><th>Qty Required</th></tr></thead>
+          <tbody>
+            ${p.materials.map(m => `
+              <tr>
+                <td>${m.item}</td>
+                <td><span class="cat-chip">${m.category}</span></td>
+                <td>${m.qty}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <a href="quote.html?project=${p.id}" class="modal-btn-primary">Submit a Quote for This Project →</a>
+        <button class="modal-btn-secondary" onclick="closeModal()">Close</button>
+      </div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+
+  // Init
+  document.getElementById('searchInput').addEventListener('input', render);
+  document.getElementById('categoryFilter').addEventListener('change', render);
+  document.getElementById('provinceFilter').addEventListener('change', render);
+  render();
+  renderCategoryDemand();
+  buildTicker();
+
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 5) + 'px'; cursor.style.top = (my - 5) + 'px';
+  });
+  (function animRing() {
+    rx += (mx - rx - 18) * 0.12; ry += (my - ry - 18) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  // Theme toggle (alt site keeps its own pref)
+  function toggleTheme() {
+    var html = document.documentElement;
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme-alt', next);
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = next === 'dark' ? '☀️' : '🌙'; label.textContent = next === 'dark' ? 'Light' : 'Dark'; }
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var t = document.documentElement.getAttribute('data-theme') || 'light';
+    var icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+    if (icon) { icon.textContent = t === 'dark' ? '☀️' : '🌙'; label.textContent = t === 'dark' ? 'Light' : 'Dark'; }
+  });
+</script>
+</body>
+</html>

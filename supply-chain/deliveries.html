@@ -20,6 +20,8 @@
   .nav-logo span { color: var(--steel); font-style: italic; font-family: 'Instrument Serif', serif; }
   .nav-sub { color: var(--steel); }
   .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-alt-btn { display:flex; align-items:center; gap:0.35rem; font-size:0.72rem; color:var(--text-dim); border:1px solid var(--border-strong); border-radius:0.4rem; padding:0.3rem 0.7rem; text-decoration:none; cursor:none; transition:border-color 0.15s, color 0.15s; font-family:'Syne', sans-serif; font-weight:600; white-space:nowrap; }
+  .nav-alt-btn:hover { border-color:var(--steel-border); color:var(--steel); }
   .nav-cta { background: var(--steel); color: #fff; border-radius: 2rem; padding: 0.55rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
   .nav-cta:hover { background: var(--steel-hover); color: #fff; }
   .nav-link.active { color: var(--steel); }
@@ -131,6 +133,7 @@
     <li><a href="deliveries.html" class="nav-link active">Deliveries</a></li>
     <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
   </ul>
+  <a href="alt.html" class="nav-alt-btn" title="Try the market terminal layout">⚡ Market View</a>
   <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
   <a href="signup.html" class="nav-cta">Register as Supplier</a>
 </nav>
