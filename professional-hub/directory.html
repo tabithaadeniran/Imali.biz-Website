@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find a Professional — The Professional Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hub: #1a6b5c; --hub-hover: #155249; --hub-soft: rgba(26,107,92,0.10); --hub-border: rgba(26,107,92,0.22);
+    --ink: #0a0a0f; --gold: #d4a832; --terracotta: #c8521a;
+    --bg: #faf7f2; --bg-alt: #ede7db; --bg-card: #ffffff;
+    --surface: rgba(0,0,0,0.04); --surface-hover: rgba(0,0,0,0.07);
+    --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.17);
+    --text: #1a1814; --text-dim: rgba(26,24,20,0.6); --text-faint: rgba(26,24,20,0.38);
+    --nav-bg: rgba(250,247,242,0.97); --input-bg: rgba(0,0,0,0.05); --input-border: rgba(0,0,0,0.14);
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0f; --bg-alt: #0f0f16; --bg-card: rgba(245,240,232,0.04);
+    --surface: rgba(245,240,232,0.04); --surface-hover: rgba(245,240,232,0.08);
+    --border: rgba(245,240,232,0.08); --border-strong: rgba(245,240,232,0.15);
+    --text: #f5f0e8; --text-dim: rgba(245,240,232,0.55); --text-faint: rgba(245,240,232,0.3);
+    --nav-bg: rgba(10,10,15,0.97); --input-bg: rgba(245,240,232,0.06); --input-border: rgba(245,240,232,0.14);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--hub); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid var(--hub-border); border-radius: 50%; pointer-events: none; z-index: 9998; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 4rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+  .nav-logo span { color: var(--hub); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hub); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--hub); font-weight: 500; }
+  .nav-cta { background: var(--hub); color: #fff; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--hub-hover); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* PAGE HEADER */
+  .page-header { padding: 8rem 4rem 3rem; background: var(--ink); }
+  .header-eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--hub); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+  .header-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--hub); }
+  .header-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 800; letter-spacing: -0.03em; color: #f5f0e8; margin-bottom: 0.75rem; }
+  .header-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .header-sub { font-size: 0.92rem; color: rgba(245,240,232,0.5); line-height: 1.7; max-width: 540px; }
+
+  /* SEARCH + FILTERS */
+  .search-bar-wrap { background: var(--ink); padding: 0 4rem 3rem; border-bottom: 1px solid rgba(245,240,232,0.07); }
+  .search-row { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .search-input-wrap { flex: 1; position: relative; }
+  .search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: rgba(245,240,232,0.3); font-size: 1rem; pointer-events: none; }
+  .search-input { width: 100%; background: rgba(245,240,232,0.07); border: 1px solid rgba(245,240,232,0.12); border-radius: 0.75rem; padding: 0.85rem 1rem 0.85rem 2.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: #f5f0e8; outline: none; transition: border-color 0.2s; }
+  .search-input::placeholder { color: rgba(245,240,232,0.3); }
+  .search-input:focus { border-color: var(--hub); }
+  .filter-select { background: rgba(245,240,232,0.07); border: 1px solid rgba(245,240,232,0.12); border-radius: 0.75rem; padding: 0.85rem 1.25rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: rgba(245,240,232,0.7); outline: none; cursor: none; transition: border-color 0.2s; appearance: none; min-width: 180px; }
+  .filter-select:focus { border-color: var(--hub); }
+  .filter-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+  .chip { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.1); border-radius: 2rem; padding: 0.35rem 0.9rem; font-size: 0.75rem; color: rgba(245,240,232,0.5); cursor: none; transition: all 0.2s; }
+  .chip:hover, .chip.active { background: var(--hub-soft); border-color: var(--hub-border); color: var(--hub); }
+  [data-theme="light"] .chip { background: var(--surface); border-color: var(--border); color: var(--text-dim); }
+  [data-theme="light"] .chip:hover, [data-theme="light"] .chip.active { background: var(--hub-soft); border-color: var(--hub-border); color: var(--hub); }
+
+  /* DIRECTORY LAYOUT */
+  .directory-layout { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 200px); }
+  .sidebar { background: var(--bg-alt); border-right: 1px solid var(--border); padding: 2rem 1.5rem; position: sticky; top: 80px; height: calc(100vh - 80px); overflow-y: auto; }
+  .sidebar-title { font-family: 'Syne', sans-serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.75rem; }
+  .sidebar-group { margin-bottom: 2rem; }
+  .specialty-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+  .specialty-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-radius: 0.5rem; cursor: none; transition: background 0.15s; font-size: 0.8rem; color: var(--text-dim); }
+  .specialty-item:hover { background: var(--surface-hover); color: var(--text); }
+  .specialty-item.active { background: var(--hub-soft); color: var(--hub); font-weight: 500; }
+  .specialty-count { font-size: 0.65rem; background: var(--surface); border-radius: 2rem; padding: 0.15rem 0.5rem; color: var(--text-faint); }
+  .specialty-item.active .specialty-count { background: rgba(26,107,92,0.15); color: var(--hub); }
+  .avail-toggle { display: flex; align-items: center; gap: 0.75rem; font-size: 0.82rem; color: var(--text-dim); }
+  .toggle-switch { width: 36px; height: 20px; background: var(--border); border-radius: 10px; position: relative; cursor: none; transition: background 0.2s; flex-shrink: 0; }
+  .toggle-switch.on { background: var(--hub); }
+  .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; background: white; border-radius: 50%; transition: left 0.2s; }
+  .toggle-switch.on::after { left: 19px; }
+  .district-list { list-style: none; display: flex; flex-direction: column; gap: 0.2rem; }
+  .district-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.35rem 0.5rem; border-radius: 0.4rem; cursor: none; font-size: 0.78rem; color: var(--text-dim); }
+  .district-item:hover { background: var(--surface-hover); }
+  .district-check { width: 14px; height: 14px; border: 1px solid var(--border-strong); border-radius: 3px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+  .district-check.checked { background: var(--hub); border-color: var(--hub); }
+
+  /* RESULTS */
+  .results-area { padding: 2rem 2.5rem; }
+  .results-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .results-count { font-size: 0.8rem; color: var(--text-faint); }
+  .sort-select { background: var(--surface); border: 1px solid var(--border); border-radius: 0.5rem; padding: 0.4rem 0.75rem; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: var(--text-dim); outline: none; cursor: none; appearance: none; }
+  .pros-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .pro-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 1.5rem; transition: all 0.25s; cursor: none; position: relative; }
+  .pro-card:hover { border-color: var(--hub-border); box-shadow: 0 6px 20px rgba(26,107,92,0.1); transform: translateY(-2px); }
+  .pro-card-top { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+  .pro-card-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: #fff; flex-shrink: 0; }
+  .pro-card-info { flex: 1; min-width: 0; }
+  .pro-card-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.15rem; }
+  .pro-card-specialty { font-size: 0.75rem; color: var(--hub); font-weight: 500; margin-bottom: 0.3rem; }
+  .pro-card-location { font-size: 0.72rem; color: var(--text-faint); }
+  .pro-card-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.85rem; }
+  .badge { font-size: 0.65rem; padding: 0.2rem 0.55rem; border-radius: 2rem; font-weight: 600; }
+  .badge-trust { background: var(--hub-soft); color: var(--hub); border: 1px solid var(--hub-border); }
+  .badge-kyc { background: rgba(212,168,50,0.1); color: #a07820; border: 1px solid rgba(212,168,50,0.2); }
+  [data-theme="dark"] .badge-kyc { color: var(--gold); }
+  .badge-avail { background: rgba(93,219,184,0.12); color: #2a9b7a; border: 1px solid rgba(93,219,184,0.25); }
+  .badge-unavail { background: var(--surface); color: var(--text-faint); border: 1px solid var(--border); }
+  .pro-card-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 1.1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .pro-card-footer { display: flex; justify-content: space-between; align-items: center; }
+  .pro-card-reviews { font-size: 0.7rem; color: var(--text-faint); }
+  .pro-card-reviews span { color: var(--gold); font-size: 0.75rem; }
+  .pro-card-actions { display: flex; gap: 0.5rem; }
+  .btn-card-primary { background: var(--hub); color: #fff; border: none; border-radius: 2rem; padding: 0.45rem 1rem; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; cursor: none; transition: background 0.2s; text-decoration: none; }
+  .btn-card-primary:hover { background: var(--hub-hover); }
+  .btn-card-outline { background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 2rem; padding: 0.45rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; cursor: none; transition: all 0.2s; }
+  .btn-card-outline:hover { border-color: var(--hub); color: var(--hub); }
+  .verified-badge { position: absolute; top: 1rem; right: 1rem; font-size: 0.65rem; color: var(--hub); display: flex; align-items: center; gap: 0.3rem; }
+  .verified-badge::before { content: '✓'; background: var(--hub); color: #fff; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; font-weight: 700; }
+
+  /* PAGINATION */
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 3rem 0; }
+  .page-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; cursor: none; border: 1px solid var(--border); background: transparent; color: var(--text-dim); transition: all 0.2s; }
+  .page-btn:hover { border-color: var(--hub); color: var(--hub); }
+  .page-btn.active { background: var(--hub); border-color: var(--hub); color: #fff; }
+
+  footer { background: var(--ink); color: rgba(245,240,232,0.35); padding: 2rem 4rem; display: flex; justify-content: space-between; font-size: 0.72rem; border-top: 1px solid rgba(245,240,232,0.06); }
+  footer a { color: rgba(245,240,232,0.35); text-decoration: none; }
+  footer a:hover { color: rgba(245,240,232,0.6); }
+
+  /* LIGHT MODE OVERRIDES */
+  [data-theme="light"] .page-header { background: #eaf5f2; }
+  [data-theme="light"] .header-title { color: var(--text); }
+  [data-theme="light"] .header-sub { color: var(--text-dim); }
+  [data-theme="light"] .search-bar-wrap { background: #eaf5f2; border-bottom-color: var(--border); }
+  [data-theme="light"] .search-input { background: rgba(0,0,0,0.05); color: var(--text); border-color: rgba(0,0,0,0.14); }
+  [data-theme="light"] .search-input::placeholder { color: var(--text-faint); }
+  [data-theme="light"] .filter-select { background: rgba(0,0,0,0.05); color: var(--text-dim); border-color: rgba(0,0,0,0.14); }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 1.5rem; }
+    .page-header, .search-bar-wrap { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .directory-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .results-area { padding: 1.5rem; }
+    .pros-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Professional Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link active">Find a Professional</a></li>
+    <li><a href="projects.html" class="nav-link">Find Projects</a></li>
+    <li><a href="register.html" class="nav-link">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link" style="color:var(--text-faint)">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+    <li><a href="register.html" class="nav-cta">Join as a Professional</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="header-eyebrow">Verified Professionals</div>
+  <h1 class="header-title">Find the right person <em>for your project.</em></h1>
+  <p class="header-sub">Every professional on this directory is KYC-verified. Filter by specialty, district, trust score, and availability — then contact directly.</p>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar-wrap">
+  <div class="search-row">
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" placeholder="Search by name, specialty, or keyword…" id="searchInput">
+    </div>
+    <select class="filter-select" id="specialtyFilter">
+      <option value="">All Specialties</option>
+      <option value="architect">Architect</option>
+      <option value="construction-manager">Construction Manager</option>
+      <option value="environmental-consultant">Environmental Consultant</option>
+      <option value="geotechnical-engineer">Geotechnical Engineer</option>
+      <option value="interior-designer">Interior Designer</option>
+      <option value="land-surveyor">Land Surveyor</option>
+      <option value="lawyer">Lawyer</option>
+      <option value="project-manager">Project Manager</option>
+      <option value="quantity-surveyor">Quantity Surveyor</option>
+      <option value="real-estate-agent">Real Estate Agent / Broker</option>
+      <option value="structural-engineer">Structural Engineer</option>
+      <option value="urban-planner">Urban Planner</option>
+    </select>
+    <select class="filter-select" id="districtFilter">
+      <option value="">All Districts</option>
+      <option>Gasabo</option>
+      <option>Kicukiro</option>
+      <option>Nyarugenge</option>
+      <option>Bugesera</option>
+      <option>Gatsibo</option>
+      <option>Kayonza</option>
+      <option>Kirehe</option>
+      <option>Ngoma</option>
+      <option>Nyagatare</option>
+      <option>Rwamagana</option>
+      <option>Burera</option>
+      <option>Gakenke</option>
+      <option>Gicumbi</option>
+      <option>Musanze</option>
+      <option>Rulindo</option>
+      <option>Gisagara</option>
+      <option>Huye</option>
+      <option>Kamonyi</option>
+      <option>Muhanga</option>
+      <option>Nyamagabe</option>
+      <option>Nyanza</option>
+      <option>Nyaruguru</option>
+      <option>Ruhango</option>
+      <option>Karongi</option>
+      <option>Ngororero</option>
+      <option>Nyabihu</option>
+      <option>Nyamasheke</option>
+      <option>Rubavu</option>
+      <option>Rusizi</option>
+      <option>Rutsiro</option>
+    </select>
+  </div>
+  <div class="filter-chips" id="filterChips">
+    <span class="chip active" data-filter="all">All</span>
+    <span class="chip" data-filter="available">Available now</span>
+    <span class="chip" data-filter="verified">KYC Verified</span>
+    <span class="chip" data-filter="trust90">Trust 90+</span>
+    <span class="chip" data-filter="trust80">Trust 80+</span>
+  </div>
+</div>
+
+<!-- DIRECTORY -->
+<div class="directory-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-group">
+      <div class="sidebar-title">Specialty</div>
+      <ul class="specialty-list" id="specialtyList">
+        <li class="specialty-item active" data-s="all">All Professionals <span class="specialty-count">48</span></li>
+        <li class="specialty-item" data-s="architect">Architect <span class="specialty-count">7</span></li>
+        <li class="specialty-item" data-s="construction-manager">Construction Manager <span class="specialty-count">4</span></li>
+        <li class="specialty-item" data-s="environmental-consultant">Environmental Consultant <span class="specialty-count">3</span></li>
+        <li class="specialty-item" data-s="geotechnical-engineer">Geotechnical Engineer <span class="specialty-count">3</span></li>
+        <li class="specialty-item" data-s="interior-designer">Interior Designer <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="land-surveyor">Land Surveyor <span class="specialty-count">6</span></li>
+        <li class="specialty-item" data-s="lawyer">Lawyer <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="project-manager">Project Manager <span class="specialty-count">4</span></li>
+        <li class="specialty-item" data-s="quantity-surveyor">Quantity Surveyor <span class="specialty-count">4</span></li>
+        <li class="specialty-item" data-s="real-estate-agent">Real Estate Agent / Broker <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="structural-engineer">Structural Engineer <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="urban-planner">Urban Planner <span class="specialty-count">3</span></li>
+      </ul>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-title">Availability</div>
+      <div class="avail-toggle" style="margin-bottom:0.75rem;">
+        <div class="toggle-switch" id="availToggle" onclick="this.classList.toggle('on')"></div>
+        Available now only
+      </div>
+    </div>
+    <div class="sidebar-group">
+      <div class="sidebar-title">Province</div>
+      <ul class="district-list">
+        <li class="district-item" onclick="toggleCheck(this)"><div class="district-check"></div>Kigali City</li>
+        <li class="district-item" onclick="toggleCheck(this)"><div class="district-check"></div>Eastern Province</li>
+        <li class="district-item" onclick="toggleCheck(this)"><div class="district-check"></div>Northern Province</li>
+        <li class="district-item" onclick="toggleCheck(this)"><div class="district-check"></div>Southern Province</li>
+        <li class="district-item" onclick="toggleCheck(this)"><div class="district-check"></div>Western Province</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- RESULTS -->
+  <div class="results-area">
+    <div class="results-meta">
+      <span class="results-count" id="resultsCount">Showing 12 of 48 professionals</span>
+      <select class="sort-select">
+        <option>Sort: Trust Score (High to Low)</option>
+        <option>Sort: Newest</option>
+        <option>Sort: Most Reviews</option>
+        <option>Sort: Alphabetical</option>
+      </select>
+    </div>
+
+    <div class="pros-grid" id="prosGrid">
+
+      <!-- Card 1 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#1a6b5c,#2a9b87)">CU</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Claire Uwimana</div>
+            <div class="pro-card-specialty">Architect</div>
+            <div class="pro-card-location">📍 Gasabo, Kigali</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 94</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-avail">Available</span>
+        </div>
+        <p class="pro-card-desc">10 years designing residential and mixed-use developments across Kigali. Specialises in affordable housing and climate-adaptive design. Member of the Rwanda Institute of Architects.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★★</span> 4.9 · 23 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#a07820,#d4a832)">JM</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Jean-Paul Mugisha</div>
+            <div class="pro-card-specialty">Structural Engineer</div>
+            <div class="pro-card-location">📍 Kicukiro, Kigali</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 88</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-avail">Available</span>
+        </div>
+        <p class="pro-card-desc">Structural analysis and design for mid-rise residential buildings. Experienced in slope-terrain foundations and seismic considerations for the East African region.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★★</span> 4.8 · 18 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#c8521a,#e06020)">AN</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Agathe Nzeyimana</div>
+            <div class="pro-card-specialty">Quantity Surveyor</div>
+            <div class="pro-card-location">📍 Musanze, Northern Province</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 91</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-avail">Available</span>
+        </div>
+        <p class="pro-card-desc">Bills of quantities and cost management for construction projects ranging from RWF 65M to RWF 6.5B. Works with local and international developers. RICS-affiliated.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★★</span> 4.9 · 31 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#3a2a6a,#5a3a9a)">DK</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Désiré Karangwa</div>
+            <div class="pro-card-specialty">Land Surveyor</div>
+            <div class="pro-card-location">📍 Huye, Southern Province</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 86</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-unavail">On a project</span>
+        </div>
+        <p class="pro-card-desc">Boundary demarcation, topographic surveys, and NLA parcel verification across Southern Province. 8 years of field experience. Registered with Rwanda Land Management and Use Authority.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★☆</span> 4.6 · 14 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#1a3a5c,#2a6b9c)">PM</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Patrick Murenzi</div>
+            <div class="pro-card-specialty">Lawyer — Real Estate &amp; Conveyancing</div>
+            <div class="pro-card-location">📍 Nyarugenge, Kigali</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 96</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-avail">Available</span>
+        </div>
+        <p class="pro-card-desc">Title due diligence, conveyancing, and property dispute resolution. Bar-licensed in Rwanda. Handles residential and commercial transactions, leasehold conversions, and inheritance disputes.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★★</span> 5.0 · 42 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#1a6b3c,#2a9b5c)">SN</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Solange Ntawukuliryayo</div>
+            <div class="pro-card-specialty">Environmental Consultant</div>
+            <div class="pro-card-location">📍 Kayonza, Eastern Province</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 83</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-avail">Available</span>
+        </div>
+        <p class="pro-card-desc">Environmental impact assessments and REMA permit applications for residential and agri-commercial developments. Accredited EIA practitioner with 6 years of field experience across Rwanda.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★☆</span> 4.7 · 11 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#6b1a3c,#9b2a5c)">IH</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Innocent Hakizimana</div>
+            <div class="pro-card-specialty">Urban Planner</div>
+            <div class="pro-card-location">📍 Gasabo, Kigali</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 89</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-avail">Available</span>
+        </div>
+        <p class="pro-card-desc">Land use zoning, master plan compliance, and development permit advisory. Former Rwanda Housing Authority planner. Specialises in densification strategies for Kigali's growing residential zones.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★★</span> 4.8 · 19 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="pro-card">
+        <div class="verified-badge">Verified</div>
+        <div class="pro-card-top">
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#3a6b1a,#5a9b2a)">GM</div>
+          <div class="pro-card-info">
+            <div class="pro-card-name">Gisèle Mukamana</div>
+            <div class="pro-card-specialty">Interior Designer</div>
+            <div class="pro-card-location">📍 Kicukiro, Kigali</div>
+          </div>
+        </div>
+        <div class="pro-card-badges">
+          <span class="badge badge-trust">Trust 85</span>
+          <span class="badge badge-kyc">KYC Verified</span>
+          <span class="badge badge-unavail">On a project</span>
+        </div>
+        <p class="pro-card-desc">Interior fit-out for mid-range and premium residential units. Specialises in space optimisation for smaller footprints and African contemporary aesthetics. Portfolio includes 60+ completed units.</p>
+        <div class="pro-card-footer">
+          <div class="pro-card-reviews"><span>★★★★★</span> 4.9 · 27 reviews</div>
+          <div class="pro-card-actions">
+            <a href="#" class="btn-card-primary">Contact</a>
+            <a href="#" class="btn-card-outline">Profile</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /pros-grid -->
+
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">4</button>
+      <span style="color:var(--text-faint);font-size:0.8rem;">···</span>
+      <button class="page-btn">6</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Imali.biz — The Professional Hub</span>
+  <span><a href="index.html">Home</a> · <a href="register.html">Register</a> · <a href="dashboard.html">Dashboard</a> · <a href="../index.html">Imali.biz</a></span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  });
+  (function anim(){ rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.transform=`translate(${rx}px,${ry}px)`; requestAnimationFrame(anim); })();
+
+  // Filter chips
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
+  // Sidebar specialty items
+  document.querySelectorAll('.specialty-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.specialty-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const specialty = item.getAttribute('data-s');
+      const select = document.getElementById('specialtyFilter');
+      select.value = specialty === 'all' ? '' : specialty;
+    });
+  });
+
+  function toggleCheck(el) {
+    el.querySelector('.district-check').classList.toggle('checked');
+  }
+
+  function toggleTheme() {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const t = document.documentElement.getAttribute('data-theme') || 'light';
+    document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+    // Pre-select specialty from URL param
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
+    if (type) {
+      document.getElementById('specialtyFilter').value = type;
+      document.querySelectorAll('.specialty-item').forEach(item => {
+        item.classList.toggle('active', item.getAttribute('data-s') === type);
+      });
+    }
+  });
+</script>
+</body>
+</html>

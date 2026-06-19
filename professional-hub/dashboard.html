@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard — The Professional Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --hub: #1a6b5c; --hub-hover: #155249; --hub-soft: rgba(26,107,92,0.10); --hub-border: rgba(26,107,92,0.22);
+    --ink: #0a0a0f; --gold: #d4a832; --terracotta: #c8521a;
+    --bg: #faf7f2; --bg-alt: #ede7db; --bg-card: #ffffff;
+    --surface: rgba(0,0,0,0.04); --surface-hover: rgba(0,0,0,0.07);
+    --border: rgba(0,0,0,0.09); --border-strong: rgba(0,0,0,0.17);
+    --text: #1a1814; --text-dim: rgba(26,24,20,0.6); --text-faint: rgba(26,24,20,0.38);
+    --nav-bg: rgba(250,247,242,0.97); --sidebar-bg: #f0ebe2;
+    --positive: #1a6b5c; --negative: #c0392b;
+  }
+  [data-theme="dark"] {
+    --bg: #0a0a0f; --bg-alt: #0f0f16; --bg-card: rgba(245,240,232,0.04);
+    --surface: rgba(245,240,232,0.04); --surface-hover: rgba(245,240,232,0.08);
+    --border: rgba(245,240,232,0.08); --border-strong: rgba(245,240,232,0.15);
+    --text: #f5f0e8; --text-dim: rgba(245,240,232,0.55); --text-faint: rgba(245,240,232,0.3);
+    --nav-bg: rgba(10,10,15,0.97); --sidebar-bg: #0d0d14;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; cursor: none; }
+  .cursor { position: fixed; width: 10px; height: 10px; background: var(--hub); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid var(--hub-border); border-radius: 50%; pointer-events: none; z-index: 9998; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9997; opacity: 0.6; }
+
+  /* TOP NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); height: 64px; }
+  .nav-logo-wrap { display: flex; flex-direction: column; gap: 0; text-decoration: none; }
+  .nav-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; color: var(--text); display: flex; align-items: center; gap: 0.35rem; }
+  .nav-logo span { color: var(--hub); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.55rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hub); font-weight: 500; }
+  .nav-right { display: flex; align-items: center; gap: 1rem; }
+  .notif-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: none; position: relative; font-size: 0.9rem; transition: background 0.2s; }
+  .notif-btn:hover { background: var(--surface-hover); }
+  .notif-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: var(--terracotta); border-radius: 50%; border: 2px solid var(--nav-bg); }
+  .user-pill { display: flex; align-items: center; gap: 0.6rem; background: var(--surface); border: 1px solid var(--border); border-radius: 3rem; padding: 0.35rem 0.85rem 0.35rem 0.35rem; cursor: none; transition: background 0.2s; }
+  .user-pill:hover { background: var(--surface-hover); }
+  .user-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--hub), #2a9b87); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.65rem; font-weight: 700; color: #fff; }
+  .user-name { font-size: 0.78rem; font-weight: 500; color: var(--text); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.3rem 0.65rem; cursor: none; display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* LAYOUT */
+  .app-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; padding-top: 64px; }
+
+  /* SIDEBAR */
+  .sidebar { background: var(--sidebar-bg); border-right: 1px solid var(--border); padding: 2rem 1rem; position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto; display: flex; flex-direction: column; }
+  .sidebar-section { margin-bottom: 2rem; }
+  .sidebar-label { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.5rem; padding: 0 0.5rem; }
+  .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 0.15rem; }
+  .sidebar-nav a { display: flex; align-items: center; gap: 0.65rem; padding: 0.55rem 0.75rem; border-radius: 0.6rem; text-decoration: none; font-size: 0.82rem; color: var(--text-dim); transition: background 0.15s, color 0.15s; cursor: none; }
+  .sidebar-nav a:hover { background: var(--surface-hover); color: var(--text); }
+  .sidebar-nav a.active { background: var(--hub-soft); color: var(--hub); font-weight: 500; }
+  .sidebar-nav .nav-icon { font-size: 1rem; width: 20px; text-align: center; }
+  .sidebar-badge { margin-left: auto; background: var(--terracotta); color: #fff; border-radius: 2rem; padding: 0.1rem 0.4rem; font-size: 0.6rem; font-weight: 700; }
+  .trust-score-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1rem; margin-top: auto; text-align: center; }
+  .trust-label { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.4rem; }
+  .trust-num { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; color: var(--hub); line-height: 1; }
+  .trust-max { font-size: 0.7rem; color: var(--text-faint); }
+  .trust-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 0.75rem; overflow: hidden; }
+  .trust-fill { height: 100%; background: linear-gradient(90deg, var(--hub), #2a9b87); border-radius: 2px; width: 88%; transition: width 1s ease; }
+
+  /* MAIN CONTENT */
+  .main { padding: 2.5rem 3rem; overflow-y: auto; }
+  .page-header { margin-bottom: 2.5rem; }
+  .page-greeting { font-family: 'Syne', sans-serif; font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 0.35rem; }
+  .page-greeting em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--hub); }
+  .page-subtitle { font-size: 0.85rem; color: var(--text-dim); }
+
+  /* STATUS BANNER */
+  .status-banner { display: flex; align-items: center; gap: 1rem; background: rgba(212,168,50,0.08); border: 1px solid rgba(212,168,50,0.2); border-radius: 0.85rem; padding: 1rem 1.25rem; margin-bottom: 2rem; }
+  .status-icon { font-size: 1.2rem; }
+  .status-text { font-size: 0.82rem; color: var(--text-dim); flex: 1; }
+  .status-text strong { color: var(--text); }
+  .status-btn { background: var(--gold); color: var(--ink); border-radius: 2rem; padding: 0.4rem 1rem; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; text-decoration: none; cursor: none; white-space: nowrap; }
+
+  /* STATS ROW */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem 1.5rem; }
+  .stat-card-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.5rem; }
+  .stat-card-value { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; color: var(--text); line-height: 1; margin-bottom: 0.3rem; }
+  .stat-card-value.hub { color: var(--hub); }
+  .stat-card-value.gold { color: var(--gold); }
+  .stat-card-delta { font-size: 0.7rem; color: var(--positive); display: flex; align-items: center; gap: 0.3rem; }
+  .stat-card-delta.neg { color: var(--negative); }
+
+  /* GRID PANELS */
+  .panels-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+  .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; }
+  .panel-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+  .panel-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; }
+  .panel-link { font-size: 0.72rem; color: var(--hub); text-decoration: none; cursor: none; }
+  .panel-link:hover { text-decoration: underline; }
+  .panel-body { padding: 0; }
+
+  /* PROJECT LIST */
+  .project-item { display: flex; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .project-item:last-child { border-bottom: none; }
+  .project-item:hover { background: var(--surface); }
+  .project-icon { width: 38px; height: 38px; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .pi-land { background: rgba(200,82,26,0.1); }
+  .pi-wealth { background: rgba(212,168,50,0.1); }
+  .pi-supply { background: rgba(47,111,176,0.1); }
+  .project-info { flex: 1; min-width: 0; }
+  .project-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .project-meta { font-size: 0.7rem; color: var(--text-faint); }
+  .project-status { display: flex; flex-direction: column; align-items: flex-end; gap: 0.35rem; flex-shrink: 0; }
+  .status-chip { font-size: 0.62rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 2rem; white-space: nowrap; }
+  .sc-active { background: rgba(26,107,92,0.1); color: var(--hub); border: 1px solid rgba(26,107,92,0.2); }
+  .sc-pending { background: rgba(212,168,50,0.1); color: #a07820; border: 1px solid rgba(212,168,50,0.2); }
+  .sc-complete { background: var(--surface); color: var(--text-faint); border: 1px solid var(--border); }
+  [data-theme="dark"] .sc-pending { color: var(--gold); }
+  .project-value { font-size: 0.72rem; color: var(--text-dim); font-weight: 500; }
+
+  /* MATCH LIST */
+  .match-item { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .match-item:last-child { border-bottom: none; }
+  .match-item:hover { background: var(--surface); }
+  .match-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
+  .match-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; }
+  .match-score { font-size: 0.65rem; background: var(--hub-soft); color: var(--hub); border: 1px solid var(--hub-border); border-radius: 2rem; padding: 0.15rem 0.5rem; font-weight: 600; }
+  .match-desc { font-size: 0.74rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 0.6rem; }
+  .match-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .match-tag { font-size: 0.62rem; background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.15rem 0.5rem; color: var(--text-faint); }
+  .match-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+  .btn-match-accept { background: var(--hub); color: #fff; border: none; border-radius: 2rem; padding: 0.35rem 0.9rem; font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-match-accept:hover { background: var(--hub-hover); }
+  .btn-match-decline { background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.7rem; cursor: none; transition: all 0.2s; }
+  .btn-match-decline:hover { border-color: var(--border-strong); }
+
+  /* EARNINGS PANEL */
+  .earnings-panel { background: var(--ink); border-radius: 1rem; padding: 1.75rem; margin-bottom: 1.5rem; position: relative; overflow: hidden; }
+  .earnings-panel::before { content: ''; position: absolute; top: -60px; right: -60px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(26,107,92,0.15), transparent); }
+  .ep-label { font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(245,240,232,0.35); margin-bottom: 0.5rem; }
+  .ep-total { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; letter-spacing: -0.04em; color: #f5f0e8; line-height: 1; margin-bottom: 0.25rem; }
+  .ep-sub { font-size: 0.72rem; color: rgba(245,240,232,0.35); margin-bottom: 1.75rem; }
+  .ep-breakdown { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .ep-item { background: rgba(245,240,232,0.06); border: 1px solid rgba(245,240,232,0.08); border-radius: 0.75rem; padding: 0.9rem; }
+  .ep-item-label { font-size: 0.65rem; color: rgba(245,240,232,0.35); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .ep-item-value { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: #f5f0e8; }
+  .ep-item-value.token { color: var(--gold); }
+  .ep-cta { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(26,107,92,0.3); border: 1px solid rgba(26,107,92,0.4); color: #5ddbb8; border-radius: 2rem; padding: 0.45rem 1rem; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 600; cursor: none; text-decoration: none; margin-top: 1.25rem; transition: background 0.2s; }
+  .ep-cta:hover { background: rgba(26,107,92,0.45); }
+
+  /* REVIEWS PANEL */
+  .review-item { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); }
+  .review-item:last-child { border-bottom: none; }
+  .review-stars { color: var(--gold); font-size: 0.8rem; margin-bottom: 0.35rem; }
+  .review-text { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 0.4rem; font-style: italic; }
+  .review-from { font-size: 0.68rem; color: var(--text-faint); }
+
+  /* PARTNER SECTION */
+  .partner-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 1.75rem; margin-bottom: 1.5rem; }
+  .partner-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; margin-bottom: 0.35rem; }
+  .partner-sub { font-size: 0.78rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 1.25rem; }
+  .partner-code-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 0.65rem; padding: 0.85rem 1rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .partner-code { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--hub); }
+  .copy-btn { background: var(--hub-soft); border: 1px solid var(--hub-border); border-radius: 0.5rem; padding: 0.35rem 0.75rem; font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 600; color: var(--hub); cursor: none; transition: background 0.2s; }
+  .copy-btn:hover { background: rgba(26,107,92,0.18); }
+  .partner-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .partner-stat { background: var(--surface); border-radius: 0.65rem; padding: 0.85rem; text-align: center; }
+  .ps-num { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--text); }
+  .ps-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-faint); }
+
+  /* PROFILE COMPLETENESS */
+  .profile-panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 1.75rem; margin-bottom: 1.5rem; }
+  .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+  .profile-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; }
+  .profile-pct { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 800; color: var(--hub); }
+  .profile-bar { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 1.25rem; overflow: hidden; }
+  .profile-fill { height: 100%; background: linear-gradient(90deg, var(--hub), #2a9b87); border-radius: 3px; width: 60%; }
+  .profile-tasks { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .profile-task { display: flex; align-items: center; gap: 0.75rem; font-size: 0.78rem; }
+  .pt-check { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; }
+  .pt-done { background: var(--hub); color: #fff; }
+  .pt-todo { background: var(--surface); border: 1px solid var(--border); color: var(--text-faint); }
+  .pt-text { color: var(--text-dim); }
+  .pt-text.done { color: var(--text-faint); text-decoration: line-through; }
+  .pt-action { margin-left: auto; font-size: 0.68rem; color: var(--hub); text-decoration: none; cursor: none; }
+  .pt-action:hover { text-decoration: underline; }
+
+  footer { background: var(--ink); color: rgba(245,240,232,0.3); padding: 1.25rem 3rem; display: flex; justify-content: space-between; font-size: 0.7rem; border-top: 1px solid rgba(245,240,232,0.06); }
+  footer a { color: rgba(245,240,232,0.3); text-decoration: none; }
+  footer a:hover { color: rgba(245,240,232,0.6); }
+
+  /* LIGHT MODE OVERRIDES */
+  [data-theme="light"] .earnings-panel { background: var(--hub); }
+  [data-theme="light"] .earnings-panel::before { background: radial-gradient(circle, rgba(255,255,255,0.1), transparent); }
+  [data-theme="light"] .ep-label { color: rgba(255,255,255,0.65); }
+  [data-theme="light"] .ep-total { color: #fff; }
+  [data-theme="light"] .ep-sub { color: rgba(255,255,255,0.55); }
+  [data-theme="light"] .ep-item { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.18); }
+  [data-theme="light"] .ep-item-label { color: rgba(255,255,255,0.6); }
+  [data-theme="light"] .ep-item-value { color: #fff; }
+  [data-theme="light"] .ep-cta { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); color: #fff; }
+  [data-theme="light"] .ep-cta:hover { background: rgba(255,255,255,0.25); }
+
+  @media (max-width: 1100px) {
+    .app-layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; flex-direction: row; flex-wrap: wrap; gap: 0.5rem; padding: 1rem; }
+    .sidebar-section { margin-bottom: 0; }
+    .trust-score-pill { margin-top: 0; }
+    .main { padding: 1.5rem; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .panels-grid { grid-template-columns: 1fr; }
+    footer { padding: 1.25rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- TOP NAV -->
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Professional Hub</div>
+  </a>
+  <div class="nav-right">
+    <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    <div class="user-pill">
+      <div class="user-avatar">CU</div>
+      <span class="user-name">Claire U.</span>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button>
+    <a href="../index.html" style="font-size:0.75rem;color:var(--text-faint);text-decoration:none;cursor:none;">← Imali.biz</a>
+  </div>
+</nav>
+
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Main</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active"><span class="nav-icon">📊</span>Overview</a></li>
+        <li><a href="#"><span class="nav-icon">🎯</span>Project Matches <span class="sidebar-badge">3</span></a></li>
+        <li><a href="#"><span class="nav-icon">💼</span>My Projects</a></li>
+        <li><a href="#"><span class="nav-icon">💰</span>Earnings</a></li>
+        <li><a href="#"><span class="nav-icon">⭐</span>Reviews</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Profile</div>
+      <ul class="sidebar-nav">
+        <li><a href="#"><span class="nav-icon">🪪</span>My Profile</a></li>
+        <li><a href="#"><span class="nav-icon">📄</span>Credentials</a></li>
+        <li><a href="#"><span class="nav-icon">🔗</span>Partner Dashboard</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Account</div>
+      <ul class="sidebar-nav">
+        <li><a href="#"><span class="nav-icon">⚙️</span>Settings</a></li>
+        <li><a href="directory.html"><span class="nav-icon">🌍</span>Browse Directory</a></li>
+        <li><a href="#"><span class="nav-icon">🚪</span>Sign Out</a></li>
+      </ul>
+    </div>
+    <div class="trust-score-pill">
+      <div class="trust-label">Trust Score</div>
+      <div class="trust-num">88</div>
+      <div class="trust-max">/ 100</div>
+      <div class="trust-bar"><div class="trust-fill"></div></div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <div class="page-header">
+      <h1 class="page-greeting">Good morning, <em>Claire.</em></h1>
+      <p class="page-subtitle">You have 3 new project matches and 1 pending review request.</p>
+    </div>
+
+    <!-- STATUS BANNER -->
+    <div class="status-banner">
+      <span class="status-icon">🪪</span>
+      <div class="status-text"><strong>Complete your KYC to go fully verified.</strong> Upload your National ID or passport to unlock priority matching and the verified badge on your profile.</div>
+      <a href="#" class="status-btn">Complete KYC</a>
+    </div>
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-label">Projects Completed</div>
+        <div class="stat-card-value hub">7</div>
+        <div class="stat-card-delta">↑ 2 this quarter</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Total Earned (Cash)</div>
+        <div class="stat-card-value">RWF 6.2M</div>
+        <div class="stat-card-delta">↑ RWF 1,560,000 this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Token Balance</div>
+        <div class="stat-card-value gold">1,240</div>
+        <div class="stat-card-delta">+ 480 this quarter</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-label">Profile Views</div>
+        <div class="stat-card-value">312</div>
+        <div class="stat-card-delta">↑ 38% vs last month</div>
+      </div>
+    </div>
+
+    <!-- PANELS: PROJECTS + MATCHES -->
+    <div class="panels-grid">
+
+      <!-- MY PROJECTS -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">My Projects</span>
+          <a href="#" class="panel-link">View all →</a>
+        </div>
+        <div class="panel-body">
+          <div class="project-item">
+            <div class="project-icon pi-land">🏡</div>
+            <div class="project-info">
+              <div class="project-name">Ngoma Residential Plot Survey</div>
+              <div class="project-meta">Land Surveyor · Ngoma District · Client: Imali Land Bank</div>
+            </div>
+            <div class="project-status">
+              <span class="status-chip sc-active">In Progress</span>
+              <span class="project-value">RWF 780,000</span>
+            </div>
+          </div>
+          <div class="project-item">
+            <div class="project-icon pi-wealth">📈</div>
+            <div class="project-info">
+              <div class="project-name">Kigali Mixed-Use Development — Feasibility</div>
+              <div class="project-meta">Architect · Gasabo · Client: Wealth Hub Project</div>
+            </div>
+            <div class="project-status">
+              <span class="status-chip sc-pending">Awaiting Brief</span>
+              <span class="project-value">RWF 1,820,000 + tokens</span>
+            </div>
+          </div>
+          <div class="project-item">
+            <div class="project-icon pi-supply">🧱</div>
+            <div class="project-info">
+              <div class="project-name">Musanze Housing Units — Structural Review</div>
+              <div class="project-meta">Structural Engineer · Musanze · Private Client</div>
+            </div>
+            <div class="project-status">
+              <span class="status-chip sc-complete">Complete</span>
+              <span class="project-value">RWF 1,105,000</span>
+            </div>
+          </div>
+          <div class="project-item">
+            <div class="project-icon pi-land">🏡</div>
+            <div class="project-info">
+              <div class="project-name">Title Due Diligence — Huye Plot Sale</div>
+              <div class="project-meta">Lawyer (Referred) · Huye District</div>
+            </div>
+            <div class="project-status">
+              <span class="status-chip sc-complete">Complete</span>
+              <span class="project-value">RWF 416,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECT MATCHES -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">New Matches</span>
+          <a href="#" class="panel-link">See all 3 →</a>
+        </div>
+        <div class="panel-body">
+          <div class="match-item">
+            <div class="match-header">
+              <span class="match-name">Nyagatare Agricultural Hub — Site Design</span>
+              <span class="match-score">98% match</span>
+            </div>
+            <p class="match-desc">Seeking an Architect for a 12-unit mixed residential and commercial development on a 3,200m² plot in Eastern Province. Budget: RWF 2,600,000–RWF 4,550,000.</p>
+            <div class="match-tags">
+              <span class="match-tag">Architect</span>
+              <span class="match-tag">Eastern Province</span>
+              <span class="match-tag">Residential</span>
+            </div>
+            <div class="match-actions">
+              <button class="btn-match-accept">Accept Match</button>
+              <button class="btn-match-decline">Decline</button>
+            </div>
+          </div>
+          <div class="match-item">
+            <div class="match-header">
+              <span class="match-name">Kigali Luxury Apartment — Interior Concept</span>
+              <span class="match-score">85% match</span>
+            </div>
+            <p class="match-desc">Interior concept design for a 4-bedroom premium unit in Kiyovu. Tokens available alongside cash fee. Wealth Hub development.</p>
+            <div class="match-tags">
+              <span class="match-tag">Interior Design</span>
+              <span class="match-tag">Kigali</span>
+              <span class="match-tag">Premium</span>
+              <span class="match-tag">Tokens</span>
+            </div>
+            <div class="match-actions">
+              <button class="btn-match-accept">Accept Match</button>
+              <button class="btn-match-decline">Decline</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EARNINGS PANEL -->
+    <div class="earnings-panel">
+      <div class="ep-label">Total Earnings — All Time</div>
+      <div class="ep-total">RWF 6,240,000</div>
+      <div class="ep-sub">Across 7 completed projects · Updated in real time</div>
+      <div class="ep-breakdown">
+        <div class="ep-item">
+          <div class="ep-item-label">Cash Paid Out</div>
+          <div class="ep-item-value">RWF 6,240,000</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-item-label">Token Balance</div>
+          <div class="ep-item-value token">1,240 TKN</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-item-label">Partner Commissions</div>
+          <div class="ep-item-value">RWF 442,000</div>
+        </div>
+        <div class="ep-item">
+          <div class="ep-item-label">Pending (In Progress)</div>
+          <div class="ep-item-value">RWF 2,600,000</div>
+        </div>
+      </div>
+      <a href="#" class="ep-cta">
+        View full earnings history →
+      </a>
+    </div>
+
+    <!-- BOTTOM ROW: PARTNER + PROFILE + REVIEWS -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem;">
+
+      <!-- PARTNER REFERRALS -->
+      <div class="partner-panel">
+        <div class="partner-title">Your Partner Code</div>
+        <p class="partner-sub">Share your code. Earn a commission for every professional, landowner, or investor you refer to Imali.</p>
+        <div class="partner-code-wrap">
+          <span class="partner-code">PRO-CU-8814</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <div class="partner-stats">
+          <div class="partner-stat">
+            <div class="ps-num">6</div>
+            <div class="ps-label">Referred</div>
+          </div>
+          <div class="partner-stat">
+            <div class="ps-num">4</div>
+            <div class="ps-label">Converted</div>
+          </div>
+          <div class="partner-stat">
+            <div class="ps-num" style="font-size:0.95rem;">RWF 442K</div>
+            <div class="ps-label">Earned</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE COMPLETENESS -->
+      <div class="profile-panel">
+        <div class="profile-header">
+          <span class="profile-title">Profile Completeness</span>
+          <span class="profile-pct">60%</span>
+        </div>
+        <div class="profile-bar"><div class="profile-fill"></div></div>
+        <ul class="profile-tasks">
+          <li class="profile-task">
+            <div class="pt-check pt-done">✓</div>
+            <span class="pt-text done">Choose specialty</span>
+          </li>
+          <li class="profile-task">
+            <div class="pt-check pt-done">✓</div>
+            <span class="pt-text done">Add contact details</span>
+          </li>
+          <li class="profile-task">
+            <div class="pt-check pt-done">✓</div>
+            <span class="pt-text done">Write professional bio</span>
+          </li>
+          <li class="profile-task">
+            <div class="pt-check pt-todo"></div>
+            <span class="pt-text">Complete KYC verification</span>
+            <a href="#" class="pt-action">Start →</a>
+          </li>
+          <li class="profile-task">
+            <div class="pt-check pt-todo"></div>
+            <span class="pt-text">Upload credential document</span>
+            <a href="#" class="pt-action">Upload →</a>
+          </li>
+          <li class="profile-task">
+            <div class="pt-check pt-todo"></div>
+            <span class="pt-text">Add portfolio link</span>
+            <a href="#" class="pt-action">Add →</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- RECENT REVIEWS -->
+      <div class="panel" style="border-radius:1rem;">
+        <div class="panel-header">
+          <span class="panel-title">Recent Reviews</span>
+          <a href="#" class="panel-link">All reviews →</a>
+        </div>
+        <div class="panel-body">
+          <div class="review-item">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Delivered exactly what we needed — fast turnaround and the structural calculations were spot on. Will use again."</p>
+            <div class="review-from">Musanze Housing Project · 2 weeks ago</div>
+          </div>
+          <div class="review-item">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text">"Very professional. Caught a title issue we didn't know about. Saved us a lot of trouble downstream."</p>
+            <div class="review-from">Huye Plot Sale · 1 month ago</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <span>© 2025 Imali.biz — The Professional Hub</span>
+  <span><a href="index.html">Home</a> · <a href="directory.html">Directory</a> · <a href="projects.html">Find Projects</a> · <a href="register.html">Register</a> · <a href="../index.html">Imali.biz</a></span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cursor.style.transform=`translate(${mx-5}px,${my-5}px)`;
+  });
+  (function anim(){ rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.transform=`translate(${rx}px,${ry}px)`; requestAnimationFrame(anim); })();
+
+  function copyCode(btn) {
+    navigator.clipboard.writeText('PRO-CU-8814').then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  function toggleTheme() {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('imali-theme', next);
+    document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = next === 'dark' ? 'Light' : 'Dark';
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const t = document.documentElement.getAttribute('data-theme') || 'light';
+    document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+  });
+</script>
+</body>
+</html>

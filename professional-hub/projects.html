@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find Projects — The Professional Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --hub: #1a6b5c;
+    --hub-hover: #155249;
+    --hub-soft: rgba(26,107,92,0.10);
+    --hub-border: rgba(26,107,92,0.22);
+    --cursor-color: var(--hub);
+    --cursor-ring: rgba(26,107,92,0.35);
+  }
+  .nav-logo span { color: var(--hub); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hub); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--hub); font-weight: 500; }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--hub); color: #fff; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--hub-hover); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* PAGE LAYOUT */
+  .page-wrap { padding-top: 72px; }
+  .page-header { padding: 3rem 4rem 2rem; background: #eaf5f2; border-bottom: 1px solid var(--hub-border); }
+  [data-theme="dark"] .page-header { background: var(--bg-alt); border-bottom-color: var(--border); }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--hub); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--hub); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; color: var(--text); }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--hub); }
+  .page-sub { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; max-width: 560px; margin-top: 0.6rem; }
+
+  /* FILTER BAR */
+  .filter-bar { padding: 1rem 4rem; background: var(--bg-alt); border-bottom: 1px solid var(--border); display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  .filter-input { background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.5rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; transition: border-color 0.2s; cursor: none; width: 220px; }
+  .filter-input:focus { border-color: var(--hub-border); }
+  .filter-input::placeholder { color: var(--text-faint); }
+  .filter-select { background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.5rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text-dim); outline: none; cursor: none; min-width: 160px; transition: border-color 0.2s; }
+  .filter-select:focus { border-color: var(--hub-border); }
+  .result-count { margin-left: auto; font-size: 0.78rem; color: var(--text-faint); white-space: nowrap; }
+  .view-toggle { display: flex; gap: 0.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.2rem; }
+  .view-btn { width: 36px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 0.35rem; border: none; background: transparent; cursor: none; color: var(--text-faint); transition: background 0.15s, color 0.15s; font-size: 0.9rem; }
+  .view-btn.active { background: var(--bg-card); color: var(--hub); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  /* GRID */
+  .grid-wrap { padding: 2.5rem 4rem 5rem; }
+  .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+  .grid-wrap.hidden { display: none; }
+  .projects-grid.hidden { display: none; }
+
+  /* LIST VIEW */
+  .list-wrap { padding: 2rem 4rem 5rem; }
+  .list-wrap.hidden { display: none; }
+  .projects-list { width: 100%; border-collapse: collapse; }
+  .projects-list thead tr { border-bottom: 2px solid var(--border-strong); }
+  .projects-list th { text-align: left; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; padding: 0.65rem 1rem; white-space: nowrap; cursor: none; }
+  .projects-list tbody tr { border-bottom: 1px solid var(--border); cursor: none; transition: background 0.15s; }
+  .projects-list tbody tr:last-child { border-bottom: none; }
+  .projects-list tbody tr:hover { background: var(--surface); }
+  .projects-list td { padding: 0.9rem 1rem; font-size: 0.84rem; vertical-align: middle; }
+  .lt-name { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); font-size: 0.88rem; }
+  .lt-loc { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .lt-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; max-width: 240px; }
+  .lt-tag { font-size: 0.62rem; background: var(--hub-soft); border: 1px solid var(--hub-border); color: var(--hub); border-radius: 2rem; padding: 0.15rem 0.55rem; white-space: nowrap; }
+  .lt-budget { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; white-space: nowrap; color: var(--hub); }
+  .lt-timeline { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--text); }
+  .lt-action { text-align: right; white-space: nowrap; }
+
+  /* PROJECT CARD */
+  .proj-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; cursor: none; transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+  .proj-card:hover { border-color: var(--hub-border); transform: translateY(-4px); }
+  [data-theme="light"] .proj-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.09); }
+  [data-theme="dark"]  .proj-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.40); }
+
+  .proj-thumb { height: 190px; overflow: hidden; position: relative; background: #0e1219; }
+  .proj-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+  .proj-card:hover .proj-thumb img { transform: scale(1.04); }
+  .proj-source-badge { position: absolute; bottom: 0.75rem; left: 0.75rem; font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; border-radius: 2rem; padding: 0.25rem 0.7rem; background: rgba(10,10,15,0.78); color: #fff; backdrop-filter: blur(4px); z-index: 2; }
+  .proj-status-badge { position: absolute; bottom: 0.75rem; right: 0.75rem; font-size: 0.62rem; font-family: 'Syne', sans-serif; font-weight: 700; border-radius: 2rem; padding: 0.25rem 0.7rem; z-index: 2; }
+  .status-open { background: rgba(26,107,92,0.9); color: #fff; }
+  .status-closing { background: rgba(212,168,50,0.9); color: #fff; }
+  .status-reviewing { background: rgba(120,100,200,0.9); color: #fff; }
+
+  .proj-body { padding: 1.25rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .proj-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem; color: var(--text); }
+  .proj-loc { font-size: 0.75rem; color: var(--text-faint); margin-bottom: 1rem; }
+
+  .needs-label { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; margin-bottom: 0.4rem; }
+  .specialty-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .spec-tag { font-size: 0.68rem; font-weight: 500; background: var(--hub-soft); border: 1px solid var(--hub-border); color: var(--hub); border-radius: 2rem; padding: 0.2rem 0.65rem; white-space: nowrap; font-family: 'Syne', sans-serif; }
+  .spec-tag.secondary { background: var(--surface); border-color: var(--border); color: var(--text-dim); }
+
+  .proj-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+  .meta-item { background: var(--surface); border-radius: 0.5rem; padding: 0.5rem 0.75rem; }
+  .meta-val { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); }
+  .meta-label { font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.1rem; }
+
+  .proj-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; margin-bottom: 1rem; flex: 1; }
+
+  .proj-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid var(--border); margin-top: auto; gap: 0.75rem; }
+  .proj-source { font-size: 0.72rem; color: var(--text-faint); }
+  .proj-source strong { color: var(--text-dim); }
+  .btn-apply { background: var(--hub); color: #fff; border: 1px solid var(--hub); border-radius: 0.6rem; padding: 0.5rem 1.1rem; font-size: 0.78rem; font-weight: 600; cursor: none; text-decoration: none; font-family: 'Syne', sans-serif; transition: background 0.2s; display: inline-block; white-space: nowrap; }
+  .btn-apply:hover { background: var(--hub-hover); }
+  .btn-view { background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.5rem 1rem; font-size: 0.78rem; font-weight: 600; cursor: none; text-decoration: none; font-family: 'Syne', sans-serif; transition: border-color 0.2s, color 0.2s; }
+  .btn-view:hover { border-color: var(--hub-border); color: var(--hub); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.7); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.5rem; max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal-photo { width: 100%; height: 200px; position: relative; overflow: hidden; border-radius: 1.5rem 1.5rem 0 0; background: #0e1219; }
+  .modal-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .modal-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,15,0.6) 0%, transparent 55%); }
+  .modal-header { padding: 1.5rem 2rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .modal-close { background: var(--surface); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: none; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+  .modal-close:hover { background: var(--surface-hover); }
+  .modal-body { padding: 1.5rem 2rem 2rem; }
+  .modal-location { font-size: 0.72rem; color: var(--hub); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+  .modal-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin: 1.25rem 0 0.75rem; }
+  .modal-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
+  .modal-specs { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+  .modal-meta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 0.5rem; }
+  .modal-meta-item { background: var(--surface); border-radius: 0.65rem; padding: 0.75rem 1rem; }
+  .modal-meta-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .modal-meta-label { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.25rem; }
+  .modal-actions { display: flex; gap: 0.75rem; margin-top: 2rem; }
+  .modal-btn-primary { flex: 1; text-align: center; background: var(--hub); color: #fff; border-radius: 0.75rem; padding: 0.85rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; text-decoration: none; transition: background 0.2s; }
+  .modal-btn-primary:hover { background: var(--hub-hover); }
+  .modal-btn-outline { flex: 1; text-align: center; background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.85rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  .modal-btn-outline:hover { border-color: var(--hub-border); color: var(--hub); }
+
+  /* EMPTY STATE */
+  .empty-state { text-align: center; padding: 5rem 2rem; color: var(--text-faint); }
+  .empty-state.hidden { display: none; }
+  .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-state-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text-dim); margin-bottom: 0.5rem; }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* FOOTER */
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-faint); }
+  footer a { color: var(--text-faint); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 1024px) {
+    .page-header { padding: 2.5rem 2rem 1.5rem; }
+    .filter-bar { padding: 1rem 2rem; }
+    .grid-wrap { padding: 2rem 2rem 4rem; }
+    .list-wrap { padding: 1.5rem 2rem 4rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    footer { padding: 2rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+  @media (max-width: 640px) {
+    .filter-input { width: 100%; }
+    .modal-meta-grid { grid-template-columns: 1fr 1fr; }
+    .modal-actions { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Professional Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link">Find a Professional</a></li>
+    <li><a href="projects.html" class="nav-link active">Find Projects</a></li>
+    <li><a href="register.html" class="nav-link">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+    <li><a href="register.html" class="nav-cta">Join as a Professional</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-eyebrow">The Professional Hub · Open Projects</div>
+    <h1 class="page-title">Projects looking for <em>your expertise</em></h1>
+    <p class="page-sub">Active construction and development projects across Rwanda seeking qualified professionals. Filter by your specialty, district, or budget and apply directly.</p>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <input type="text" class="filter-input" placeholder="Search projects…" id="searchInput" oninput="applyFilters()">
+    <select class="filter-select" id="specialtyFilter" onchange="applyFilters()">
+      <option value="">All Specialties</option>
+      <option>Architect</option>
+      <option>Construction Manager</option>
+      <option>Environmental Consultant</option>
+      <option>Geotechnical Engineer</option>
+      <option>Interior Designer</option>
+      <option>Land Surveyor</option>
+      <option>Lawyer</option>
+      <option>Project Manager</option>
+      <option>Quantity Surveyor</option>
+      <option>Real Estate Agent</option>
+      <option>Structural Engineer</option>
+      <option>Urban Planner</option>
+    </select>
+    <select class="filter-select" id="districtFilter" onchange="applyFilters()">
+      <option value="">All Districts</option>
+      <option>Gasabo, Kigali</option>
+      <option>Kicukiro, Kigali</option>
+      <option>Nyarugenge, Kigali</option>
+      <option>Huye, Southern</option>
+      <option>Muhanga, Southern</option>
+      <option>Musanze, Northern</option>
+      <option>Bugesera, Eastern</option>
+      <option>Rubavu, Western</option>
+    </select>
+    <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+      <option value="">All Statuses</option>
+      <option>Open</option>
+      <option>Closing Soon</option>
+      <option>Reviewing Applications</option>
+    </select>
+    <span class="result-count" id="resultCount">8 projects</span>
+    <div class="view-toggle">
+      <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grid view">⊞</button>
+      <button class="view-btn" id="listBtn" onclick="setView('list')" title="List view">☰</button>
+    </div>
+  </div>
+
+  <!-- GRID VIEW -->
+  <div class="grid-wrap" id="gridView">
+    <div class="projects-grid" id="projectsGrid">
+      <!-- Cards injected by JS -->
+    </div>
+    <div class="empty-state hidden" id="emptyState">
+      <div class="empty-state-icon">🔍</div>
+      <div class="empty-state-title">No projects match your filters</div>
+      <p>Try broadening your search or clearing some filters.</p>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div class="list-wrap hidden" id="listView">
+    <table class="projects-list" id="projectsList">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Specialties Needed</th>
+          <th>Budget</th>
+          <th>Timeline</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="listBody"></tbody>
+    </table>
+  </div>
+
+</div><!-- end page-wrap -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-photo">
+      <img id="modalImg" src="" alt="">
+      <div class="modal-photo-overlay"></div>
+    </div>
+    <div class="modal-header">
+      <div>
+        <div class="modal-location" id="modalLocation"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Specialties Needed</div>
+      <div class="modal-specs" id="modalSpecs"></div>
+      <div class="modal-section-title">Project Overview</div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-section-title">Key Details</div>
+      <div class="modal-meta-grid" id="modalMeta"></div>
+      <div class="modal-actions">
+        <a href="register.html" class="modal-btn-primary">Apply for This Project</a>
+        <button class="modal-btn-outline" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Imali.biz — The Professional Hub</span>
+  <span><a href="index.html">Home</a> · <a href="directory.html">Directory</a> · <a href="projects.html">Find Projects</a> · <a href="register.html">Register</a> · <a href="../index.html">Imali.biz</a></span>
+</footer>
+
+<script>
+// ── THEME ──────────────────────────────────────────────
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('imali-theme', next);
+  updateThemeUI(next);
+}
+function updateThemeUI(t) {
+  document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+}
+updateThemeUI(document.documentElement.getAttribute('data-theme'));
+
+// ── CURSOR ─────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.transform = `translate(${mx}px,${my}px)`; });
+(function animateRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.transform = `translate(${rx}px,${ry}px)`; requestAnimationFrame(animateRing); })();
+
+// ── PROJECT DATA ────────────────────────────────────────
+const projects = [
+  {
+    id: 1,
+    name: 'Kigali Heights Residential Tower',
+    location: 'Gasabo, Kigali',
+    district: 'Gasabo, Kigali',
+    specialties: ['Architect', 'Structural Engineer', 'Project Manager'],
+    budget: 'RWF 850M',
+    budgetRaw: 850,
+    timeline: '18 months',
+    source: 'Land Bank',
+    status: 'Open',
+    statusClass: 'status-open',
+    desc: 'A 12-storey mixed-use residential development in the rapidly developing Kibagabaga corridor. The project requires an experienced architect for façade design and interior layout, a structural engineer for the reinforced concrete frame, and a project manager to coordinate phased construction. BIM modelling expected.',
+    img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 850M', label: 'Total Budget' },
+      { val: '18 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Land Bank', label: 'Source' },
+      { val: 'Gasabo', label: 'District' },
+      { val: 'Residential', label: 'Type' },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Butare University Medical Clinic',
+    location: 'Huye, Southern Province',
+    district: 'Huye, Southern',
+    specialties: ['Construction Manager', 'Interior Designer', 'Quantity Surveyor'],
+    budget: 'RWF 120M',
+    budgetRaw: 120,
+    timeline: '8 months',
+    source: 'Private',
+    status: 'Open',
+    statusClass: 'status-open',
+    desc: 'Expansion of the existing student health centre at the University of Rwanda — Huye campus. A new wing including consultation rooms, a minor procedures suite, and pharmacy will be added. Seeking a construction manager to oversee on-site works, an interior designer for clinical-grade finishes, and a QS to control the tight budget.',
+    img: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 120M', label: 'Total Budget' },
+      { val: '8 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Private', label: 'Source' },
+      { val: 'Huye', label: 'District' },
+      { val: 'Medical', label: 'Type' },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Musanze Eco-Lodge & Retreat',
+    location: 'Musanze, Northern Province',
+    district: 'Musanze, Northern',
+    specialties: ['Architect', 'Interior Designer', 'Environmental Consultant'],
+    budget: 'RWF 280M',
+    budgetRaw: 280,
+    timeline: '12 months',
+    source: 'Wealth Hub',
+    status: 'Open',
+    statusClass: 'status-open',
+    desc: 'A 24-chalet eco-lodge at the foothills of the Virunga volcanoes targeting high-end eco-tourism. The design must integrate with the natural landscape and meet sustainability standards. Looking for an architect with hospitality experience, an interior designer for chalet fit-out, and an environmental consultant for EIA and site impact assessment.',
+    img: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 280M', label: 'Total Budget' },
+      { val: '12 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Wealth Hub', label: 'Source' },
+      { val: 'Musanze', label: 'District' },
+      { val: 'Hospitality', label: 'Type' },
+    ],
+  },
+  {
+    id: 4,
+    name: 'Nyamata Industrial Park — Phase 2',
+    location: 'Bugesera, Eastern Province',
+    district: 'Bugesera, Eastern',
+    specialties: ['Structural Engineer', 'Construction Manager', 'Geotechnical Engineer'],
+    budget: 'RWF 650M',
+    budgetRaw: 650,
+    timeline: '24 months',
+    source: 'Land Bank',
+    status: 'Open',
+    statusClass: 'status-open',
+    desc: 'Second phase of the Nyamata Industrial Park — eight warehouse units totalling 14,000 m² of light-industrial floor space, plus road access and utilities. Ground conditions on the eastern plateau require detailed geotechnical investigation before foundation design. Seeking a structural engineer, construction manager, and geotechnical engineer.',
+    img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 650M', label: 'Total Budget' },
+      { val: '24 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Land Bank', label: 'Source' },
+      { val: 'Bugesera', label: 'District' },
+      { val: 'Industrial', label: 'Type' },
+    ],
+  },
+  {
+    id: 5,
+    name: 'Kacyiru Commercial Plaza',
+    location: 'Gasabo, Kigali',
+    district: 'Gasabo, Kigali',
+    specialties: ['Architect', 'Urban Planner', 'Quantity Surveyor'],
+    budget: 'RWF 420M',
+    budgetRaw: 420,
+    timeline: '14 months',
+    source: 'Wealth Hub',
+    status: 'Closing Soon',
+    statusClass: 'status-closing',
+    desc: 'A ground-plus-five commercial development in Kacyiru, targeting retail on the ground floor and office space above. The project sits adjacent to a proposed road-widening scheme — urban planning expertise is essential to navigate the masterplan amendments. Also requires an architect and a QS for bill of quantities and cost reporting.',
+    img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 420M', label: 'Total Budget' },
+      { val: '14 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Wealth Hub', label: 'Source' },
+      { val: 'Gasabo', label: 'District' },
+      { val: 'Commercial', label: 'Type' },
+    ],
+  },
+  {
+    id: 6,
+    name: 'Rubavu Lakefront Villa Plots',
+    location: 'Rubavu, Western Province',
+    district: 'Rubavu, Western',
+    specialties: ['Architect', 'Land Surveyor', 'Interior Designer'],
+    budget: 'RWF 195M',
+    budgetRaw: 195,
+    timeline: '10 months',
+    source: 'Private',
+    status: 'Open',
+    statusClass: 'status-open',
+    desc: "Six luxury lakefront villas on Lake Kivu's northern shore in Rubavu. Each villa spans approximately 450 m² with private jetty access. The site requires boundary demarcation and topographic survey before permits can be lodged. Seeking an architect for custom villa designs, a land surveyor for site boundaries, and an interior designer for bespoke fit-out packages.",
+    img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 195M', label: 'Total Budget' },
+      { val: '10 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Private', label: 'Source' },
+      { val: 'Rubavu', label: 'District' },
+      { val: 'Residential', label: 'Type' },
+    ],
+  },
+  {
+    id: 7,
+    name: 'Muhanga Smart Township',
+    location: 'Muhanga, Southern Province',
+    district: 'Muhanga, Southern',
+    specialties: ['Urban Planner', 'Environmental Consultant', 'Project Manager'],
+    budget: 'RWF 1.2B',
+    budgetRaw: 1200,
+    timeline: '36 months',
+    source: 'Land Bank',
+    status: 'Open',
+    statusClass: 'status-open',
+    desc: 'A master-planned township on a 45-hectare greenfield site south of Muhanga town, targeting 1,200 mixed-income residential units alongside schools, a health centre, and commercial zones. This is one of the largest active projects on the platform. Seeking an urban planner, environmental consultant for EIA, and a senior project manager.',
+    img: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 1.2B', label: 'Total Budget' },
+      { val: '36 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Land Bank', label: 'Source' },
+      { val: 'Muhanga', label: 'District' },
+      { val: 'Township', label: 'Type' },
+    ],
+  },
+  {
+    id: 8,
+    name: 'Remera Grade-A Office Complex',
+    location: 'Gasabo, Kigali',
+    district: 'Gasabo, Kigali',
+    specialties: ['Structural Engineer', 'Project Manager', 'Real Estate Agent'],
+    budget: 'RWF 380M',
+    budgetRaw: 380,
+    timeline: '16 months',
+    source: 'Private',
+    status: 'Reviewing Applications',
+    statusClass: 'status-reviewing',
+    desc: 'An eight-storey Grade-A office tower in Remera targeting multinational tenants. The build specification includes raised floors, centralised HVAC, and a rooftop terrace. Applications are now being reviewed — a structural engineer and project manager are still needed. A real estate agent is also sought for pre-leasing and tenant acquisition ahead of practical completion.',
+    img: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=700&h=300&fit=crop&q=80&auto=format',
+    metaItems: [
+      { val: 'RWF 380M', label: 'Total Budget' },
+      { val: '16 mo', label: 'Timeline' },
+      { val: '3', label: 'Roles Open' },
+      { val: 'Private', label: 'Source' },
+      { val: 'Gasabo', label: 'District' },
+      { val: 'Commercial', label: 'Type' },
+    ],
+  },
+];
+
+// ── VIEW TOGGLE ─────────────────────────────────────────
+let currentView = 'grid';
+function setView(v) {
+  currentView = v;
+  document.getElementById('gridView').classList.toggle('hidden', v !== 'grid');
+  document.getElementById('listView').classList.toggle('hidden', v !== 'list');
+  document.getElementById('gridBtn').classList.toggle('active', v === 'grid');
+  document.getElementById('listBtn').classList.toggle('active', v === 'list');
+  renderAll(filteredProjects);
+}
+
+// ── FILTER ──────────────────────────────────────────────
+let filteredProjects = [...projects];
+function applyFilters() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const spec = document.getElementById('specialtyFilter').value;
+  const dist = document.getElementById('districtFilter').value;
+  const stat = document.getElementById('statusFilter').value;
+  filteredProjects = projects.filter(p => {
+    if (q && !p.name.toLowerCase().includes(q) && !p.desc.toLowerCase().includes(q) && !p.location.toLowerCase().includes(q)) return false;
+    if (spec && !p.specialties.includes(spec)) return false;
+    if (dist && p.district !== dist) return false;
+    if (stat && p.status !== stat) return false;
+    return true;
+  });
+  document.getElementById('resultCount').textContent = filteredProjects.length + ' project' + (filteredProjects.length !== 1 ? 's' : '');
+  renderAll(filteredProjects);
+}
+
+function renderAll(list) {
+  renderGrid(list);
+  renderList(list);
+  const empty = document.getElementById('emptyState');
+  const grid = document.getElementById('projectsGrid');
+  if (list.length === 0) {
+    grid.classList.add('hidden');
+    empty.classList.remove('hidden');
+  } else {
+    grid.classList.remove('hidden');
+    empty.classList.add('hidden');
+  }
+  observeReveal();
+}
+
+// ── GRID RENDER ──────────────────────────────────────────
+function renderGrid(list) {
+  const grid = document.getElementById('projectsGrid');
+  grid.innerHTML = list.map(p => `
+    <div class="proj-card" onclick="openModal(${p.id})">
+      <div class="proj-thumb">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <span class="proj-source-badge">${p.source}</span>
+        <span class="proj-status-badge ${p.statusClass}">${p.status}</span>
+      </div>
+      <div class="proj-body">
+        <div class="proj-name">${p.name}</div>
+        <div class="proj-loc">📍 ${p.location}</div>
+        <div class="needs-label">Professionals Needed</div>
+        <div class="specialty-tags">
+          ${p.specialties.map(s => `<span class="spec-tag">${s}</span>`).join('')}
+        </div>
+        <div class="proj-meta">
+          <div class="meta-item">
+            <div class="meta-val">${p.budget}</div>
+            <div class="meta-label">Budget</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-val">${p.timeline}</div>
+            <div class="meta-label">Duration</div>
+          </div>
+        </div>
+        <p class="proj-desc">${p.desc.substring(0, 130)}…</p>
+        <div class="proj-footer">
+          <div class="proj-source">Via <strong>${p.source}</strong></div>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn-view" onclick="event.stopPropagation();openModal(${p.id})">Details</button>
+            <a href="register.html" class="btn-apply" onclick="event.stopPropagation()">Apply</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── LIST RENDER ──────────────────────────────────────────
+function renderList(list) {
+  const tbody = document.getElementById('listBody');
+  tbody.innerHTML = list.map(p => `
+    <tr onclick="openModal(${p.id})">
+      <td>
+        <div class="lt-name">${p.name}</div>
+        <div class="lt-loc">📍 ${p.location}</div>
+      </td>
+      <td>
+        <div class="lt-tags">
+          ${p.specialties.map(s => `<span class="lt-tag">${s}</span>`).join('')}
+        </div>
+      </td>
+      <td><span class="lt-budget">${p.budget}</span></td>
+      <td><span class="lt-timeline">${p.timeline}</span></td>
+      <td><span class="proj-status-badge ${p.statusClass}" style="position:static;">${p.status}</span></td>
+      <td class="lt-action">
+        <a href="register.html" class="btn-apply" onclick="event.stopPropagation()">Apply</a>
+      </td>
+    </tr>
+  `).join('');
+}
+
+// ── MODAL ────────────────────────────────────────────────
+function openModal(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('modalImg').src = p.img;
+  document.getElementById('modalImg').alt = p.name;
+  document.getElementById('modalLocation').textContent = '📍 ' + p.location + ' · ' + p.source;
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalSpecs').innerHTML = p.specialties.map(s => `<span class="spec-tag">${s}</span>`).join('');
+  document.getElementById('modalMeta').innerHTML = p.metaItems.map(m => `
+    <div class="modal-meta-item">
+      <div class="modal-meta-val">${m.val}</div>
+      <div class="modal-meta-label">${m.label}</div>
+    </div>
+  `).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── REVEAL ────────────────────────────────────────────────
+function observeReveal() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+}
+
+// ── INIT ──────────────────────────────────────────────────
+renderAll(projects);
+</script>
+</body>
+</html>
