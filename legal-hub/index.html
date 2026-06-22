@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Legal Hub — Property Law for Rwanda | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --legal:        #2d2a7a;
+    --legal-hover:  #231f61;
+    --legal-soft:   rgba(45,42,122,0.09);
+    --legal-border: rgba(45,42,122,0.22);
+    --cursor-color: var(--legal);
+    --cursor-ring:  rgba(45,42,122,0.30);
+  }
+
+  /* NAV */
+  .nav-logo span { color: var(--legal); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--legal); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--legal); font-weight: 500; }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--legal); color: #fff; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--legal-hover); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); transition: all 0.2s; }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  /* HERO */
+  .hero { min-height: 100vh; background: var(--ink); padding: 8rem 4rem 5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(45,42,122,0.14) 0%, transparent 65%); pointer-events: none; }
+  .hero::after  { content: ''; position: absolute; bottom: -100px; left: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(212,168,50,0.06) 0%, transparent 65%); pointer-events: none; }
+
+  [data-theme="light"] .hero { background: #f0f0f8; }
+  [data-theme="light"] .hero-headline { color: var(--text); }
+  [data-theme="light"] .hero-headline em { color: var(--legal); }
+  [data-theme="light"] .hero-sub { color: var(--text-dim); }
+  [data-theme="light"] .hero-stats { border-top-color: var(--border); }
+  [data-theme="light"] .stat-label { color: var(--text-faint); }
+  [data-theme="light"] .btn-outline { border-color: var(--border-strong); color: var(--text-dim); }
+  [data-theme="light"] .btn-outline:hover { border-color: var(--legal); color: var(--legal); }
+  [data-theme="light"] .case-card { background: #fff; border-color: rgba(45,42,122,0.15); box-shadow: 0 2px 12px rgba(45,42,122,0.06); }
+  [data-theme="light"] .case-name { color: var(--text); }
+  [data-theme="light"] .case-role { color: var(--text-dim); }
+  [data-theme="light"] .case-loc { color: var(--text-faint); }
+  [data-theme="light"] .case-tag { background: var(--legal-soft); border-color: var(--legal-border); color: var(--legal); }
+  [data-theme="light"] .status-active { background: var(--legal-soft); color: var(--legal); border-color: var(--legal-border); }
+  [data-theme="light"] .status-review { background: rgba(212,168,50,0.12); color: #8a6200; border-color: rgba(212,168,50,0.3); }
+  [data-theme="light"] .status-complete { background: rgba(26,107,92,0.10); color: #1a6b5c; border-color: rgba(26,107,92,0.25); }
+
+  .hero-eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--legal); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--legal); }
+  .hero-headline { font-family: 'Syne', sans-serif; font-size: clamp(2.6rem, 4vw, 4rem); font-weight: 800; line-height: 1.08; letter-spacing: -0.03em; color: #f5f0e8; margin-bottom: 1.5rem; }
+  .hero-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-sub { font-size: 1rem; color: rgba(245,240,232,0.6); line-height: 1.75; max-width: 480px; margin-bottom: 2.5rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--legal); color: #fff; text-decoration: none; border-radius: 3rem; padding: 0.85rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; transition: background 0.2s, transform 0.2s; border: none; }
+  .btn-primary:hover { background: var(--legal-hover); transform: translateY(-2px); }
+  .btn-outline { display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid rgba(245,240,232,0.25); color: rgba(245,240,232,0.7); text-decoration: none; border-radius: 3rem; padding: 0.85rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; transition: border-color 0.2s, color 0.2s; }
+  .btn-outline:hover { border-color: var(--legal); color: #fff; }
+
+  .hero-stats { display: flex; gap: 2.5rem; margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid rgba(245,240,232,0.1); }
+  .stat-item { display: flex; flex-direction: column; gap: 0.3rem; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.03em; color: var(--legal); }
+  [data-theme="light"] .stat-num { color: var(--legal); }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(245,240,232,0.35); }
+
+  /* HERO RIGHT — case preview cards */
+  .hero-right { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1rem; }
+  .case-card { background: rgba(245,240,232,0.05); border: 1px solid rgba(245,240,232,0.1); border-radius: 1rem; padding: 1.25rem 1.5rem; transition: background 0.3s; }
+  .case-card:hover { background: rgba(245,240,232,0.08); }
+  .case-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.6rem; }
+  .case-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: #f5f0e8; }
+  .case-status { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 2rem; padding: 0.2rem 0.65rem; font-weight: 600; white-space: nowrap; }
+  .status-active { background: rgba(45,42,122,0.4); color: #b8b4f8; border: 1px solid rgba(45,42,122,0.5); }
+  .status-review { background: rgba(212,168,50,0.15); color: var(--gold); border: 1px solid rgba(212,168,50,0.3); }
+  .status-complete { background: rgba(26,107,92,0.25); color: #5ddbb8; border: 1px solid rgba(26,107,92,0.3); }
+  .case-role { font-size: 0.72rem; color: rgba(245,240,232,0.5); margin-bottom: 0.5rem; }
+  .case-loc { font-size: 0.7rem; color: rgba(245,240,232,0.35); }
+  .case-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.75rem; }
+  .case-tag { font-size: 0.62rem; background: rgba(45,42,122,0.3); border: 1px solid rgba(45,42,122,0.4); color: #b8b4f8; border-radius: 2rem; padding: 0.15rem 0.55rem; }
+
+  /* SECTION SHARED */
+  section { padding: 6rem 4rem; position: relative; }
+  .section-eyebrow { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--legal); margin-bottom: 1.25rem; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--legal); }
+  .section-title { font-family: 'Syne', sans-serif; font-size: clamp(1.9rem, 3vw, 3rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 1rem; color: var(--text); }
+  .section-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--legal); }
+  .section-sub { font-size: 0.92rem; color: var(--text-dim); line-height: 1.7; max-width: 540px; }
+
+  /* SERVICES */
+  .services-section { background: var(--bg-alt); }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem; }
+  .service-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.75rem; transition: all 0.25s; cursor: none; }
+  .service-card:hover { border-color: var(--legal-border); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(45,42,122,0.10); }
+  .svc-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+  .svc-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+  .svc-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.65; }
+  .svc-tag { display: inline-block; margin-top: 1rem; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; color: var(--legal); background: var(--legal-soft); border: 1px solid var(--legal-border); border-radius: 2rem; padding: 0.2rem 0.65rem; }
+
+  /* HOW IT WORKS */
+  .how-section { background: #f0f0f8; }
+  .how-section .section-title { color: var(--text); }
+  .how-section .section-title em { color: var(--legal); }
+  .how-section .section-eyebrow { color: var(--legal); }
+  .how-section .section-eyebrow::before { background: var(--legal); }
+  [data-theme="dark"] .how-section { background: var(--ink); }
+  [data-theme="dark"] .how-section .section-title { color: #f5f0e8; }
+  [data-theme="dark"] .how-section .section-title em { color: var(--gold); }
+  .how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; margin-top: 3.5rem; position: relative; }
+  .how-steps::before { content: ''; position: absolute; top: 2rem; left: 3rem; right: 3rem; height: 1px; background: var(--legal-border); z-index: 0; }
+  .how-step { position: relative; z-index: 1; }
+  .step-num { width: 44px; height: 44px; border-radius: 50%; background: var(--legal-soft); border: 1px solid var(--legal-border); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; color: var(--legal); margin-bottom: 1.25rem; }
+  .step-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; }
+  .step-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
+  .step-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.65; }
+  [data-theme="dark"] .step-title { color: #f5f0e8; }
+  [data-theme="dark"] .step-desc { color: rgba(245,240,232,0.5); }
+
+  /* FEATURES */
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3.5rem; }
+  .feat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; padding: 1.75rem; transition: background 0.25s; }
+  .feat-card:hover { background: var(--surface-hover); }
+  .feat-icon { font-size: 1.6rem; margin-bottom: 0.75rem; display: block; }
+  .feat-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text); }
+  .feat-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
+
+  /* TRACK */
+  .track-section { background: var(--bg-alt); }
+  .track-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.5rem; padding: 2.5rem; max-width: 680px; margin: 3rem auto 0; position: relative; overflow: hidden; }
+  .track-card::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; border-radius: 50%; background: var(--legal); opacity: 0.05; }
+  .track-badge { display: inline-block; font-family: 'Syne', sans-serif; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3rem 0.75rem; border-radius: 2rem; margin-bottom: 1.25rem; background: var(--legal-soft); color: var(--legal); border: 1px solid var(--legal-border); }
+  .track-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; color: var(--text); }
+  .track-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 1.75; margin-bottom: 1.75rem; }
+  .track-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+  .track-features li { font-size: 0.82rem; color: var(--text-dim); display: flex; align-items: flex-start; gap: 0.6rem; }
+  .track-features li::before { content: '✓'; color: var(--legal); font-weight: 700; font-size: 0.75rem; margin-top: 0.1rem; flex-shrink: 0; }
+  .btn-legal { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--legal); color: #fff; text-decoration: none; border-radius: 3rem; padding: 0.8rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-legal:hover { background: var(--legal-hover); }
+  .btn-outline-dk { display: inline-flex; align-items: center; gap: 0.6rem; border: 1px solid var(--border-strong); color: var(--text-dim); text-decoration: none; border-radius: 3rem; padding: 0.8rem 1.75rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: none; transition: border-color 0.2s, color 0.2s; }
+  .btn-outline-dk:hover { border-color: var(--legal); color: var(--legal); }
+
+  /* ECOSYSTEM */
+  .eco-section { background: var(--surface); border-top: 1px solid var(--border); padding: 3rem 4rem; }
+  .eco-label { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 1.25rem; }
+  .eco-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .eco-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.4rem 1rem; font-size: 0.75rem; color: var(--text-dim); text-decoration: none; transition: all 0.2s; cursor: none; }
+  .eco-pill:hover { background: var(--surface-hover); color: var(--text); border-color: var(--border-strong); }
+  .eco-pill.active { background: var(--legal-soft); border-color: var(--legal-border); color: var(--legal); }
+
+  /* CTA */
+  .cta-section { text-align: center; background: var(--bg); padding: 7rem 4rem; }
+  .cta-eyebrow { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--legal); margin-bottom: 1.25rem; display: inline-flex; align-items: center; gap: 0.75rem; }
+  .cta-eyebrow::before, .cta-eyebrow::after { content: ''; display: block; width: 24px; height: 1px; background: var(--legal); }
+  .cta-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 3.5vw, 3.5rem); font-weight: 800; letter-spacing: -0.025em; line-height: 1.1; margin-bottom: 1.25rem; color: var(--text); }
+  .cta-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--legal); }
+  .cta-sub { font-size: 0.95rem; color: var(--text-dim); line-height: 1.7; max-width: 480px; margin: 0 auto 2.5rem; }
+  .cta-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer { background: var(--ink); color: #f5f0e8; padding: 4rem; }
+  .footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #f5f0e8; }
+  .footer-logo span { color: var(--legal); font-family: 'Instrument Serif', serif; font-style: italic; }
+  .footer-sub { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--legal); margin: 0.3rem 0 0.85rem; }
+  .footer-tagline { font-size: 0.78rem; color: rgba(245,240,232,0.35); line-height: 1.6; max-width: 260px; }
+  .footer-col-title { font-family: 'Syne', sans-serif; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,240,232,0.3); margin-bottom: 1rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { color: rgba(245,240,232,0.45); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: #f5f0e8; }
+  .footer-bottom { border-top: 1px solid rgba(245,240,232,0.07); padding-top: 2rem; display: flex; justify-content: space-between; font-size: 0.7rem; color: rgba(245,240,232,0.2); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; padding: 7rem 2rem 4rem; }
+    .hero-right { display: none; }
+    section { padding: 4.5rem 2rem; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .how-steps { grid-template-columns: repeat(2, 1fr); }
+    .how-steps::before { display: none; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .eco-section { padding: 3rem 2rem; }
+    footer { padding: 3rem 2rem; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .features-grid { grid-template-columns: 1fr; }
+    .footer-inner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Legal Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link">Find a Lawyer</a></li>
+    <li><a href="cases.html" class="nav-link">Active Cases</a></li>
+    <li><a href="apply.html" class="nav-link">Apply</a></li>
+    <li><a href="register.html" class="nav-link">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+    <li><a href="register.html" class="nav-cta">Join as a Legal Professional</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">The Legal Hub — Imali.biz</div>
+    <h1 class="hero-headline">
+      Every deal,<br>legally <em>watertight.</em>
+    </h1>
+    <p class="hero-sub">Rwanda's first platform connecting verified legal professionals to real estate transactions — title verifications, conveyancing, LAIS searches, SPV formation, and smart contract audits, all in one digital workflow.</p>
+    <div class="hero-actions">
+      <a href="register.html" class="btn-primary">
+        Register as a Legal Professional
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="cases.html" class="btn-outline">
+        Browse Open Cases
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">40+</span>
+        <span class="stat-label">Verified Lawyers</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">6</span>
+        <span class="stat-label">Legal Services</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">LAIS-Integrated</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="case-card">
+      <div class="case-top">
+        <div class="case-name">Kimironko Mixed-Use Block</div>
+        <span class="case-status status-active">In Progress</span>
+      </div>
+      <div class="case-role">Title Verification + Marital Consent</div>
+      <div class="case-loc">📍 Gasabo, Kigali · Assigned to Jean-Claude M.</div>
+      <div class="case-tags">
+        <span class="case-tag">Title Deed</span>
+        <span class="case-tag">LAIS Search</span>
+        <span class="case-tag">Marital Consent</span>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-top">
+        <div class="case-name">Rubavu Lakefront Villas SPV</div>
+        <span class="case-status status-review">Under Review</span>
+      </div>
+      <div class="case-role">SPV Formation + Tokenisation Legal Wrap</div>
+      <div class="case-loc">📍 Rubavu, Western Province · Assigned to Amara N.</div>
+      <div class="case-tags">
+        <span class="case-tag">SPV Formation</span>
+        <span class="case-tag">Smart Contract Audit</span>
+        <span class="case-tag">NLA Filing</span>
+      </div>
+    </div>
+    <div class="case-card">
+      <div class="case-top">
+        <div class="case-name">Huye University Clinic Transfer</div>
+        <span class="case-status status-complete">Completed</span>
+      </div>
+      <div class="case-role">Full Conveyancing + Title Transfer</div>
+      <div class="case-loc">📍 Huye, Southern Province · Emmanuel K.</div>
+      <div class="case-tags">
+        <span class="case-tag">Conveyancing</span>
+        <span class="case-tag">Title Transfer</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section">
+  <div class="section-eyebrow">Legal Services</div>
+  <h2 class="section-title">Every legal service <em>property needs.</em></h2>
+  <p class="section-sub">Six core services covering the full legal lifecycle of any real estate transaction in Rwanda — from initial due diligence to final title transfer.</p>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="svc-icon">🔍</span>
+      <div class="svc-title">Title Verification</div>
+      <p class="svc-desc">Full NLA title deed verification, encumbrance searches, and ownership chain analysis. Know exactly what you're buying before any money moves.</p>
+      <span class="svc-tag">Due Diligence</span>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="svc-icon">📋</span>
+      <div class="svc-title">LAIS Searches</div>
+      <p class="svc-desc">Direct integration with Rwanda's Land Administration Information System. Pull official land records, cadastral data, and registered charges — digitally and traceably.</p>
+      <span class="svc-tag">Government Integration</span>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="svc-icon">📝</span>
+      <div class="svc-title">Conveyancing</div>
+      <p class="svc-desc">End-to-end conveyancing for property sales, transfers, and leases. Drafted in line with Rwandan property law, reviewed by a verified Rwanda Law Society member.</p>
+      <span class="svc-tag">Transfer & Sale</span>
+    </div>
+    <div class="service-card reveal">
+      <span class="svc-icon">💍</span>
+      <div class="svc-title">Marital Consent Checks</div>
+      <p class="svc-desc">Mandatory under Rwandan law for all property held in community of property. We verify and obtain marital consent documentation before any transaction proceeds.</p>
+      <span class="svc-tag">Compliance</span>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="svc-icon">🏢</span>
+      <div class="svc-title">SPV Formation</div>
+      <p class="svc-desc">Special Purpose Vehicle structuring for fractional ownership and tokenisation projects. We create the legal entity that investors actually own a share of — with full title backing.</p>
+      <span class="svc-tag">Tokenisation</span>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="svc-icon">🔗</span>
+      <div class="svc-title">Smart Contract Audit</div>
+      <p class="svc-desc">Legal review of smart contracts governing token issuance, escrow release triggers, and ownership transfers. Ensuring every on-chain event has a legally binding off-chain counterpart.</p>
+      <span class="svc-tag">Web3 & Tokens</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div style="text-align:center; max-width:640px; margin:0 auto;">
+    <div class="section-eyebrow" style="justify-content:center;">How It Works</div>
+    <h2 class="section-title">Verified once. <em>Trusted everywhere.</em></h2>
+  </div>
+  <div class="how-steps" style="max-width:960px; margin:0 auto;">
+    <div class="how-step reveal">
+      <div class="step-num">01</div>
+      <span class="step-icon">⚖️</span>
+      <div class="step-title">Register & Verify</div>
+      <p class="step-desc">Submit your Rwanda Law Society membership number, bar certificate, and practice area. Our team verifies your credentials within 48 hours.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <span class="step-icon">📂</span>
+      <div class="step-title">Get Matched to Cases</div>
+      <p class="step-desc">Cases from the Land Bank, Wealth Hub, and Professional Hub are matched to lawyers by practice area, location, and availability. Accept the ones that fit.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <span class="step-icon">✅</span>
+      <div class="step-title">Complete Due Diligence</div>
+      <p class="step-desc">Work through the digital case file — LAIS searches, document reviews, consent forms, and filings — tracked and time-stamped on the platform.</p>
+    </div>
+    <div class="how-step reveal reveal-delay-3">
+      <div class="step-num">04</div>
+      <span class="step-icon">💰</span>
+      <div class="step-title">Earn Fees + Tokens</div>
+      <p class="step-desc">Receive your professional fee in RWF on case completion, plus a token allocation in projects you help clear — earning ongoing value as the asset appreciates.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section style="background:var(--bg);">
+  <div class="section-eyebrow">Platform Benefits</div>
+  <h2 class="section-title">Built for <em>Rwandan law.</em></h2>
+  <p class="section-sub">Not a generic legal platform adapted for Rwanda — built from the ground up around NLA processes, LAIS integration, and the Rwanda Law Society's requirements.</p>
+  <div class="features-grid">
+    <div class="feat-card reveal">
+      <span class="feat-icon">🏛️</span>
+      <div class="feat-title">Rwanda Law Society Verified</div>
+      <p class="feat-desc">Every lawyer on the platform is cross-checked with the Rwanda Law Society directory. Clients and counterparties can trust that their legal professional is legitimate and in good standing.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-1">
+      <span class="feat-icon">🗂️</span>
+      <div class="feat-title">Digital Case Management</div>
+      <p class="feat-desc">All case documents, LAIS results, consent forms, and correspondence in one secure workspace. Time-stamped audit trail for every action — admissible and traceable.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-2">
+      <span class="feat-icon">🔐</span>
+      <div class="feat-title">Escrow-Linked Completion</div>
+      <p class="feat-desc">Legal sign-off directly unlocks the next escrow milestone. Your approval of a clean title or completed conveyancing triggers payment release — eliminating delays and disputes.</p>
+    </div>
+    <div class="feat-card reveal">
+      <span class="feat-icon">📊</span>
+      <div class="feat-title">Reputation Score</div>
+      <p class="feat-desc">Every case you complete builds your Legal Hub score — rated by transaction speed, accuracy, and client feedback. Higher scores mean priority matching to higher-value cases.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-1">
+      <span class="feat-icon">🤝</span>
+      <div class="feat-title">Referral Earnings</div>
+      <p class="feat-desc">Refer other legal professionals, property owners, or investors to Imali.biz and earn a commission on every deal they complete. Build a network, earn passively.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-2">
+      <span class="feat-icon">🌍</span>
+      <div class="feat-title">Cross-Platform Integration</div>
+      <p class="feat-desc">Cases flow in from the Land Bank, Wealth Hub, Consumer Portal, and Professional Hub. One registration opens you to the full Imali.biz transaction pipeline.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRACK -->
+<section class="track-section">
+  <div style="text-align:center; margin-bottom:0.5rem;">
+    <div class="section-eyebrow" style="justify-content:center;">Built For You</div>
+    <h2 class="section-title" style="text-align:center;">Everything a <em>legal professional needs</em></h2>
+  </div>
+  <div class="track-card reveal">
+    <span class="track-badge">For Lawyers & Legal Firms</span>
+    <div class="track-title">Rwanda's property law, digitised.</div>
+    <p class="track-desc">Whether you're a sole practitioner or part of a firm, the Legal Hub gives you a steady pipeline of verified real estate cases, a digital workspace to manage them, and a new income stream through project token allocations.</p>
+    <ul class="track-features">
+      <li>Verified case pipeline from every Imali.biz platform</li>
+      <li>Digital LAIS search integration — no manual queue visits</li>
+      <li>Marital consent, SPV, and conveyancing document templates</li>
+      <li>Escrow-linked fee payment — automatic on case sign-off</li>
+      <li>Token allocation in every project you help clear</li>
+      <li>Rwanda Law Society verification badge on your profile</li>
+    </ul>
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+      <a href="register.html" class="btn-legal">Register as a Legal Professional</a>
+      <a href="cases.html" class="btn-outline-dk">Browse Open Cases</a>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<div class="eco-section">
+  <div class="eco-label">The Imali.biz Ecosystem</div>
+  <div class="eco-pills">
+    <a href="../index.html" class="eco-pill">🏠 Imali.biz Home</a>
+    <a href="../land-bank/index.html" class="eco-pill">🏡 Land Bank</a>
+    <a href="../wealth-hub/index.html" class="eco-pill">💼 Wealth Hub</a>
+    <a href="../consumer-portal/index.html" class="eco-pill">🏠 Consumer Portal</a>
+    <a href="../supply-chain/index.html" class="eco-pill">🧱 Supply Chain</a>
+    <a href="../professional-hub/index.html" class="eco-pill">🏛️ Professional Hub</a>
+    <a href="./index.html" class="eco-pill active">⚖️ The Legal Hub</a>
+    <a href="../index.html#banks" class="eco-pill">🏦 Banking Partners</a>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-eyebrow">Get Started</div>
+  <h2 class="cta-title">Your legal expertise,<br><em>working harder.</em></h2>
+  <p class="cta-sub">Join Rwanda's first digital property law platform. Get matched to verified cases, earn fees on completion, and build an asset through project tokens.</p>
+  <div class="cta-buttons">
+    <a href="register.html" class="btn-primary">
+      Register Now — It's Free
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <a href="cases.html" class="btn-outline-dk">Browse Open Cases</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Imali<span>.</span>biz</div>
+      <div class="footer-sub">The Legal Hub</div>
+      <p class="footer-tagline">Rwanda's digital property law platform — connecting verified legal professionals to every real estate transaction.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Legal Services</div>
+      <ul class="footer-links">
+        <li><a href="cases.html">Browse Cases</a></li>
+        <li><a href="register.html">Register as a Lawyer</a></li>
+        <li><a href="dashboard.html">My Dashboard</a></li>
+        <li><a href="directory.html">Lawyer Directory</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Platforms</div>
+      <ul class="footer-links">
+        <li><a href="../land-bank/index.html">The Land Bank</a></li>
+        <li><a href="../wealth-hub/index.html">The Wealth Hub</a></li>
+        <li><a href="../consumer-portal/index.html">Consumer Portal</a></li>
+        <li><a href="../supply-chain/index.html">Supply Chain</a></li>
+        <li><a href="../professional-hub/index.html">The Professional Hub</a></li>
+        <li><a href="./index.html">The Legal Hub</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="../index.html">Imali.biz</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">How It Works</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Imali.biz — The Legal Hub</span>
+    <span>Rwanda's Real Estate Intelligence Platform</span>
+  </div>
+</footer>
+
+<script>
+// ── THEME ──────────────────────────────────────────────
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('imali-theme', next);
+  updateThemeUI(next);
+}
+function updateThemeUI(t) {
+  document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+}
+updateThemeUI(document.documentElement.getAttribute('data-theme'));
+
+// ── CURSOR ─────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx}px,${my}px)`;
+});
+(function animateRing() {
+  rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+  ring.style.transform = `translate(${rx}px,${ry}px)`;
+  requestAnimationFrame(animateRing);
+})();
+
+// ── REVEAL ──────────────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

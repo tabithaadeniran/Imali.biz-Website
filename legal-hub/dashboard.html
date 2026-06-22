@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — The Legal Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --legal: #2d2a7a; --legal-hover: #231f61;
+    --legal-soft: rgba(45,42,122,0.09); --legal-border: rgba(45,42,122,0.22);
+    --cursor-color: var(--legal); --cursor-ring: rgba(45,42,122,0.30);
+  }
+  .nav-logo span { color: var(--legal); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--legal); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--legal); font-weight: 500; }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); }
+  .theme-toggle:hover { background: var(--surface-hover); }
+
+  /* LAYOUT */
+  .dash-wrap { display: grid; grid-template-columns: 260px 1fr; min-height: calc(100vh - 72px); margin-top: 72px; }
+
+  /* SIDEBAR */
+  .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 2rem 1.25rem; position: sticky; top: 72px; height: calc(100vh - 72px); overflow-y: auto; display: flex; flex-direction: column; gap: 0.25rem; }
+  .sidebar-profile { display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem; margin-bottom: 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 0.85rem; }
+  .sidebar-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--legal), #5b58c4); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; color: #fff; font-size: 0.9rem; flex-shrink: 0; }
+  .sidebar-name { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); }
+  .sidebar-role { font-size: 0.68rem; color: var(--text-faint); }
+  .verified-badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.6rem; background: var(--legal-soft); color: var(--legal); border: 1px solid var(--legal-border); border-radius: 2rem; padding: 0.15rem 0.5rem; font-weight: 600; margin-top: 0.25rem; }
+  .sidebar-section { font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; padding: 0.5rem 0.75rem 0.3rem; margin-top: 0.5rem; }
+  .sidebar-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; border-radius: 0.6rem; font-size: 0.82rem; color: var(--text-dim); cursor: none; transition: all 0.15s; text-decoration: none; }
+  .sidebar-item:hover { background: var(--surface-hover); color: var(--text); }
+  .sidebar-item.active { background: var(--legal-soft); color: var(--legal); font-weight: 600; }
+  .sidebar-item-icon { font-size: 0.95rem; width: 20px; text-align: center; }
+  .sidebar-badge { margin-left: auto; background: var(--legal); color: #fff; font-size: 0.6rem; font-weight: 700; border-radius: 2rem; padding: 0.15rem 0.5rem; font-family: 'Syne', sans-serif; }
+
+  /* MAIN */
+  .dash-main { padding: 2.5rem 3rem; overflow-y: auto; }
+  .dash-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; }
+  .dash-title { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: var(--text); }
+  .dash-title span { color: var(--legal); font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; }
+  .dash-subtitle { font-size: 0.82rem; color: var(--text-dim); margin-top: 0.25rem; }
+  .btn-new-case { background: var(--legal); color: #fff; border: none; border-radius: 0.6rem; padding: 0.55rem 1.1rem; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700; cursor: none; transition: background 0.2s; text-decoration: none; white-space: nowrap; }
+  .btn-new-case:hover { background: var(--legal-hover); }
+
+  /* STAT CARDS */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1rem; padding: 1.25rem 1.5rem; }
+  .stat-card.accent { background: var(--legal); border-color: var(--legal); }
+  .sc-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.6rem; }
+  .stat-card.accent .sc-label { color: rgba(255,255,255,0.55); }
+  .sc-val { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--text); letter-spacing: -0.03em; }
+  .stat-card.accent .sc-val { color: #fff; }
+  .sc-sub { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.3rem; }
+  .stat-card.accent .sc-sub { color: rgba(255,255,255,0.5); }
+  .sc-trend { font-size: 0.72rem; font-weight: 600; margin-top: 0.25rem; }
+  .trend-up { color: #22c55e; }
+
+  /* GRID */
+  .dash-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
+
+  /* ACTIVE CASES */
+  .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; }
+  .panel-header { padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .panel-title { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--text); }
+  .panel-link { font-size: 0.75rem; color: var(--legal); text-decoration: none; font-weight: 600; }
+  .panel-link:hover { text-decoration: underline; }
+
+  .case-row { display: flex; align-items: flex-start; gap: 1rem; padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border); transition: background 0.15s; cursor: none; }
+  .case-row:last-child { border-bottom: none; }
+  .case-row:hover { background: var(--surface); }
+  .case-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 0.45rem; }
+  .dot-active   { background: var(--legal); }
+  .dot-review   { background: var(--gold); }
+  .dot-complete { background: #22c55e; }
+  .dot-pending  { background: var(--text-faint); }
+  .case-info { flex: 1; min-width: 0; }
+  .case-name { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .case-meta { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.15rem; }
+  .case-chips { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.4rem; }
+  .mini-chip { font-size: 0.6rem; background: var(--legal-soft); border: 1px solid var(--legal-border); color: var(--legal); border-radius: 2rem; padding: 0.1rem 0.5rem; }
+  .case-right { text-align: right; flex-shrink: 0; }
+  .case-fee { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); }
+  .case-deadline { font-size: 0.68rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .case-deadline.urgent { color: #ef4444; font-weight: 600; }
+  .case-status-pill { font-size: 0.6rem; letter-spacing: 0.07em; text-transform: uppercase; border-radius: 2rem; padding: 0.18rem 0.55rem; font-weight: 700; margin-top: 0.35rem; display: inline-block; }
+  .pill-active   { background: var(--legal-soft); color: var(--legal); border: 1px solid var(--legal-border); }
+  .pill-review   { background: rgba(212,168,50,0.1); color: #8a6200; border: 1px solid rgba(212,168,50,0.3); }
+  [data-theme="dark"] .pill-review { color: var(--gold); }
+  .pill-complete { background: rgba(34,197,94,0.1); color: #166534; border: 1px solid rgba(34,197,94,0.25); }
+  [data-theme="dark"] .pill-complete { color: #4ade80; }
+
+  /* RIGHT COLUMN */
+  .right-col { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  /* EARNINGS */
+  .earnings-panel { background: var(--legal); border-radius: 1.25rem; padding: 1.5rem; }
+  .ep-label { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+  .ep-total { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: #fff; letter-spacing: -0.03em; }
+  .ep-sub { font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-bottom: 1.25rem; }
+  .ep-items { display: flex; flex-direction: column; gap: 0.5rem; }
+  .ep-item { background: rgba(255,255,255,0.1); border-radius: 0.6rem; padding: 0.65rem 0.85rem; display: flex; justify-content: space-between; align-items: center; }
+  .ep-item-label { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+  .ep-item-val { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: #fff; }
+
+  /* REPUTATION */
+  .rep-body { padding: 1.25rem 1.5rem; }
+  .rep-score-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+  .rep-score-big { font-family: 'Syne', sans-serif; font-size: 2.5rem; font-weight: 800; color: var(--legal); letter-spacing: -0.04em; }
+  .rep-stars { font-size: 0.85rem; color: var(--gold); }
+  .rep-count { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .rep-bar-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
+  .rep-bar-row { display: flex; align-items: center; gap: 0.75rem; }
+  .rep-bar-label { font-size: 0.7rem; color: var(--text-faint); width: 90px; flex-shrink: 0; }
+  .rep-bar-bg { flex: 1; height: 5px; background: var(--surface); border-radius: 2rem; overflow: hidden; }
+  .rep-bar-fill { height: 100%; background: var(--legal); border-radius: 2rem; }
+  .rep-bar-val { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; color: var(--text); width: 28px; text-align: right; flex-shrink: 0; }
+
+  /* ACTIVITY */
+  .activity-list { display: flex; flex-direction: column; }
+  .activity-item { display: flex; align-items: flex-start; gap: 0.85rem; padding: 0.9rem 1.5rem; border-bottom: 1px solid var(--border); }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .activity-text { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+  .activity-text strong { color: var(--text); }
+  .activity-time { font-size: 0.65rem; color: var(--text-faint); margin-top: 0.15rem; }
+
+  /* QUICK ACTIONS */
+  .qa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; padding: 1.25rem 1.5rem; }
+  .qa-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.85rem; text-align: center; font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; color: var(--text-dim); cursor: none; transition: all 0.2s; text-decoration: none; display: block; }
+  .qa-btn:hover { background: var(--surface-hover); border-color: var(--legal-border); color: var(--legal); }
+  .qa-icon { font-size: 1.2rem; display: block; margin-bottom: 0.35rem; }
+
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-faint); }
+  footer a { color: var(--text-faint); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 1100px) {
+    .dash-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .dash-wrap { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .dash-main { padding: 1.5rem; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Legal Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link">Find a Lawyer</a></li>
+    <li><a href="cases.html" class="nav-link">Active Cases</a></li>
+    <li><a href="apply.html" class="nav-link">Apply</a></li>
+    <li><a href="register.html" class="nav-link">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link active">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+  </ul>
+</nav>
+
+<div class="dash-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-profile">
+      <div class="sidebar-avatar">JM</div>
+      <div>
+        <div class="sidebar-name">Jean-Claude M.</div>
+        <div class="sidebar-role">Property Lawyer · Gasabo</div>
+        <div class="verified-badge">✓ RLS Verified</div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">Main</div>
+    <a href="#" class="sidebar-item active"><span class="sidebar-item-icon">📊</span>Overview</a>
+    <a href="cases.html" class="sidebar-item"><span class="sidebar-item-icon">📂</span>My Cases <span class="sidebar-badge">3</span></a>
+    <a href="#" class="sidebar-item"><span class="sidebar-item-icon">💰</span>Earnings</a>
+    <a href="#" class="sidebar-item"><span class="sidebar-item-icon">📋</span>Documents</a>
+
+    <div class="sidebar-section">Marketplace</div>
+    <a href="cases.html" class="sidebar-item"><span class="sidebar-item-icon">🔍</span>Browse Cases</a>
+    <a href="directory.html" class="sidebar-item"><span class="sidebar-item-icon">👥</span>Lawyer Directory</a>
+
+    <div class="sidebar-section">Account</div>
+    <a href="#" class="sidebar-item"><span class="sidebar-item-icon">👤</span>My Profile</a>
+    <a href="#" class="sidebar-item"><span class="sidebar-item-icon">⚙️</span>Settings</a>
+    <a href="../index.html" class="sidebar-item"><span class="sidebar-item-icon">🏠</span>Imali.biz</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="dash-main">
+    <div class="dash-header">
+      <div>
+        <div class="dash-title">Good morning, <span>Jean-Claude.</span></div>
+        <div class="dash-subtitle">You have 3 active cases and 2 new case matches today.</div>
+      </div>
+      <a href="cases.html" class="btn-new-case">Browse Open Cases →</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card accent">
+        <div class="sc-label">Total Earnings</div>
+        <div class="sc-val">RWF 3.8M</div>
+        <div class="sc-sub">↑ RWF 620,000 this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Active Cases</div>
+        <div class="sc-val">3</div>
+        <div class="sc-trend trend-up">+2 new matches</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Cases Completed</div>
+        <div class="sc-val">34</div>
+        <div class="sc-sub">Since joining</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-label">Reputation Score</div>
+        <div class="sc-val">4.9</div>
+        <div class="sc-trend trend-up">Top 5% on platform</div>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="dash-grid">
+
+      <!-- LEFT: ACTIVE CASES + ACTIVITY -->
+      <div style="display:flex; flex-direction:column; gap:1.5rem;">
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Active Cases</div>
+            <a href="cases.html" class="panel-link">Browse all →</a>
+          </div>
+          <div class="case-row">
+            <div class="case-dot dot-active"></div>
+            <div class="case-info">
+              <div class="case-name">Kimironko Mixed-Use Block</div>
+              <div class="case-meta">📍 Gasabo, Kigali · Via Land Bank</div>
+              <div class="case-chips">
+                <span class="mini-chip">Title Verification</span>
+                <span class="mini-chip">LAIS Searches</span>
+                <span class="mini-chip">Marital Consent</span>
+              </div>
+            </div>
+            <div class="case-right">
+              <div class="case-fee">RWF 450,000</div>
+              <div class="case-deadline urgent">Due in 4 days</div>
+              <span class="case-status-pill pill-active">In Progress</span>
+            </div>
+          </div>
+          <div class="case-row">
+            <div class="case-dot dot-review"></div>
+            <div class="case-info">
+              <div class="case-name">Rubavu Lakefront Villas SPV</div>
+              <div class="case-meta">📍 Rubavu, Western · Via Wealth Hub</div>
+              <div class="case-chips">
+                <span class="mini-chip">SPV Formation</span>
+                <span class="mini-chip">Smart Contract Audit</span>
+              </div>
+            </div>
+            <div class="case-right">
+              <div class="case-fee">RWF 1,200,000</div>
+              <div class="case-deadline">Due in 21 days</div>
+              <span class="case-status-pill pill-review">Under Review</span>
+            </div>
+          </div>
+          <div class="case-row">
+            <div class="case-dot dot-active"></div>
+            <div class="case-info">
+              <div class="case-name">Remera Office Tower Pre-Sale</div>
+              <div class="case-meta">📍 Gasabo, Kigali · Via Professional Hub</div>
+              <div class="case-chips">
+                <span class="mini-chip">Conveyancing</span>
+                <span class="mini-chip">LAIS Searches</span>
+              </div>
+            </div>
+            <div class="case-right">
+              <div class="case-fee">RWF 420,000</div>
+              <div class="case-deadline">Due in 16 days</div>
+              <span class="case-status-pill pill-active">In Progress</span>
+            </div>
+          </div>
+          <div class="case-row">
+            <div class="case-dot dot-complete"></div>
+            <div class="case-info">
+              <div class="case-name">Huye University Clinic Sale</div>
+              <div class="case-meta">📍 Huye, Southern · Via Consumer Portal</div>
+              <div class="case-chips">
+                <span class="mini-chip">Conveyancing</span>
+                <span class="mini-chip">Title Transfer</span>
+              </div>
+            </div>
+            <div class="case-right">
+              <div class="case-fee">RWF 320,000</div>
+              <div class="case-deadline">Completed 2 days ago</div>
+              <span class="case-status-pill pill-complete">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Recent Activity</div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon">✅</div>
+              <div>
+                <div class="activity-text"><strong>Huye University Clinic Sale</strong> marked complete. Fee of RWF 320,000 released from escrow.</div>
+                <div class="activity-time">2 days ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">📂</div>
+              <div>
+                <div class="activity-text">New case match: <strong>Muhanga Smart Township Phase 1</strong> — Title Verification + LAIS (RWF 1,400,000 fee).</div>
+                <div class="activity-time">3 days ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">📋</div>
+              <div>
+                <div class="activity-text">LAIS search results received for <strong>Kimironko Mixed-Use Block</strong>. One encumbrance flagged — client notified.</div>
+                <div class="activity-time">5 days ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">⭐</div>
+              <div>
+                <div class="activity-text">New 5-star review from <strong>Wealth Hub</strong> client: "Jean-Claude was thorough and fast. SPV formation handled perfectly."</div>
+                <div class="activity-time">1 week ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-icon">🪙</div>
+              <div>
+                <div class="activity-text">Token allocation received: <strong>120 IMALI tokens</strong> from Rubavu Lakefront Villas project.</div>
+                <div class="activity-time">1 week ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN -->
+      <div class="right-col">
+
+        <!-- EARNINGS -->
+        <div class="earnings-panel">
+          <div class="ep-label">Total Earnings</div>
+          <div class="ep-total">RWF 3,820,000</div>
+          <div class="ep-sub">↑ RWF 620,000 this month</div>
+          <div class="ep-items">
+            <div class="ep-item">
+              <span class="ep-item-label">Completed cases</span>
+              <span class="ep-item-val">RWF 3,820,000</span>
+            </div>
+            <div class="ep-item">
+              <span class="ep-item-label">Pending (in escrow)</span>
+              <span class="ep-item-val">RWF 2,070,000</span>
+            </div>
+            <div class="ep-item">
+              <span class="ep-item-label">Token holdings</span>
+              <span class="ep-item-val">340 IMALI</span>
+            </div>
+            <div class="ep-item">
+              <span class="ep-item-label">Referral earnings</span>
+              <span class="ep-item-val">RWF 180,000</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- REPUTATION -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Reputation Score</div>
+            <span style="font-size:0.72rem; color:var(--text-faint);">Top 5%</span>
+          </div>
+          <div class="rep-body">
+            <div class="rep-score-wrap">
+              <div class="rep-score-big">4.9</div>
+              <div>
+                <div class="rep-stars">★★★★★</div>
+                <div class="rep-count">Based on 34 cases</div>
+              </div>
+            </div>
+            <div class="rep-bar-wrap">
+              <div class="rep-bar-row">
+                <span class="rep-bar-label">Accuracy</span>
+                <div class="rep-bar-bg"><div class="rep-bar-fill" style="width:97%"></div></div>
+                <span class="rep-bar-val">4.9</span>
+              </div>
+              <div class="rep-bar-row">
+                <span class="rep-bar-label">Turnaround</span>
+                <div class="rep-bar-bg"><div class="rep-bar-fill" style="width:94%"></div></div>
+                <span class="rep-bar-val">4.7</span>
+              </div>
+              <div class="rep-bar-row">
+                <span class="rep-bar-label">Communication</span>
+                <div class="rep-bar-bg"><div class="rep-bar-fill" style="width:100%"></div></div>
+                <span class="rep-bar-val">5.0</span>
+              </div>
+              <div class="rep-bar-row">
+                <span class="rep-bar-label">Documentation</span>
+                <div class="rep-bar-bg"><div class="rep-bar-fill" style="width:96%"></div></div>
+                <span class="rep-bar-val">4.8</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="panel">
+          <div class="panel-header"><div class="panel-title">Quick Actions</div></div>
+          <div class="qa-grid">
+            <a href="cases.html" class="qa-btn"><span class="qa-icon">🔍</span>Browse Cases</a>
+            <a href="#" class="qa-btn"><span class="qa-icon">📋</span>LAIS Search</a>
+            <a href="#" class="qa-btn"><span class="qa-icon">📝</span>New Document</a>
+            <a href="#" class="qa-btn"><span class="qa-icon">🤝</span>Refer a Client</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <span>© 2025 Imali.biz — The Legal Hub</span>
+  <span><a href="index.html">Home</a> · <a href="directory.html">Directory</a> · <a href="cases.html">Cases</a> · <a href="register.html">Register</a> · <a href="../index.html">Imali.biz</a></span>
+</footer>
+
+<script>
+function toggleTheme(){const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('imali-theme',n);updateUI(n);}
+function updateUI(t){document.getElementById('themeIcon').textContent=t==='dark'?'☀️':'🌙';document.getElementById('themeLabel').textContent=t==='dark'?'Light':'Dark';}
+updateUI(document.documentElement.getAttribute('data-theme'));
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx}px,${my}px)`;});
+(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop);})();
+</script>
+</body>
+</html>

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browse Cases — The Legal Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --legal: #2d2a7a; --legal-hover: #231f61;
+    --legal-soft: rgba(45,42,122,0.09); --legal-border: rgba(45,42,122,0.22);
+    --cursor-color: var(--legal); --cursor-ring: rgba(45,42,122,0.30);
+  }
+  .nav-logo span { color: var(--legal); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--legal); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--legal); font-weight: 500; }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--legal); color: #fff; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--legal-hover); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  .page-wrap { padding-top: 72px; }
+  .page-header { padding: 3rem 4rem 2rem; background: #f0f0f8; border-bottom: 1px solid var(--legal-border); }
+  [data-theme="dark"] .page-header { background: var(--bg-alt); border-bottom-color: var(--border); }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--legal); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--legal); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; color: var(--text); }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--legal); }
+  .page-sub { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; max-width: 520px; margin-top: 0.5rem; }
+
+  .filter-bar { padding: 1rem 4rem; background: var(--bg-alt); border-bottom: 1px solid var(--border); display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+  [data-theme="light"] .filter-bar { background: #f0f0f8; border-bottom-color: var(--legal-border); }
+  .filter-input { background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.5rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; width: 220px; transition: border-color 0.2s; cursor: none; }
+  [data-theme="light"] .filter-input { background: rgba(0,0,0,0.05); }
+  .filter-input::placeholder { color: var(--text-faint); }
+  .filter-input:focus { border-color: var(--legal-border); }
+  .filter-select { background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.5rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text-dim); outline: none; cursor: none; min-width: 155px; }
+  [data-theme="light"] .filter-select { background: rgba(0,0,0,0.05); }
+  .filter-select:focus { border-color: var(--legal-border); }
+  .result-count { margin-left: auto; font-size: 0.78rem; color: var(--text-faint); white-space: nowrap; }
+  .view-toggle { display: flex; gap: 0.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.2rem; }
+  .view-btn { width: 36px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 0.35rem; border: none; background: transparent; cursor: none; color: var(--text-faint); transition: background 0.15s, color 0.15s; font-size: 0.9rem; }
+  .view-btn.active { background: var(--bg-card); color: var(--legal); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  .grid-wrap { padding: 2.5rem 4rem 5rem; }
+  .grid-wrap.hidden { display: none; }
+  .cases-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+  .list-wrap { padding: 2rem 4rem 5rem; }
+  .list-wrap.hidden { display: none; }
+  .cases-list { width: 100%; border-collapse: collapse; }
+  .cases-list thead tr { border-bottom: 2px solid var(--border-strong); }
+  .cases-list th { text-align: left; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); font-weight: 600; padding: 0.65rem 1rem; white-space: nowrap; }
+  .cases-list tbody tr { border-bottom: 1px solid var(--border); cursor: none; transition: background 0.15s; }
+  .cases-list tbody tr:hover { background: var(--surface); }
+  .cases-list td { padding: 0.9rem 1rem; font-size: 0.84rem; vertical-align: middle; }
+  .lt-name { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); font-size: 0.88rem; }
+  .lt-source { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.2rem; }
+  .lt-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; max-width: 240px; }
+  .lt-tag { font-size: 0.62rem; background: var(--legal-soft); border: 1px solid var(--legal-border); color: var(--legal); border-radius: 2rem; padding: 0.15rem 0.55rem; white-space: nowrap; }
+  .lt-fee { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--legal); white-space: nowrap; }
+  .lt-deadline { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--text); }
+  .lt-action { text-align: right; }
+
+  /* CASE CARD */
+  .case-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; overflow: hidden; cursor: none; transition: all 0.3s; display: flex; flex-direction: column; }
+  .case-card:hover { border-color: var(--legal-border); transform: translateY(-4px); }
+  [data-theme="light"] .case-card:hover { box-shadow: 0 16px 40px rgba(45,42,122,0.08); }
+  [data-theme="dark"]  .case-card:hover { box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
+  .card-banner { height: 6px; }
+  .banner-open     { background: linear-gradient(90deg, var(--legal), #5b58c4); }
+  .banner-closing  { background: linear-gradient(90deg, #a07820, var(--gold)); }
+  .banner-assigned { background: linear-gradient(90deg, #1a6b5c, #2a9b87); }
+  .card-body { padding: 1.4rem 1.5rem; flex: 1; display: flex; flex-direction: column; }
+  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; gap: 0.75rem; }
+  .card-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+  .card-status { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 700; border-radius: 2rem; padding: 0.25rem 0.7rem; white-space: nowrap; flex-shrink: 0; }
+  .status-open     { background: var(--legal-soft); color: var(--legal); border: 1px solid var(--legal-border); }
+  .status-closing  { background: rgba(212,168,50,0.12); color: #8a6200; border: 1px solid rgba(212,168,50,0.3); }
+  [data-theme="dark"] .status-closing { color: var(--gold); border-color: rgba(212,168,50,0.35); }
+  .status-assigned { background: rgba(26,107,92,0.1); color: #1a6b5c; border: 1px solid rgba(26,107,92,0.25); }
+  [data-theme="dark"] .status-assigned { color: #5ddbb8; }
+  .card-source { font-size: 0.72rem; color: var(--text-faint); margin-bottom: 0.85rem; }
+  .card-services { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1rem; }
+  .svc-chip { font-size: 0.68rem; font-weight: 500; background: var(--legal-soft); border: 1px solid var(--legal-border); color: var(--legal); border-radius: 2rem; padding: 0.2rem 0.65rem; font-family: 'Syne', sans-serif; }
+  .card-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+  .meta-item { background: var(--surface); border-radius: 0.5rem; padding: 0.5rem 0.75rem; }
+  .meta-val { font-family: 'Syne', sans-serif; font-size: 0.82rem; font-weight: 700; color: var(--text); }
+  .meta-label { font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.1rem; }
+  .card-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; flex: 1; margin-bottom: 1rem; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid var(--border); margin-top: auto; gap: 0.5rem; }
+  .card-platform { font-size: 0.72rem; color: var(--text-faint); }
+  .card-platform strong { color: var(--text-dim); }
+  .btn-apply { background: var(--legal); color: #fff; border: none; border-radius: 0.6rem; padding: 0.5rem 1.1rem; font-size: 0.78rem; font-weight: 600; cursor: none; font-family: 'Syne', sans-serif; transition: background 0.2s; text-decoration: none; white-space: nowrap; }
+  .btn-apply:hover { background: var(--legal-hover); }
+  .btn-detail { background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.5rem 0.9rem; font-size: 0.78rem; font-weight: 600; cursor: none; font-family: 'Syne', sans-serif; transition: border-color 0.2s, color 0.2s; text-decoration: none; }
+  .btn-detail:hover { border-color: var(--legal-border); color: var(--legal); }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,15,0.7); backdrop-filter: blur(6px); z-index: 200; align-items: center; justify-content: center; padding: 2rem; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.5rem; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; }
+  .modal-top { height: 8px; border-radius: 1.5rem 1.5rem 0 0; }
+  .modal-header { padding: 1.5rem 2rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .modal-close { background: var(--surface); border: none; color: var(--text); width: 32px; height: 32px; border-radius: 50%; cursor: none; font-size: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .modal-close:hover { background: var(--surface-hover); }
+  .modal-body { padding: 1.5rem 2rem 2rem; }
+  .modal-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-faint); margin: 1.25rem 0 0.6rem; }
+  .modal-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.65; }
+  .modal-services { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .modal-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+  .modal-meta-item { background: var(--surface); border-radius: 0.65rem; padding: 0.75rem 1rem; }
+  .modal-meta-val { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .modal-meta-label { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.25rem; }
+  .modal-source { font-size: 0.72rem; color: var(--legal); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .modal-title { font-family: 'Syne', sans-serif; font-size: 1.35rem; font-weight: 700; color: var(--text); }
+  .modal-actions { display: flex; gap: 0.75rem; margin-top: 2rem; }
+  .modal-btn-primary { flex: 1; text-align: center; background: var(--legal); color: #fff; border-radius: 0.75rem; padding: 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; text-decoration: none; transition: background 0.2s; }
+  .modal-btn-primary:hover { background: var(--legal-hover); }
+  .modal-btn-outline { flex: 1; text-align: center; background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 0.75rem; padding: 0.85rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; cursor: none; transition: border-color 0.2s; }
+  .modal-btn-outline:hover { border-color: var(--legal-border); color: var(--legal); }
+
+  .empty-state { text-align: center; padding: 5rem 2rem; color: var(--text-faint); }
+  .empty-state.hidden { display: none; }
+
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-faint); }
+  footer a { color: var(--text-faint); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 1024px) {
+    .page-header, .filter-bar, .grid-wrap, .list-wrap { padding-left: 2rem; padding-right: 2rem; }
+    .cases-grid { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Legal Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link">Find a Lawyer</a></li>
+    <li><a href="cases.html" class="nav-link active">Active Cases</a></li>
+    <li><a href="apply.html" class="nav-link">Apply</a></li>
+    <li><a href="register.html" class="nav-link">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+    <li><a href="register.html" class="nav-cta">Join as a Legal Professional</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">The Legal Hub · Open Cases</div>
+    <h1 class="page-title">Cases seeking <em>legal expertise</em></h1>
+    <p class="page-sub">Active real estate transactions across Rwanda needing verified legal professionals. Filter by service type, platform source, or district and apply directly.</p>
+  </div>
+
+  <div class="filter-bar">
+    <input type="text" class="filter-input" placeholder="Search cases…" id="searchInput" oninput="applyFilters()">
+    <select class="filter-select" id="serviceFilter" onchange="applyFilters()">
+      <option value="">All Services</option>
+      <option>Title Verification</option>
+      <option>Conveyancing</option>
+      <option>LAIS Searches</option>
+      <option>Marital Consent</option>
+      <option>SPV Formation</option>
+      <option>Smart Contract Audit</option>
+    </select>
+    <select class="filter-select" id="sourceFilter" onchange="applyFilters()">
+      <option value="">All Platforms</option>
+      <option>Land Bank</option>
+      <option>Wealth Hub</option>
+      <option>Consumer Portal</option>
+      <option>Professional Hub</option>
+    </select>
+    <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+      <option value="">All Statuses</option>
+      <option>Open</option>
+      <option>Closing Soon</option>
+      <option>Assigned</option>
+    </select>
+    <span class="result-count" id="resultCount">8 cases</span>
+    <div class="view-toggle">
+      <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grid">⊞</button>
+      <button class="view-btn" id="listBtn" onclick="setView('list')" title="List">☰</button>
+    </div>
+  </div>
+
+  <div class="grid-wrap" id="gridView">
+    <div class="cases-grid" id="casesGrid"></div>
+    <div class="empty-state hidden" id="emptyState">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⚖️</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:700; color:var(--text-dim); margin-bottom:0.5rem;">No cases match your filters</div>
+      <p>Try broadening your search or clearing some filters.</p>
+    </div>
+  </div>
+
+  <div class="list-wrap hidden" id="listView">
+    <table class="cases-list">
+      <thead><tr>
+        <th>Case</th><th>Services Needed</th><th>Fee</th><th>Deadline</th><th>Status</th><th></th>
+      </tr></thead>
+      <tbody id="listBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOutside(event)">
+  <div class="modal">
+    <div class="modal-top banner-open" id="modalBanner"></div>
+    <div class="modal-header">
+      <div>
+        <div class="modal-source" id="modalSource"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-label">Services Required</div>
+      <div class="modal-services" id="modalServices"></div>
+      <div class="modal-label">Case Overview</div>
+      <p class="modal-desc" id="modalDesc"></p>
+      <div class="modal-label">Key Details</div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div class="modal-actions">
+        <a href="apply.html" id="modalApplyBtn" class="modal-btn-primary">Apply for This Case</a>
+        <button class="modal-btn-outline" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Imali.biz — The Legal Hub</span>
+  <span><a href="index.html">Home</a> · <a href="directory.html">Directory</a> · <a href="register.html">Register</a> · <a href="dashboard.html">Dashboard</a> · <a href="../index.html">Imali.biz</a></span>
+</footer>
+
+<script>
+function toggleTheme(){const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('imali-theme',n);updateUI(n);}
+function updateUI(t){document.getElementById('themeIcon').textContent=t==='dark'?'☀️':'🌙';document.getElementById('themeLabel').textContent=t==='dark'?'Light':'Dark';}
+updateUI(document.documentElement.getAttribute('data-theme'));
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx}px,${my}px)`;});
+(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop);})();
+
+const cases = [
+  { id:1, name:'Kimironko Mixed-Use Block', source:'Land Bank', district:'Gasabo, Kigali', status:'Open', bannerClass:'banner-open', statusClass:'status-open',
+    services:['Title Verification','LAIS Searches','Marital Consent'],
+    fee:'RWF 450,000', deadline:'14 days', urgency:'normal',
+    desc:'12-storey mixed-use development in Kibagabaga. Full title verification, LAIS search for encumbrances, and marital consent documentation required before the listing goes live on the Land Bank.',
+    meta:[{v:'RWF 450K',l:'Legal Fee'},{v:'14 days',l:'Deadline'},{v:'3',l:'Services'},{v:'Land Bank',l:'Source'},{v:'Gasabo',l:'District'},{v:'Residential',l:'Type'}] },
+  { id:2, name:'Rubavu Lakefront Villas SPV', source:'Wealth Hub', district:'Rubavu, Western', status:'Open', bannerClass:'banner-open', statusClass:'status-open',
+    services:['SPV Formation','Smart Contract Audit','LAIS Searches'],
+    fee:'RWF 1,200,000', deadline:'21 days', urgency:'normal',
+    desc:'Six luxury lakefront villas to be tokenised through the Wealth Hub. Requires SPV formation, a legal audit of the token smart contracts, and LAIS searches on all six plots.',
+    meta:[{v:'RWF 1.2M',l:'Legal Fee'},{v:'21 days',l:'Deadline'},{v:'3',l:'Services'},{v:'Wealth Hub',l:'Source'},{v:'Rubavu',l:'District'},{v:'Tokenisation',l:'Type'}] },
+  { id:3, name:'Huye University Clinic Sale', source:'Consumer Portal', district:'Huye, Southern', status:'Closing Soon', bannerClass:'banner-closing', statusClass:'status-closing',
+    services:['Conveyancing','Title Verification','Marital Consent'],
+    fee:'RWF 320,000', deadline:'4 days', urgency:'urgent',
+    desc:'Sale of an existing commercial medical clinic to a private buyer. Full conveyancing, title deed verification, and marital consent check required. Buyer is finance-ready — deadline is firm.',
+    meta:[{v:'RWF 320K',l:'Legal Fee'},{v:'4 days',l:'Deadline'},{v:'3',l:'Services'},{v:'Consumer Portal',l:'Source'},{v:'Huye',l:'District'},{v:'Commercial',l:'Type'}] },
+  { id:4, name:'Nyamata Industrial Park Phase 2', source:'Land Bank', district:'Bugesera, Eastern', status:'Open', bannerClass:'banner-open', statusClass:'status-open',
+    services:['Title Verification','LAIS Searches'],
+    fee:'RWF 580,000', deadline:'18 days', urgency:'normal',
+    desc:'Eight warehouse units across a 14,000 m² industrial site. Requires title verification on all sub-plots and a comprehensive LAIS search before construction permits can be filed.',
+    meta:[{v:'RWF 580K',l:'Legal Fee'},{v:'18 days',l:'Deadline'},{v:'2',l:'Services'},{v:'Land Bank',l:'Source'},{v:'Bugesera',l:'District'},{v:'Industrial',l:'Type'}] },
+  { id:5, name:'Kacyiru Commercial Plaza', source:'Wealth Hub', district:'Gasabo, Kigali', status:'Assigned', bannerClass:'banner-assigned', statusClass:'status-assigned',
+    services:['SPV Formation','Conveyancing'],
+    fee:'RWF 750,000', deadline:'30 days', urgency:'normal',
+    desc:'Ground-plus-five commercial development. SPV already being formed — a conveyancing specialist is still needed for the sale and leaseback structure of the ground-floor retail units.',
+    meta:[{v:'RWF 750K',l:'Legal Fee'},{v:'30 days',l:'Deadline'},{v:'2',l:'Services'},{v:'Wealth Hub',l:'Source'},{v:'Gasabo',l:'District'},{v:'Commercial',l:'Type'}] },
+  { id:6, name:'Musanze Eco-Lodge Legal Wrap', source:'Wealth Hub', district:'Musanze, Northern', status:'Open', bannerClass:'banner-open', statusClass:'status-open',
+    services:['SPV Formation','Smart Contract Audit','Title Verification'],
+    fee:'RWF 980,000', deadline:'25 days', urgency:'normal',
+    desc:'24-chalet eco-lodge at Virunga foothills being tokenised. Needs SPV formation under Rwandan company law, smart contract audit on the Hedera token issuance, and title verification on the land parcel.',
+    meta:[{v:'RWF 980K',l:'Legal Fee'},{v:'25 days',l:'Deadline'},{v:'3',l:'Services'},{v:'Wealth Hub',l:'Source'},{v:'Musanze',l:'District'},{v:'Hospitality',l:'Type'}] },
+  { id:7, name:'Remera Office Tower Pre-Sale', source:'Professional Hub', district:'Gasabo, Kigali', status:'Open', bannerClass:'banner-open', statusClass:'status-open',
+    services:['Conveyancing','LAIS Searches','Marital Consent'],
+    fee:'RWF 420,000', deadline:'16 days', urgency:'normal',
+    desc:'Grade-A office tower pre-selling floors to corporate tenants. Conveyancing of individual floor leases, LAIS searches on the parent title, and marital consent from the registered landowner.',
+    meta:[{v:'RWF 420K',l:'Legal Fee'},{v:'16 days',l:'Deadline'},{v:'3',l:'Services'},{v:'Professional Hub',l:'Source'},{v:'Gasabo',l:'District'},{v:'Commercial',l:'Type'}] },
+  { id:8, name:'Muhanga Smart Township Phase 1', source:'Land Bank', district:'Muhanga, Southern', status:'Closing Soon', bannerClass:'banner-closing', statusClass:'status-closing',
+    services:['Title Verification','LAIS Searches','Marital Consent'],
+    fee:'RWF 1,400,000', deadline:'6 days', urgency:'urgent',
+    desc:'45-hectare greenfield township. Phase 1 title clearance across 12 land parcels, LAIS searches on all plots, and marital consent from six registered landowners. Largest active case on the platform.',
+    meta:[{v:'RWF 1.4M',l:'Legal Fee'},{v:'6 days',l:'Deadline'},{v:'3',l:'Services'},{v:'Land Bank',l:'Source'},{v:'Muhanga',l:'District'},{v:'Township',l:'Type'}] },
+];
+
+let filtered = [...cases];
+let currentView = 'grid';
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('gridView').classList.toggle('hidden', v!=='grid');
+  document.getElementById('listView').classList.toggle('hidden', v!=='list');
+  document.getElementById('gridBtn').classList.toggle('active', v==='grid');
+  document.getElementById('listBtn').classList.toggle('active', v==='list');
+}
+
+function applyFilters() {
+  const q   = document.getElementById('searchInput').value.toLowerCase();
+  const svc = document.getElementById('serviceFilter').value;
+  const src = document.getElementById('sourceFilter').value;
+  const st  = document.getElementById('statusFilter').value;
+  filtered = cases.filter(c => {
+    if (q && !c.name.toLowerCase().includes(q) && !c.desc.toLowerCase().includes(q)) return false;
+    if (svc && !c.services.includes(svc)) return false;
+    if (src && c.source !== src) return false;
+    if (st && c.status !== st) return false;
+    return true;
+  });
+  document.getElementById('resultCount').textContent = filtered.length + ' case' + (filtered.length!==1?'s':'');
+  renderAll(filtered);
+}
+
+function renderAll(list) {
+  renderGrid(list);
+  renderList(list);
+  const empty = document.getElementById('emptyState');
+  const grid  = document.getElementById('casesGrid');
+  if (!list.length) { grid.classList.add('hidden'); empty.classList.remove('hidden'); }
+  else              { grid.classList.remove('hidden'); empty.classList.add('hidden'); }
+}
+
+function renderGrid(list) {
+  document.getElementById('casesGrid').innerHTML = list.map(c => `
+    <div class="case-card" onclick="openModal(${c.id})">
+      <div class="card-banner ${c.bannerClass}"></div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-name">${c.name}</div>
+          <span class="card-status ${c.statusClass}">${c.status}</span>
+        </div>
+        <div class="card-source">📍 ${c.district} · Via <strong>${c.source}</strong></div>
+        <div class="card-services">${c.services.map(s=>`<span class="svc-chip">${s}</span>`).join('')}</div>
+        <div class="card-meta">
+          <div class="meta-item"><div class="meta-val">${c.fee}</div><div class="meta-label">Fee</div></div>
+          <div class="meta-item"><div class="meta-val">${c.deadline}</div><div class="meta-label">Deadline</div></div>
+        </div>
+        <p class="card-desc">${c.desc.substring(0,130)}…</p>
+        <div class="card-footer">
+          <div class="card-platform">Via <strong>${c.source}</strong></div>
+          <div style="display:flex;gap:0.5rem;">
+            <button class="btn-detail" onclick="event.stopPropagation();openModal(${c.id})">Details</button>
+            <a href="apply.html?case=${c.id}" class="btn-apply" onclick="event.stopPropagation()">Apply</a>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderList(list) {
+  document.getElementById('listBody').innerHTML = list.map(c => `
+    <tr onclick="openModal(${c.id})">
+      <td><div class="lt-name">${c.name}</div><div class="lt-source">📍 ${c.district}</div></td>
+      <td><div class="lt-tags">${c.services.map(s=>`<span class="lt-tag">${s}</span>`).join('')}</div></td>
+      <td><span class="lt-fee">${c.fee}</span></td>
+      <td><span class="lt-deadline">${c.deadline}</span></td>
+      <td><span class="card-status ${c.statusClass}" style="position:static;">${c.status}</span></td>
+      <td class="lt-action"><a href="apply.html?case=${c.id}" class="btn-apply" onclick="event.stopPropagation()">Apply</a></td>
+    </tr>`).join('');
+}
+
+function openModal(id) {
+  const c = cases.find(x=>x.id===id); if (!c) return;
+  document.getElementById('modalBanner').className = 'modal-top ' + c.bannerClass;
+  document.getElementById('modalSource').textContent = '📍 ' + c.district + ' · ' + c.source;
+  document.getElementById('modalTitle').textContent  = c.name;
+  document.getElementById('modalDesc').textContent   = c.desc;
+  document.getElementById('modalServices').innerHTML = c.services.map(s=>`<span class="svc-chip">${s}</span>`).join('');
+  document.getElementById('modalMeta').innerHTML     = c.meta.map(m=>`<div class="modal-meta-item"><div class="modal-meta-val">${m.v}</div><div class="modal-meta-label">${m.l}</div></div>`).join('');
+  document.getElementById('modalApplyBtn').href      = 'apply.html?case=' + c.id;
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow='';}
+function closeOutside(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+renderAll(cases);
+</script>
+</body>
+</html>

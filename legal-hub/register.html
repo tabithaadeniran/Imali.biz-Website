@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — The Legal Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --legal: #2d2a7a; --legal-hover: #231f61;
+    --legal-soft: rgba(45,42,122,0.09); --legal-border: rgba(45,42,122,0.22);
+    --cursor-color: var(--legal); --cursor-ring: rgba(45,42,122,0.30);
+  }
+  .nav-logo span { color: var(--legal); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--legal); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--legal); font-weight: 500; }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); }
+  .theme-toggle:hover { background: var(--surface-hover); }
+
+  /* LAYOUT */
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  .reg-wrap { flex: 1; display: grid; grid-template-columns: 380px 1fr; min-height: calc(100vh - 72px); margin-top: 72px; }
+
+  /* LEFT PANEL */
+  .left-panel { background: var(--legal); padding: 3rem 2.5rem; display: flex; flex-direction: column; position: sticky; top: 72px; height: calc(100vh - 72px); overflow-y: auto; }
+  [data-theme="light"] .left-panel { background: var(--legal); }
+  .left-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; color: rgba(255,255,255,0.5); margin-bottom: 2.5rem; }
+  .left-logo span { color: rgba(255,255,255,0.9); font-family: 'Instrument Serif', serif; font-style: italic; }
+  .left-title { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 0.75rem; letter-spacing: -0.02em; }
+  .left-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: rgba(255,255,255,0.7); }
+  .left-sub { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.65; margin-bottom: 2.5rem; }
+  .step-list { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
+  .step-dot-wrap { display: flex; align-items: center; gap: 0.85rem; cursor: none; }
+  .step-dot { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.25); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.4); flex-shrink: 0; transition: all 0.3s; }
+  .step-dot.active { background: #fff; border-color: #fff; color: var(--legal); }
+  .step-dot.done { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.4); color: #fff; }
+  .step-label { font-size: 0.8rem; color: rgba(255,255,255,0.4); transition: color 0.3s; }
+  .step-label.active { color: #fff; font-weight: 600; }
+  .step-label.done { color: rgba(255,255,255,0.7); }
+  .left-benefits { margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+  .benefit { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .benefit-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+  .benefit-text { font-size: 0.75rem; color: rgba(255,255,255,0.5); line-height: 1.55; }
+
+  /* RIGHT PANEL */
+  .right-panel { padding: 3rem 4rem; overflow-y: auto; }
+  .form-step { display: none; }
+  .form-step.active { display: block; }
+  .step-heading { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 0.4rem; }
+  .step-heading em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--legal); }
+  .step-sub { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 2.5rem; line-height: 1.6; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-label { font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600; color: var(--text-dim); letter-spacing: 0.04em; }
+  .form-input, .form-select, .form-textarea { background: var(--surface); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.7rem 0.9rem; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--text); outline: none; transition: border-color 0.2s; cursor: none; width: 100%; box-sizing: border-box; }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--legal-border); box-shadow: 0 0 0 3px rgba(45,42,122,0.07); }
+  .form-input::placeholder, .form-textarea::placeholder { color: var(--text-faint); }
+  .form-textarea { resize: vertical; min-height: 100px; }
+  .form-hint { font-size: 0.72rem; color: var(--text-faint); margin-top: 0.25rem; }
+
+  /* PRACTICE AREAS */
+  .areas-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-bottom: 1.5rem; }
+  .area-chip { display: flex; align-items: center; gap: 0.6rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: 0.7rem; padding: 0.7rem 1rem; cursor: none; transition: all 0.2s; user-select: none; }
+  .area-chip:hover { border-color: var(--legal-border); }
+  .area-chip.selected { background: var(--legal-soft); border-color: var(--legal); }
+  .area-chip input { display: none; }
+  .area-check { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 0.7rem; }
+  .area-chip.selected .area-check { background: var(--legal); border-color: var(--legal); color: #fff; }
+  .area-chip-label { font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 600; color: var(--text-dim); }
+  .area-chip.selected .area-chip-label { color: var(--legal); }
+
+  /* REVIEW */
+  .review-section { margin-bottom: 1.75rem; }
+  .review-section-title { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.85rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+  .review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .review-item { padding: 0.6rem 0.85rem; background: var(--surface); border-radius: 0.5rem; }
+  .review-label { font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-bottom: 0.2rem; }
+  .review-val { font-size: 0.85rem; font-weight: 500; color: var(--text); }
+  .review-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .review-chip { font-size: 0.72rem; background: var(--legal-soft); border: 1px solid var(--legal-border); color: var(--legal); border-radius: 2rem; padding: 0.2rem 0.65rem; }
+  .terms-box { background: var(--surface); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1.5rem; font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
+
+  /* NAV BUTTONS */
+  .form-nav { display: flex; gap: 0.75rem; margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .btn-back { background: transparent; border: 1px solid var(--border); color: var(--text-dim); border-radius: 0.6rem; padding: 0.75rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: none; transition: all 0.2s; }
+  .btn-back:hover { border-color: var(--border-strong); color: var(--text); }
+  .btn-next { flex: 1; background: var(--legal); color: #fff; border: none; border-radius: 0.6rem; padding: 0.75rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-next:hover { background: var(--legal-hover); }
+  .btn-submit { flex: 1; background: var(--legal); color: #fff; border: none; border-radius: 0.6rem; padding: 0.75rem 1.5rem; font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: none; transition: background 0.2s; }
+  .btn-submit:hover { background: var(--legal-hover); }
+
+  /* SUCCESS */
+  .success-wrap { text-align: center; padding: 4rem 2rem; max-width: 480px; margin: 0 auto; }
+  .success-icon { font-size: 3.5rem; margin-bottom: 1.5rem; }
+  .success-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--text); margin-bottom: 0.75rem; }
+  .success-sub { font-size: 0.9rem; color: var(--text-dim); line-height: 1.7; margin-bottom: 2rem; }
+  .btn-dash { background: var(--legal); color: #fff; border-radius: 0.75rem; padding: 0.85rem 2rem; font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; cursor: none; text-decoration: none; transition: background 0.2s; display: inline-block; }
+  .btn-dash:hover { background: var(--legal-hover); }
+
+  @media (max-width: 900px) {
+    .reg-wrap { grid-template-columns: 1fr; }
+    .left-panel { position: static; height: auto; }
+    .right-panel { padding: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Legal Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link">Find a Lawyer</a></li>
+    <li><a href="cases.html" class="nav-link">Active Cases</a></li>
+    <li><a href="apply.html" class="nav-link">Apply</a></li>
+    <li><a href="register.html" class="nav-link active">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+  </ul>
+</nav>
+
+<div class="reg-wrap">
+  <!-- LEFT -->
+  <div class="left-panel">
+    <div class="left-logo">Imali<span>.</span>biz</div>
+    <div class="left-title">Join <em>The Legal Hub</em></div>
+    <p class="left-sub">Rwanda's digital property law platform. Get matched to real estate cases, manage them digitally, and earn fees plus project tokens.</p>
+    <div class="step-list">
+      <div class="step-dot-wrap">
+        <div class="step-dot active" id="dot-1">01</div>
+        <span class="step-label active" id="lbl-1">Personal Details</span>
+      </div>
+      <div class="step-dot-wrap">
+        <div class="step-dot" id="dot-2">02</div>
+        <span class="step-label" id="lbl-2">Credentials</span>
+      </div>
+      <div class="step-dot-wrap">
+        <div class="step-dot" id="dot-3">03</div>
+        <span class="step-label" id="lbl-3">Practice Areas</span>
+      </div>
+      <div class="step-dot-wrap">
+        <div class="step-dot" id="dot-4">04</div>
+        <span class="step-label" id="lbl-4">Review & Submit</span>
+      </div>
+    </div>
+    <div class="left-benefits">
+      <div class="benefit"><span class="benefit-icon">⚖️</span><span class="benefit-text">Matched to cases from Land Bank, Wealth Hub, Consumer Portal, and Professional Hub</span></div>
+      <div class="benefit"><span class="benefit-icon">💰</span><span class="benefit-text">Earn fees in RWF on completion, plus token allocations in tokenised projects you clear</span></div>
+      <div class="benefit"><span class="benefit-icon">🏛️</span><span class="benefit-text">Rwanda Law Society verification badge on your public profile</span></div>
+      <div class="benefit"><span class="benefit-icon">🗂️</span><span class="benefit-text">Digital case management — LAIS searches, documents, and filings in one workspace</span></div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right-panel">
+
+    <!-- STEP 1 -->
+    <div class="form-step active" id="step-1">
+      <h2 class="step-heading">Personal <em>details</em></h2>
+      <p class="step-sub">Tell us about yourself. This information will appear on your public lawyer profile.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-input" placeholder="e.g. Jean-Claude" id="firstName">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-input" placeholder="e.g. Mutabazi" id="lastName">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" placeholder="you@example.com" id="email">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" placeholder="+250 7XX XXX XXX" id="phone">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">District</label>
+          <select class="form-select" id="district">
+            <option value="">Select district…</option>
+            <option>Gasabo, Kigali</option>
+            <option>Kicukiro, Kigali</option>
+            <option>Nyarugenge, Kigali</option>
+            <option>Huye, Southern</option>
+            <option>Muhanga, Southern</option>
+            <option>Musanze, Northern</option>
+            <option>Bugesera, Eastern</option>
+            <option>Rubavu, Western</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Years of Experience</label>
+          <select class="form-select" id="experience">
+            <option value="">Select…</option>
+            <option>1–3 years</option>
+            <option>4–7 years</option>
+            <option>8–12 years</option>
+            <option>13+ years</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Short Bio</label>
+          <textarea class="form-textarea" placeholder="Briefly describe your legal background and property law expertise (2–3 sentences)…" id="bio"></textarea>
+          <span class="form-hint">This will appear on your public profile visible to clients and counterparties.</span>
+        </div>
+      </div>
+      <div class="form-nav">
+        <button class="btn-next" onclick="goTo(2)">Continue → Credentials</button>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="form-step" id="step-2">
+      <h2 class="step-heading">Your <em>credentials</em></h2>
+      <p class="step-sub">Your Rwanda Law Society membership and qualifications. These will be verified before your profile goes live.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Rwanda Law Society Number</label>
+          <input type="text" class="form-input" placeholder="e.g. RLS-2014-0042" id="rlsNumber">
+          <span class="form-hint">We will cross-check this with the Rwanda Law Society directory.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Year Admitted to the Bar</label>
+          <input type="text" class="form-input" placeholder="e.g. 2014" id="admitYear">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Law Degree Institution</label>
+          <input type="text" class="form-input" placeholder="e.g. University of Rwanda" id="lawSchool">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Graduation Year</label>
+          <input type="text" class="form-input" placeholder="e.g. 2012" id="gradYear">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Current Employer / Firm (optional)</label>
+          <input type="text" class="form-input" placeholder="e.g. Kagire & Partners Advocates" id="firm">
+          <span class="form-hint">Leave blank if you are a sole practitioner.</span>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Professional Indemnity Insurance (optional)</label>
+          <input type="text" class="form-input" placeholder="Provider and policy number" id="insurance">
+          <span class="form-hint">Recommended for high-value SPV and tokenisation cases.</span>
+        </div>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(1)">← Back</button>
+        <button class="btn-next" onclick="goTo(3)">Continue → Practice Areas</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="form-step" id="step-3">
+      <h2 class="step-heading">Practice <em>areas</em></h2>
+      <p class="step-sub">Select every service you can provide. You will only be matched to cases within your selected areas.</p>
+      <div class="areas-grid" id="areasGrid">
+        <label class="area-chip">
+          <input type="checkbox" value="Title Verification" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">🔍 Title Verification</span>
+        </label>
+        <label class="area-chip">
+          <input type="checkbox" value="LAIS Searches" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">📋 LAIS Searches</span>
+        </label>
+        <label class="area-chip">
+          <input type="checkbox" value="Conveyancing" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">📝 Conveyancing</span>
+        </label>
+        <label class="area-chip">
+          <input type="checkbox" value="Marital Consent" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">💍 Marital Consent</span>
+        </label>
+        <label class="area-chip">
+          <input type="checkbox" value="SPV Formation" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">🏢 SPV Formation</span>
+        </label>
+        <label class="area-chip">
+          <input type="checkbox" value="Smart Contract Audit" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">🔗 Smart Contract Audit</span>
+        </label>
+        <label class="area-chip">
+          <input type="checkbox" value="Other" onchange="handleArea(this)">
+          <div class="area-check">✓</div>
+          <span class="area-chip-label">✏️ Other</span>
+        </label>
+      </div>
+      <div id="otherAreaWrap" style="display:none; margin-bottom:1rem;">
+        <div class="form-group">
+          <label class="form-label">Describe your other practice area</label>
+          <input type="text" class="form-input" id="otherAreaText" placeholder="e.g. Agricultural land rights, Succession planning, Lease disputes…">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Availability</label>
+          <select class="form-select" id="availability">
+            <option>Available Now</option>
+            <option>Available in 1 week</option>
+            <option>Available in 2 weeks</option>
+            <option>Currently Busy</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-group">
+          <label class="form-label">Maximum concurrent cases</label>
+          <select class="form-select" id="maxCases">
+            <option>1 case at a time</option>
+            <option>2–3 cases</option>
+            <option>4–5 cases</option>
+            <option>6+ cases</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(2)">← Back</button>
+        <button class="btn-next" onclick="goTo(4)">Review & Submit →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="form-step" id="step-4">
+      <h2 class="step-heading">Review <em>& submit</em></h2>
+      <p class="step-sub">Check your details below. We will verify your Rwanda Law Society number and activate your profile within 48 hours.</p>
+      <div class="review-section">
+        <div class="review-section-title">Personal Details</div>
+        <div class="review-grid">
+          <div class="review-item"><div class="review-label">Name</div><div class="review-val" id="rv-name">—</div></div>
+          <div class="review-item"><div class="review-label">Email</div><div class="review-val" id="rv-email">—</div></div>
+          <div class="review-item"><div class="review-label">Phone</div><div class="review-val" id="rv-phone">—</div></div>
+          <div class="review-item"><div class="review-label">District</div><div class="review-val" id="rv-district">—</div></div>
+          <div class="review-item"><div class="review-label">Experience</div><div class="review-val" id="rv-exp">—</div></div>
+        </div>
+      </div>
+      <div class="review-section">
+        <div class="review-section-title">Credentials</div>
+        <div class="review-grid">
+          <div class="review-item"><div class="review-label">RLS Number</div><div class="review-val" id="rv-rls">—</div></div>
+          <div class="review-item"><div class="review-label">Admitted</div><div class="review-val" id="rv-admit">—</div></div>
+          <div class="review-item"><div class="review-label">Law School</div><div class="review-val" id="rv-school">—</div></div>
+          <div class="review-item"><div class="review-label">Firm</div><div class="review-val" id="rv-firm">—</div></div>
+        </div>
+      </div>
+      <div class="review-section">
+        <div class="review-section-title">Practice Areas</div>
+        <div class="review-chips" id="rv-areas"></div>
+      </div>
+      <div class="terms-box">
+        By submitting this form you confirm that all information provided is accurate and that you consent to Imali.biz verifying your Rwanda Law Society membership. Your profile will be visible to clients and counterparties on the platform once verified.
+      </div>
+      <div class="form-nav">
+        <button class="btn-back" onclick="goTo(3)">← Back</button>
+        <button class="btn-submit" onclick="submitForm()">Submit Application ✓</button>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="form-step" id="step-success">
+      <div class="success-wrap">
+        <div class="success-icon">⚖️</div>
+        <div class="success-title">Application submitted!</div>
+        <p class="success-sub">We are verifying your Rwanda Law Society membership. You will receive an email confirmation within 48 hours and your profile will go live once approved. Welcome to The Legal Hub.</p>
+        <a href="dashboard.html" class="btn-dash">Go to My Dashboard →</a>
+      </div>
+    </div>
+
+  </div><!-- end right-panel -->
+</div>
+
+<script>
+function toggleTheme(){const n=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('imali-theme',n);updateUI(n);}
+function updateUI(t){document.getElementById('themeIcon').textContent=t==='dark'?'☀️':'🌙';document.getElementById('themeLabel').textContent=t==='dark'?'Light':'Dark';}
+updateUI(document.documentElement.getAttribute('data-theme'));
+const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx}px,${my}px)`;});
+(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop);})();
+
+let currentStep = 1;
+
+function goTo(n) {
+  document.getElementById('step-'+currentStep).classList.remove('active');
+  document.getElementById('step-'+n).classList.add('active');
+  [1,2,3,4].forEach(i => {
+    const dot = document.getElementById('dot-'+i);
+    const lbl = document.getElementById('lbl-'+i);
+    if (!dot) return;
+    dot.classList.remove('active','done');
+    lbl.classList.remove('active','done');
+    if (i < n) { dot.classList.add('done'); lbl.classList.add('done'); dot.textContent = '✓'; }
+    else if (i === n) { dot.classList.add('active'); lbl.classList.add('active'); dot.textContent = '0'+i; }
+    else { dot.textContent = '0'+i; }
+  });
+  if (n === 4) populateReview();
+  currentStep = n;
+  document.querySelector('.right-panel').scrollTop = 0;
+}
+
+function handleArea(cb) {
+  const chip = cb.closest('.area-chip');
+  chip.classList.toggle('selected', cb.checked);
+  if (cb.value === 'Other') {
+    document.getElementById('otherAreaWrap').style.display = cb.checked ? 'block' : 'none';
+  }
+}
+
+function populateReview() {
+  const fn = document.getElementById('firstName').value || '—';
+  const ln = document.getElementById('lastName').value || '—';
+  document.getElementById('rv-name').textContent    = fn + ' ' + ln;
+  document.getElementById('rv-email').textContent   = document.getElementById('email').value || '—';
+  document.getElementById('rv-phone').textContent   = document.getElementById('phone').value || '—';
+  document.getElementById('rv-district').textContent= document.getElementById('district').value || '—';
+  document.getElementById('rv-exp').textContent     = document.getElementById('experience').value || '—';
+  document.getElementById('rv-rls').textContent     = document.getElementById('rlsNumber').value || '—';
+  document.getElementById('rv-admit').textContent   = document.getElementById('admitYear').value || '—';
+  document.getElementById('rv-school').textContent  = document.getElementById('lawSchool').value || '—';
+  document.getElementById('rv-firm').textContent    = document.getElementById('firm').value || 'Sole Practitioner';
+  const otherText = document.getElementById('otherAreaText').value.trim();
+  const areas = [...document.querySelectorAll('.area-chip.selected input')].map(i =>
+    i.value === 'Other' ? (otherText || 'Other') : i.value
+  );
+  document.getElementById('rv-areas').innerHTML = areas.length
+    ? areas.map(a=>`<span class="review-chip">${a}</span>`).join('')
+    : '<span style="color:var(--text-faint);font-size:0.82rem;">None selected</span>';
+}
+
+function submitForm() {
+  document.getElementById('step-4').classList.remove('active');
+  document.getElementById('step-success').classList.add('active');
+  [1,2,3,4].forEach(i=>{
+    const d=document.getElementById('dot-'+i);
+    const l=document.getElementById('lbl-'+i);
+    if(d){d.classList.remove('active');d.classList.add('done');d.textContent='✓';l.classList.remove('active');l.classList.add('done');}
+  });
+}
+</script>
+</body>
+</html>

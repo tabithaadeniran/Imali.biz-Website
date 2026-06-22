@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<script>(function(){var t=localStorage.getItem('imali-theme')||'light';document.documentElement.setAttribute('data-theme',t);})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Find a Lawyer — The Legal Hub | Imali.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  :root {
+    --legal: #2d2a7a; --legal-hover: #231f61;
+    --legal-soft: rgba(45,42,122,0.09); --legal-border: rgba(45,42,122,0.22);
+    --cursor-color: var(--legal); --cursor-ring: rgba(45,42,122,0.30);
+  }
+  .nav-logo span { color: var(--legal); font-style: italic; font-family: 'Instrument Serif', serif; }
+  .nav-sub { font-size: 0.58rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--legal); font-weight: 500; }
+  .nav-links { display: flex; align-items: center; gap: 1.5rem; list-style: none; }
+  .nav-link { color: var(--text-dim); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; cursor: none; }
+  .nav-link:hover { color: var(--text); }
+  .nav-link.active { color: var(--legal); font-weight: 500; }
+  .nav-back { color: var(--text-faint); font-size: 0.78rem; }
+  .nav-cta { background: var(--legal); color: #fff; border-radius: 2rem; padding: 0.5rem 1.25rem; font-size: 0.82rem; font-weight: 600; text-decoration: none; cursor: none; transition: background 0.2s; font-family: 'Syne', sans-serif; }
+  .nav-cta:hover { background: var(--legal-hover); }
+  .theme-toggle { background: var(--surface); border: 1px solid var(--border); border-radius: 2rem; padding: 0.35rem 0.75rem; cursor: none; display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: var(--text-dim); }
+  .theme-toggle:hover { background: var(--surface-hover); color: var(--text); }
+
+  .page-wrap { padding-top: 72px; }
+  .page-header { padding: 3rem 4rem 2rem; background: #f0f0f8; border-bottom: 1px solid var(--legal-border); }
+  [data-theme="dark"] .page-header { background: var(--bg-alt); border-bottom-color: var(--border); }
+  .page-eyebrow { font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--legal); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.65rem; }
+  .page-eyebrow::before { content: ''; display: block; width: 20px; height: 1px; background: var(--legal); }
+  .page-title { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; letter-spacing: -0.025em; color: var(--text); }
+  .page-title em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--legal); }
+  .page-sub { font-size: 0.88rem; color: var(--text-dim); line-height: 1.6; max-width: 520px; margin-top: 0.5rem; }
+
+  .search-bar-wrap { padding: 1rem 4rem; background: var(--bg-alt); border-bottom: 1px solid var(--border); display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+  [data-theme="light"] .search-bar-wrap { background: #f0f0f8; border-bottom-color: var(--legal-border); }
+  .search-input { background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.5rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text); outline: none; width: 240px; transition: border-color 0.2s; cursor: none; }
+  [data-theme="light"] .search-input { background: rgba(0,0,0,0.05); }
+  .search-input::placeholder { color: var(--text-faint); }
+  .search-input:focus { border-color: var(--legal-border); }
+  .filter-select { background: var(--surface); border: 1px solid var(--border); border-radius: 0.55rem; padding: 0.5rem 0.85rem; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text-dim); outline: none; cursor: none; min-width: 160px; }
+  [data-theme="light"] .filter-select { background: rgba(0,0,0,0.05); }
+  .filter-select:focus { border-color: var(--legal-border); }
+  .result-count { margin-left: auto; font-size: 0.78rem; color: var(--text-faint); }
+
+  .dir-wrap { padding: 2.5rem 4rem 5rem; }
+  .lawyers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+
+  .lawyer-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 1.25rem; padding: 1.5rem; transition: all 0.25s; cursor: none; }
+  .lawyer-card:hover { border-color: var(--legal-border); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(45,42,122,0.09); }
+  .lc-top { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+  .lc-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: #fff; flex-shrink: 0; }
+  .av-1 { background: linear-gradient(135deg, #2d2a7a, #5b58c4); }
+  .av-2 { background: linear-gradient(135deg, #1a6b5c, #2a9b87); }
+  .av-3 { background: linear-gradient(135deg, #6b1a3a, #c43060); }
+  .av-4 { background: linear-gradient(135deg, #6b4a1a, #c4882a); }
+  .av-5 { background: linear-gradient(135deg, #1a3a6b, #2a60c4); }
+  .av-6 { background: linear-gradient(135deg, #3a1a6b, #7040c4); }
+  .lc-info { flex: 1; min-width: 0; }
+  .lc-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); }
+  .lc-specialty { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.15rem; }
+  .lc-score { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; background: var(--legal-soft); color: var(--legal); border: 1px solid var(--legal-border); border-radius: 2rem; padding: 0.2rem 0.55rem; font-weight: 600; margin-top: 0.4rem; }
+  .lc-loc { font-size: 0.72rem; color: var(--text-faint); margin-bottom: 0.75rem; }
+  .lc-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1rem; }
+  .lc-tag { font-size: 0.62rem; background: var(--legal-soft); border: 1px solid var(--legal-border); color: var(--legal); border-radius: 2rem; padding: 0.18rem 0.6rem; font-weight: 500; }
+  .lc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-bottom: 1rem; }
+  .lc-stat { background: var(--surface); border-radius: 0.5rem; padding: 0.45rem 0.6rem; text-align: center; }
+  .lc-stat-val { font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 700; color: var(--text); }
+  .lc-stat-label { font-size: 0.58rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); margin-top: 0.1rem; }
+  .lc-footer { display: flex; gap: 0.5rem; }
+  .btn-contact { flex: 1; text-align: center; background: var(--legal); color: #fff; border: none; border-radius: 0.6rem; padding: 0.55rem; font-size: 0.78rem; font-weight: 600; cursor: none; font-family: 'Syne', sans-serif; transition: background 0.2s; text-decoration: none; }
+  .btn-contact:hover { background: var(--legal-hover); }
+  .btn-profile { flex: 1; text-align: center; background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: 0.6rem; padding: 0.55rem; font-size: 0.78rem; font-weight: 600; cursor: none; font-family: 'Syne', sans-serif; transition: border-color 0.2s, color 0.2s; text-decoration: none; }
+  .btn-profile:hover { border-color: var(--legal-border); color: var(--legal); }
+
+  .avail-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 0.35rem; }
+  .avail-yes { background: #22c55e; }
+  .avail-busy { background: var(--gold); }
+
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; color: var(--text-faint); }
+  footer a { color: var(--text-faint); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 1024px) {
+    .page-header { padding: 2rem; }
+    .search-bar-wrap { padding: 1rem 2rem; }
+    .dir-wrap { padding: 2rem 2rem 4rem; }
+    .lawyers-grid { grid-template-columns: repeat(2, 1fr); }
+    footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.5rem; }
+  }
+  @media (max-width: 640px) {
+    .lawyers-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="./index.html" class="nav-logo-wrap">
+    <div class="nav-logo">Imali<span>.</span>biz</div>
+    <div class="nav-sub">The Legal Hub</div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="directory.html" class="nav-link active">Find a Lawyer</a></li>
+    <li><a href="cases.html" class="nav-link">Active Cases</a></li>
+    <li><a href="apply.html" class="nav-link">Apply</a></li>
+    <li><a href="register.html" class="nav-link">Register</a></li>
+    <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+    <li><a href="../index.html" class="nav-link nav-back">← Imali.biz</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()"><span id="themeIcon">🌙</span><span id="themeLabel">Dark</span></button></li>
+    <li><a href="register.html" class="nav-cta">Join as a Legal Professional</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">Verified Legal Professionals</div>
+    <h1 class="page-title">Find a <em>lawyer</em></h1>
+    <p class="page-sub">Every legal professional on this platform is verified by the Rwanda Law Society. Filter by practice area or district to find the right match for your transaction.</p>
+  </div>
+
+  <div class="search-bar-wrap">
+    <input type="text" class="search-input" placeholder="Search lawyers…" id="searchInput" oninput="applyFilters()">
+    <select class="filter-select" id="specialtyFilter" onchange="applyFilters()">
+      <option value="">All Practice Areas</option>
+      <option>Title Verification</option>
+      <option>Conveyancing</option>
+      <option>LAIS Searches</option>
+      <option>Marital Consent</option>
+      <option>SPV Formation</option>
+      <option>Smart Contract Audit</option>
+    </select>
+    <select class="filter-select" id="districtFilter" onchange="applyFilters()">
+      <option value="">All Districts</option>
+      <option>Gasabo, Kigali</option>
+      <option>Kicukiro, Kigali</option>
+      <option>Nyarugenge, Kigali</option>
+      <option>Huye, Southern</option>
+      <option>Musanze, Northern</option>
+      <option>Rubavu, Western</option>
+    </select>
+    <select class="filter-select" id="availFilter" onchange="applyFilters()">
+      <option value="">Any Availability</option>
+      <option>Available Now</option>
+      <option>Busy</option>
+    </select>
+    <span class="result-count" id="resultCount">6 lawyers</span>
+  </div>
+
+  <div class="dir-wrap">
+    <div class="lawyers-grid" id="lawyersGrid"></div>
+    <div style="display:none; text-align:center; padding:4rem 2rem; color:var(--text-faint);" id="emptyState">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">⚖️</div>
+      <div style="font-family:'Syne',sans-serif; font-weight:700; color:var(--text-dim); margin-bottom:0.5rem;">No lawyers match your filters</div>
+      <p>Try broadening your search or clearing some filters.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>© 2025 Imali.biz — The Legal Hub</span>
+  <span><a href="index.html">Home</a> · <a href="cases.html">Cases</a> · <a href="register.html">Register</a> · <a href="dashboard.html">Dashboard</a> · <a href="../index.html">Imali.biz</a></span>
+</footer>
+
+<script>
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('imali-theme', next);
+  updateThemeUI(next);
+}
+function updateThemeUI(t) {
+  document.getElementById('themeIcon').textContent = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeLabel').textContent = t === 'dark' ? 'Light' : 'Dark';
+}
+updateThemeUI(document.documentElement.getAttribute('data-theme'));
+
+const cursor = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx}px,${my}px)`;});
+(function loop(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(loop);})();
+
+const lawyers = [
+  { id:1, initials:'JM', av:'av-1', name:'Jean-Claude Mutabazi', specialty:'Property Law & Conveyancing', location:'Gasabo, Kigali', avail:'Available Now', score:'4.9', cases:34, years:12, district:'Gasabo, Kigali',
+    areas:['Conveyancing','Title Verification','LAIS Searches'], bio:'Senior property lawyer with 12 years handling high-value land transactions in Kigali. Rwanda Law Society member since 2012.' },
+  { id:2, initials:'AN', av:'av-3', name:'Amara Nyiramana', specialty:'SPV Formation & Tokenisation Law', location:'Nyarugenge, Kigali', avail:'Available Now', score:'4.8', cases:21, years:8, district:'Nyarugenge, Kigali',
+    areas:['SPV Formation','Smart Contract Audit','Title Verification'], bio:'Specialist in structuring SPVs for fractional ownership and token-based real estate deals. Advises on Hedera and Polygon legal wraps under Rwandan law.' },
+  { id:3, initials:'EK', av:'av-2', name:'Emmanuel Karangwa', specialty:'Conveyancing & Title Transfer', location:'Huye, Southern', avail:'Busy', score:'4.7', cases:58, years:15, district:'Huye, Southern',
+    areas:['Conveyancing','Marital Consent','LAIS Searches'], bio:'Most experienced conveyancer on the platform. Handles full title transfer, marital consent documentation, and NLA filings for Southern Province.' },
+  { id:4, initials:'GU', av:'av-4', name:'Grace Uwimana', specialty:'Real Estate Due Diligence', location:'Kicukiro, Kigali', avail:'Available Now', score:'4.9', cases:29, years:9, district:'Kicukiro, Kigali',
+    areas:['Title Verification','LAIS Searches','Marital Consent'], bio:'Focused on pre-purchase due diligence and encumbrance searches. Works closely with the Land Bank team to clear title before any listing goes live.' },
+  { id:5, initials:'PI', av:'av-5', name:'Patrick Ingabire', specialty:'Commercial Property & SPV Law', location:'Gasabo, Kigali', avail:'Available Now', score:'4.6', cases:17, years:6, district:'Gasabo, Kigali',
+    areas:['SPV Formation','Conveyancing','Smart Contract Audit'], bio:'Commercial property specialist advising developers and investors on SPV structuring, joint venture agreements, and tokenisation legal frameworks.' },
+  { id:6, initials:'MN', av:'av-6', name:'Marie-Claire Nkurunziza', specialty:'Title & LAIS Specialist', location:'Musanze, Northern', avail:'Busy', score:'4.8', cases:41, years:11, district:'Musanze, Northern',
+    areas:['Title Verification','LAIS Searches','Conveyancing'], bio:'Northern Province specialist with deep expertise in rural and peri-urban land titles. Trusted partner for eco-lodge and hospitality development projects.' },
+];
+
+let filtered = [...lawyers];
+
+function applyFilters() {
+  const q    = document.getElementById('searchInput').value.toLowerCase();
+  const spec = document.getElementById('specialtyFilter').value;
+  const dist = document.getElementById('districtFilter').value;
+  const av   = document.getElementById('availFilter').value;
+  filtered = lawyers.filter(l => {
+    if (q && !l.name.toLowerCase().includes(q) && !l.specialty.toLowerCase().includes(q)) return false;
+    if (spec && !l.areas.includes(spec)) return false;
+    if (dist && l.district !== dist) return false;
+    if (av && l.avail !== av) return false;
+    return true;
+  });
+  document.getElementById('resultCount').textContent = filtered.length + ' lawyer' + (filtered.length!==1?'s':'');
+  render(filtered);
+}
+
+function render(list) {
+  const grid = document.getElementById('lawyersGrid');
+  const empty = document.getElementById('emptyState');
+  if (!list.length) { grid.style.display='none'; empty.style.display='block'; return; }
+  grid.style.display='grid'; empty.style.display='none';
+  grid.innerHTML = list.map(l => `
+    <div class="lawyer-card">
+      <div class="lc-top">
+        <div class="lc-avatar ${l.av}">${l.initials}</div>
+        <div class="lc-info">
+          <div class="lc-name">${l.name}</div>
+          <div class="lc-specialty">${l.specialty}</div>
+          <div class="lc-score">⭐ ${l.score} · <span class="avail-dot ${l.avail==='Available Now'?'avail-yes':'avail-busy'}"></span>${l.avail}</div>
+        </div>
+      </div>
+      <div class="lc-loc">📍 ${l.location}</div>
+      <div class="lc-tags">${l.areas.map(a=>`<span class="lc-tag">${a}</span>`).join('')}</div>
+      <div class="lc-stats">
+        <div class="lc-stat"><div class="lc-stat-val">${l.cases}</div><div class="lc-stat-label">Cases</div></div>
+        <div class="lc-stat"><div class="lc-stat-val">${l.years}yr</div><div class="lc-stat-label">Experience</div></div>
+        <div class="lc-stat"><div class="lc-stat-val">${l.score}</div><div class="lc-stat-label">Rating</div></div>
+      </div>
+      <div class="lc-footer">
+        <a href="register.html" class="btn-contact">Request a Case</a>
+        <a href="#" class="btn-profile">View Profile</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+render(lawyers);
+</script>
+</body>
+</html>
