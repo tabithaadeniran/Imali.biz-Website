@@ -204,18 +204,38 @@
     <input type="text" class="filter-input" placeholder="Search projects…" id="searchInput" oninput="applyFilters()">
     <select class="filter-select" id="specialtyFilter" onchange="applyFilters()">
       <option value="">All Specialties</option>
-      <option>Architect</option>
-      <option>Construction Manager</option>
-      <option>Environmental Consultant</option>
-      <option>Geotechnical Engineer</option>
-      <option>Interior Designer</option>
-      <option>Land Surveyor</option>
-      <option>Lawyer</option>
-      <option>Project Manager</option>
-      <option>Quantity Surveyor</option>
-      <option>Real Estate Agent</option>
-      <option>Structural Engineer</option>
-      <option>Urban Planner</option>
+      <optgroup label="Professionals">
+        <option>Architect</option>
+        <option>Construction Manager</option>
+        <option>Environmental Consultant</option>
+        <option>Interior Designer</option>
+        <option>Land Surveyor</option>
+        <option>Project Manager</option>
+        <option>Quantity Surveyor</option>
+        <option>Real Estate Agent</option>
+        <option>Urban Planner</option>
+      </optgroup>
+      <optgroup label="Engineers">
+        <option>Structural Engineer</option>
+        <option>Geotechnical Engineer</option>
+        <option>Civil Engineer</option>
+        <option>Mechanical Engineer</option>
+        <option>Electrical Engineer</option>
+        <option>Construction / Project Engineer</option>
+      </optgroup>
+      <optgroup label="Trades">
+        <option>Carpenter</option>
+        <option>Electrician</option>
+        <option>General Labourer</option>
+        <option>HVAC Technician</option>
+        <option>Mason / Bricklayer</option>
+        <option>Painter</option>
+        <option>Plasterer</option>
+        <option>Plumber</option>
+        <option>Steel Fixer / Bender</option>
+        <option>Tiler</option>
+        <option>Welder</option>
+      </optgroup>
     </select>
     <select class="filter-select" id="districtFilter" onchange="applyFilters()">
       <option value="">All Districts</option>

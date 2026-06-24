@@ -134,6 +134,33 @@
   footer a { color: rgba(245,240,232,0.35); text-decoration: none; }
   footer a:hover { color: rgba(245,240,232,0.6); }
 
+  /* VERIFY PANEL */
+  .verify-panel { display: none; margin: 0; padding: 1rem 4rem; border-bottom: 1px solid var(--border); transition: background 0.3s; }
+  .verify-panel.visible { display: block; }
+  .verify-panel-inner { display: flex; align-items: flex-start; gap: 1.25rem; padding: 1rem 1.25rem; border-radius: 0.85rem; border: 1px solid; }
+  .vp-professional .verify-panel-inner { background: rgba(26,107,92,0.07); border-color: rgba(26,107,92,0.2); }
+  .vp-engineer    .verify-panel-inner { background: rgba(47,111,176,0.07); border-color: rgba(47,111,176,0.2); }
+  .vp-trade       .verify-panel-inner { background: rgba(180,100,20,0.07); border-color: rgba(180,100,20,0.2); }
+  .vp-abbr { width: 48px; height: 48px; border-radius: 0.65rem; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.04em; text-align: center; flex-shrink: 0; line-height: 1.2; }
+  .vp-professional .vp-abbr { background: rgba(26,107,92,0.15); color: #1a6b5c; }
+  .vp-engineer    .vp-abbr { background: rgba(47,111,176,0.15); color: #2f6fb0; }
+  .vp-trade       .vp-abbr { background: rgba(180,100,20,0.15); color: #b46414; }
+  .vp-content { flex: 1; min-width: 0; }
+  .vp-eyebrow { font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.2rem; }
+  .vp-professional .vp-eyebrow { color: #1a6b5c; }
+  .vp-engineer    .vp-eyebrow { color: #2f6fb0; }
+  .vp-trade       .vp-eyebrow { color: #b46414; }
+  .vp-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+  .vp-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.55; }
+  .vp-links { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.65rem; }
+  .vp-link { font-size: 0.72rem; font-weight: 600; text-decoration: none; border-radius: 2rem; padding: 0.25rem 0.75rem; border: 1px solid; font-family: 'Syne', sans-serif; transition: opacity 0.2s; cursor: none; white-space: nowrap; }
+  .vp-link:hover { opacity: 0.75; }
+  .vp-professional .vp-link { color: #1a6b5c; border-color: rgba(26,107,92,0.35); background: rgba(26,107,92,0.08); }
+  .vp-engineer    .vp-link { color: #2f6fb0; border-color: rgba(47,111,176,0.35); background: rgba(47,111,176,0.08); }
+  .vp-trade       .vp-link { color: #b46414; border-color: rgba(180,100,20,0.35); background: rgba(180,100,20,0.08); }
+  .vp-close { background: none; border: none; color: var(--text-faint); font-size: 1rem; cursor: none; padding: 0.25rem; flex-shrink: 0; line-height: 1; transition: color 0.2s; margin-top: -0.1rem; }
+  .vp-close:hover { color: var(--text); }
+
   /* LIGHT MODE OVERRIDES */
   [data-theme="light"] .page-header { background: #eaf5f2; }
   [data-theme="light"] .header-title { color: var(--text); }
@@ -189,18 +216,38 @@
     </div>
     <select class="filter-select" id="specialtyFilter">
       <option value="">All Specialties</option>
-      <option value="architect">Architect</option>
-      <option value="construction-manager">Construction Manager</option>
-      <option value="environmental-consultant">Environmental Consultant</option>
-      <option value="geotechnical-engineer">Geotechnical Engineer</option>
-      <option value="interior-designer">Interior Designer</option>
-      <option value="land-surveyor">Land Surveyor</option>
-      <option value="lawyer">Lawyer</option>
-      <option value="project-manager">Project Manager</option>
-      <option value="quantity-surveyor">Quantity Surveyor</option>
-      <option value="real-estate-agent">Real Estate Agent / Broker</option>
-      <option value="structural-engineer">Structural Engineer</option>
-      <option value="urban-planner">Urban Planner</option>
+      <optgroup label="Professionals">
+        <option value="architect">Architect</option>
+        <option value="construction-manager">Construction Manager</option>
+        <option value="environmental-consultant">Environmental Consultant</option>
+        <option value="interior-designer">Interior Designer</option>
+        <option value="land-surveyor">Land Surveyor</option>
+        <option value="project-manager">Project Manager</option>
+        <option value="quantity-surveyor">Quantity Surveyor</option>
+        <option value="real-estate-agent">Real Estate Agent / Broker</option>
+        <option value="urban-planner">Urban Planner</option>
+      </optgroup>
+      <optgroup label="Engineers">
+        <option value="structural-engineer">Structural Engineer</option>
+        <option value="geotechnical-engineer">Geotechnical Engineer</option>
+        <option value="civil-engineer">Civil Engineer</option>
+        <option value="mechanical-engineer">Mechanical Engineer</option>
+        <option value="electrical-engineer">Electrical Engineer</option>
+        <option value="construction-engineer">Construction / Project Engineer</option>
+      </optgroup>
+      <optgroup label="Trades">
+        <option value="carpenter">Carpenter</option>
+        <option value="electrician">Electrician</option>
+        <option value="general-labourer">General Labourer</option>
+        <option value="hvac-technician">HVAC Technician</option>
+        <option value="mason">Mason / Bricklayer</option>
+        <option value="painter">Painter</option>
+        <option value="plasterer">Plasterer</option>
+        <option value="plumber">Plumber</option>
+        <option value="steel-fixer">Steel Fixer / Bender</option>
+        <option value="tiler">Tiler</option>
+        <option value="welder">Welder</option>
+      </optgroup>
     </select>
     <select class="filter-select" id="districtFilter">
       <option value="">All Districts</option>
@@ -245,6 +292,20 @@
   </div>
 </div>
 
+<!-- VERIFY PANEL -->
+<div class="verify-panel" id="verifyPanel">
+  <div class="verify-panel-inner" id="vpInner">
+    <div class="vp-abbr" id="vpAbbr"></div>
+    <div class="vp-content">
+      <div class="vp-eyebrow" id="vpEyebrow">Governing Body</div>
+      <div class="vp-name" id="vpName"></div>
+      <div class="vp-desc" id="vpDesc"></div>
+      <div class="vp-links" id="vpLinks"></div>
+    </div>
+    <button class="vp-close" onclick="closeVerifyPanel()" title="Dismiss">✕</button>
+  </div>
+</div>
+
 <!-- DIRECTORY -->
 <div class="directory-layout">
   <!-- SIDEBAR -->
@@ -259,7 +320,16 @@
         <li class="specialty-item" data-s="geotechnical-engineer">Geotechnical Engineer <span class="specialty-count">3</span></li>
         <li class="specialty-item" data-s="interior-designer">Interior Designer <span class="specialty-count">5</span></li>
         <li class="specialty-item" data-s="land-surveyor">Land Surveyor <span class="specialty-count">6</span></li>
-        <li class="specialty-item" data-s="lawyer">Lawyer <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="civil-engineer">Civil Engineer <span class="specialty-count">4</span></li>
+        <li class="specialty-item" data-s="mechanical-engineer">Mechanical Engineer <span class="specialty-count">3</span></li>
+        <li class="specialty-item" data-s="electrical-engineer">Electrical Engineer <span class="specialty-count">4</span></li>
+        <li class="specialty-item" data-s="plumber">Plumber <span class="specialty-count">6</span></li>
+        <li class="specialty-item" data-s="electrician">Electrician <span class="specialty-count">7</span></li>
+        <li class="specialty-item" data-s="carpenter">Carpenter <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="mason">Mason / Bricklayer <span class="specialty-count">8</span></li>
+        <li class="specialty-item" data-s="welder">Welder <span class="specialty-count">4</span></li>
+        <li class="specialty-item" data-s="tiler">Tiler <span class="specialty-count">5</span></li>
+        <li class="specialty-item" data-s="painter">Painter <span class="specialty-count">6</span></li>
         <li class="specialty-item" data-s="project-manager">Project Manager <span class="specialty-count">4</span></li>
         <li class="specialty-item" data-s="quantity-surveyor">Quantity Surveyor <span class="specialty-count">4</span></li>
         <li class="specialty-item" data-s="real-estate-agent">Real Estate Agent / Broker <span class="specialty-count">5</span></li>
@@ -408,21 +478,21 @@
       <div class="pro-card">
         <div class="verified-badge">Verified</div>
         <div class="pro-card-top">
-          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#1a3a5c,#2a6b9c)">PM</div>
+          <div class="pro-card-avatar" style="background:linear-gradient(135deg,#3a1a1a,#8c3a20)">JN</div>
           <div class="pro-card-info">
-            <div class="pro-card-name">Patrick Murenzi</div>
-            <div class="pro-card-specialty">Lawyer — Real Estate &amp; Conveyancing</div>
-            <div class="pro-card-location">📍 Nyarugenge, Kigali</div>
+            <div class="pro-card-name">Joseph Nkurunziza</div>
+            <div class="pro-card-specialty">Civil Engineer</div>
+            <div class="pro-card-location">📍 Gasabo, Kigali</div>
           </div>
         </div>
         <div class="pro-card-badges">
-          <span class="badge badge-trust">Trust 96</span>
+          <span class="badge badge-trust">Trust 91</span>
           <span class="badge badge-kyc">KYC Verified</span>
           <span class="badge badge-avail">Available</span>
         </div>
-        <p class="pro-card-desc">Title due diligence, conveyancing, and property dispute resolution. Bar-licensed in Rwanda. Handles residential and commercial transactions, leasehold conversions, and inheritance disputes.</p>
+        <p class="pro-card-desc">Civil engineering specialist covering roads, drainage, earthworks, and site infrastructure. 10 years delivering civil works for residential estates and mixed-use developments across Kigali and Eastern Province.</p>
         <div class="pro-card-footer">
-          <div class="pro-card-reviews"><span>★★★★★</span> 5.0 · 42 reviews</div>
+          <div class="pro-card-reviews"><span>★★★★★</span> 4.8 · 29 reviews</div>
           <div class="pro-card-actions">
             <a href="#" class="btn-card-primary">Contact</a>
             <a href="#" class="btn-card-outline">Profile</a>
@@ -536,6 +606,70 @@
   });
   (function anim(){ rx+=(mx-rx-18)*0.12; ry+=(my-ry-18)*0.12; ring.style.transform=`translate(${rx}px,${ry}px)`; requestAnimationFrame(anim); })();
 
+  // ── GOVERNING BODY DATA ─────────────────────────────
+  const bodies = {
+    'architect':            { name:'Rwanda Institute of Architects (RIA)',                          abbr:'RIA',   group:'professional', desc:'RIA is the statutory body governing architecture in Rwanda. All licensed architects must be registered. Verify any architect against their published member list before engaging.',       links:[{label:'Licensed Architects',url:'https://ria.rw/licensed-architects/'},{label:'RIA Website',url:'https://ria.rw/'}] },
+    'interior-designer':   { name:'Rwanda Institute of Architects (RIA)',                          abbr:'RIA',   group:'professional', desc:'Interior designers in Rwanda are registered under RIA as professional members. Use the RIA member directory to confirm registration status.',                                            links:[{label:'RIA Member Directory',url:'https://ria.rw/member-directory/'},{label:'RIA Website',url:'https://ria.rw/'}] },
+    'quantity-surveyor':   { name:'Rwanda Institute of Quantity Surveyors (RIQS)',                 abbr:'RIQS',  group:'professional', desc:'RIQS is the mandatory licensing body for all QS professionals under Law No. 023/2025. Only licensed RIQS members may legally practise quantity surveying in Rwanda.',                links:[{label:'Licensed QS Members',url:'https://rwandaiqs.org/registered-professional-quantity-surveyors/'},{label:'RIQS Website',url:'https://rwandaiqs.org/'}] },
+    'land-surveyor':       { name:'Rwanda Organization of Land Surveyors (ROLS)',                  abbr:'ROLS',  group:'professional', desc:'ROLS is the professional body for land surveyors in Rwanda, covering boundary demarcation, topographic mapping, and cadastral surveys. Check the certified member list before engaging a surveyor.',                                              links:[{label:'Certified Surveyors 2025 (PDF)',url:'https://rols.rw/assets/files/List_of_certified_surveyors_2025.pdf'},{label:'Certified Members — All Years',url:'https://rols.rw/certified_member'},{label:'ROLS Website',url:'https://rols.rw/'}] },
+    'environmental-consultant': { name:'Rwanda Assoc. of Professional Environmental Practitioners (RAPEP)', abbr:'RAPEP', group:'professional', desc:'All environmental impact assessment practitioners must be licensed by RAPEP. RAPEP publishes an updated list of authorized experts each year.',                           links:[{label:'Licensed Experts 2025–26 (PDF)',url:'https://www.rapep.org.rw/documents/LIST-OF-RAPEP-EXPERTS-2025-2026.pdf'},{label:'RAPEP Website',url:'https://rapep.org.rw/'}] },
+    'urban-planner':       { name:'Rwanda Urban Planners Institute (RUPI)',                        abbr:'RUPI',  group:'professional', desc:'RUPI is the national professional body for urban and rural planners in Rwanda. Urban planners are also listed under RIA as a professional member category.',                         links:[{label:'RUPI Website',url:'https://www.rupi.rw/'},{label:'Urban Planners via RIA',url:'https://ria.rw/member-directory/urban-planners-member/'}] },
+    'real-estate-agent':   { name:'Rwanda Assoc. of Real Estate Brokers (RWAREB)',                 abbr:'RWAREB',group:'professional', desc:'RWAREB is Rwanda\'s professional body for real estate agents and brokers, operating under the Rwanda Private Sector Federation (PSF).',                                             links:[{label:'RWAREB via PSF',url:'http://chamberofcommerce.rw/real-estate-brokers-rwareb/'}] },
+    'construction-manager':{ name:'Institution of Engineers Rwanda (IER)',                         abbr:'IER',   group:'engineer',     desc:'Construction managers with engineering qualifications are registered with IER. Verify their IER compliance status before engagement.',                                               links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'project-manager':     { name:'Institution of Engineers Rwanda (IER)',                         abbr:'IER',   group:'engineer',     desc:'Project managers with engineering backgrounds are registered with IER. Check the compliant member list for verification.',                                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'structural-engineer': { name:'Institution of Engineers Rwanda (IER)',                         abbr:'IER',   group:'engineer',     desc:'All practising engineers in Rwanda must be registered with IER under Law No. 023/2025. The compliant member list is updated regularly.',                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'geotechnical-engineer':{ name:'Institution of Engineers Rwanda (IER)',                        abbr:'IER',   group:'engineer',     desc:'All practising engineers in Rwanda must be registered with IER under Law No. 023/2025. The compliant member list is updated regularly.',                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'civil-engineer':      { name:'Institution of Engineers Rwanda (IER)',                         abbr:'IER',   group:'engineer',     desc:'All practising engineers in Rwanda must be registered with IER under Law No. 023/2025. The compliant member list is updated regularly.',                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'mechanical-engineer': { name:'Institution of Engineers Rwanda (IER)',                         abbr:'IER',   group:'engineer',     desc:'All practising engineers in Rwanda must be registered with IER under Law No. 023/2025. The compliant member list is updated regularly.',                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'electrical-engineer': { name:'Institution of Engineers Rwanda (IER)',                         abbr:'IER',   group:'engineer',     desc:'All practising engineers in Rwanda must be registered with IER under Law No. 023/2025. The compliant member list is updated regularly.',                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'construction-engineer':{ name:'Institution of Engineers Rwanda (IER)',                        abbr:'IER',   group:'engineer',     desc:'All practising engineers in Rwanda must be registered with IER under Law No. 023/2025. The compliant member list is updated regularly.',                                          links:[{label:'IER Compliant Members',url:'https://www.engineersrwanda.rw/ier-compliant-members'},{label:'IER Website',url:'https://www.engineersrwanda.rw/'}] },
+    'carpenter':    tvetBody('Carpenter',   '🪚'),
+    'electrician':  tvetBody('Electrician', '🔌'),
+    'general-labourer': tvetBody('General Labourer','👷'),
+    'hvac-technician':  tvetBody('HVAC Technician','❄️'),
+    'mason':        tvetBody('Mason / Bricklayer','🧱'),
+    'painter':      tvetBody('Painter','🖌️'),
+    'plasterer':    tvetBody('Plasterer','🪣'),
+    'plumber':      tvetBody('Plumber','🚿'),
+    'steel-fixer':  tvetBody('Steel Fixer / Bender','🔗'),
+    'tiler':        tvetBody('Tiler','🔷'),
+    'welder':       tvetBody('Welder','🔥'),
+  };
+
+  function tvetBody(role, icon) {
+    return { name:'Rwanda TVET Board (RTB)', abbr:'RTB', group:'trade',
+      desc:`Trades professionals in Rwanda are certified through the Rwanda TVET Board (RTB). Ask your ${role} for their RTB certificate to confirm their training level and competency.`,
+      links:[{label:'RTB Website',url:'https://www.rtb.gov.rw/'}] };
+  }
+
+  function updateVerifyPanel(specialty) {
+    const panel = document.getElementById('verifyPanel');
+    const b = bodies[specialty];
+    if (!b) { panel.classList.remove('visible'); return; }
+    const inner = document.getElementById('vpInner');
+    inner.className = 'verify-panel-inner vp-' + b.group;
+    document.getElementById('vpAbbr').textContent = b.abbr;
+    document.getElementById('vpEyebrow').textContent = 'Governing Body · ' + (b.group === 'professional' ? 'Professional' : b.group === 'engineer' ? 'Engineering' : 'Trades');
+    document.getElementById('vpName').textContent = b.name;
+    document.getElementById('vpDesc').textContent = b.desc;
+    document.getElementById('vpLinks').innerHTML = b.links.map(l =>
+      `<a href="${l.url}" target="_blank" rel="noopener" class="vp-link">${l.label} ↗</a>`
+    ).join('');
+    panel.classList.add('visible');
+  }
+
+  function closeVerifyPanel() {
+    document.getElementById('verifyPanel').classList.remove('visible');
+    document.getElementById('specialtyFilter').value = '';
+    document.querySelectorAll('.specialty-item').forEach(i => i.classList.remove('active'));
+    document.querySelector('.specialty-item[data-s="all"]').classList.add('active');
+  }
+
+  // Hook into specialty dropdown
+  document.getElementById('specialtyFilter').addEventListener('change', function() {
+    updateVerifyPanel(this.value);
+  });
+
   // Filter chips
   document.querySelectorAll('.chip').forEach(chip => {
     chip.addEventListener('click', () => {
@@ -544,7 +678,7 @@
     });
   });
 
-  // Sidebar specialty items
+  // Sidebar specialty items — also trigger verify panel
   document.querySelectorAll('.specialty-item').forEach(item => {
     item.addEventListener('click', () => {
       document.querySelectorAll('.specialty-item').forEach(i => i.classList.remove('active'));
@@ -552,6 +686,7 @@
       const specialty = item.getAttribute('data-s');
       const select = document.getElementById('specialtyFilter');
       select.value = specialty === 'all' ? '' : specialty;
+      updateVerifyPanel(specialty === 'all' ? '' : specialty);
     });
   });
 
